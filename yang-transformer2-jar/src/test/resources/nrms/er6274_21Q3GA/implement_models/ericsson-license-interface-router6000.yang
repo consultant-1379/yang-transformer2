@@ -1,0 +1,76 @@
+module ericsson-license-interface-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-license-interface-router6000";
+
+  prefix "licenseifr6k";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-license-interface-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-02-22" {
+    description
+      "support for 25ge-qsa";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-08" {
+    description
+      "update port license priority";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-08-22" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet" {
+    description
+      "ericsson-license-interface";
+    /*
+    license-priority (priority-val)
+    */
+    leaf license-priority {
+      type uint8 {
+        range "1..6";
+      }
+      description
+        "Set the license priority of the port";
+    }
+  }
+
+}

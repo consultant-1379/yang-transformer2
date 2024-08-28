@@ -1,0 +1,315 @@
+module ericsson-rmon-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-rmon-router6000";
+
+  prefix "rmonr6k";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "This module contains a collection of YANG definitions for
+     remote network monitoring. Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-08-06" {
+    description
+      "Support rmon hc-alarm";
+    reference
+      "RFC 6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-03" {
+    description
+      "Update the description of alarm-sample-type.";
+    reference
+      "RFC 6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-12-27" {
+    description
+      "initial revision";
+    reference
+      "RFC 2819";
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-rmon";
+    /*
+    rmon
+    */
+    container rmon {
+      description
+        "RMON alarm and event configuration parameters";
+      list alarm {
+        key "alarm-index";
+        description
+          "The list of configured RMON alarms on the device";
+        leaf alarm-index {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Index that uniquely identifies an alarm event with
+             an entry in the alarm list. Each such entry defines
+             a diagnostic sample at a particular interval for an
+             object on the device";
+        }
+        leaf alarm-oid {
+          type string;
+          mandatory true;
+          description
+            "The object identifier of the particular variable to
+             be sampled";
+        }
+        leaf alarm-interval {
+          type uint32 {
+            range "1..2147483647";
+          }
+          mandatory true;
+          description
+            "The interval in seconds over which the data is
+             sampled and compared with the rising and falling
+             thresholds";
+        }
+        choice alarm-sample-type {
+          mandatory true;
+          description
+            "The method of sampling the selected variable and
+             calculating the value to be compared against the
+             thresholds.";
+          case delta {
+            leaf delta {
+              type empty;
+              mandatory true;
+              description
+                "Compares the difference between successive
+                 samples of the object value against the
+                 threshold value";
+            }
+          }
+          case absolute {
+            leaf absolute {
+              type empty;
+              mandatory true;
+              description
+                "Compares the actual object value against the
+                 threshold value";
+            }
+          }
+        }
+        leaf rising-threshold {
+          type uint32 {
+            range "0..2147483647";
+          }
+          mandatory true;
+          description
+            "A threshold for the sampled statistic.When the
+             current sampled value is greater than or equal to
+             this threshold, and the value at the last sampling
+             interval was less than this threshold, a single
+             event will be generated";
+        }
+        leaf rising-event {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Index of the entry in the event list that is
+             associated with the alarm event";
+        }
+        leaf falling-threshold {
+          type uint32 {
+            range "0..2147483647";
+          }
+          mandatory true;
+          description
+            "A threshold for the sampled statistic.When the
+             current sampled value is less than or equal to this
+             threshold, and the value at the last sampling
+             interval was greater than this threshold, a single
+             event will be generated";
+        }
+        leaf falling-event {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Index of the entry in the event list that is
+             associated with the alarm event";
+        }
+        leaf owner {
+          type string {
+            length "1..127";
+          }
+          description
+            "Name of the alarm owner";
+        }
+      }
+      list event {
+        key "event-index";
+        description
+          "A list of events to be generated";
+        leaf event-index {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "An index that uniquely identifies an entry in the
+             event table";
+        }
+        leaf log {
+          type empty;
+          description
+            "This event generates an entry in the RMON-MIB log
+             table";
+        }
+        leaf notify {
+          type empty;
+          description
+            "This event generates an SNMP notification";
+        }
+        leaf owner {
+          type string {
+            length "1..127";
+          }
+          description
+            "Owner of the event";
+        }
+        leaf description {
+          type string {
+            length "1..127";
+          }
+          description
+            "A comment describing this event entry";
+        }
+      }
+      list hc-alarm {
+        key "hcalarm-index";
+        description
+          "Configure an RMON High Capacity ALARM";
+        leaf hcalarm-index {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Index to the RMON HC-Alarm Table";
+        }
+        leaf hcalarm-oid {
+          type string;
+          mandatory true;
+          description
+            "MIB object identifier subtree";
+        }
+        leaf hcalarm-interval {
+          type uint32 {
+            range "1..2147483647";
+          }
+          mandatory true;
+          description
+            "The polling interval";
+        }
+        choice hcalarm-sample-type {
+          mandatory true;
+          description
+            "The method of sampling the selected variable and
+             calculating the value to be compared against the
+             thresholds.";
+          case delta {
+            leaf delta {
+              type empty;
+              mandatory true;
+              description
+                "RMON HC-Alarm Delta";
+            }
+          }
+          case absolute {
+            leaf absolute {
+              type empty;
+              mandatory true;
+              description
+                "RMON HC-Alarm Absolute";
+            }
+          }
+        }
+        container rising-threshold {
+          description
+            "RMON HC-Alarm Rising Threshold";
+          leaf negative {
+            type empty;
+            description
+              "Negative Rising Threshold Value";
+          }
+          leaf threshold-value {
+            type uint64 {
+              range "0..18446744073709551615";
+            }
+            mandatory true;
+            description
+              "RMON HC-Alarm 64bit Rising Threshold AbsValue in
+               HEX";
+          }
+        }
+        leaf rising-event {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Index to the event table";
+        }
+        container falling-threshold {
+          description
+            "RMON HC-Alarm Falling Threshold";
+          leaf negative {
+            type empty;
+            description
+              "Negative Falling Threshold Value";
+          }
+          leaf threshold-value {
+            type uint64 {
+              range "0..18446744073709551615";
+            }
+            mandatory true;
+            description
+              "RMON HC-Alarm 64bit Falling Threshold AbsValue in
+               HEX";
+          }
+        }
+        leaf falling-event {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Index to the event table";
+        }
+        leaf owner {
+          type string {
+            length "1..127";
+          }
+          description
+            "Name of the alarm owner";
+        }
+      }
+    }
+  }
+
+}

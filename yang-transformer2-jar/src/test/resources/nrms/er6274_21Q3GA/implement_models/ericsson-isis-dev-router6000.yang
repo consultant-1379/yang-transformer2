@@ -1,0 +1,130 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-isis-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-isis-dev-router6000";
+
+  prefix "isisvrouter6000";
+
+  import ericsson-isis-router6000 {
+    prefix "isisrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-isis-dev-router6000
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-05-03" {
+    description
+      "Remove deviation for ISIS SR MPLS IPv6";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2021-03-22" {
+    description
+      "Remove deviation for hmac-cryptographic cli";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2021-02-22" {
+    description
+      "deviation for hmac-cryptographic cli";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2021-02-03" {
+    description
+      "Added deviations for ISIS_SR_MPLS_IPv6";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+ revision "2018-03-07" {
+    description
+      "deviation for isis maximum paths.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-07-10" {
+    description
+      "deviation for ericsson-isis-router6000.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /*router->isis->address-family->ipv4->unicast->redistribute->static->dvsr*/
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/isisrouter6000:isis/isisrouter6000:address-family/isisrouter6000:ipv4/isisrouter6000:unicast/isisrouter6000:redistribute/isisrouter6000:static/isisrouter6000:dvsr" {
+    deviate not-supported;
+  }
+
+  /*router->isis->address-family->ipv6->unicast->redistribute->application-sgsn-mme*/
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/isisrouter6000:isis/isisrouter6000:address-family/isisrouter6000:ipv6/isisrouter6000:unicast/isisrouter6000:redistribute/isisrouter6000:application-sgsn-mme" {
+    deviate not-supported;
+  }
+
+  /* deviate prefix-sid-map-group */
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/isisrouter6000:isis/isisrouter6000:address-family/isisrouter6000:ipv4/isisrouter6000:unicast/isisrouter6000:segment-routing/isisrouter6000:prefix-sid-map-group" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/isisrouter6000:isis/isisrouter6000:maximum/isisrouter6000:paths" {
+         deviate replace {
+         type uint8 {
+            range "1..8";
+          }
+         }
+        }
+
+}

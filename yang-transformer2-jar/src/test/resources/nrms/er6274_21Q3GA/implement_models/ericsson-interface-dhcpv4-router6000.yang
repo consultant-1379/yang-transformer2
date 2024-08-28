@@ -1,0 +1,240 @@
+module ericsson-interface-dhcpv4-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-dhcpv4-router6000";
+
+  prefix "ifdhcpv4router6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-dhcpv4-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-21" {
+    description
+      "Description interface dhcpv4  ";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping dhcp-giaddr-grp {
+    description
+      "dhcp interface giaddr mode";
+    /*
+    giaddr (gateway-ip)
+    */
+    leaf giaddr {
+      type inet:ipv4-address;
+      description
+        "Configure Gateway IP address";
+    }
+    /*
+    user-class-id (class-id) { giaddr (gateway-ip) | offset
+     (offset-value) giaddr (gateway-ip) }
+    */
+    list user-class-id {
+      key "class-id";
+      description
+        "Configure User-Class-Id";
+      leaf class-id {
+        type string;
+        description
+          "user class Id";
+      }
+      container user-class-id-choice {
+        description
+          "container user-class-id-choice.";
+        leaf giaddr {
+          type inet:ipv4-address;
+          description
+            "Configure Gateway IP address";
+        }
+        container offset {
+          presence "";
+          description
+            "container offset.";
+          leaf offset {
+            type int16 {
+              range "-255..255";
+            }
+            mandatory true;
+            description
+              "Set Offset Value";
+          }
+          leaf giaddr {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "Configure Gateway IP address";
+          }
+        }
+      }
+    }
+    /*
+    vendor-class-id (class-id) { giaddr (gateway-ip) | offset
+     (Offset-value) giaddr (gateway-ip) }
+    */
+    list vendor-class-id {
+      key "class-id";
+      description
+        "Configure Vendor-Class-Id";
+      leaf class-id {
+        type string;
+        description
+          "vendor class Id";
+      }
+      container vendor-class-id-choice {
+        description
+          "container vendor-class-id-choice.";
+        leaf giaddr {
+          type inet:ipv4-address;
+          description
+            "Configure Gateway IP address";
+        }
+        container offset {
+          presence "";
+          description
+            "container offset.";
+          leaf offset {
+            type int16 {
+              range "-255..255";
+            }
+            mandatory true;
+            description
+              "Set Offset Value";
+          }
+          leaf giaddr {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "Configure Gateway IP address";
+          }
+        }
+      }
+    }
+  }
+
+  augment
+  "/if:interfaces/if:interface/ifxrouter6000:l3-interface" {
+    description
+      "ericsson-dhcpv4-interface";
+    /*
+    dhcp { client [ client-id (identifier) | lease (seconds) |
+     router-option | subnet-option ] |  proxy (relay-size) [
+     server-group (name) ] | relay (relay-size) [ server-group
+     (name) ] | server { (server-ip) | interface } }
+    */
+    container dhcp {
+      description
+        "Configure interface dhcp";
+      container client {
+        presence "";
+        description
+          "Configure dhcp interface client";
+        leaf client-id {
+          type string;
+          description
+            "Specify client identifier";
+        }
+        leaf lease {
+          type uint32 {
+            range "1..4294967295";
+          }
+          description
+            "Specify IP address lease time";
+        }
+        leaf router-option {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable router-option";
+        }
+        leaf subnet-option {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable subnet-option";
+        }
+      }
+      list proxy {
+        key "relay-size";
+        max-elements 1;
+        description
+          "Enable DHCP Proxy on the interface";
+        leaf relay-size {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Specify relay size";
+        }
+        leaf server-group {
+          type string;
+          description
+            "Assign a dhcp server group for the interface";
+        }
+        uses dhcp-giaddr-grp;
+      }
+      list relay {
+        key "relay-size";
+        max-elements 1;
+        description
+          "Enable DHCP Relay on the interface";
+        leaf relay-size {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Specify relay size";
+        }
+        leaf server-group {
+          type string;
+          description
+            "Assign a dhcp server group for the interface";
+        }
+        uses dhcp-giaddr-grp;
+      }
+      container server {
+        description
+          "Enable DHCP Server on the interface";
+        leaf server-ip {
+          type inet:ipv4-address;
+          description
+            "DHCP Server's IP address";
+        }
+        leaf interface {
+          type empty;
+          description
+            "Use interface primary IP address as DHCP server's
+             IP address";
+        }
+      }
+    }
+  }
+
+}

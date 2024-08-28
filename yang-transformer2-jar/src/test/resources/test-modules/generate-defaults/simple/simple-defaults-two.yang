@@ -1,0 +1,122 @@
+module simple-defaults-two {
+
+	namespace "urn%test%simple-defaults-two";
+	prefix this;
+
+	revision "2021-11-01";
+
+	import _3gpp-common-yang-extensions {
+		prefix yext3gpp;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string;
+			default "abc";
+		}
+
+		leaf leaf12 {
+			type string;
+			yext3gpp:initial-value "def";
+		}
+
+		leaf leaf13 {
+			type string;
+			yexte:initial-value "ghi";
+		}
+
+		leaf leaf14 {
+			type string;
+			default "abc";
+			yext3gpp:initial-value "def";	// 3GPP wins
+			yexte:initial-value "ghi";
+		}
+
+		leaf leaf15 {
+			type string;
+			default "abc";
+			yexte:initial-value "ghi";		// Eri extension wins
+		}
+	}
+
+	container cont2 {
+
+		leaf leaf21 {
+			type union {
+				type int32;
+				type string;
+			}
+			default 1000;
+		}
+	
+		leaf leaf22 {
+			type union {
+				type int32;
+				type string;
+			}
+			default "abc";
+		}
+
+		leaf leaf23 {
+			type union {
+				type int32 {
+					range "0 .. 20";
+				}
+				type string;
+			}
+			default 1000;		// should come out as string "1000"
+		}
+
+		leaf leaf24 {
+			type union {
+				type enumeration {
+					enum RED;
+					enum YELLOW;
+				}
+				type string;
+			}
+			default " YELLOW ";
+		}
+
+		leaf leaf25 {
+			type union {
+				type int32;
+				type boolean;
+			}
+			default "abc";		// illegal default value
+		}
+	}
+
+	container cont3 {
+
+		leaf-list leaflist31 {
+			type string;
+			default "abc";
+			default "def";
+			default "ghi";
+		}
+
+		leaf-list leaflist32 {
+			type int32;
+			default 1000;
+			default 3500;
+			default "ghi";		// invalid default, so no default for leaflist.
+		}
+
+		leaf-list leaflist33 {
+			type union {
+				type int32;
+				type string;
+			}
+			default 1000;
+			default "abc";
+			default 3500;
+			default "def";
+		}
+	}
+}

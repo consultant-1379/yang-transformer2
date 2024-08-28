@@ -1,0 +1,151 @@
+module ericsson-access-control-list-dev-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-access-control-list-dev-pc5gc";
+  prefix acldpc5gc;
+
+  import ietf-access-control-list {
+    prefix acl;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model deviate IETF access control list.
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision 2019-09-05 {
+    description
+      "Deviation on IETF ACL YANG";
+    reference
+      "rfc8519";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l2" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv4/acl:ipv4/acl:dscp" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv4/acl:ipv4/acl:ecn" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv4/acl:ipv4/acl:length" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv4/acl:ipv4/acl:ttl" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv4/acl:ipv4/acl:ihl" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv4/acl:ipv4/acl:flags" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv4/acl:ipv4/acl:offset" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv4/acl:ipv4/acl:identification" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv6/acl:ipv6/acl:dscp" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv6/acl:ipv6/acl:ecn" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv6/acl:ipv6/acl:length" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv6/acl:ipv6/acl:ttl" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l3/acl:ipv6/acl:ipv6/acl:flow-label" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l4/acl:tcp/acl:tcp/acl:sequence-number" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l4/acl:tcp/acl:tcp/acl:acknowledgement-number" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l4/acl:tcp/acl:tcp/acl:data-offset" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l4/acl:tcp/acl:tcp/acl:reserved" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l4/acl:tcp/acl:tcp/acl:flags" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l4/acl:tcp/acl:tcp/acl:window-size" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l4/acl:tcp/acl:tcp/acl:urgent-pointer" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l4/acl:tcp/acl:tcp/acl:options" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l4/acl:udp/acl:udp/acl:length" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:l4/acl:icmp" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:egress-interface" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches/acl:ingress-interface" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:actions/acl:logging" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:acl/acl:aces/acl:ace/acl:statistics" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:attachment-points/acl:interface/acl:ingress/acl:acl-sets/acl:acl-set/acl:ace-statistics" {
+    deviate not-supported;
+  }
+
+  deviation "/acl:acls/acl:attachment-points/acl:interface/acl:egress/acl:acl-sets/acl:acl-set/acl:ace-statistics" {
+    deviate not-supported;
+  }
+}

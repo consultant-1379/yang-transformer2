@@ -1,0 +1,31 @@
+module identityref-duplicates-one {
+
+    namespace "urn,test,identityref-duplicates-one";
+    prefix one;
+
+    revision "2021-07-30";
+
+	identity base;
+
+	identity red {		// exists in one / two / three
+		base base;
+	}
+
+	identity yellow {		// exists in one / two
+		base base;
+	}
+
+	identity green {		// exists in one
+		base base;
+	}
+
+	container cont1 {
+	
+		leaf leaf11 {
+			type identityref {
+				base base;
+			}
+		}
+	}
+	
+}

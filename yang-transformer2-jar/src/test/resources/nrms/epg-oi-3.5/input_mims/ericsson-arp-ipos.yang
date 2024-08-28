@@ -1,0 +1,121 @@
+module ericsson-arp-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-arp-ipos";
+
+  prefix "arpipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-arp-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-06-13" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:ip" {
+    description
+      "ericsson-arp";
+    /*
+    arp { maximum incomplete-entries (max-num) | < addrlist
+     (arp-ipaddr) (arp-hdwaddr) [ alias ] > }
+    */
+    container arp {
+      description
+        "Set an IP ARP entry";
+      container maximum {
+        description
+          "Configure the maximum size of arp cache entries";
+        leaf incomplete-entries {
+          type uint32 {
+            range "1..4294967295";
+          }
+          description
+            "Set the number of incomplete entries";
+        }
+      }
+      list addrlist {
+        key "arp-ipaddr";
+        description
+          "Configure ARP address";
+        leaf arp-ipaddr {
+          type inet:ipv4-address;
+          description
+            "Host IP address ";
+        }
+        leaf arp-hdwaddr {
+          type yang:mac-address;
+          mandatory true;
+          description
+            "Host IP mac-address";
+        }
+        leaf alias {
+          type empty;
+          description
+            "Respond to ARP requests for the IP address";
+        }
+      }
+    }
+  }
+
+}

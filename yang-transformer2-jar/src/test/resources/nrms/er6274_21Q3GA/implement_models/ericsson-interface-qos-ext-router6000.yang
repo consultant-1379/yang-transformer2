@@ -1,0 +1,3768 @@
+module ericsson-interface-qos-ext-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-qos-ext-router6000";
+
+  prefix "ifqosxrouter6000";
+
+  import ericsson-qos-router6000 {
+    prefix "qosrouter6000";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-lag-ext-router6000 {
+    prefix "lagxrouter6000";
+  }
+
+  import ericsson-l2vlan-ext-router6000 {
+    prefix "l2vlanxrouter6000";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-l2-service-router6000 {
+    prefix "l2servicer6k";
+  }
+
+  import ericsson-bvi-ext-router6000 {
+    prefix "bvixrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-qos-ext-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-10" {
+    description
+      "add latency-optimized";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2020-12-05" {
+    description
+      "add latency-optimized";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2020-05-21" {
+    description
+      "updated model for propagate qos ";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-10-23" {
+    description
+      "Add rate circuit out commands";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-09-27" {
+    description
+      "QoS MWBW feature commands modified";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-08-24" {
+    description
+      "QoS MWBW feature commands added";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-05-24" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-05-14" {
+    description
+      "change must condition for weight,
+       hierarchical-mode-strict and rate";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "10";
+  }
+
+  revision "2018-04-18" {
+    description
+      "change the node type of queuing and protocol-rate-limit
+       to leaf-list";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "9";
+  }
+
+  revision "2018-04-08" {
+    description
+      "remove mandatory of class-map under propagate qos to ip.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "8";
+  }
+
+  revision "2018-03-28" {
+    description
+      "JIRA IPOS-22178 Change the when condition of weight,
+       hierarchical-mode-strict and rate, to check lag in
+       addition to BVI.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-03-23" {
+    description
+      "adjust the place of policing-opt1, no hierarchy change.
+       fix JIRA IPOS-22165";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-01-23" {
+    description
+      "delete complicated must condition";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-01-13" {
+    description
+      "JIRA IPOS-3500";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2017-08-28" {
+    description
+      "IPOS-14642 [CONFD-ST]: Fail to load minimum configuration
+       when full configuration have been loaded on SSR node";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-07-27" {
+    description
+      "add omissive ssr command";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-07-24" {
+    description
+      "remove if-feature and add command for spitfire";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-12" {
+    description
+      "Modify imported module xxx not used, IPOS-12445";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-22" {
+    description
+      "Fix jira IPOS-3752";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-02" {
+    description
+      "Fix jira IPOS-9074";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-11" {
+    description
+      "Add omissive command and fix jira IPOS-7942 and
+       IPOS-8012";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-15" {
+    description
+      "Add qos for ssr";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-08" {
+    description
+      "Add a feature name for qos over BVI";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-04-14" {
+    description
+      "add qos under the port BVI";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-02-29" {
+    description
+      "1) fix when/must condition issues
+            2) fix EV274550";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature qos-profile-resource {
+    description
+      "This feature indicates that the device supports resource
+       in QoS profile.";
+  }
+
+  feature qos-rate-maximum {
+    description
+      "This feature indicates that the device supports rate
+       maximum in QoS rate.";
+  }
+
+  feature qos-rate-minimum {
+    description
+      "This feature indicates that the device supports rate
+       minimum in QoS rate.";
+  }
+
+  feature qos-pwfq-virtual-port {
+    description
+      "This feature indicates that the device supports
+       virtual-port in QoS scheduling.";
+  }
+
+  feature qos-hierarchical {
+    description
+      "This feature indicates that the device supports
+       qos-hierarchical in QoS scheduling.";
+  }
+
+  feature qos-burst {
+    description
+      "This feature indicates that the device supports qos-burst
+       in QoS scheduling.";
+  }
+
+  feature qos-ethernet-hierarchical {
+    description
+      "This feature indicates that the device supports
+       qos-ethernet-hierarchical in QoS scheduling.";
+  }
+
+  feature qos-multicast {
+    description
+      "This feature indicates that the device supports
+       qos-multicast in QoS scheduling.";
+  }
+
+  feature qos-weight {
+    description
+      "This feature indicates that the device supports
+       qos-weight in QoS scheduling.";
+  }
+
+  feature qos-ethernet-profile-resource {
+    description
+      "This feature indicates that the device supports
+       qos-ethernet-profile-resource in QoS scheduling.";
+  }
+
+  feature qos-over-bvi {
+    description
+      "This feature indicates that the device supports qos
+       config over bvi.";
+  }
+
+  feature qos-intf-ssr {
+    description
+      "This feature indicates that the device supports ssr in
+       qos .";
+  }
+
+  augment "/if:interfaces/if:interface/lagxrouter6000:link-"
+  + "group" {
+    description
+      "ericsson-qos-interface";
+    /*
+    rate circuit { in | out } (rate-num) { burst (burst-num) } [
+     excess-burst (burst-num) ] [ queuing-burst (burst-num) ]
+    */
+    list rate-circuit {
+      if-feature qos-intf-ssr;
+      key "rate-circuit-choice";
+      max-elements 2;
+      description
+        "Configure QoS circuit rate";
+      leaf rate-circuit-choice {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Configure inbound policy circuit rates";
+          }
+          enum out {
+            value 1;
+            description
+              "Configure outbound policy circuit rates";
+          }
+        }
+        description
+          "leaf rate-circuit-choice.";
+      }
+      leaf rate-num {
+        type uint32 {
+          range "66..100000000";
+        }
+        mandatory true;
+        description
+          "Rate in kbps";
+      }
+      leaf burst {
+        type uint32 {
+          range "1..4250000000";
+        }
+        mandatory true;
+        description
+          "Burst size";
+      }
+      leaf excess-burst {
+        type uint32 {
+          range "1..4250000000";
+        }
+        description
+          "Max burst size";
+      }
+      leaf queuing-burst {
+        type uint32 {
+          range "1..8000000";
+        }
+        description
+          "Queuing burst size in bytes";
+      }
+    }
+    /*
+    qos {priority (pr-num) | pwfq scheduling {physical-port |
+     virtual-port} | <rate { <maximum (rate-num) [ burst (burst-
+     num) ]> | <latency-optimized> } > }
+    */
+    container qos {
+      description
+        "Configure QoS parameters";
+      leaf priority {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Circuit default QoS priority";
+      }
+      container pwfq {
+        description
+          "configure pwfq";
+        leaf scheduling {
+          type enumeration {
+            enum physical-port {
+              value 0;
+              description
+                "set physical-port";
+            }
+            enum virtual-port {
+              value 1;
+              description
+                "set virtual-port. SpitFire can't support
+                 virtual-port.";
+            }
+          }
+          description
+            "set qos pwfq scheduling";
+        }
+      }
+      container rate {
+        description
+          "Circuit rate limits";
+        container maximum {
+          presence "";
+          description
+            "Maximum rate limit";
+          leaf rate-num {
+            type uint32 {
+              range "325..10000000";
+            }
+            mandatory true;
+            description
+              "Rate in Kbps";
+          }
+          leaf burst {
+            if-feature qos-burst;
+            type uint32 {
+              range "1024..524288";
+            }
+            description
+              "Burst size";
+          }
+        }
+        leaf latency-optimized {
+          type empty;
+          description
+            "Latency optimized";
+        }
+      }
+      container policy {
+        description
+          "Configure policy";
+        list policing {
+          key "pol-name";
+          max-elements 1;
+          description
+            "Input policing";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:policing" {
+              error-message "Policy type doesn't match";
+              description
+                "Policy type must be policing";
+            }
+            description
+              "Must specify a policing policy name";
+          }
+          choice policing-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                if-feature qos-hierarchical;
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice policing-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        list metering {
+          if-feature qos-intf-ssr;
+          key "pol-name";
+          max-elements 1;
+          description
+            "Set QoS metering policy to use";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:metering" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a metering policy name";
+            }
+            description
+              "Must specify a metering policy name";
+          }
+          choice metering-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice metering-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        leaf-list queuing {
+          when "../../pwfq/scheduling" {
+            description
+              "";
+          }
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          must "(/qosrouter6000:qos/qosrouter6000:policy[qosrout"
+          + "er6000:gpol-polname=current()]/qosrouter6000:pwfq) or "
+          + "(/qosrouter6000:qos/qosrouter6000:policy[qosrouter6000"
+          + ":gpol-polname=current()]/qosrouter6000:mdrr)" {
+            error-message "this is not a queuing policy";
+            description
+              "must have the queue under the policy";
+          }
+          max-elements 1;
+          description
+            "Output queuing, must specify a";
+        }
+        leaf-list protocol-rate-limit {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Protocol rate limiting";
+        }
+      }
+      container hierarchical {
+        description
+          "Hierarchical scheduling settings";
+        leaf mode-strict {
+          type empty;
+          description
+            "Strict priority scheduling";
+        }
+        list priority-group {
+          key "pr-num";
+          description
+            "priority group";
+          leaf pr-num {
+            type uint8 {
+              range "0..7";
+            }
+            description
+              "Priority group number";
+          }
+          container rate {
+            description
+              "Priority group rate";
+            container maximum {
+              presence "";
+              description
+                "Maximum rate limit";
+              leaf rate-num {
+                type uint32 {
+                  range "4..100000000";
+                }
+                mandatory true;
+                description
+                  "Rate in Kbps";
+              }
+              leaf burst {
+                type uint32 {
+                  range "1024..524288";
+                }
+                description
+                  "Burst size";
+              }
+            }
+          }
+        }
+        container multicast {
+          if-feature qos-multicast;
+          description
+            "multicast separation";
+          choice multicast {
+            case prioritized {
+              leaf prioritized {
+                type empty;
+                description
+                  "multicast prioritized";
+              }
+            }
+            case aggregated {
+              container aggregated {
+                presence "";
+                description
+                  "multicast aggregated";
+                leaf priority {
+                  type uint8 {
+                    range "0..7";
+                  }
+                  description
+                    "multicast aggregated priority";
+                }
+              }
+            }
+          }
+        }
+        container weight {
+          if-feature qos-weight;
+          description
+            "mcast or ucast weight";
+          container default {
+            presence "";
+            description
+              "default (mcast and ucast) weight";
+            leaf weight-value {
+              type uint16 {
+                range "1..256";
+              }
+              description
+                "weight number";
+            }
+          }
+          container mcast {
+            presence "";
+            description
+              "multicast weight";
+            leaf weight-value {
+              type uint16 {
+                range "1..256";
+              }
+              description
+                "weight number";
+            }
+          }
+        }
+      }
+      container profile {
+        description
+          "Configure profile";
+        list overhead {
+          key "name-overhead";
+          max-elements 1;
+          description
+            "Overhead profile";
+          leaf name-overhead {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Overhead profile name";
+          }
+          leaf inherit {
+            type empty;
+            description
+              "inherit profile to children";
+          }
+        }
+        list resource {
+          if-feature qos-profile-resource;
+          key "resource";
+          max-elements 1;
+          description
+            "Resource profile";
+          leaf resource {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Resource profile name";
+          }
+        }
+      }
+      container port-queue-depth {
+        presence "";
+        description
+          "Total depth of all queues under the port";
+        leaf depth-num {
+          type uint32 {
+            range "32..800000";
+          }
+          mandatory true;
+          description
+            "Number of packets (per port)";
+        }
+        leaf average-packet-size {
+          type uint16 {
+            range "128..9600";
+          }
+          description
+            "Average packet size";
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet/l"
+  + "2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc" {
+    description
+      "ericsson-qos-interface";
+    /*
+    flow apply { admission-control profile (prof-name) { in |
+     out | bidirectional } | ip profile (profile-name) { in | out
+     | both } }
+    */
+    container flow-apply {
+      if-feature qos-intf-ssr;
+      presence "";
+      description
+        "Apply Flows on this circuit";
+      choice flow-apply {
+        case admission-control-profile {
+          container admission-control-profile {
+            description
+              "Apply a Flow AC profile to this circuit";
+            leaf prof-name {
+              type string {
+                length "1..63";
+              }
+              mandatory true;
+              description
+                "Specify the name of a Flow Admission-Control
+                 profile";
+            }
+            choice admission-control-profile-choice {
+              case in {
+                leaf in {
+                  type empty;
+                  description
+                    "Apply FAC profile for ingress traffic";
+                }
+              }
+              case out {
+                leaf out {
+                  type empty;
+                  description
+                    "Apply FAC profile for egress traffic";
+                }
+              }
+              case bidirectional {
+                leaf bidirectional {
+                  type empty;
+                  description
+                    "Apply FAC profile for bidirectional
+                     traffic";
+                }
+              }
+            }
+          }
+        }
+        case ip-profile {
+          container ip-profile {
+            description
+              "IP flow profile configuration";
+            leaf profile-name {
+              type string {
+                length "1..63";
+              }
+              mandatory true;
+              description
+                "Profile name";
+            }
+            choice ip-profile-choice {
+              case in {
+                leaf in {
+                  type empty;
+                  description
+                    "Apply profile in ingress direction only";
+                }
+              }
+              case out {
+                leaf out {
+                  type empty;
+                  description
+                    "Apply profile in egress direction only";
+                }
+              }
+              case both {
+                leaf both {
+                  type empty;
+                  description
+                    "Apply profile in ingress and egress
+                     directions";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    rate circuit { in | out } {(rate-num) burst (burst-num) [
+     excess-burst (burst-num) ] [ queuing-burst (burst-num) ] | <
+     adjust link-bandwidth >}
+    */
+    list rate-circuit {
+      if-feature qos-intf-ssr;
+      key "rate-circuit-choice";
+      max-elements 2;
+      description
+        "Configure QoS circuit rate";
+      leaf rate-circuit-choice {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Configure inbound policy circuit rates";
+          }
+          enum out {
+            value 1;
+            description
+              "Configure outbound policy circuit rates";
+          }
+        }
+        description
+          "leaf rate-circuit-choice.";
+      }
+      choice rate-burst-params {
+        description
+          "QoS rate and burst parameters";
+        case rate-num {
+          container rate-num {
+            description
+              "container rate-num.";
+            leaf rate-num {
+              type uint32 {
+                range "66..100000000";
+              }
+              mandatory true;
+              description
+                "Rate in kbps";
+            }
+            leaf burst {
+              type empty;
+              mandatory true;
+              description
+                "Burst size";
+            }
+            leaf burst-num {
+              type uint32 {
+                range "1..4250000000";
+              }
+              mandatory true;
+              description
+                "Burst size in bytes";
+            }
+            leaf excess-burst {
+              type uint32 {
+                range "1..4250000000";
+              }
+              description
+                "Max burst size";
+            }
+            leaf queuing-burst {
+              when "../../rate-circuit-choice='out'" {
+                description
+                  "";
+              }
+              type uint32 {
+                range "1..8000000";
+              }
+              description
+                "Queuing burst size in bytes";
+            }
+          }
+        }
+        case adjust-link-bandwidth {
+          leaf adjust-link-bandwidth {
+            when "../rate-circuit-choice='out'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Adjust link-bandwidth circuit rate configuration";
+          }
+        }
+      }
+    }
+    /*
+    qos {priority (pr-num) | rate {pir (rate-num) [ burst
+     (burst-num) ] | cir (rate-num) [ burst (burst-num) ] |
+     maximum  (rate-num) | minimum  (rate-num) | adjust link-
+     bandwidth} | weight (weight-num)}
+    */
+    container qos {
+      description
+        "Configure QoS parameters";
+      leaf priority {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Circuit default QoS priority";
+      }
+      container rate {
+        description
+          "Circuit rate limits";
+        container pir {
+          presence "";
+          description
+            "Peak information rate in kbps";
+          leaf rate-num {
+            type uint32 {
+              range "325..10000000";
+            }
+            mandatory true;
+            description
+              "Rate in Kbps";
+          }
+          leaf burst {
+            type uint32 {
+              range "1000..523264";
+            }
+            description
+              "Burst size";
+          }
+        }
+        container cir {
+          presence "";
+          description
+            "Committed information rate in kbps";
+          leaf rate-num {
+            type uint32 {
+              range "325..10000000";
+            }
+            must "(../../pir) and (number(.)<= number(../../pir"
+            + "/rate-num))" {
+              error-message "cir must be less than or equal to "
+              + "pir.";
+              description
+                "min rate must be less than or equal to max
+                 rate";
+            }
+            mandatory true;
+            description
+              "Rate in Kbps";
+          }
+          leaf burst {
+            type uint32 {
+              range "1000..523264";
+            }
+            description
+              "Burst size";
+          }
+        }
+        leaf maximum {
+          if-feature qos-rate-maximum;
+          type uint32 {
+            range "1000..10000000";
+          }
+          must "not (../minimum) or number(.) > "
+          + "number(../minimum)" {
+            error-message "min rate must be less than max rate";
+            description
+              "min rate must be less than max rate";
+          }
+          description
+            "Maximum rate limit";
+        }
+        leaf minimum {
+          when "not (../../weight)" {
+            description
+              "";
+          }
+          if-feature qos-rate-minimum;
+          type uint32 {
+            range "4..1000000";
+          }
+          must "not (../maximum) or number(.) < "
+          + "number(../maximum)" {
+            error-message "min rate must be less than max rate";
+            description
+              "min rate must be less than max rate";
+          }
+          description
+            "Minimum rate limit";
+        }
+        leaf adjust-link-bandwidth {
+          type empty;
+          description
+            "Adjust link-bandwidth rate configuration";
+        }
+      }
+      leaf weight {
+        type uint16 {
+          range "1..256";
+        }
+        description
+          "Relative weight";
+      }
+      container policy {
+        description
+          "Configure policy";
+        list metering {
+          if-feature qos-intf-ssr;
+          key "pol-name";
+          max-elements 1;
+          description
+            "Set QoS metering policy to use";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:metering" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a metering policy name";
+            }
+            description
+              "Must specify a metering policy name";
+          }
+          choice metering-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                if-feature qos-hierarchical;
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice metering-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        list policing {
+          key "pol-name";
+          max-elements 1;
+          description
+            "Input policing";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:policing" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a policing policy name";
+            }
+            description
+              "Must specify a policing policy name";
+          }
+          choice policing-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                if-feature qos-hierarchical;
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice policing-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        leaf-list queuing {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Output queuing, must specify a";
+        }
+        leaf-list protocol-rate-limit {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Protocol rate limiting";
+        }
+      }
+      leaf hierarchical-mode-strict {
+        type empty;
+        description
+          "Strict priority scheduling";
+      }
+      container profile {
+        description
+          "Configure profile";
+        list overhead {
+          key "name-overhead";
+          max-elements 1;
+          description
+            "Overhead profile";
+          leaf name-overhead {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Overhead profile name";
+          }
+          leaf inherit {
+            type empty;
+            description
+              "inherit profile to children";
+          }
+        }
+        list resource {
+          if-feature qos-profile-resource;
+          key "resource";
+          max-elements 1;
+          description
+            "Resource profile";
+          leaf resource {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Resource profile name";
+          }
+        }
+      }
+    }
+    /*
+    rate-circuit-out  <adjust link-bandwidth >
+    */
+    container rate-circuit-out {
+      description
+        "Configure QoS rate";
+      leaf adjust-link-bandwidth {
+        type empty;
+        description
+          "Adjust link-bandwidth circuit rate configuration";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l"
+  + "2vlanxrouter6000:pvc-list" {
+    description
+      "ericsson-qos-interface";
+    /*
+    flow apply { admission-control profile (prof-name) { in |
+     out | bidirectional } | ip profile (profile-name) { in | out
+     | both } }
+    */
+    container flow-apply {
+      if-feature qos-intf-ssr;
+      presence "";
+      description
+        "Apply Flows on this circuit";
+      choice flow-apply {
+        case admission-control-profile {
+          container admission-control-profile {
+            description
+              "Apply a Flow AC profile to this circuit";
+            leaf prof-name {
+              type string {
+                length "1..63";
+              }
+              mandatory true;
+              description
+                "Specify the name of a Flow Admission-Control
+                 profile";
+            }
+            choice admission-control-profile-choice {
+              case in {
+                leaf in {
+                  type empty;
+                  description
+                    "Apply FAC profile for ingress traffic";
+                }
+              }
+              case out {
+                leaf out {
+                  type empty;
+                  description
+                    "Apply FAC profile for egress traffic";
+                }
+              }
+              case bidirectional {
+                leaf bidirectional {
+                  type empty;
+                  description
+                    "Apply FAC profile for bidirectional
+                     traffic";
+                }
+              }
+            }
+          }
+        }
+        case ip-profile {
+          container ip-profile {
+            description
+              "IP flow profile configuration";
+            leaf profile-name {
+              type string {
+                length "1..63";
+              }
+              mandatory true;
+              description
+                "Profile name";
+            }
+            choice ip-profile-choice {
+              case in {
+                leaf in {
+                  type empty;
+                  description
+                    "Apply profile in ingress direction only";
+                }
+              }
+              case out {
+                leaf out {
+                  type empty;
+                  description
+                    "Apply profile in egress direction only";
+                }
+              }
+              case both {
+                leaf both {
+                  type empty;
+                  description
+                    "Apply profile in ingress and egress
+                     directions";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    rate circuit { in | out } {(rate-num) burst (burst-num) [
+     excess-burst (burst-num) ] [ queuing-burst (burst-num) ] | <
+     adjust link-bandwidth >}
+    */
+    list rate-circuit {
+      if-feature qos-intf-ssr;
+      key "rate-circuit-choice";
+      max-elements 2;
+      description
+        "Configure QoS circuit rate";
+      leaf rate-circuit-choice {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Configure inbound policy circuit rates";
+          }
+          enum out {
+            value 1;
+            description
+              "Configure outbound policy circuit rates";
+          }
+        }
+        description
+          "leaf rate-circuit-choice.";
+      }
+      choice rate-burst-params {
+        description
+          "QoS rate and burst parameters";
+        case rate-num {
+          container rate-num {
+            description
+              "container rate-num.";
+            leaf rate-num {
+              type uint32 {
+                range "66..100000000";
+              }
+              mandatory true;
+              description
+                "Rate in kbps";
+            }
+            leaf burst {
+              type empty;
+              mandatory true;
+              description
+                "Burst size";
+            }
+            leaf burst-num {
+              type uint32 {
+                range "1..4250000000";
+              }
+              mandatory true;
+              description
+                "Burst size in bytes";
+            }
+            leaf excess-burst {
+              type uint32 {
+                range "1..4250000000";
+              }
+              description
+                "Max burst size";
+            }
+            leaf queuing-burst {
+              when "../../rate-circuit-choice='out'" {
+                description
+                  "";
+              }
+              type uint32 {
+                range "1..8000000";
+              }
+              description
+                "Queuing burst size in bytes";
+            }
+          }
+        }
+        case adjust-link-bandwidth {
+          leaf adjust-link-bandwidth {
+            when "../rate-circuit-choice='out'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Adjust link-bandwidth circuit rate configuration";
+          }
+        }
+      }
+    }
+    /*
+    qos {priority (pr-num) | rate {pir (rate-num) [ burst
+     (burst-num) ] | cir (rate-num) [ burst (burst-num) ] |
+     maximum  (rate-num) | minimum  (rate-num) | adjust link-
+     bandwidth} | weight (weight-num)}
+    */
+    container qos {
+      description
+        "Configure QoS parameters";
+      leaf priority {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Circuit default QoS priority";
+      }
+      container rate {
+        description
+          "Circuit rate limits";
+        container pir {
+          presence "";
+          description
+            "Peak information rate in kbps";
+          leaf rate-num {
+            type uint32 {
+              range "325..10000000";
+            }
+            mandatory true;
+            description
+              "Rate in Kbps";
+          }
+          leaf burst {
+            type uint32 {
+              range "1000..523264";
+            }
+            description
+              "Burst size";
+          }
+        }
+        container cir {
+          presence "";
+          description
+            "Committed information rate in kbps";
+          leaf rate-num {
+            type uint32 {
+              range "325..10000000";
+            }
+            must "(../../pir) and (number(.)<= number(../../pir"
+            + "/rate-num))" {
+              error-message "cir must be less than or equal to "
+              + "pir.";
+              description
+                "min rate must be less than or equal to max
+                 rate";
+            }
+            mandatory true;
+            description
+              "Rate in Kbps";
+          }
+          leaf burst {
+            type uint32 {
+              range "1000..523264";
+            }
+            description
+              "Burst size";
+          }
+        }
+        leaf maximum {
+          if-feature qos-rate-maximum;
+          type uint32 {
+            range "1000..10000000";
+          }
+          must "not (../minimum) or number(.) > "
+          + "number(../minimum)" {
+            error-message "min rate must be less than max rate";
+            description
+              "min rate must be less than max rate";
+          }
+          description
+            "Maximum rate limit";
+        }
+        leaf minimum {
+          when "not (../../weight)" {
+            description
+              "";
+          }
+          if-feature qos-rate-minimum;
+          type uint32 {
+            range "4..1000000";
+          }
+          must "not (../maximum) or number(.) < "
+          + "number(../maximum)" {
+            error-message "min rate must be less than max rate";
+            description
+              "min rate must be less than max rate";
+          }
+          description
+            "Minimum rate limit";
+        }
+        leaf adjust-link-bandwidth {
+          type empty;
+          description
+            "Adjust link-bandwidth rate configuration";
+        }
+      }
+      leaf weight {
+        type uint16 {
+          range "1..256";
+        }
+        description
+          "Relative weight";
+      }
+      container policy {
+        description
+          "Configure policy";
+        list metering {
+          if-feature qos-intf-ssr;
+          key "pol-name";
+          max-elements 1;
+          description
+            "Set QoS metering policy to use";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:metering" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a metering policy name";
+            }
+            description
+              "Must specify a metering policy name";
+          }
+          choice metering-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                if-feature qos-hierarchical;
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice metering-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        list policing {
+          key "pol-name";
+          max-elements 1;
+          description
+            "Input policing";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:policing" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a policing policy name";
+            }
+            description
+              "Must specify a policing policy name";
+          }
+          choice policing-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                if-feature qos-hierarchical;
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice policing-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        leaf-list queuing {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Output queuing, must specify a";
+        }
+        leaf-list protocol-rate-limit {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Protocol rate limiting";
+        }
+      }
+      leaf hierarchical-mode-strict {
+        type empty;
+        description
+          "Strict priority scheduling";
+      }
+      container profile {
+        description
+          "Configure profile";
+        list overhead {
+          key "name-overhead";
+          max-elements 1;
+          description
+            "Overhead profile";
+          leaf name-overhead {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Overhead profile name";
+          }
+          leaf inherit {
+            type empty;
+            description
+              "inherit profile to children";
+          }
+        }
+        list resource {
+          if-feature qos-profile-resource;
+          key "resource";
+          max-elements 1;
+          description
+            "Resource profile";
+          leaf resource {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Resource profile name";
+          }
+        }
+      }
+    }
+    /*
+    rate-circuit-out  <adjust link-bandwidth >
+    */
+    container rate-circuit-out {
+      description
+        "Configure QoS rate";
+      leaf adjust-link-bandwidth {
+        type empty;
+        description
+          "Adjust link-bandwidth circuit rate configuration";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet/l"
+  + "2servicer6k:service-instance" {
+    description
+      "ericsson-qos-interface";
+    /*
+    qos priority (pr-num)
+    */
+    container qos {
+      description
+        "Configure QoS parameters";
+      leaf priority {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Circuit default QoS priority";
+      }
+      container policy {
+        description
+          "Configure policy";
+        list metering {
+          if-feature qos-intf-ssr;
+          key "pol-name";
+          max-elements 1;
+          description
+            "Set QoS metering policy to use";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:metering" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a metering policy name";
+            }
+            description
+              "Must specify a metering policy name";
+          }
+          leaf acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+        list policing {
+          key "pol-name";
+          max-elements 1;
+          description
+            "Input policing";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:policing" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a policing policy name";
+            }
+            description
+              "Must specify a policing policy name";
+          }
+          leaf acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+        leaf-list queuing {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Output queuing, must specify a";
+        }
+        leaf protocol-rate-limit {
+          if-feature qos-intf-ssr;
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          description
+            "Protocol rate limiting";
+        }
+      }
+      container profile {
+        description
+          "Configure profile";
+        list overhead {
+          key "overhead";
+          max-elements 1;
+          description
+            "Overhead profile";
+          leaf overhead {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Overhead profile name";
+          }
+        }
+        list resource {
+          if-feature qos-profile-resource;
+          key "resource";
+          max-elements 1;
+          description
+            "Resource profile";
+          leaf resource {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Resource profile name";
+          }
+        }
+      }
+    }
+    /*
+    rate-circuit-out  <adjust link-bandwidth >
+    */
+    container rate-circuit-out {
+      description
+        "Configure QoS rate";
+      leaf adjust-link-bandwidth {
+        type empty;
+        description
+          "Adjust link-bandwidth circuit rate configuration";
+      }
+    }
+  }
+
+  augment
+  "/if:interfaces/if:interface/ifxrouter6000:l3-interface" {
+    description
+      "ericsson-qos-interface";
+    /*
+    mark-dscp-destination <mark dscp destination>
+    */
+    container mark-dscp-destination {
+      description
+        "Enable IP packet marking";
+      leaf mark-dscp-destination {
+        type empty;
+        description
+          "Enable DSCP marking based on destination";
+      }
+    }
+    /*
+    propagate qos { from ip { class-map (class-map-name) } |
+     from mpls-ip { class-map (class-map-name) } | to ip [ class-
+     map (class-map-name) ] | to mpls [ class-map (class-map-
+     name) ] }
+    */
+    container propagate-qos {
+      description
+        "Propagate QoS information";
+      container from-ip {
+        presence "";
+        description
+          "Configure IP qos mapping";
+        leaf class-map {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:class-"
+            + "map/qosrouter6000:map-name";
+          }
+          must "/qosrouter6000:qos/qosrouter6000:class-"
+          + "map[qosrouter6000:map-name = "
+          + "current()]/qosrouter6000:ip/qosrouter6000:in" {
+            error-message "class-map must be ip type for in "
+            + "direction";
+            description
+              "leafref to class-map with ip in type";
+          }
+          mandatory true;
+          description
+            "Configure packet classification mapping";
+        }
+      }
+      container from-mpls-ip {
+        when "(../../ifxrouter6000:context='local') and "
+          + "(/ctxsr6k:contexts/ctxr6k:context/ctxr6k:mpls-diffserv-trust-outermost-exp)"{
+          description
+             "propagate qos from mpls-ip can be configured local context only.
+              mpls diffserv trust outermost-exp should be configured before mpls-ip.";
+        }
+        presence "";
+        description
+          "Configure IP qos mapping";
+        leaf class-map {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:class-"
+            + "map/qosrouter6000:map-name";
+          }
+          must "/qosrouter6000:qos/qosrouter6000:class-"
+          + "map[qosrouter6000:map-name = current()]/qosrouter6000"
+          + ":mpls-ip/qosrouter6000:in" {
+            error-message "class-map must be mpls-ip type for in "
+            + "direction";
+            description
+              "leafref to class-map with mpls-ip in type";
+          }
+          mandatory true;
+          description
+            "Configure packet classification mapping";
+        }
+      }
+      container to-ip {
+        presence "";
+        description
+          "Configure IP qos mapping";
+        leaf class-map {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:class-"
+            + "map/qosrouter6000:map-name";
+          }
+          must "/qosrouter6000:qos/qosrouter6000:class-"
+          + "map[qosrouter6000:map-name = "
+          + "current()]/qosrouter6000:ip/qosrouter6000:out" {
+            error-message "class-map must be ip type for out "
+            + "direction";
+            description
+              "leafref to class-map with ip out type";
+          }
+          description
+            "Configure packet classification mapping";
+        }
+      }
+      container to-mpls {
+          when "../../ifxrouter6000:context='local'" {
+          description
+            "propagate qos to mpls can be configured local context only.";
+        }
+        presence "";
+        description
+          "Configure IP qos mapping";
+        leaf class-map {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:class-"
+            + "map/qosrouter6000:map-name";
+          }
+          must "/qosrouter6000:qos/qosrouter6000:class-"
+          + "map[qosrouter6000:map-name = "
+          + "current()]/qosrouter6000:mpls/qosrouter6000:out" {
+            error-message "class-map must be mpls type for out "
+            + "direction";
+            description
+              "leafref to class-map with mpls out type";
+          }
+          mandatory true;
+          description
+            "Configure packet classification mapping";
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet" {
+    description
+      "ericsson-qos-interface";
+    /*
+    rate circuit { in | out } { (rate-num) burst (burst-num) [
+     excess-burst (burst-num) ] [ queuing-burst (burst-num) ] | <
+     adjust link-bandwidth >}
+    */
+    list rate-circuit {
+      if-feature qos-intf-ssr;
+      key "rate-circuit-choice";
+      max-elements 2;
+      description
+        "Configure QoS circuit rate";
+      leaf rate-circuit-choice {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Configure inbound policy circuit rates";
+          }
+          enum out {
+            value 1;
+            description
+              "Configure outbound policy circuit rates";
+          }
+        }
+        description
+          "leaf rate-circuit-choice.";
+      }
+      choice rate-burst-params  {
+        description
+          "QoS rate and burst parameters";
+        case rate-num {
+          container rate-num {
+            description
+              "container rate-num.";
+            leaf rate-num {
+              type uint32 {
+                range "66..100000000";
+              }
+              mandatory true;
+              description
+                "Rate in kbps";
+            }
+            leaf burst {
+              type empty;
+              mandatory true;
+              description
+                "Burst size";
+            }
+            leaf burst-num {
+              type uint32 {
+                range "1..4250000000";
+              }
+              mandatory true;
+              description
+                "Burst size in bytes";
+            }
+            leaf excess-burst {
+              type uint32 {
+                range "1..4250000000";
+              }
+              description
+                "Max burst size";
+            }
+            leaf queuing-burst {
+              when "../../rate-circuit-choice='out'" {
+                description
+                  "";
+              }
+              type uint32 {
+                range "1..8000000";
+              }
+              description
+                "Queuing burst size in bytes";
+            }
+          }
+        }
+        case adjust-link-bandwidth {
+          leaf adjust-link-bandwidth {
+            when "../rate-circuit-choice='out'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Adjust link-bandwidth circuit rate configuration";
+          }
+        }
+      }
+    }
+    /*
+    qos {priority (pr-num) | < rate { < maximum (rate-num) [ burst
+     (burst-num) ]  > | < adjust link-bandwidth > | latency-optimized } > }
+    */
+    container qos {
+      description
+        "Configure QoS parameters";
+      leaf priority {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Circuit default QoS priority";
+      }
+      container rate {
+        description
+          "Circuit rate limits";
+        container maximum {
+          presence "";
+          description
+            "Maximum rate limit";
+          leaf rate-num {
+            type uint32 {
+              range "1000..10000000";
+            }
+            mandatory true;
+            description
+              "Rate in Kbps";
+          }
+          leaf burst {
+            if-feature qos-burst;
+            type uint32 {
+              range "1024..524288";
+            }
+            description
+              "Burst size";
+          }
+        }
+        leaf adjust-link-bandwidth {
+          type empty;
+          description
+            "Adjust link-bandwidth rate configuration";
+        }
+        leaf latency-optimized {
+          type empty;
+          description
+            "Latency optimized";
+        }
+      }
+      container policy {
+        description
+          "Configure policy";
+        list metering {
+          if-feature qos-intf-ssr;
+          key "pol-name";
+          max-elements 1;
+          description
+            "Set QoS metering policy to use";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:metering" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a metering policy name";
+            }
+            description
+              "Must specify a metering policy name";
+          }
+          choice metering-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                if-feature qos-hierarchical;
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice metering-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        list policing {
+          key "pol-name";
+          max-elements 1;
+          description
+            "Input policing";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:policing" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a policing policy name";
+            }
+            description
+              "Must specify a policing policy name";
+          }
+          choice policing-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                if-feature qos-ethernet-hierarchical;
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice policing-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        leaf-list queuing {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Output queuing, must specify a";
+        }
+        leaf-list protocol-rate-limit {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Protocol rate limiting";
+        }
+      }
+      container hierarchical {
+        description
+          "Hierarchical scheduling settings";
+        leaf mode-strict {
+          type empty;
+          description
+            "Strict priority scheduling";
+        }
+        list priority-group {
+          key "pr-num";
+          description
+            "priority group";
+          leaf pr-num {
+            type uint8 {
+              range "0..7";
+            }
+            description
+              "Priority group number";
+          }
+          container rate {
+            description
+              "Priority group rate";
+            container maximum {
+              presence "";
+              description
+                "Maximum rate limit";
+              leaf rate-num {
+                type uint32 {
+                  range "325..100000000";
+                }
+                mandatory true;
+                description
+                  "Rate in Kbps";
+              }
+              leaf burst {
+                type uint32 {
+                  range "1000..523264";
+                }
+                default "100352";
+                description
+                  "Burst size";
+              }
+            }
+          }
+        }
+        container multicast {
+          if-feature qos-multicast;
+          description
+            "multicast separation";
+          choice multicast {
+            case prioritized {
+              leaf prioritized {
+                type empty;
+                description
+                  "multicast prioritized";
+              }
+            }
+            case aggregated {
+              container aggregated {
+                presence "";
+                description
+                  "multicast aggregated";
+                leaf priority {
+                  type uint8 {
+                    range "0..7";
+                  }
+                  description
+                    "multicast aggregated priority";
+                }
+              }
+            }
+          }
+        }
+        container weight {
+          if-feature qos-weight;
+          description
+            "mcast or ucast weight";
+          container default {
+            presence "";
+            description
+              "default (mcast and ucast) weight";
+            leaf weight-value {
+              type uint16 {
+                range "1..256";
+              }
+              description
+                "weight number";
+            }
+          }
+          container mcast {
+            presence "";
+            description
+              "multicast weight";
+            leaf weight-value {
+              type uint16 {
+                range "1..256";
+              }
+              description
+                "weight number";
+            }
+          }
+        }
+      }
+      container profile {
+        description
+          "Configure profile";
+        list overhead {
+          key "name-overhead";
+          max-elements 1;
+          description
+            "Overhead profile";
+          leaf name-overhead {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Overhead profile name";
+          }
+          leaf inherit {
+            type empty;
+            description
+              "inherit profile to children";
+          }
+        }
+        list resource {
+          if-feature qos-profile-resource;
+          key "resource";
+          max-elements 1;
+          description
+            "Resource profile";
+          leaf resource {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Resource profile name";
+          }
+        }
+      }
+      container port-queue-depth {
+        presence "";
+        description
+          "Total depth of all queues under the port";
+        leaf depth-num {
+          type uint32 {
+            range "32..800000";
+          }
+          mandatory true;
+          description
+            "Number of packets (per port)";
+        }
+        leaf average-packet-size {
+          type uint16 {
+            range "128..9600";
+          }
+          description
+            "Average packet size";
+        }
+      }
+    }
+    /*
+    rate-circuit-out  <adjust link-bandwidth >
+    */
+    container rate-circuit-out {
+      description
+        "Configure QoS rate";
+      leaf adjust-link-bandwidth {
+        type empty;
+        description
+          "Adjust link-bandwidth circuit rate configuration";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/bvixrouter6000:bvi" {
+    description
+      "ericsson-qos-interface";
+    /*
+    qos {< policy { < policing (pol-name) [ inherit |
+     hierarchical ] [ ip acl-counters | ipv6 acl-counters | ip
+     ipv6 acl-counters ]  > | < metering (pol-name) [ inherit |
+     hierarchical ] [ ip acl-counters | ipv6 acl-counters | ip
+     ipv6 acl-counters ] >} >}
+    */
+    container qos {
+      presence "";
+      description
+        "Configure QoS parameters";
+      container policy {
+        description
+          "Configure policy";
+        list policing {
+          key "pol-name";
+          max-elements 1;
+          description
+            "Input policing";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:policing" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a policing policy name";
+            }
+            description
+              "Policy name";
+          }
+          choice policing-opt1 {
+            case inherit {
+              leaf inherit {
+                if-feature qos-intf-ssr;
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                if-feature qos-intf-ssr;
+                if-feature qos-hierarchical;
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice policing-opt {
+            case ip-acl-counters {
+              leaf ip-acl-counters {
+                type empty;
+                description
+                  "leaf ip-acl-counters.";
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "leaf ipv6-acl-counters.";
+              }
+            }
+            case ip-ipv6-acl-counters {
+              leaf ip-ipv6-acl-counters {
+                type empty;
+                description
+                  "leaf ip-ipv6-acl-counters.";
+              }
+            }
+          }
+        }
+        list metering {
+          if-feature qos-intf-ssr;
+          key "pol-name";
+          max-elements 1;
+          description
+            "Set QoS metering policy to use";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:metering" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a metering policy name";
+            }
+            description
+              "Must specify a metering policy name";
+          }
+          choice metering-opt1 {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice metering-opt {
+            case ip-acl-counters {
+              leaf ip-acl-counters {
+                type empty;
+                description
+                  "leaf ip-acl-counters.";
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "leaf ipv6-acl-counters.";
+              }
+            }
+            case ip-ipv6-acl-counters {
+              leaf ip-ipv6-acl-counters {
+                type empty;
+                description
+                  "leaf ip-ipv6-acl-counters.";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/lagxrouter6000:link-"
+  + "group/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc" {
+    description
+      "ericsson-qos-interface";
+    /*
+    qos {priority (pr-num) | rate {pir (rate-num) [ burst
+     (burst-num) ] | cir (rate-num) [ burst (burst-num) ] |
+     maximum  (rate-num) | minimum  (rate-num)} | weight (weight-
+     num)}
+    */
+    container qos {
+      description
+        "Configure QoS parameters";
+      leaf priority {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Circuit default QoS priority";
+      }
+      container rate {
+        description
+          "Circuit rate limits";
+        container pir {
+          presence "";
+          description
+            "Peak information rate in kbps";
+          leaf rate-num {
+            type uint32 {
+              range "325..10000000";
+            }
+            mandatory true;
+            description
+              "Rate in Kbps";
+          }
+          leaf burst {
+            type uint32 {
+              range "1000..523264";
+            }
+            description
+              "Burst size";
+          }
+        }
+        container cir {
+          presence "";
+          description
+            "Committed information rate in kbps";
+          leaf rate-num {
+            type uint32 {
+              range "325..10000000";
+            }
+            must "(../../pir) and (number(.)<= number(../../pir"
+            + "/rate-num))" {
+              error-message "cir must be less than or equal to "
+              + "pir.";
+              description
+                "min rate must be less than or equal to max
+                 rate";
+            }
+            must "(../../pir) and (number(.)<= number(../../pir"
+            + "/rate-num))" {
+              error-message "cir must be less than or equal to "
+              + "pir.";
+              description
+                "min rate must be less than or equal to max
+                 rate";
+            }
+            mandatory true;
+            description
+              "Rate in Kbps";
+          }
+          leaf burst {
+            type uint32 {
+              range "1000..523264";
+            }
+            description
+              "Burst size";
+          }
+        }
+        leaf maximum {
+          if-feature qos-rate-maximum;
+          type uint32 {
+            range "1000..10000000";
+          }
+          must "not (../minimum) or number(.) > "
+          + "number(../minimum)" {
+            error-message "min rate must be less than max rate";
+            description
+              "min rate must be less than max rate";
+          }
+          must "not (../minimum) or number(.) > "
+          + "number(../minimum)" {
+            error-message "min rate must be less than max rate";
+            description
+              "min rate must be less than max rate";
+          }
+          description
+            "Maximum rate limit";
+        }
+        leaf minimum {
+          when "not (../../weight)" {
+            description
+              "";
+          }
+          if-feature qos-rate-minimum;
+          type uint32 {
+            range "4..1000000";
+          }
+          must "not (../maximum) or number(.) < "
+          + "number(../maximum)" {
+            error-message "min rate must be less than max rate";
+            description
+              "min rate must be less than max rate";
+          }
+          must "not (../maximum) or number(.) < "
+          + "number(../maximum)" {
+            error-message "min rate must be less than max rate";
+            description
+              "min rate must be less than max rate";
+          }
+          description
+            "Minimum rate limit";
+        }
+      }
+      leaf weight {
+        type uint16 {
+          range "1..256";
+        }
+        description
+          "Relative weight";
+      }
+      container policy {
+        description
+          "Configure policy";
+        list policing {
+          key "pol-name";
+          max-elements 1;
+          description
+            "Input policing";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:policing" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a policing policy name";
+            }
+            description
+              "Must specify a policing policy name";
+          }
+          choice policing-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                if-feature qos-hierarchical;
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice policing-opt1 {
+            case ip {
+              container ip {
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        list metering {
+          if-feature qos-intf-ssr;
+          key "pol-name";
+          max-elements 1;
+          description
+            "Set QoS metering policy to use";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:metering" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a metering policy name";
+            }
+            description
+              "Must specify a metering policy name";
+          }
+          choice metering-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice metering-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        leaf-list queuing {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Output queuing, must specify a";
+        }
+        leaf-list protocol-rate-limit {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Protocol rate limiting";
+        }
+      }
+      container profile {
+        description
+          "Configure profile";
+        list overhead {
+          key "name-overhead";
+          max-elements 1;
+          description
+            "Overhead profile";
+          leaf name-overhead {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Overhead profile name";
+          }
+          leaf inherit {
+            type empty;
+            description
+              "inherit profile to children";
+          }
+        }
+        list resource {
+          if-feature qos-profile-resource;
+          key "resource";
+          max-elements 1;
+          description
+            "Resource profile";
+          leaf resource {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Resource profile name";
+          }
+        }
+      }
+      leaf hierarchical-mode-strict {
+        type empty;
+        description
+          "Strict priority scheduling";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l"
+  + "2vlanxrouter6000:pvc" {
+    description
+      "ericsson-qos-interface";
+    /*
+    qos {priority (pr-num) | rate {pir (rate-num) [ burst
+     (burst-num) ] | cir (rate-num) [ burst (burst-num) ] |
+     maximum  (rate-num) | minimum  (rate-num) | adjust link-
+     bandwidth} | weight (weight-num)}
+    */
+    container qos {
+      description
+        "Configure QoS parameters";
+      leaf priority {
+        when "not(starts-with(../../../../if:name, 'bvi-'))" {
+          description
+            "priority is not applicable under BVI ports";
+        }
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Circuit default QoS priority";
+      }
+      container rate {
+        when "not(starts-with(../../../../if:name, 'bvi-')) and "
+        + "not(starts-with(../../../../if:name, 'lag-'))" {
+          description
+            "rate is not applicable under BVI ports and lag";
+        }
+        description
+          "Circuit rate limits";
+        container pir {
+          presence "";
+          description
+            "Peak information rate in kbps";
+          leaf rate-num {
+            type uint32 {
+              range "325..10000000";
+            }
+            mandatory true;
+            description
+              "Rate in Kbps";
+          }
+          leaf burst {
+            type uint32 {
+              range "1024..524288";
+            }
+            description
+              "Burst size";
+          }
+        }
+        container cir {
+          presence "";
+          description
+            "Committed information rate in kbps";
+          leaf rate-num {
+            type uint32 {
+              range "325..10000000";
+            }
+            mandatory true;
+            description
+              "Rate in Kbps";
+          }
+          leaf burst {
+            type uint32 {
+              range "1024..524288";
+            }
+            description
+              "Burst size";
+          }
+        }
+        leaf maximum {
+          if-feature qos-rate-maximum;
+          type uint32 {
+            range "4..1000000";
+          }
+          must "not (../minimum) or number(.) > "
+          + "number(../minimum)" {
+            error-message "min rate must be less than max rate";
+            description
+              "min rate must be less than max rate";
+          }
+          description
+            "Maximum rate limit";
+        }
+        leaf minimum {
+          when "not (../../weight)" {
+            description
+              "";
+          }
+          if-feature qos-rate-minimum;
+          type uint32 {
+            range "4..1000000";
+          }
+          must "not (../maximum) or number(.) < "
+          + "number(../maximum)" {
+            error-message "min rate must be less than max rate";
+            description
+              "min rate must be less than max rate";
+          }
+          description
+            "Minimum rate limit";
+        }
+        leaf adjust-link-bandwidth {
+          type empty;
+          description
+            "Adjust link-bandwidth rate configuration";
+        }
+      }
+      leaf weight {
+        when "not(starts-with(../../../../if:name, 'bvi-')) and "
+        + "not(starts-with(../../../../if:name, 'lag-'))" {
+          description
+            "weight is not applicable under BVI ports and lag";
+        }
+        type uint16 {
+          range "1..4096";
+        }
+        description
+          "Relative weight";
+      }
+      leaf hierarchical-mode-strict {
+        when "not(starts-with(../../../../if:name, 'bvi-')) and "
+        + "not(starts-with(../../../../if:name, 'lag-'))" {
+          description
+            "hierarchical is not applicable under BVI ports and
+             lag";
+        }
+        type empty;
+        description
+          "Strict priority scheduling";
+      }
+      container policy {
+        description
+          "Configure policy";
+        list policing {
+          key "pol-name";
+          max-elements 1;
+          description
+            "Input policing";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:policing" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a policing policy name";
+            }
+            description
+              "Must specify a policing policy name";
+          }
+          choice policing-opt {
+            case inherit {
+              leaf inherit {
+                when "not(starts-with(../../../../../../if:name, "
+                + "'bvi-'))" {
+                  description
+                    "inherit is not applicable under BVI ports";
+                }
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                when "not(starts-with(../../../../../../if:name, "
+                + "'bvi-'))" {
+                  description
+                    "hierarchical is not applicable under BVI
+                     ports";
+                }
+                if-feature qos-hierarchical;
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice policing-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        list metering {
+          if-feature qos-intf-ssr;
+          key "pol-name";
+          max-elements 1;
+          description
+            "Set QoS metering policy to use";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:metering" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a metering policy name";
+            }
+            description
+              "Must specify a metering policy name";
+          }
+          choice metering-opt {
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                type empty;
+                description
+                  "enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice metering-opt1 {
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPV6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        leaf-list queuing {
+          when "not(starts-with(../../../../../if:name, "
+          + "'bvi-'))" {
+            description
+              "queuing is not applicable under BVI ports";
+          }
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          must "(../../weight)or(../../hierarchical-mode-"
+          + "strict)or(../../rate)or(starts-"
+          + "with(../../../../../if:name, 'bvi-'))or(starts-"
+          + "with(../../../../../if:name, 'lag-'))" {
+            error-message "l2 node must exists with l3 node.";
+            description
+              "l2 node must exists with l3 node";
+          }
+          max-elements 1;
+          description
+            "Output queuing, must specify a";
+        }
+        leaf-list protocol-rate-limit {
+          when "not(starts-with(../../../../../if:name, "
+          + "'bvi-'))" {
+            description
+              "protocol-rate-limit is not applicable under BVI
+               ports";
+          }
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Protocol rate limiting";
+        }
+      }
+      container profile {
+        when "not(starts-with(../../../../if:name, 'bvi-'))" {
+          description
+            "profile is not applicable under BVI ports";
+        }
+        description
+          "Configure profile";
+        list overhead {
+          key "name-overhead";
+          max-elements 1;
+          description
+            "Overhead profile";
+          leaf name-overhead {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Overhead profile name";
+          }
+          leaf inherit {
+            type empty;
+            description
+              "inherit profile to children";
+          }
+        }
+        list resource {
+          if-feature qos-profile-resource;
+          key "resource";
+          max-elements 1;
+          description
+            "Resource profile";
+          leaf resource {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Resource profile name";
+          }
+        }
+      }
+    }
+    /*
+    rate circuit { in | out } {(rate-num) burst (burst-num) [
+     excess-burst (burst-num) ] [ queuing-burst (burst-num) ] | <
+     adjust link-bandwidth >}
+    */
+    list rate-circuit {
+      if-feature qos-intf-ssr;
+      key "rate-circuit-choice";
+      max-elements 2;
+      description
+        "Configure QoS circuit rate";
+      leaf rate-circuit-choice {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Configure inbound policy circuit rates";
+          }
+          enum out {
+            value 1;
+            description
+              "Configure outbound policy circuit rates";
+          }
+        }
+        description
+          "leaf rate-circuit-choice.";
+      }
+      choice rate-burst-params  {
+        description
+          "QoS rate and burst parameters";
+        case rate-num {
+          container rate-num {
+            description
+              "container rate-num.";
+            leaf rate-num {
+              type uint32 {
+                range "66..100000000";
+              }
+              mandatory true;
+              description
+                "Rate in kbps";
+            }
+            leaf burst {
+              type empty;
+              mandatory true;
+              description
+                "Burst size";
+            }
+            leaf burst-num {
+              type uint32 {
+                range "1..4250000000";
+              }
+              mandatory true;
+              description
+                "Burst size in bytes";
+            }
+            leaf excess-burst {
+              type uint32 {
+                range "1..4250000000";
+              }
+              description
+                "Max burst size";
+            }
+            leaf queuing-burst {
+              when "../../rate-circuit-choice='out'" {
+                description
+                  "";
+              }
+              type uint32 {
+                range "1..8000000";
+              }
+              description
+                "Queuing burst size in bytes";
+            }
+          }
+        }
+        case adjust-link-bandwidth {
+          leaf adjust-link-bandwidth {
+            when "../rate-circuit-choice='out'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Adjust link-bandwidth circuit rate configuration";
+          }
+        }
+      }
+    }
+    /*
+    rate-circuit-out  <adjust link-bandwidth >
+    */
+    container rate-circuit-out {
+      description
+        "Configure QoS rate";
+      leaf adjust-link-bandwidth {
+        type empty;
+        description
+          "Adjust link-bandwidth circuit rate configuration";
+      }
+    }
+    /*
+    flow apply { admission-control profile (prof-name) { in |
+     out | bidirectional } | ip profile (profile-name) { in | out
+     | both } }
+    */
+    container flow-apply {
+      if-feature qos-intf-ssr;
+      presence "";
+      description
+        "Apply Flows on this circuit";
+      choice flow-apply {
+        case admission-control-profile {
+          container admission-control-profile {
+            description
+              "Apply a Flow AC profile to this circuit";
+            leaf prof-name {
+              type string {
+                length "1..63";
+              }
+              mandatory true;
+              description
+                "Specify the name of a Flow Admission-Control
+                 profile";
+            }
+            choice admission-control-profile-choice {
+              case in {
+                leaf in {
+                  type empty;
+                  description
+                    "Apply FAC profile for ingress traffic";
+                }
+              }
+              case out {
+                leaf out {
+                  type empty;
+                  description
+                    "Apply FAC profile for egress traffic";
+                }
+              }
+              case bidirectional {
+                leaf bidirectional {
+                  type empty;
+                  description
+                    "Apply FAC profile for bidirectional
+                     traffic";
+                }
+              }
+            }
+          }
+        }
+        case ip-profile {
+          container ip-profile {
+            description
+              "IP flow profile configuration";
+            leaf profile-name {
+              type string {
+                length "1..63";
+              }
+              mandatory true;
+              description
+                "Profile name";
+            }
+            choice ip-profile-choice {
+              case in {
+                leaf in {
+                  type empty;
+                  description
+                    "Apply profile in ingress direction only";
+                }
+              }
+              case out {
+                leaf out {
+                  type empty;
+                  description
+                    "Apply profile in egress direction only";
+                }
+              }
+              case both {
+                leaf both {
+                  type empty;
+                  description
+                    "Apply profile in ingress and egress
+                     directions";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/lagxrouter6000:link-"
+  + "group/l2servicer6k:service-instance" {
+    description
+      "ericsson-qos-interface";
+    /*
+    qos priority (pr-num)
+    */
+    container qos {
+      description
+        "Configure QoS parameters";
+      leaf priority {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Circuit default QoS priority";
+      }
+      container policy {
+        description
+          "Configure policy";
+        list policing {
+          key "pol-name";
+          max-elements 1;
+          description
+            "Input policing";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:policing" {
+              error-message "Policy type doesn't match";
+              description
+                "Policy type must be policing";
+            }
+            description
+              "Must specify a policing policy name";
+          }
+          leaf acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+        list metering {
+          if-feature qos-intf-ssr;
+          key "pol-name";
+          max-elements 1;
+          description
+            "Set QoS metering policy to use";
+          leaf pol-name {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:policy/qosr"
+              + "outer6000:gpol-polname";
+            }
+            must "/qosrouter6000:qos/qosrouter6000:policy[qosrou"
+            + "ter6000:gpol-"
+            + "polname=current()]/qosrouter6000:metering" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a metering policy name";
+            }
+            description
+              "Must specify a metering policy name";
+          }
+          leaf acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+        leaf-list queuing {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:policy/qosrou"
+            + "ter6000:gpol-polname";
+          }
+          max-elements 1;
+          description
+            "Output queuing, must specify a";
+        }
+      }
+      container profile {
+        description
+          "Configure profile";
+        list overhead {
+          key "overhead";
+          max-elements 1;
+          description
+            "Overhead profile";
+          leaf overhead {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Overhead profile name";
+          }
+        }
+        list resource {
+          if-feature qos-profile-resource;
+          key "resource";
+          max-elements 1;
+          description
+            "Resource profile";
+          leaf resource {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:profile/qos"
+              + "router6000:profile-name";
+            }
+            description
+              "Resource profile name";
+          }
+        }
+      }
+    }
+  }
+
+}

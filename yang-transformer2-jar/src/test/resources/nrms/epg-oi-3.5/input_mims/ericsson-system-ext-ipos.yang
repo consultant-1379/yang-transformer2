@@ -1,0 +1,594 @@
+module ericsson-system-ext-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-system-ext-ipos";
+
+  prefix "sysxipos";
+
+  import ericsson-interfaces-ext-ipos {
+    prefix "ifxipos";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ietf-system {
+    prefix "sys";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-system-ext-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-10-18" {
+    description
+      "Introducing alarms for high memory utilization";
+    reference
+      "JIRA:SSR-18145";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "12";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "11";
+  }
+
+  revision "2019-04-03" {
+    description
+      "Add system autosync";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "10";
+  }
+
+  revision "2018-07-02" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "9";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "8";
+  }
+
+  revision "2017-09-05" {
+    description
+      "Add ntp server version default value.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2017-08-31" {
+    description
+      "Delete the system console.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2017-08-31" {
+    description
+      "Add ntp-broastcast default value and ip address
+       precondition.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2017-08-28" {
+    description
+      "Add manual_header for dummy container for ntp server
+       check.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2017-08-11" {
+    description
+      "SSR-6317 add summer timezonename leafref.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-07-17" {
+    description
+      "Add IPOS time-zone and remove ietf-system timezone in
+       yang model.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-06-26" {
+    description
+      "Add summer-time in yang model.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-06" {
+    description
+      "Create the ipos system yang model.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+  augment "/sys:system/sys:ntp/sys:server" {
+    description
+      "ericsson-system";
+
+      container server-checks {
+        description "The container implements checks for the NTP server function and SHALL NOT be used for configuration";
+        must "count(/sys:system/sys:ntp/sys:server"
+                + "[sysxipos:context=current()/../sysxipos:context][sys:prefer='true']) < 2" {
+                error-message "Conflict exists,prefer has already been set "
+                  + "under the same context.";
+                description
+                    "Conflict exists,prefer has already been set
+                     under the same context.";
+                }
+            }
+        }
+
+  augment "/sys:system" {
+    description
+      "ericsson-system";
+    /*
+    description (userlabel-str)
+    */
+    leaf description {
+      type string;
+      description
+        "Add descriptive text for the system";
+    }
+    /*
+    alarm { redundancy suppress | transceiver suppress | <
+     excessive-mem-utilization < percent (percent_val) > <
+     duration (duration_val) > > | < extreme-mem-utilization <
+     percent (perc_val) > < duration (sec_val) > >}
+    */
+    container alarm {
+      description
+        "Sets system level alarm options";
+      leaf redundancy-suppress {
+        type empty;
+        description
+          "Suppress all redundancy related alarms";
+      }
+      leaf transceiver-suppress {
+        type empty;
+        description
+          "Suppress all transceiver related alarms";
+      }
+      container excessive-mem-utilization {
+        description
+          "Configure the excessiveMemUtilization alarm
+           notification";
+        leaf excessive-mem-utilization-enable {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable excessive-mem-utilization-enable";
+        }
+        leaf percent {
+          when "../excessive-mem-utilization-enable='true'" {
+            description
+              "";
+          }
+          type uint8 {
+            range "80..99";
+          }
+          default "90";
+          description
+            "Configure threshold in percentage";
+        }
+        leaf duration {
+          when "../excessive-mem-utilization-enable='true'" {
+            description
+              "";
+          }
+          type uint16 {
+            range "0..3600";
+          }
+          default "30";
+          description
+            "Configure duration in second";
+        }
+      }
+      container extreme-mem-utilization {
+        description
+          "Configure the extremeMemUtilization alarm
+           notification";
+        leaf extreme-mem-utilization-enable {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable extreme-mem-utilization-enable";
+        }
+        leaf percent {
+          when "../extreme-mem-utilization-enable='true'" {
+            description
+              "";
+          }
+          type uint8 {
+            range "80..99";
+          }
+          default "95";
+          description
+            "Configure threshold in percentage";
+        }
+        leaf duration {
+          when "../extreme-mem-utilization-enable='true'" {
+            description
+              "";
+          }
+          type uint16 {
+            range "0..3600";
+          }
+          default "60";
+          description
+            "Configure duration in second";
+        }
+      }
+    }
+    /*
+    autosync
+    */
+    leaf autosync {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable autosync";
+    }
+  }
+
+  augment "/sys:system/sys:ntp/sys:server" {
+    description
+      "ericsson-system";
+    /*
+      source (intf-name)
+    */
+    leaf source {
+      type leafref {
+        path "/if:interfaces/if:interface/if:name";
+      }
+      description
+        "Interface for source address";
+    }
+    /*
+    version (ver-num)
+    */
+    leaf version {
+      type uint8 {
+        range "1..3";
+      }
+      default "3";
+      description
+        "Configure NTP version";
+    }
+    /*
+    server
+    */
+    leaf server {
+      type empty;
+      must "(../sys:association-type = 'peer')" {
+        error-message "The value of association type should be "
+        + "peer.";
+        description
+          "The value of association type should be peer.";
+      }
+      description
+        "Configured peer as a server";
+    }
+    /*
+    context (ctx-name)
+    */
+    leaf context {
+      type leafref {
+        path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+        + "context-name";
+      }
+      description
+        "Configure a context";
+    }
+  }
+
+  augment "/sys:system/sys:clock" {
+    description
+      "ericsson-system";
+    /*
+    timezone (timezone-str) (timezone-hr) [ (timezone-min) ][
+     local ]
+    */
+    list timezone {
+      key "timezone-str";
+      description
+        "Configure time zone";
+      leaf timezone-str {
+        type string;
+        description
+          "Time zone name";
+      }
+      leaf timezone-hr {
+        type int8 {
+          range "-23..23";
+        }
+        mandatory true;
+        description
+          "Hours offset from UTC";
+      }
+      leaf timezone-min {
+        type uint8 {
+          range "0..59";
+        }
+        description
+          "Minutes offset from UTC";
+      }
+      leaf local {
+        type empty;
+        must "count(/sys:system/sys:clock/sysxipos:timezone/"
+        + "sysxipos:local) < 2" {
+          error-message "Local timezone already set.";
+          description
+            "Local timezone already set.";
+        }
+        description
+          "Select as local timezone";
+      }
+    }
+    /*
+    summer-time (timezone-name) (summertime-name) { date
+     (summer-date-start) (summer-date-end) | recurring  [ <
+     recurring-opt {(summer-week-start) | first-start | last-
+     start} (summer-day-start) (summer-month-start) (summer-time-
+     start) {(summer-week-end) | first-end | last-end} (summer-
+     day-end) (summer-month-end)(summer-time-end) >]}
+    */
+    list summer-time {
+      key "timezone-name";
+      description
+        "Configure summer (daylight saving) time";
+      leaf timezone-name {
+        type leafref {
+          path "/sys:system/sys:clock/sysxipos:timezone/sysxipos:"
+          + "timezone-str";
+        }
+        description
+          "Time zone name";
+      }
+      leaf summertime-name {
+        type string;
+        mandatory true;
+        description
+          "Time zone name in summer";
+      }
+      choice summer-time-choice {
+        mandatory true;
+        description
+          "";
+        case date {
+          container date {
+            description
+              "Configure absolute summer time";
+            leaf summer-date-start {
+              type typesipos:system-date;
+              mandatory true;
+              description
+                "Date when summer (daylight saving) time begins.
+                 The date format: yyyy:mm:dd:hh:mm[:ss]";
+            }
+            leaf summer-date-end {
+              type typesipos:system-date;
+              mandatory true;
+              description
+                "Date when summer (daylight saving) time ends.
+                 The date format: yyyy:mm:dd:hh:mm[:ss]";
+            }
+          }
+        }
+        case recurring {
+          container recurring {
+            presence "";
+            description
+              "Configure recurring summer time";
+            container recurring-opt {
+              presence "";
+              description
+                "Configure recurring summer time option";
+              choice recurring-opt-choice {
+                description
+                  "";
+                case summer-week-start {
+                  leaf summer-week-start {
+                    type uint8 {
+                      range "1..4";
+                    }
+                    description
+                      "Week number to start";
+                  }
+                }
+                case first-start {
+                  leaf first-start {
+                    type empty;
+                    description
+                      "First week of the month";
+                  }
+                }
+                case last-start {
+                  leaf last-start {
+                    type empty;
+                    description
+                      "Last week of the month";
+                  }
+                }
+              }
+              leaf summer-day-start {
+                type typesipos:system_week_day_type;
+                mandatory true;
+                description
+                  "Weekday to start";
+              }
+              leaf summer-month-start {
+                type typesipos:system_month_type;
+                mandatory true;
+                description
+                  "Month to start";
+              }
+              leaf summer-time-start {
+                type uint8 {
+                  range "0..23";
+                }
+                mandatory true;
+                description
+                  "Time to start";
+              }
+              choice recurring-opt-choice1 {
+                description
+                  "";
+                case summer-week-end {
+                  leaf summer-week-end {
+                    type uint8 {
+                      range "1..4";
+                    }
+                    description
+                      "Week number to end";
+                  }
+                }
+                case first-end {
+                  leaf first-end {
+                    type empty;
+                    description
+                      "First week of the month";
+                  }
+                }
+                case last-end {
+                  leaf last-end {
+                    type empty;
+                    description
+                      "Last week of the month";
+                  }
+                }
+              }
+              leaf summer-day-end {
+                type typesipos:system_week_day_type;
+                mandatory true;
+                description
+                  "Weekday to end";
+              }
+              leaf summer-month-end {
+                type typesipos:system_month_type;
+                mandatory true;
+                description
+                  "Month to end";
+              }
+              leaf summer-time-end {
+                type uint8 {
+                  range "0..23";
+                }
+                mandatory true;
+                description
+                  "Time to end";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ifxipos:l3-interface" {
+    description
+      "ericsson-system";
+    /*
+    ntp-broadcast [ (broadcast-num) ]
+    */
+    container ntp-broadcast {
+      must "../ifxipos:ip/ifxipos:address/ifxipos:addr-primary or "
+      + "../ifxipos:ipv6/ifxipos:address/ifxipos:addr-primary" {
+        error-message "Configure an IP address before "
+        + "configuring NTP broadcast";
+        description
+          "Configure an IP address before configuring NTP
+           broadcast";
+      }
+      presence "";
+      description
+        "Configure NTP broadcast";
+      leaf broadcast-num {
+        type uint32 {
+          range "0..999999";
+        }
+        default "3000";
+        description
+          "Time delay (in microseconds)";
+      }
+    }
+  }
+
+}

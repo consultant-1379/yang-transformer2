@@ -1,0 +1,186 @@
+module wrap-3gpp {
+
+    namespace "urn/test/wrap-3gpp";
+    prefix this;
+
+    revision "2015-01-08";
+
+	identity identity1;
+	
+	identity identity2 {
+		base identity1;
+	}
+
+	list List1 {
+		key id;
+		leaf id { type string; }
+
+		container attributes {
+
+			leaf leaf11 {
+				type string;
+			}
+			leaf-list leaflist12 {
+				type int32;
+			}
+
+			list leaf13Wrap {
+				key idx;
+				max-elements 10;
+
+				leaf idx { type uint32; }
+				leaf leaf13 {
+					type string;
+				}
+			}
+
+ 			list leaf14Wrap {
+				key idx;
+				leaf idx { type uint32; }
+				leaf leaf14 {
+					type enumeration {
+						enum RED;
+						enum YELLOW;
+					}
+				}
+			}
+
+			list structsequence15 {
+				key leaf16;
+
+				leaf leaf16 {
+					type string;
+				}
+				leaf-list leaflist17 {
+					type int32;
+				}
+
+				list leaf18Wrap {
+					key idx;
+					leaf idx { type uint32; }
+					leaf leaf18 {
+						type identityref {
+							base this:identity1;
+						}
+					}
+				}
+			}
+		}
+
+		action action2 {
+			input {
+
+				leaf leaf21 {
+					type string;
+				}
+				list leaf22Wrap {
+					key idx;
+					min-elements 5;
+
+					leaf idx { type uint32; }
+					leaf leaf22 {
+						type string;
+					}
+				}
+			}
+			output {
+
+				leaf leaf25 {
+					type boolean;
+				}
+				list leaf26Wrap {
+					key idx;
+
+					leaf idx { type uint32; }
+					leaf leaf26 {
+						type enumeration {
+							enum RED;
+							enum YELLOW;
+						}
+					}
+				}
+			}
+		}
+
+		action action3 {
+			output {
+				list leaf31Wrap {
+					key idx;
+					leaf idx { type uint32; }
+					leaf leaf31 {
+						type string;
+					}
+				}
+			}
+		}
+	}
+
+	container Cont4 {
+
+		container attributes {
+
+			list leaf41Wrap {					// normal wrap
+				key idx;
+				leaf idx { type uint32; }
+				leaf leaf41 { type string; }
+			}
+
+ 			list leaf42wrap {					// not a wrap - needs capital 'W'
+				key idx;
+				leaf idx { type uint32; }
+				leaf leaf42 { type string; }
+			}
+
+ 			list leaf43Wrap {					// not a wrap - extra leaf
+				key idx;
+				leaf idx { type uint32; }
+				leaf leaf43 { type string; }
+				leaf another-leaf { type string; }
+			}
+
+			list leaf44Wrap {					// not a wrap - wrong key name
+				key index;
+				leaf index { type uint32; }
+				leaf leaf44 { type string; }
+			}
+
+			list leaf45Wrap {					// not a wrap - has no key
+				leaf index { type uint32; }
+				leaf leaf45 { type string; }
+			}
+
+ 			list leaf46Wrap {					// not a wrap - idx wrong data type
+				key idx;
+				leaf idx { type uint16; }
+				leaf leaf46 { type string; }
+			}
+
+ 			list leaf47Wrap {					// not a wrap - names don't match up
+				key idx;
+				leaf idx { type uint32; }
+				leaf LEAF47 { type string; }
+			}
+
+			list leaf48Wrap {					// key does not exist
+				key idx;
+				leaf index { type uint32; }
+				leaf leaf48 { type string; }
+			}
+
+			list leaf49Wrap {					// key does not have a type
+				key idx;
+				leaf idx;
+				leaf leaf49 { type string; }
+			}
+		}
+	}
+
+	container cont5 {						// not a 3GPP container
+
+		list leaf51Wrap {					// not a wrap, not in 3GPP branch, will be generated into a MOC
+			key idx;
+			leaf idx { type uint32; }
+			leaf leaf51 { type string; }
+		}
+	}	
+}

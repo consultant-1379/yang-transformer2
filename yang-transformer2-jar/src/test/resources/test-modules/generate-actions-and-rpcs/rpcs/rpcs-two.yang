@@ -1,0 +1,31 @@
+module rpcs-two {
+
+    namespace "urn!test!rpcs-two";
+    prefix this;
+
+    revision "2019-03-12";
+
+	rpc rpc6 {
+		input {
+			leaf leaf61 {
+				type boolean;
+			}
+		}
+	}
+	
+	rpc rpc7;
+	
+	rpc rpc8 {
+		output {
+			container struct81 {
+				leaf leaf82 {
+					type string;
+				}
+				leaf leaf83 {
+					type int32;
+				}
+			}
+		}
+	}
+	
+}

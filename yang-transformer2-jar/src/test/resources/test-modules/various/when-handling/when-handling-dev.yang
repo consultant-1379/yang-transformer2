@@ -1,0 +1,25 @@
+module when-handling-dev {
+
+	namespace "urn.test.when-handling-dev";
+	prefix this;
+
+	import when-handling {
+		prefix wh;
+	}
+
+	revision "2021-12-07";
+
+	augment "/wh:cont2" {
+		when "/wh:cont1/wh:leaf11 = 'World'";
+
+		leaf leaf21 {
+			type string;
+			mandatory true;
+		}
+
+		leaf leaf22 {
+			type string;
+			when "../leaf21 = 'Hello'";
+		}
+	}
+}

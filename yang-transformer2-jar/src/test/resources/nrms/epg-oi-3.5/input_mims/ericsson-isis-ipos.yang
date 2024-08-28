@@ -1,0 +1,4544 @@
+module ericsson-isis-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-isis-ipos";
+
+  prefix "isisipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-isis-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-09-03" {
+    description
+      "Remove the backslash";
+    reference
+      "rfc7950";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-11-15" {
+    description
+      "Modify the node default value";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-09-07" {
+    description
+      "Add when condition on bfd.";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-08-21" {
+    description
+      "Obsolete bgp and add bgp-as-num and set metricpassive as
+       obsolete and set order for command string
+       passive-interface,set leaf display as obsolete.";
+    reference
+      "rfc7752";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-20" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-06-19" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-11" {
+    description
+      "add when condition on prefix-hiding,correct some
+       description";
+    reference
+      "exec_cli";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-05-03" {
+    description
+      "add when condition to restrict adjacency-sid and
+       prefix-sid;delete redundent must condition on interface
+       and isis token";
+    reference
+      "exec_cli";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-02-06" {
+    description
+      "level option is deleted in the link-state id CLI under
+       ISIS.";
+    reference
+      "rfc7752";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-02" {
+    description
+      "JIRA:SSR-6748 Added App-ID for LIM Application Id for LIM
+       feature.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2017-12-30" {
+    description
+      "IPOS 7880 move microloop-delay cmd under AF mode and
+       modify it`s upper-limit value to 15 seconds";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2017-12-18" {
+    description
+      "VRE 2366 Adding redistribute seg and service
+       fabric-hello-interval yang commands";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2017-12-15" {
+    description
+      "IPOS 7880 Micro-loop feature configuration";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-11-07" {
+    description
+      "add new container metricpassive for passive interface
+       only";
+    reference
+      "exec cli";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-08-10" {
+    description
+      "add when condition to restrict adjacency-sid and
+       prefix-sid,they are not executable under a vpn context";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-07-25" {
+    description
+      "add when condition on container adjacency-sid and
+       confainer prefix-sid";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-13" {
+    description
+      "add cf_flag for snmp traps";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-26" {
+    description
+      "delete if-feature lfa_spf,delete if-feature
+       segment-routing,modify container snmp-traps";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-06-05" {
+    description
+      "add when condition on lfa and remote-lfa;add new
+       container snmp,add new leaf
+       unidirectional-available-bandwidth,add new leaf
+       unidirectional-link-delay";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-31" {
+    description
+      "IPOS-10643 and IPOS-10974:modify segment-routing
+       command;redistribute application add if-feature";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-27" {
+    description
+      " TI LFA feature configuration";
+    reference
+      "draft-bashandy-rtgwg-segment-routing-ti-lfa-00";
+  }
+
+  revision "2017-03-28" {
+    description
+      "change segment-routing-global-block to list;add new
+       command";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-09" {
+    description
+      "IPOS-7763 retransmit-interval in ISIS model should keep
+       the previous type as uint16";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-18" {
+    description
+      "HV HV53277:removing if-feature 'if_srlg' in isis-ipos
+       yang file;split address-family ipv4 and ipv6";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-04" {
+    description
+      "Fix side-effect";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-05" {
+    description
+      "add support for remote lfa feature";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-10-28" {
+    description
+      "Delete if-feature for lfa";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature nonstop-routing {
+    description
+      "This feature indicates that the device supports
+       nonstop-routing in IS-IS.";
+  }
+
+  feature if_af_ipv4_multicast {
+    description
+      "This feature indicates that the device supports IPv4
+       multicast on IS-IS interface in IS-IS.";
+  }
+
+  feature if_af_ipv6_multicast {
+    description
+      "This feature indicates that the device supports IPv6
+       multicast on IS-IS interface in IS-IS.";
+  }
+
+  feature af_ipv4_multicast {
+    description
+      "This feature indicates that the device supports IPv4
+       multicast topology on an IS-IS instance in IS-IS.";
+  }
+
+  feature af_ipv6_multicast {
+    description
+      "This feature indicates that the device supports IPv6
+       multicast topology on an IS-IS instance in IS-IS.";
+  }
+
+  feature af_redis_bgf {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Border Gateway Function
+       (BGF) in IS-IS.";
+  }
+
+  feature af_redis_cgnat {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Carrier Grade Network
+       Address Translation (CGNAT) in IS-IS.";
+  }
+
+  feature af_redis_epg {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Evolved Packet Gateway (EPG)
+       routes in IS-IS.";
+  }
+
+  feature af_redis_ipsec {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from IPsec routes in IS-IS.";
+  }
+
+  feature af_redis_msp {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Multi-Service Proxy (MSP)
+       routes in IS-IS.";
+  }
+
+  feature af_redis_nat {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Network Address Translation
+       (NAT) in IS-IS.";
+  }
+
+  feature af_ipv4_redis_rip {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from RIP routes for IPv4 unicast
+       topology in IS-IS.";
+  }
+
+  feature af_ipv6_redis_rip {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from RIP routes for IPv6 unicast
+       topology in IS-IS.";
+  }
+
+  feature af_redis_sasn {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Service-Aware Support Node
+       (SASN) routes in IS-IS.";
+  }
+
+  feature af_ipv4_redis_subscriber {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Subscriber routes for IPv4
+       unicast topology in IS-IS.";
+  }
+
+  feature af_ipv6_redis_subscriber {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Subscriber routes for IPv6
+       unicast topology in IS-IS.";
+  }
+
+  feature af_redis_vrrp {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Virtual Router Redundancy
+       (VRRP) routes in IS-IS.";
+  }
+
+  feature af_redis_wifiac {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from WiFi Access Concentrator
+       (WiFiAC) routes in IS-IS.";
+  }
+
+  feature af_redis_wmg {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Wi-Fi Mobility Gateway (WMG)
+       routes in IS-IS.";
+  }
+
+  feature af_seg_rt {
+    description
+      "This feature indicates that the device supports segment
+       routing in IS-IS.";
+  }
+
+  feature af_redis_seg {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from Security Gateway (SEG)
+       routes in IS-IS.";
+  }
+
+  feature af_redis_app {
+    description
+      "This feature indicates that the device supports to
+       redistribute information from application sgsn-mme routes
+       in IS-IS.";
+  }
+
+  grouping isis-if-grp {
+    description
+      "ISIS interface configuration mode";
+    /*
+    authentication { (level-1) | (level-2) } { key-chain
+     (keychain-name) } [ type { hmac-md5 | simple } ] [no-check]
+    */
+    list authentication {
+      key "authentication-choice";
+      description
+        "Configure authentication for hello packets";
+      leaf authentication-choice {
+        type enumeration {
+          enum level-1 {
+            value 0;
+            description
+              "Configure authentication on level-1 IIHs";
+          }
+          enum level-2 {
+            value 1;
+            description
+              "Configure authentication on level-2 IIHs";
+          }
+        }
+        description
+          "Configure authentication about level";
+      }
+      leaf key-chain {
+        type string;
+        mandatory true;
+        description
+          "Configure authentication using key-chain";
+      }
+      leaf type {
+        type enumeration {
+          enum hmac-md5 {
+            value 0;
+            description
+              "Configure hmac-md5 authentication type (default)
+               ";
+          }
+          enum simple {
+            value 1;
+            description
+              "Configure simple authentication type";
+          }
+        }
+        default "hmac-md5";
+        description
+          "Configure authentication type";
+      }
+      leaf no-check {
+        type empty;
+        description
+          "Configure ignoring authentication on receiving";
+      }
+    }
+    /*
+    circuit { mtu (mtu-num) | type { level-1 | level-2-only |
+     level-1-2 } }
+    */
+    container circuit {
+      description
+        "Set IS-IS circuit parameters";
+      leaf mtu {
+        type uint16 {
+          range "256..9140";
+        }
+        default "1497";
+        description
+          "Configure circuit ISIS MTU";
+      }
+      leaf type {
+        type enumeration {
+          enum level-1 {
+            value 0;
+            description
+              "Set circuit to level-1 only type";
+          }
+          enum level-2-only {
+            value 1;
+            description
+              "Set circuit to level-2 only type";
+          }
+          enum level-1-2 {
+            value 2;
+            description
+              "Set circuit to level-1 and level-2 type
+               (default)";
+          }
+        }
+        default "level-1-2";
+        description
+          "Configure circuit type for IS-IS interface";
+      }
+    }
+    /*
+    csnp { { { interval level-1 } (interval-value) } | { {
+     interval level-2 } (interval-value) } | periodic-on-ptp }
+    */
+    container csnp {
+      description
+        "Set CSNP parameters on IS-IS interface";
+      leaf interval-level-1 {
+        type uint16 {
+          range "1..65535";
+        }
+        default "10";
+        description
+          "Set CSNP interval on LAN (in seconds)";
+      }
+      leaf interval-level-2 {
+        type uint16 {
+          range "1..65535";
+        }
+        default "10";
+        description
+          "Set CSNP interval on LAN (in seconds)";
+      }
+      leaf periodic-on-ptp {
+        type empty;
+        description
+          "Issue periodic CSNPs on point-to-point interface";
+      }
+    }
+    /*
+    hello { { { interval level-1 } (interval-value) } | { {
+     interval level-2 } (interval-value) } | { { multiplier
+     level-1 } (multiplier-value) } | { { multiplier level-2 }
+     (multiplier-value) } | padding { first-only | never | always
+     } }
+    */
+    container hello {
+      description
+        "Set IS-IS interface IIH parameters";
+      leaf interval-level-1 {
+        type uint16 {
+          range "1..65535";
+        }
+        default "10";
+        description
+          "Set IS-IS Hello interval";
+      }
+      leaf interval-level-2 {
+        type uint16 {
+          range "1..65535";
+        }
+        default "10";
+        description
+          "Set IS-IS Hello interval";
+      }
+      leaf multiplier-level-1 {
+        type uint16 {
+          range "3..1000";
+        }
+        default "3";
+        description
+          "Set Hello multiplier";
+      }
+      leaf multiplier-level-2 {
+        type uint16 {
+          range "3..1000";
+        }
+        default "3";
+        description
+          "Set Hello multiplier";
+      }
+      leaf padding {
+        type enumeration {
+          enum first-only {
+            value 0;
+            description
+              "Only initial hellos padded to MTU (default)";
+          }
+          enum never {
+            value 1;
+            description
+              "Never pad hellos to MTU";
+          }
+          enum always {
+            value 2;
+            description
+              "Always pad hellos to MTU";
+          }
+        }
+        default "first-only";
+        description
+          "Set Hello padding style";
+      }
+    }
+    /*
+    lsp { interval (interval-value) | receive-only-mode | block-
+     flooding { (level-1) | (level-2) } | retransmit-interval
+     (interval-value) }
+    */
+    container lsp {
+      description
+        "Set LSP parameters on the IS-IS interface";
+      leaf interval {
+        type uint16 {
+          range "10..65535";
+        }
+        default "33";
+        description
+          "Set LSP transmission interval";
+      }
+      leaf receive-only-mode {
+        type empty;
+        description
+          "For testing purpose, never send LSP out on this
+           circuit";
+      }
+      list block-flooding {
+        key "block-flooding";
+        max-elements 2;
+        description
+          "Stop flooding of LSPs on this interface";
+        leaf block-flooding {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Stop flooding for level-1 only";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Stop flooding for level-2 only";
+            }
+          }
+          description
+            "Stop flooding for level";
+        }
+      }
+      leaf retransmit-interval {
+        type uint16 {
+          range "1..120";
+        }
+        default "5";
+        description
+          "Set per-LSP retransmission interval";
+      }
+    }
+    /*
+    optional-checksums { level-1 | level-2 }
+    */
+    list optional-checksums {
+      key "optional-checksums";
+      max-elements 2;
+      description
+        "Add optional checksums to hellos and SNPs";
+      leaf optional-checksums {
+        type enumeration {
+          enum level-1 {
+            value 0;
+            description
+              "Stop checksum for level-1 only";
+          }
+          enum level-2 {
+            value 1;
+            description
+              "Stop checksum for level-2 only";
+          }
+        }
+        description
+          "Enables optional Intermediate System-to-Intermediate
+           System (IS-IS) checksums on the interface";
+      }
+    }
+    /*
+    passive-interface
+    */
+    leaf passive-interface {
+      type empty;
+      description
+        "Suppress routing updates on an interface";
+    }
+    /*
+    priority { level-1 (priority-value) | level-2 (priority-
+     value) }
+    */
+    container priority {
+      description
+        "Set priority for designated router election";
+      leaf level-1 {
+        type uint8 {
+          range "0..127";
+        }
+        default "64";
+        description
+          "Configure priority value for level-1 only";
+      }
+      leaf level-2 {
+        type uint8 {
+          range "0..127";
+        }
+        default "64";
+        description
+          "Configure priority value for level-2 only";
+      }
+    }
+    /*
+    ldp-igp-synchronization
+    */
+    leaf ldp-igp-synchronization {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable ldp-igp-synchronization";
+    }
+    /*
+    srlg (srlg-spec)
+    */
+    leaf srlg {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Configure shared risk link group (SRLG) interface";
+    }
+    /*
+    unidirectional-available-bandwidth (bandwidth-spec)
+    */
+    leaf unidirectional-available-bandwidth {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Configure unidirectional available bandwidth";
+    }
+    /*
+    unidirectional-link-delay (delay-spec)
+    */
+    leaf unidirectional-link-delay {
+      type uint32 {
+        range "0..16777215";
+      }
+      description
+        "Configure unidirectional link delay";
+    }
+    /*
+    address-family { ipv4 { unicast | multicast } | ipv6 {
+     unicast | multicast } }
+    */
+    container address-family {
+      description
+        "Enable IS-IS for an address-family/topology";
+      container ipv4 {
+        description
+          "Enable IS-IS for IPv4";
+        container unicast {
+          description
+            "Enable IS-IS for IPv4 unicast topology";
+          leaf unicast-enable {
+            type boolean;
+            default "true";
+            description
+              "Enable/Disable unicast-enable";
+          }
+          uses isis-if-af-grp;
+        }
+        container multicast {
+          if-feature if_af_ipv4_multicast;
+          presence "";
+          description
+            "Enable IS-IS for IPv4 multicast topology";
+          uses isis-if-af-grp;
+        }
+      }
+      container ipv6 {
+        description
+          "Enable IS-IS for IPv6";
+        container unicast {
+          presence "";
+          description
+            "Enable IS-IS for IPv6 unicast topology";
+          uses isis-if-af-grp;
+        }
+        container multicast {
+          if-feature if_af_ipv6_multicast;
+          presence "";
+          description
+            "Enable IS-IS for IPv6 multicast topology";
+          uses isis-if-af-grp;
+        }
+      }
+    }
+  }
+
+  grouping isis-grp {
+    description
+      "ISIS configuration mode";
+    /*
+    attached-bit { ignore | never-set }
+    */
+    container attached-bit {
+      description
+        "Configure L1 LSP attached-bit preference";
+      leaf ignore {
+        type empty;
+        description
+          "Ignore the attached flag in L1 LSPs";
+      }
+      leaf never-set {
+        type empty;
+        description
+          "Do not set the attached flag in L1 LSPs";
+      }
+    }
+    /*
+    authentication { (level-1) | (level-2) } { key-chain
+     (keychain-name) } [ type { hmac-md5 | simple } ] [lsp-only]
+     [no-check]
+    */
+    list authentication {
+      key "authentication-choice";
+      description
+        "Configure authentication for ISIS packets";
+      leaf authentication-choice {
+        type enumeration {
+          enum level-1 {
+            value 0;
+            description
+              "Configure authentication on level-1 area";
+          }
+          enum level-2 {
+            value 1;
+            description
+              "Configure authentication on level-2 domain";
+          }
+        }
+        description
+          "Configure authentication about level";
+      }
+      leaf key-chain {
+        type string;
+        mandatory true;
+        description
+          "Configure authentication using key-chain";
+      }
+      leaf type {
+        type enumeration {
+          enum hmac-md5 {
+            value 0;
+            description
+              "Configure hmac-md5 authentication type (default)
+               ";
+          }
+          enum simple {
+            value 1;
+            description
+              "Configure simple authentication type";
+          }
+        }
+        default "hmac-md5";
+        description
+          "Configure authentication type";
+      }
+      leaf lsp-only {
+        type empty;
+        description
+          "Configure authentication on LSP only";
+      }
+      leaf no-check {
+        type empty;
+        description
+          "Configure ignoring authentication on receiving";
+      }
+    }
+    /*
+    distance (distance-value)
+    */
+    leaf distance {
+      type uint8 {
+        range "1..255";
+      }
+      default "115";
+      description
+        "Define an administrative distance";
+    }
+    /*
+    dynamic-hostname [ display | router-name (hostname-string) ]
+    */
+    container dynamic-hostname {
+      description
+        "Configure dynamic hostname advertisement";
+      leaf dynamic-hostname-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable dynamic-hostname-enable";
+      }
+      leaf display {
+        when "../dynamic-hostname-enable='true'" {
+          description
+            "";
+        }
+        type empty;
+        status obsolete;
+        description
+          "[OBSOLETE]Enable dynamic hostname display only";
+      }
+      leaf router-name {
+        when "../dynamic-hostname-enable='true'" {
+          description
+            "";
+        }
+        type string;
+        description
+          "Router name for the instance";
+      }
+    }
+    /*
+    is type { level-1 | level-2-only | level-1-2 }
+    */
+    container is {
+      description
+        "Set IS-IS system parameters";
+      leaf type {
+        type enumeration {
+          enum level-1 {
+            value 0;
+            description
+              "IS-IS level-1 only type";
+          }
+          enum level-2-only {
+            value 1;
+            description
+              "IS-IS level-2 only type";
+          }
+          enum level-1-2 {
+            value 2;
+            description
+              "IS-IS level-1 and level-2 type";
+          }
+        }
+        default "level-1-2";
+        description
+          "Levels ISIS participates in";
+      }
+    }
+    /*
+    lsp { { { gen-interval level-1 } (interval-value) } | { {
+     gen-interval level-2 } (interval-value) } | max-lifetime
+     (lifetime-value) | refresh-interval (interval-value) }
+    */
+    container lsp {
+      description
+        "Set IS-IS LSP parameters";
+      leaf gen-interval-level-1 {
+        type uint8 {
+          range "1..120";
+        }
+        default "10";
+        description
+          "Minimum interval between regenerating same LSP";
+      }
+      leaf gen-interval-level-2 {
+        type uint8 {
+          range "1..120";
+        }
+        default "10";
+        description
+          "Minimum interval between regenerating same LSP";
+      }
+      leaf max-lifetime {
+        type uint16 {
+          range "120..65535";
+        }
+        default "1200";
+        description
+          "Set maximum lifetime of locally generated LSPs";
+      }
+      leaf refresh-interval {
+        type uint16 {
+          range "30..65535";
+        }
+        default "900";
+        description
+          "Set LSP refresh interval";
+      }
+    }
+    /*
+    maximum { paths (paths-value) | redistribute (prefix-num) [
+     retry-interval (delay-num) ] }
+    */
+    container maximum {
+      description
+        "Set maximum value of ISIS parameters";
+      leaf paths {
+        type uint8 {
+          range "1..16";
+        }
+        default "8";
+        description
+          "Forward packets over multiple paths";
+      }
+      container redistribute {
+        presence "";
+        description
+          "Set maximum number of prefixes to be redistributed
+           into ISIS";
+        leaf prefix-num {
+          type uint32 {
+            range "1..1000000";
+          }
+          mandatory true;
+          description
+            "Number of prefixes";
+        }
+        leaf retry-interval {
+          type uint16 {
+            range "120..7200";
+          }
+          default "600";
+          description
+            "Retry in seconds to refresh the redistribution into
+             ISIS";
+        }
+      }
+    }
+    /*
+    metric-style { short | transition | wide } [ level-1 |
+     level-2 ]
+    */
+    container metric-style {
+      description
+        "Define metric encoding styles advertised and used in
+         computation";
+      leaf metric-style-choice {
+        type enumeration {
+          enum short {
+            value 0;
+            description
+              "Advertise and use for computation short (10589)
+               style only";
+          }
+          enum transition {
+            value 1;
+            description
+              "Advertise short and wide style";
+          }
+          enum wide {
+            value 2;
+            description
+              "Advertise and use for computation wide (TE) style
+               only (default)";
+          }
+        }
+        default "wide";
+        description
+          "Metric style";
+      }
+      leaf metric-style-opt1 {
+        type enumeration {
+          enum level-1 {
+            value 0;
+            description
+              "Metric style for level-1 only";
+          }
+          enum level-2 {
+            value 1;
+            description
+              "Metric style for level-2 only";
+          }
+        }
+        description
+          "Metric style";
+      }
+    }
+    /*
+    net (net-value)
+    */
+    leaf net {
+      type string;
+      description
+        "Configure an area address and system ID";
+    }
+    /*
+    graceful-restart [ (restart-time) ]
+    */
+    container graceful-restart {
+      description
+        "IS-IS restart with non-stop forwarding";
+      leaf graceful-restart-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable graceful-restart-enable";
+      }
+      leaf restart-time {
+        when "../graceful-restart-enable='true'" {
+          description
+            "";
+        }
+        type uint16 {
+          range "10..900";
+        }
+        default "120";
+        description
+          "Time in seconds after IS-IS restart";
+      }
+    }
+    /*
+    nonstop-routing
+    */
+    leaf nonstop-routing {
+      if-feature nonstop-routing;
+      type empty;
+      description
+        "IS-IS with nonstop routing";
+    }
+    /*
+    set-overload-bit [ on-startup (start-time-value) | bgp-
+     converge-delay  (time-value) | strict-bgp-tracking ]
+    */
+    container set-overload-bit {
+      presence "";
+      description
+        "Signal other routers not to traverse this router in
+         SPF";
+      choice set-overload-bit-opt {
+        description
+          "";
+        case on-startup {
+          leaf on-startup {
+            type uint16 {
+              range "10..3600";
+            }
+            default "210";
+            description
+              "Set overload-bit only temporarily at ISIS
+               startup";
+          }
+        }
+        case bgp-converge-delay {
+          leaf bgp-converge-delay {
+            type uint16 {
+              range "10..3600";
+            }
+            default "210";
+            description
+              "Set overload-bit temporarily waiting for BGP
+               convergence";
+          }
+        }
+        case strict-bgp-tracking {
+          leaf strict-bgp-tracking {
+            type empty;
+            description
+              "Set overload-bit as long as BGP is not converged";
+          }
+        }
+      }
+    }
+    /*
+    snmp traps { all | { adjacencychange | areamismatch |
+     attempttoexceedmaxsequence | authentication |
+     authenticationtype | corruptedlspdetected | databaseoverload
+     | idlenmismatch | lsperrordetected | lsptoolargetopropagate
+     | manualaddressdrops | maxareaaddressmismatch |
+     origlspbuffsizemismatch | ownlsppurge |
+     protocolssupportedmismatch | rejectedadjacency |
+     sequencenumberskip | versionskew } }
+    */
+    container snmp-traps {
+      description
+        "Configure SNMP traps";
+      choice snmp-traps {
+        description
+          "";
+        case all {
+          leaf all {
+            type empty;
+            description
+              "Enable sending all supported ISIS traps";
+          }
+        }
+        case snmp-traps-choice {
+          leaf snmp-traps-choice {
+            type bits {
+              bit adjacencychange {
+                position 0;
+                description
+                  "Enable sending ISIS adjacency change traps";
+              }
+              bit areamismatch {
+                position 1;
+                description
+                  "Enable sending isisAreaMismatch traps";
+              }
+              bit attempttoexceedmaxsequence {
+                position 2;
+                description
+                  "Enable sending isisAttemptToExceedMaxSequence
+                   traps";
+              }
+              bit authentication {
+                position 3;
+                description
+                  "Enable sending isisAuthenticationFailure
+                   traps";
+              }
+              bit authenticationtype {
+                position 4;
+                description
+                  "Enable sending isisAuthenticationTypeFailure
+                   traps";
+              }
+              bit corruptedlspdetected {
+                position 5;
+                description
+                  "Enable sending isisCorruptedLSPDetected
+                   traps";
+              }
+              bit databaseoverload {
+                position 6;
+                description
+                  "Enable sending isisDatabaseOverload traps";
+              }
+              bit idlenmismatch {
+                position 7;
+                description
+                  "Enable sending isisIdLenMismatch traps";
+              }
+              bit lsperrordetected {
+                position 8;
+                description
+                  "Enable sending isisLSPErrorDetected traps";
+              }
+              bit lsptoolargetopropagate {
+                position 9;
+                description
+                  "Enable sending isisLSPTooLargeToPropagate
+                   traps";
+              }
+              bit manualaddressdrops {
+                position 10;
+                description
+                  "Enable sending isisManualAddressDrops traps";
+              }
+              bit maxareaaddressmismatch {
+                position 11;
+                description
+                  "Enable sending isisMaxAreaAddressMismatch
+                   traps";
+              }
+              bit origlspbuffsizemismatch {
+                position 12;
+                description
+                  "Enable sending isisOrigLSPBuffSizeMismatch
+                   traps";
+              }
+              bit ownlsppurge {
+                position 13;
+                description
+                  "Enable sending isisOwnLSPPurge traps";
+              }
+              bit protocolssupportedmismatch {
+                position 14;
+                description
+                  "Enable sending isisProtocolsSupportedMismatch
+                   traps";
+              }
+              bit rejectedadjacency {
+                position 15;
+                description
+                  "Enable sending isisRejectedAdjacency traps";
+              }
+              bit sequencenumberskip {
+                position 16;
+                description
+                  "Enable sending isisSeqNoSkip traps";
+              }
+              bit versionskew {
+                position 17;
+                description
+                  "Enable sending isisVersionSkew traps";
+              }
+            }
+            description
+              "leaf snmp-traps-choice.";
+          }
+        }
+      }
+    }
+    /*
+    spf { { { holddown level-1 } (holddown-value) } |  { {
+     holddown level-2 } (holddown-value) } | { { interval level-1
+     } (interval-value) } | { { interval level-2 } (interval-
+     value) } }
+    */
+    container spf {
+      description
+        "Set IS-IS SPF parameters";
+      leaf holddown-level-1 {
+        type uint16 {
+          range "1..65535";
+        }
+        default "5";
+        description
+          "Interval to delay SPF after receiving the first
+           update";
+      }
+      leaf holddown-level-2 {
+        type uint16 {
+          range "1..65535";
+        }
+        default "5";
+        description
+          "Interval to delay SPF after receiving the first
+           update";
+      }
+      leaf interval-level-1 {
+        type uint8 {
+          range "1..120";
+        }
+        default "10";
+        description
+          "Minimum interval between SPF calculations";
+      }
+      leaf interval-level-2 {
+        type uint8 {
+          range "1..120";
+        }
+        default "10";
+        description
+          "Minimum interval between SPF calculations";
+      }
+    }
+    /*
+    lfa-spf { scheduling (number-limit) | holddown (holddown-
+     value) }
+    */
+    container lfa-spf {
+      description
+        "Configure Loop Free Alternative(LFA) SPF parameters";
+      leaf scheduling {
+        type uint8 {
+          range "1..64";
+        }
+        default "8";
+        description
+          "Configure LFA-SPF scheduling parameters";
+      }
+      leaf holddown {
+        type uint16 {
+          range "500..3000";
+        }
+        default "1000";
+        description
+          "Configure LFA SPF holddown value";
+      }
+    }
+    /*
+    fast-convergence [ (fastconv-msdelay) (fastconv-extraspfs) ]
+    */
+    container fast-convergence {
+      description
+        "Configure fast convergence scheduling parameters";
+      leaf fast-convergence-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable fast-convergence-enable";
+      }
+      container fast-convergence-opt {
+        description
+          "Configure fastconv";
+        leaf fastconv-msdelay {
+          type uint16 {
+            range "0..999";
+          }
+          default "100";
+          description
+            "SPF delay value (in milli-seconds)";
+        }
+        leaf fastconv-extraspfs {
+          type uint8 {
+            range "0..15";
+          }
+          default "3";
+          description
+            "Number of additional SPFs allowed in hold-time";
+        }
+      }
+    }
+    /*
+    traffic-engineering { level-1 | level-2 | level-1-2 }
+    */
+    leaf traffic-engineering {
+      type enumeration {
+        enum level-1 {
+          value 0;
+          description
+            "MPLS TE for level-1 only";
+        }
+        enum level-2 {
+          value 1;
+          description
+            "MPLS TE for level-2 only";
+        }
+        enum level-1-2 {
+          value 2;
+          description
+            "MPLS TE for level-1-2";
+        }
+      }
+      description
+        "Set MPLS traffic-engineering levels";
+    }
+    /*
+    ldp-igp-synchronization [ timeout (holddown-value) ]
+    */
+    container ldp-igp-synchronization {
+      presence "";
+      description
+        "Set LDP-IGP synchronization";
+      leaf timeout {
+        type uint16 {
+          range "5..65535";
+        }
+        description
+          "LDP ISIS sync expire time";
+      }
+    }
+    /*
+    address-family { ipv4 { unicast | multicast } | ipv6 {
+     unicast | multicast } }
+    */
+    container address-family {
+      description
+        "Enable IS-IS for an address-family/topology";
+      container ipv4 {
+        description
+          "Enable IS-IS for IPv4";
+        container unicast {
+          description
+            "Enable IS-IS for IPv4 unicast topology";
+          leaf unicast-enable {
+            type boolean;
+            default "true";
+            description
+              "Enable/Disable unicast-enable";
+          }
+          uses isis-af-ipv4-grp;
+        }
+        leaf multicast {
+          if-feature af_ipv4_multicast;
+          type empty;
+          description
+            "Enable IS-IS for IPv4 multicast topology";
+        }
+      }
+      container ipv6 {
+        description
+          "Enable IS-IS for IPv6";
+        container unicast {
+          presence "";
+          description
+            "Enable IS-IS for IPv6 unicast topology";
+          uses isis-af-ipv6-grp;
+        }
+        leaf multicast {
+          if-feature af_ipv6_multicast;
+          type empty;
+          description
+            "Enable IS-IS for IPv6 multicast topology";
+        }
+      }
+    }
+    /*
+    interface (intf-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "Enable IS-IS routing on interface";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface name";
+      }
+      uses isis-if-grp;
+    }
+  }
+
+  grouping isis-af-ipv4-grp {
+    description
+      "ISIS address family IPV4 configuration mode";
+    /*
+    microloop-delay (delay-val)
+    */
+    leaf microloop-delay {
+      type uint16 {
+        range "10..15000";
+      }
+      description
+        "Configure micro-loop avoidance delay timer (in
+         milliseconds)";
+    }
+    /*
+    segment-routing
+    */
+    container segment-routing {
+      description
+        "Configure segment routing";
+      list prefix-sid-map-group {
+        key "group-string";
+        description
+          "Configure SR mapping server prefix-sid group";
+        leaf group-string {
+          type string;
+          description
+            "Prefix-sid group name, enter the # or the ! to be
+             prefixed with backslash";
+        }
+        leaf prefix-sid-map-group-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Advertise prefix-sid mappings to level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Advertise prefix-sid mappings to level-2";
+            }
+          }
+          mandatory true;
+          description
+            "Advertise prefix-sid mappings to level-1 or
+             level-2";
+        }
+      }
+      container distance {
+        presence "";
+        description
+          "Configure admin distance for SR LSPs";
+        leaf sr-value {
+          type uint8 {
+            range "1..255";
+          }
+          default "14";
+          description
+            "SR admin distance value";
+        }
+      }
+      list global-block {
+        key "global-min";
+        description
+          "Configure segment routing";
+        leaf global-min {
+          type uint32 {
+            range "999424..1015807";
+          }
+          description
+            "Start of SRGB range 999424..1015807";
+        }
+        leaf through {
+          type uint32 {
+            range "999424..1015807";
+          }
+          mandatory true;
+          description
+            "Keyword";
+        }
+      }
+    }
+    /*
+    prefix-hiding
+    */
+    leaf prefix-hiding {
+      type empty;
+      description
+        "Prefix hiding for this address-family";
+    }
+    /*
+    redistribute { bgf | bgp { (redistribute-bgpas) | (bgpas-
+     aann) } | bgp-as-num (redistribute-bgpas) | cg-nat |
+     application sgsn-mme | connected | epg | ipsec | isis (opt-
+     tag) | lim | upf | msp | nat | rip (opt-tag) | sasn | seg |
+     static [dvsr] | subscriber [address | static ] | vrrp |
+     wifi-ac | wmg } { level-1 | level-2 } [ metric (metric-num)
+     ] [ metric-type { external | internal } ] [ route-map
+     (routemap-str) ]
+    */
+    container redistribute {
+      description
+        "Redistribute information from another routing protocol";
+      list bgf {
+        if-feature af_redis_bgf;
+        key "bgf-choice";
+        max-elements 2;
+        description
+          "Border Gateway Function (BGF) routes";
+        leaf bgf-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list bgp {
+        key "bgp bgp-choice";
+        status obsolete;
+        description
+          "[OBSOLETE]Border Gateway Protocol (BGP)";
+        leaf bgp {
+          type union {
+            type uint32 {
+              range "1..4294967295";
+            }
+            type string;
+          }
+          description
+            "bgp autonomous system number.";
+        }
+        leaf bgp-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list bgp-as-num {
+        key "bgp-as-num bgp-as-num-choice";
+        description
+          "Border Gateway Protocol (BGP)";
+        leaf bgp-as-num {
+          type uint32 {
+            range "1..4294967295";
+          }
+          description
+            "Autonomous system number";
+        }
+        leaf bgp-as-num-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list cg-nat {
+        if-feature af_redis_cgnat;
+        key "cg-nat-choice";
+        max-elements 2;
+        description
+          "Carrier Grade Network Address Translation (CGNAT)
+           routes";
+        leaf cg-nat-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list application-sgsn-mme {
+        if-feature af_redis_app;
+        key "application-sgsn-mme-choice";
+        description
+          "SGSN and Mobility Management Entity (MME) routes";
+        leaf application-sgsn-mme-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list connected {
+        key "connected-choice";
+        description
+          "Directly connected routes";
+        leaf connected-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list epg {
+        if-feature af_redis_epg;
+        key "epg-choice";
+        description
+          "Evolved Packet Gateway (EPG) routes";
+        leaf epg-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list ipsec {
+        if-feature af_redis_ipsec;
+        key "ipsec-choice";
+        description
+          "IPsec routes";
+        leaf ipsec-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list isis {
+        key "isis isis-choice";
+        description
+          "ISO IS-IS routes";
+        leaf isis {
+          type string;
+          description
+            "ISO routing area tag";
+        }
+        leaf isis-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list lim {
+        if-feature af_redis_seg;
+        key "lim-choice";
+        description
+          "Lawful Interception Module (LIM) routes";
+        leaf lim-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list upf {
+        if-feature af_redis_seg;
+        key "upf-choice";
+        description
+          "User Plane Function(UPF) routes";
+        leaf upf-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list msp {
+        if-feature af_redis_msp;
+        key "msp-choice";
+        description
+          "Multi-Service Proxy (MSP) routes";
+        leaf msp-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list nat {
+        if-feature af_redis_nat;
+        key "nat-choice";
+        description
+          "Network Address Translation (NAT)";
+        leaf nat-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list rip {
+        if-feature af_ipv4_redis_rip;
+        key "rip rip-choice";
+        description
+          "RIP protocol";
+        leaf rip {
+          type string;
+          description
+            "RIP protocol instance name";
+        }
+        leaf rip-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list sasn {
+        if-feature af_redis_sasn;
+        key "sasn-choice";
+        description
+          "Service-Aware Support Node (SASN) routes";
+        leaf sasn-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list seg {
+        if-feature af_redis_seg;
+        key "seg-choice";
+        description
+          "Security Gateway (SEG) routes";
+        leaf seg-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list static {
+        key "static-choice";
+        description
+          "Static routes";
+        leaf static-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf dvsr {
+          type empty;
+          description
+            "Dynamically Verified Static Routing (DVSR)";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list subscriber {
+        if-feature af_ipv4_redis_subscriber;
+        key "subscriber-choice1";
+        description
+          "Subscriber routes";
+        leaf subscriber-choice1 {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf subscriber-opt {
+          type enumeration {
+            enum address {
+              value 0;
+              description
+                "Subscriber address routes";
+            }
+            enum static {
+              value 1;
+              description
+                "Subscriber static routes";
+            }
+          }
+          description
+            "Subscriber routes.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list vrrp {
+        if-feature af_redis_vrrp;
+        key "vrrp-choice";
+        description
+          "Virtual Router Redundancy (VRRP) routes";
+        leaf vrrp-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list wifi-ac {
+        if-feature af_redis_wifiac;
+        key "wifi-ac-choice";
+        description
+          "WiFi Access Concentrator (WiFiAC) routes";
+        leaf wifi-ac-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list wmg {
+        if-feature af_redis_wmg;
+        key "wmg-choice";
+        description
+          "Wi-Fi Mobility Gateway (WMG) routes";
+        leaf wmg-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list ospf {
+        key "ospf ospf-choice1";
+        description
+          "Open Shortest Path First (OSPF)";
+        leaf ospf {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "OSPF instance";
+        }
+        leaf ospf-choice1 {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute into level-1 or level-2";
+        }
+        choice ospf-opt {
+          description
+            "";
+          case match {
+            container match {
+              presence "";
+              description
+                "Match a specific OSPF route type";
+              leaf intra-area {
+                type empty;
+                description
+                  "Redistribute OSPF Intra-area routes";
+              }
+              leaf inter-area {
+                type empty;
+                description
+                  "Redistribute OSPF Inter-area routes";
+              }
+              container external {
+                presence "";
+                description
+                  "Redistribute OSPF external routes";
+                leaf external-opt {
+                  type enumeration {
+                    enum type-1 {
+                      value 0;
+                      description
+                        "Redistribute OSPF External routes (Type
+                         1)";
+                    }
+                    enum type-2 {
+                      value 1;
+                      description
+                        "Redistribute OSPF External routes (Type
+                         2)";
+                    }
+                  }
+                  description
+                    " Redistribute OSPF External route options.";
+                }
+              }
+              container nssa {
+                presence "";
+                description
+                  "Redistribute OSPF NSSA routes";
+                leaf nssa-opt {
+                  type enumeration {
+                    enum type-1 {
+                      value 0;
+                      description
+                        "Redistribute OSPF NSSA type 1 routes";
+                    }
+                    enum type-2 {
+                      value 1;
+                      description
+                        "Redistribute OSPF NSSA type 2 routes";
+                    }
+                  }
+                  description
+                    "Redistribute OSPF NSSA route options.";
+                }
+              }
+            }
+          }
+          case metric {
+            leaf metric {
+              type uint32 {
+                range "0..16777214";
+              }
+              default "0";
+              description
+                "Metric for redistributed routes";
+            }
+          }
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+    }
+    /*
+    interarea-distribute { l1-to-l2 | l2-to-l1 } [ prefix-list
+     (list-value) ]
+    */
+    list interarea-distribute {
+      key "interarea-distribute-choice";
+      description
+        "Interarea IP route leaking";
+      leaf interarea-distribute-choice {
+        type enumeration {
+          enum l1-to-l2 {
+            value 0;
+            description
+              "IP route leaking from level-1 into level-2";
+          }
+          enum l2-to-l1 {
+            value 1;
+            description
+              "IP route leaking from level-2 into level-1";
+          }
+        }
+        description
+          "Configure IP route leaking";
+      }
+      leaf prefix-list {
+        type string;
+        description
+          "Filter redistributed routes";
+      }
+    }
+    /*
+    summary-address { addr-ipv4 (address-prefix) [ level-1 |
+     level-2 ] }
+    */
+    container summary-address {
+      description
+        "Configure IP address summaries";
+      list addr-ipv4 {
+        key "address-prefix";
+        description
+          "False token for IPv4 list";
+        leaf address-prefix {
+          type typesipos:ipos-ip-prefix;
+          description
+            "IP summary address prefix";
+        }
+        leaf addr-ipv4-opt {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "IP summary for level-1 only";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "IP summary for level-2 only";
+            }
+          }
+          description
+            "IP summary options.";
+        }
+      }
+    }
+    /*
+    priority-prefix (prefix-list)
+    */
+    leaf priority-prefix {
+      type string;
+      description
+        "Configure prioritization of selected prefixes";
+    }
+    /*
+    link-state id (id-num)
+    */
+    container link-state {
+      description
+        "Configure IGP LS";
+      leaf id {
+        type uint64 {
+          range "0..18446744073709551615";
+        }
+        description
+          "IGP-LS ID";
+      }
+    }
+  }
+
+  grouping isis-af-ipv6-grp {
+    description
+      "ISIS address family IPv6 configuration mode";
+    /*
+    prefix-hiding
+    */
+    leaf prefix-hiding {
+      type empty;
+      description
+        "Prefix hiding for this address-family";
+    }
+    /*
+    redistribute { bgf | bgp { (redistribute-bgpas) | (bgpas-
+     aann) } | bgp-as-num (redistribute-bgpas) | cg-nat |
+     application sgsn-mme | connected | epg | isis (opt-tag) |
+     lim | upf | msp | nat | ripng (ripng-tag) | sasn | seg |
+     static [dvsr] | subscriber-v6 { address | dhcp-pd | nd |
+     static } | wifi-ac | wmg } { level-1 | level-2 } [ metric
+     (metric-num) ] [ metric-type { external | internal } ] [
+     route-map (routemap-str) ]
+    */
+    container redistribute {
+      description
+        "Redistribute information from another routing protocol";
+      list bgf {
+        if-feature af_redis_bgf;
+        key "bgf-choice";
+        max-elements 2;
+        description
+          "Border Gateway Function (BGF) routes";
+        leaf bgf-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list bgp {
+        key "bgp bgp-choice";
+        status obsolete;
+        description
+          "[OBSOLETE]Border Gateway Protocol (BGP)";
+        leaf bgp {
+          type union {
+            type uint32 {
+              range "1..4294967295";
+            }
+            type string;
+          }
+          description
+            "bgp autonomous system number.";
+        }
+        leaf bgp-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list bgp-as-num {
+        key "bgp-as-num bgp-as-num-choice";
+        description
+          "Border Gateway Protocol (BGP)";
+        leaf bgp-as-num {
+          type uint32 {
+            range "1..4294967295";
+          }
+          description
+            "Autonomous system number";
+        }
+        leaf bgp-as-num-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list cg-nat {
+        if-feature af_redis_cgnat;
+        key "cg-nat-choice";
+        max-elements 2;
+        description
+          "Carrier Grade Network Address Translation (CGNAT)
+           routes";
+        leaf cg-nat-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list application-sgsn-mme {
+        if-feature af_redis_app;
+        key "application-sgsn-mme-choice";
+        description
+          "SGSN and Mobility Management Entity (MME) routes";
+        leaf application-sgsn-mme-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list connected {
+        key "connected-choice";
+        description
+          "Directly connected routes";
+        leaf connected-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list epg {
+        if-feature af_redis_epg;
+        key "epg-choice";
+        description
+          "Evolved Packet Gateway (EPG) routes";
+        leaf epg-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list isis {
+        key "isis isis-choice";
+        description
+          "ISO IS-IS routes";
+        leaf isis {
+          type string;
+          description
+            "ISO routing area tag";
+        }
+        leaf isis-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list lim {
+        if-feature af_redis_seg;
+        key "lim-choice";
+        description
+          "Lawful Interception Module (LIM) routes";
+        leaf lim-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list upf {
+        if-feature af_redis_seg;
+        key "upf-choice";
+        description
+          "User Plane Function(UPF) routes";
+        leaf upf-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list msp {
+        if-feature af_redis_msp;
+        key "msp-choice";
+        description
+          "Multi-Service Proxy (MSP) routes";
+        leaf msp-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list nat {
+        if-feature af_redis_nat;
+        key "nat-choice";
+        description
+          "Network Address Translation (NAT)";
+        leaf nat-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list ripng {
+        if-feature af_ipv6_redis_rip;
+        key "ripng ripng-choice";
+        description
+          "RIP protocol";
+        leaf ripng {
+          type string;
+          description
+            "RIP protocol instance name";
+        }
+        leaf ripng-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list sasn {
+        if-feature af_redis_sasn;
+        key "sasn-choice";
+        description
+          "Service-Aware Support Node (SASN) routes";
+        leaf sasn-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list seg {
+        if-feature af_redis_seg;
+        key "seg-choice";
+        description
+          "Security Gateway (SEG) routes";
+        leaf seg-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list static {
+        key "static-choice";
+        description
+          "Static routes";
+        leaf static-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf dvsr {
+          type empty;
+          description
+            "Dynamically Verified Static Routing (DVSR)";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list subscriber-v6 {
+        if-feature af_ipv6_redis_subscriber;
+        key "subscriber-v6 subscriber-v6-choice";
+        description
+          "Subscriber routes";
+        leaf subscriber-v6 {
+          type enumeration {
+            enum address {
+              value 0;
+              description
+                "Subscriber address routes";
+            }
+            enum dhcp-pd {
+              value 1;
+              description
+                "Subscriber static routes";
+            }
+            enum nd {
+              value 2;
+              description
+                "Subscriber DHCP Prefix Delegation (dhcp-pd)
+                 routes";
+            }
+            enum static {
+              value 3;
+              description
+                "Subscriber Neighbor Discovery (ND) routes";
+            }
+          }
+          description
+            "Subscriber routes.";
+        }
+        leaf subscriber-v6-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list wifi-ac {
+        if-feature af_redis_wifiac;
+        key "wifi-ac-choice";
+        description
+          "WiFi Access Concentrator (WiFiAC) routes";
+        leaf wifi-ac-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list wmg {
+        if-feature af_redis_wmg;
+        key "wmg-choice";
+        description
+          "Wi-Fi Mobility Gateway (WMG) routes";
+        leaf wmg-choice {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute level options.";
+        }
+        leaf metric {
+          type uint32 {
+            range "0..16777214";
+          }
+          default "0";
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list ospf3 {
+        key "ospf3 ospf3-choice1";
+        description
+          "Open Shortest Path First Version 3 (OSPF3)";
+        leaf ospf3 {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "OSPF3 instance";
+        }
+        leaf ospf3-choice1 {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute into level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute into level-2";
+            }
+          }
+          description
+            "Redistribute into level-1 or level-2";
+        }
+        choice ospf3-opt {
+          description
+            "";
+          case match {
+            container match {
+              presence "";
+              description
+                "Match a specific OSPF3 route type";
+              leaf intra-area {
+                type empty;
+                description
+                  "Redistribute OSPFv3 Intra-area routes";
+              }
+              leaf inter-area {
+                type empty;
+                description
+                  "Redistribute OSPFv3 Inter-area routes";
+              }
+              container external {
+                presence "";
+                description
+                  "Redistribute OSPFv3 external routes";
+                leaf external-opt {
+                  type enumeration {
+                    enum type-1 {
+                      value 0;
+                      description
+                        "Redistribute OSPFv3 External routes
+                         (Type 1)";
+                    }
+                    enum type-2 {
+                      value 1;
+                      description
+                        "Redistribute OSPFv3 External routes
+                         (Type 2)";
+                    }
+                  }
+                  description
+                    "Redistribute OSPFv3 External routes
+                     options.";
+                }
+              }
+              container nssa {
+                presence "";
+                description
+                  "Redistribute OSPFv3 NSSA routes";
+                leaf nssa-opt {
+                  type enumeration {
+                    enum type-1 {
+                      value 0;
+                      description
+                        "Redistribute OSPFv3 NSSA type 1 routes";
+                    }
+                    enum type-2 {
+                      value 1;
+                      description
+                        "Redistribute OSPFv3 NSSA type 2 routes";
+                    }
+                  }
+                  description
+                    "Redistribute OSPFv3 NSSA route optins.";
+                }
+              }
+            }
+          }
+          case metric {
+            leaf metric {
+              type uint32 {
+                range "0..16777214";
+              }
+              default "0";
+              description
+                "Metric for redistributed routes";
+            }
+          }
+        }
+        leaf metric-type {
+          type enumeration {
+            enum external {
+              value 0;
+              description
+                "External metric type";
+            }
+            enum internal {
+              value 1;
+              description
+                "Internal metric type";
+            }
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+    }
+    /*
+    interarea-distribute { l1-to-l2 | l2-to-l1 } [  ipv6-prefix-
+     list (list-value) ]
+    */
+    list interarea-distribute {
+      key "interarea-distribute-choice";
+      description
+        "Interarea IP route leaking";
+      leaf interarea-distribute-choice {
+        type enumeration {
+          enum l1-to-l2 {
+            value 0;
+            description
+              "IP route leaking from level-1 into level-2";
+          }
+          enum l2-to-l1 {
+            value 1;
+            description
+              "IP route leaking from level-2 into level-1";
+          }
+        }
+        description
+          "Configure IP route leaking";
+      }
+      leaf ipv6-prefix-list {
+        type string;
+        description
+          "Filter redistributed IPv6 routes";
+      }
+    }
+    /*
+    summary-address { addr-ipv6 (address-prefix) [ level-1 |
+     level-2 ] }
+    */
+    container summary-address {
+      description
+        "Configure IP address summaries";
+      list addr-ipv6 {
+        key "address-prefix";
+        description
+          "False token for IPv6 list";
+        leaf address-prefix {
+          type inet:ipv6-prefix;
+          description
+            "IPv6 summary address prefix";
+        }
+        leaf addr-ipv6-opt {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "IPv6 summary for level-1 only";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "IPv6 summary for level-2 only";
+            }
+          }
+          description
+            " IPv6 summary options.";
+        }
+      }
+    }
+    /*
+    priority-prefix (prefix-list)
+    */
+    leaf priority-prefix {
+      type string;
+      description
+        "Configure prioritization of selected prefixes";
+    }
+  }
+
+  grouping isis-if-af-grp {
+    description
+      "ISIS interface address family configuration mode";
+    /*
+    prefix-hiding [ ignore-global ]
+    */
+    container prefix-hiding {
+      when "name(..) = 'isisipos:unicast'" {
+        description
+          "prefix-hiding is configurable on unicast only.";
+      }
+      description
+        "Hide interface prefix for this interface";
+      leaf prefix-hiding-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable prefix-hiding-enable";
+      }
+      leaf ignore-global {
+        when "../prefix-hiding-enable='true'" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "Ignore config at instance (address-family) level";
+      }
+    }
+    /*
+    prefix-sid index (global-value) [ node ] [ explicit-null |
+     php ]
+    */
+    container prefix-sid-index {
+      when "name(..) = 'isisipos:unicast' and name(../..) = "
+      + "'isisipos:ipv4' and not(../../../../../../../ctxipos:"
+      + "vpn-rd)" {
+        description
+          "Prefix-sid option just exist under address-family
+           ipv4 unicast.";
+      }
+      presence "";
+      description
+        "Index into the SRGB range";
+      leaf global-value {
+        type uint16 {
+          range "0..16383";
+        }
+        mandatory true;
+        description
+          "Segment identifier";
+      }
+      leaf node {
+        type empty;
+        description
+          "Configure as a node-segment identifier";
+      }
+      leaf prefix-sid-index-opt {
+        type enumeration {
+          enum explicit-null {
+            value 0;
+            description
+              "Enable explicit-NULL operation";
+          }
+          enum php {
+            value 1;
+            description
+              "Enable penultimate-hop pop operation";
+          }
+        }
+        description
+          "Prefix-sid index options.";
+      }
+    }
+    /*
+    adjacency-sid absolute (local-value)
+    */
+    container adjacency-sid {
+      when "name(..) = 'isisipos:unicast' and name(../..) = "
+      + "'isisipos:ipv4' and not(../../../../../../../ctxipos:"
+      + "vpn-rd)" {
+        description
+          "Adjacency-sid option just exist under address-family
+           ipv4 unicast.";
+      }
+      description
+        "Configure adjacency-segment identifier for the
+         interface";
+      leaf absolute {
+        type uint32 {
+          range "983040..999423";
+        }
+        description
+          "Identifier from local range";
+      }
+    }
+    /*
+    bfd
+    */
+    leaf bfd {
+      when "name(..) = 'isisipos:unicast'" {
+        description
+          "";
+      }
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable bfd";
+    }
+    /*
+    metric { level-1 (metric-value) | level-2 (metric-value) }
+    */
+    container metric {
+      description
+        "Configure a metric for interface";
+      leaf level-1 {
+        type uint32 {
+          range "1..16777215";
+        }
+        default "10";
+        description
+          "Configure metric value for level-1 only";
+      }
+      leaf level-2 {
+        type uint32 {
+          range "1..16777215";
+        }
+        default "10";
+        description
+          "Configure metric value for level-2 only";
+      }
+    }
+    /*
+    lfa [ backup | [ protect { link-only | node-only } ] [
+     prefer ecmp | exclude ecmp ] [ remote-lfa ] ]
+    */
+    container lfa {
+      when "name(..) = 'isisipos:unicast'" {
+        description
+          "Lfa just exist under address-family ipv4/ipv6
+           unicast.";
+      }
+      presence "";
+      description
+        "Configure Loop Free Alternative (LFA) computation";
+      leaf backup {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable backup";
+      }
+      container protect {
+        description
+          "Configure protection constraints";
+        leaf protect {
+          type enumeration {
+            enum link-only {
+              value 0;
+              description
+                "Only link protecting neighbors chosen as LFAs";
+            }
+            enum node-only {
+              value 1;
+              description
+                "Only node protecting neighbors chosen as LFAs";
+            }
+          }
+          description
+            "Configure LFA protection constraints";
+        }
+        choice protect-opt {
+          description
+            "";
+          case prefer-ecmp {
+            leaf prefer-ecmp {
+              type empty;
+              description
+                "LFA selection prefers equal-cost multipath
+                 nexthops";
+            }
+          }
+          case exclude-ecmp {
+            leaf exclude-ecmp {
+              type empty;
+              description
+                "LFA selection excludes equal-cost multipath
+                 nexthops";
+            }
+          }
+        }
+        leaf remote-lfa {
+          when "name(../../../..) = 'isisipos:ipv4'" {
+            description
+              "Remote-lfa option just exist under address-family
+               ipv4 unicast.";
+          }
+          type empty;
+          description
+            "Configure Remote LFA computation";
+        }
+      }
+    }
+    /*
+    ti-lfa [ backup | [ protect { link-only } ] | [ segment-
+     limit (limit-value) ] ]
+    */
+    container ti-lfa {
+      when "name(..) = 'isisipos:unicast' and name(../..) = "
+      + "'isisipos:ipv4' and contains(../../../../isisipos:"
+      + "interface, '@local')" {
+        description
+          "TILFA is configurable on unicast only";
+      }
+      presence "";
+      description
+        "Configure Loop Free Alternate (TILFA) computation";
+      leaf backup {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable backup";
+      }
+      container protect-link-only {
+        description
+          "Configure TILFA protection constraints";
+        leaf protect-link-only {
+          type empty;
+          description
+            "Only link protecting neighbors are chosen as
+             TILFAs";
+        }
+      }
+      container segment-limit {
+        description
+          "Configure segment limit";
+        leaf segment-limit {
+          type uint8 {
+            range "0..2";
+          }
+          default "2";
+          description
+            "Configure TILFA segment limit";
+        }
+      }
+    }
+    /*
+    metricpassive { level-1 (metric-value) | level-2 (metric-
+     value) }
+    */
+    container metricpassive {
+      when "../../../../passive-interface" {
+        description
+          "Configure a metric for passive interface only";
+      }
+      status obsolete;
+      description
+        "[OBSOLETE]Configure a metric for passive interface
+         only";
+      leaf level-1 {
+        type uint32 {
+          range "1..16777215";
+        }
+        description
+          "Configure metric value for level-1 only";
+      }
+      leaf level-2 {
+        type uint32 {
+          range "1..16777215";
+        }
+        description
+          "Configure metric value for level-2 only";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:router" {
+    description
+      "ericsson-isis";
+    /*
+    isis (isis-tag)
+    */
+    list isis {
+      key "isis";
+      description
+        "ISO IS-IS routes";
+      leaf isis {
+        type string;
+        description
+          "IS-IS protocol instance name";
+      }
+      uses isis-grp;
+    }
+  }
+
+}

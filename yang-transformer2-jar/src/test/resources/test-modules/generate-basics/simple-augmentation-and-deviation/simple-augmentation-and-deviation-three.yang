@@ -1,0 +1,42 @@
+module simple-augmentation-and-deviation-three {
+
+    namespace "urn:test:simple-augmentation-and-deviation-three";
+    prefix this;
+
+	import simple-augmentation-and-deviation-one {
+		prefix saad1;
+	}
+
+	import simple-augmentation-and-deviation-two {
+		prefix saad2;
+	}
+	
+    revision "2021-05-09";
+
+	deviation /saad1:cont1/saad1:leaf12 {
+		deviate not-supported;
+	}
+
+	deviation /saad1:cont1/saad2:leaf19 {
+		deviate not-supported;
+	}
+
+	deviation /saad2:cont4/saad2:leaf43 {
+		deviate not-supported;
+	}
+
+	deviation /saad1:cont2/saad2:cont5 {
+		deviate not-supported;
+	}
+
+	deviation /saad1:cont2/saad2:cont6/saad2:leaf66 {
+		deviate not-supported;
+	}
+	
+	augment /saad1:cont2/saad2:cont6 {
+		
+		leaf leaf69 {
+			type string;
+		}
+	}
+}

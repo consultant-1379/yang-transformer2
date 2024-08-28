@@ -1,0 +1,292 @@
+module ericsson-nrsectorcarrier-vdu-ext {
+  yang-version 1.1;
+  namespace urn:rdns:com:ericsson:oammodel:ericsson-nrsectorcarrier-vdu-ext;
+  prefix nrsectcarr3gppext;
+
+  import _3gpp-common-managed-element { prefix me3gpp; }
+  import _3gpp-nr-nrm-gnbdufunction { prefix gnbdu3gpp; }
+  import _3gpp-nr-nrm-nrsectorcarrier { prefix nrsectcarr3gpp; }
+  import ericsson-yang-extensions { prefix yexte; }
+  import _3gpp-common-yang-types { prefix types3gpp; }
+  import ericsson-notifications { prefix notife; }
+  
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "The module defines the NRSectorCarrier data model additional leafs for the Ericsson vDU.
+
+    Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+  revision 2021-07-27 {
+    description
+      "Bug Fix, leaf-list state notifiable compatibility issue. Adds extension notife:notifiable-state-data false to availabilityStatus.";
+    yexte:version 1;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+  
+  revision 2021-07-05 {
+    description
+      "Add Mute TRS parameters and validation";
+    yexte:version 0;
+    yexte:release 4;
+    yexte:correction 0;
+  }
+
+  revision 2021-06-24 {
+    description
+      "ulAvailableCrbs validator for FR1 FDD.";
+    yexte:version 0;
+    yexte:release 3;
+    yexte:correction 2;
+  }
+
+  revision 2021-05-26 {
+    description
+      "Restore default value of administrativeState.";
+    yexte:version 0;
+    yexte:release 3;
+    yexte:correction 1;
+  }
+
+  revision 2021-03-15 {
+    description
+      "Remove mute TRS parameter.";
+    yexte:version 0;
+    yexte:release 3;
+    yexte:correction 0;
+  }
+
+  revision 2021-03-11 {
+    description
+      "Copy attributes from ericsson-nrsectorcarrier-vdu-add@2020-12-09.yang";
+    yexte:version 0;
+    yexte:release 2;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+
+  revision 2021-02-12 {
+    description
+      "Add PRB Blanking parameters.";
+    yexte:version 0;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+  grouping NRSectorCarrierVduGrp {
+    description "Ericsson extensions to the 3gpp NRSectorCarrier IOC.";
+    reference "Ericsson documentaion";
+
+    leaf dlStartCrb {
+      description "Start position of Common Resource Blocks (CRBs) available for downlink channels.";
+      type int32 { range "0..272"; }
+      default 0;
+      yexte:takes-effect "Next NRCellDU MO unlock";
+      yexte:precondition "Value can only be changed if
+                administrativeState is LOCKED???";
+    }
+
+    typedef TrsConfigMode {
+        description "TRS bandwidth configuration mode.";
+        type enumeration {
+            enum AUTO {
+                value 0;
+                description "System automatically selects TRS configuration.";
+            }
+            enum FULL_BW {
+                value 1;
+                description "TRS bandwidth is full bandwidth.";
+            }
+            enum PRB_52 {
+                value 2;
+                description "TRS bandwidth is 52 PRBs.";
+            }
+            enum FULL_BW_MUTE {
+                value 3;
+                description "TRS bandwidth is full bandwidth with muting function.";
+            }
+        }
+    }
+
+    leaf dlAvailableCrbs {
+      description "Total amount of Common Resource Blocks (CRBs) available for downlink channels.
+        Empty value means no bandwidth restriction, no blanking in DL.";
+      type int32 { range "0..272"; }
+      yexte:takes-effect "Next NRCellDU MO unlock";
+      yexte:precondition "Value can only be changed if
+                administrativeState is LOCKED???";
+      //FR1 FDD
+      must 'not(boolean(.)) or (../nrsectcarr3gpp:arfcnDL = ../nrsectcarr3gpp:arfcnUL) or (
+      (../nrsectcarr3gpp:bSChannelBwDL =5 and ((. + ../dlStartCrb) <= 25)) or
+      (../nrsectcarr3gpp:bSChannelBwDL =10 and ((. + ../dlStartCrb) <= 52)) or
+      (../nrsectcarr3gpp:bSChannelBwDL =15 and ((. + ../dlStartCrb) <= 79)) or
+      (../nrsectcarr3gpp:bSChannelBwDL =20 and ((. + ../dlStartCrb) <= 106)))' {
+        error-message
+            "For FR1 FDD NRSectorCarrier, dlAvailableCrbs, if configured, must be equal or less than:
+            - bSChannelBwDL = 5 MHz sector carrier, 25 - dlStartCrb.
+            - bSChannelBwDL = 10 MHz sector carrier, 52 - dlStartCrb.
+            - bSChannelBwDL = 15 MHz sector carrier, 79 - dlStartCrb.
+            - bSChannelBwDL = 20 MHz sector carrier, 106 - dlStartCrb.";
+      }
+      //FR1 TDD
+      must 'not(boolean(.)) or (../nrsectcarr3gpp:arfcnDL != ../nrsectcarr3gpp:arfcnUL) or (../nrsectcarr3gpp:arfcnDL >= 875000) or (
+          (../nrsectcarr3gpp:bSChannelBwDL =100 and ((. + ../dlStartCrb) < 273)))' {
+        error-message
+            "For FR1 TDD NRSectorCarrier, dlAvailableCrbs, if configured, must be less than:
+             - bSChannelBwDL = 100 MHz sector carrier, 273 - dlStartCrb.";
+      }
+    }
+
+    leaf ulStartCrb {
+      description "Start position of Common Resource Blocks (CRBs) available for uplink channels.";
+      type int32 { range "0..272"; }
+      default 0;
+      yexte:takes-effect "Next NRCellDU MO unlock";
+      yexte:precondition "Value can only be changed if
+                administrativeState is LOCKED???";
+    }
+
+    leaf ulAvailableCrbs {
+      description "Total amount of Common Resource Blocks (CRBs) available for uplink channels.
+        Empty value means no bandwidth restriction, no blanking in UL.";
+        type int32 { range "0..272"; }
+        yexte:takes-effect "Next NRCellDU MO unlock";
+        //FR1 FDD
+        must 'not(boolean(.)) or (../nrsectcarr3gpp:arfcnDL = ../nrsectcarr3gpp:arfcnUL)
+         or ((../nrsectcarr3gpp:bSChannelBwUL =5 and ((. + ../ulStartCrb) <= 25))
+         or (../nrsectcarr3gpp:bSChannelBwUL =10 and ((. + ../ulStartCrb) <= 52))
+         or (../nrsectcarr3gpp:bSChannelBwUL =15 and ((. + ../ulStartCrb) <= 79))
+         or (../nrsectcarr3gpp:bSChannelBwUL =20 and ((. + ../ulStartCrb) <= 106)))' {
+        error-message
+            "For FR1 FDD NRSectorCarrier, ulAvailableCrbs, if configured, must be equal or less than:
+            - bSChannelBwUL = 5 MHz sector carrier, 25 - ulStartCrb.
+            - bSChannelBwUL = 10 MHz sector carrier, 52 - ulStartCrb.
+            - bSChannelBwUL = 15 MHz sector carrier, 79 - ulStartCrb.
+            - bSChannelBwUL = 20 MHz sector carrier, 106 - ulStartCrb.";
+        }
+        //FR1 TDD
+        must 'not(boolean(.)) or (../nrsectcarr3gpp:arfcnDL != ../nrsectcarr3gpp:arfcnUL) or (../nrsectcarr3gpp:arfcnUL >= 875000)
+         or ((../nrsectcarr3gpp:bSChannelBwUL =100 and ((. + ../ulStartCrb) < 273)))' {
+        error-message
+            "For FR1 TDD NRSectorCarrier, ulAvailableCrbs, if configured, must be less than:
+             - bSChannelBwUL = 100 MHz sector carrier, 273 - ulStartCrb.";
+      }
+    }
+
+    leaf administrativeState  {
+      description "Administrative state of the NRSectorCarrier. Indicates the
+        permission to use or prohibition against using the sector carrier, imposed
+        through the OAM services.";
+      type types3gpp:AdministrativeState;
+      default LOCKED;
+      reference
+        "ITU-T Rec. X.731";
+    }
+
+    leaf operationalState  {
+      description "Operational state of the NRSectorCarrier instance. Indicates
+        whether the resource is installed and partially or fully operable
+        (ENABLED) or the resource is not installed or not operable
+        (DISABLED).";
+      config false;
+      type types3gpp:OperationalState;
+      reference
+        "ITU-T Rec. X.731";
+    }
+
+    leaf-list availabilityStatus {
+      description "The availability status.
+        It contains details about operationalState.";
+      config false;
+      notife:notifiable-state-data false;
+      min-elements 0;
+      type types3gpp:AvailabilityStatus;
+      reference
+        "ITU-T Rec. X.731";
+    }
+
+    leaf essScPairId {
+        description "ID attribute that pairs SectorCarriers from gNodeB and
+            eNodeB in Ericsson Spectrum Sharing (ESS).
+
+            Must be unique within gNodeB and eNodeB.";
+        type uint64 { range "1..9223372036854775807"; }
+        mandatory false;
+        yexte:dependencies "If configured, arfcnDL must be different than
+        arfcnUL, and bsChannelBwDL and bsChannelBwUL must be 10, 15, or 20.";
+        yexte:takes-effect "Next MO unlock";
+        yexte:precondition "Value can only be changed if
+                administrativeState is LOCKED";
+    }
+
+    leaf essScLocalId {
+        description "The gNodeB internal ID attribute for SectorCarrier
+            within Ericsson Shared Spectrum.
+
+            Must be unique and non-zero in gNodeB for ESS NRSectorCarriers.";
+        type uint32 { range "1..99999"; }
+        mandatory false;
+        yexte:takes-effect "Next MO unlock";
+        yexte:precondition "Value can only be changed if
+                administrativeState is LOCKED";
+    }
+
+    leaf essMbsfnSubframeConfig {
+      description "MBSFN subframe configuration for eNodeB
+        using four frames.
+
+        ESS NSA:
+        110000 000000 100000 000000 (decimal 12584960).
+
+        ESS SA:
+        100100 000000 110100 000000 (decimal 9440512) or
+        100100 000000 111100 000000 (decimal 9441024).";
+      mandatory false;
+      type uint32 { range "9440512 | 9441024 | 12584960"; }
+    }
+
+    leaf trsConfigMode {
+        description
+        "TRS bandwidth configuration mode.";
+        type TrsConfigMode;
+        default AUTO;
+        yexte:takes-effect "Next cell unlock";
+        // Only present on FDD/LB
+        when "../nrsectcarr3gpp:arfcnDL != ../nrsectcarr3gpp:arfcnUL";
+        must '. != "FULL_BW_MUTE" or ../dlAvailableCrbs > 0' {
+          error-message "Value FULL_BW_MUTE can only be set if dlAvailableCrbs is greater than 0.";
+        }
+        must '. != "PRB_52" or ((../dlStartCrb mod 4 = 0 and ../dlAvailableCrbs >= 52)
+        or (../dlStartCrb mod 4 = 3 and ../dlAvailableCrbs >= 53)
+        or (../dlStartCrb mod 4 = 2 and ../dlAvailableCrbs >= 54)
+        or (../dlStartCrb mod 4 = 1 and ../dlAvailableCrbs >= 55))' {
+            error-message
+            "Value PRB_52 can only be set if dlAvailableCrbs is greater than or equal to:
+             - 52 when dlStartCrb modulo 4 is equal to 0.
+             - 53 when dlStartCrb modulo 4 is equal to 3.
+             - 54 when dlStartCrb modulo 4 is equal to 2.
+             - 55 when dlStartCrb modulo 4 is equal to 1.";
+        }
+    }
+
+    leaf trsModeSelected {
+      description "Selected TRS mode.
+
+        When empty, TRS mode is not selected.";
+      config false;
+      type TrsConfigMode;
+    }
+  }
+
+  augment "/me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrsectcarr3gpp:NRSectorCarrier/nrsectcarr3gpp:attributes" {
+    description "Adds Ericsson attributes to 3gpp NRSectorCarrier";
+    uses NRSectorCarrierVduGrp;
+  }
+}

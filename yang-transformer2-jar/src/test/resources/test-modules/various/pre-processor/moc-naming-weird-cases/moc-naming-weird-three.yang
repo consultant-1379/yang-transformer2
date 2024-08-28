@@ -1,0 +1,41 @@
+module moc-naming-weird-three {
+
+    namespace "urn*test*moc-naming-weird-three";
+    prefix this;
+
+    revision "2021-11-01";
+
+	import moc-naming-weird-one {
+		prefix one;
+	}
+
+	import moc-naming-weird-two {
+		prefix two;
+	}
+
+	container cont8 {
+		leaf leafXx { type string; }
+	}
+
+	// augmented twice, resulting in the same
+	// path to schema root.
+
+	augment /one:cont7 {
+		container cont8 {
+			leaf leafXx { type string; }
+		}
+	}
+
+	augment /one:cont6/one:cont7 {
+		container cont8 {
+			leaf leafXx { type string; }
+		}
+	}
+
+	augment /two:cont7 {
+		container cont8 {
+			leaf leafXx { type string; }
+		}
+	}
+
+}

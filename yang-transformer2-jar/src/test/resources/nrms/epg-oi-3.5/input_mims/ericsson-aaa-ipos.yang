@@ -1,0 +1,1156 @@
+module ericsson-aaa-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-aaa-ipos";
+
+  prefix "aaaipos";
+
+  import ietf-system {
+    prefix "sys";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import tailf-common {
+    prefix "tailf";
+  }
+
+  import ietf-netconf-acm {
+    prefix "nacm";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-aaa-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-09-30" {
+    description
+      "Added platform information to users: uid, gid, homedir
+       and shell";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "3";
+  }
+
+  revision "2019-09-03" {
+    description
+      "Make unsupported SSH crytography algorithms obsolete and
+       introduce new ones.";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "2";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2019-01-30" {
+    description
+      "Support authorization mode";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "Depracated the system security admin-eal3-compliance
+       command.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-07-20" {
+    description
+      "Local per user session idle timeout support.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-19" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "13";
+  }
+
+  revision "2018-06-11" {
+    description
+      "Update the idle timeout session description and idle time
+       unit.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "12";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "11";
+  }
+
+  revision "2018-05-08" {
+    description
+      "Change session timeout idle default time as 3,since epg
+       has updated the script.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "10";
+  }
+
+  revision "2018-04-09" {
+    description
+      "Change session timeout idle default time as 43200 as
+       epg's requirement.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "9";
+  }
+
+  revision "2018-03-27" {
+    description
+      "Timeout configuration command missing";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "8";
+  }
+
+  revision "2018-03-08" {
+    description
+      "SSH configuration command missing part 2";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-02-12" {
+    description
+      "SSH configuration command missing";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-01-24" {
+    description
+      "Augment authorized-key to add 'comment'";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-01-19" {
+    description
+      "change probe-interval range and its default value";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-01-18" {
+    description
+      "update full-name length and probe value range";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-11-10" {
+    description
+      "fixed compiling warning";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-09-15" {
+    description
+      "IPOS-15293 'administrator' can't be deleted with'no
+       administrator'";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-28" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+    identity tacacsplus {
+      base sys:authentication-method;
+      description
+        "tacacs+ server to authenticate";
+    }
+
+  grouping administrator-grp {
+    description
+      "Administrators configuration mode";
+    /*
+    full-name (desc-str)
+    */
+    leaf full-name {
+      type string {
+        length "1..60";
+      }
+      description
+        "Full name or description of the user";
+    }
+    /*
+    allow-password-change
+    */
+    leaf allow-password-change {
+      type empty;
+      description
+        "Allow administrator password change from exec mode CLI";
+    }
+    /*
+    lockout-duration (lockout-time)
+    */
+    leaf lockout-duration {
+      type uint16 {
+        range "0..1440";
+      }
+      description
+        "Time period (in minutes) that the user is locked after
+         consecutive failed login attempts";
+    }
+    /*
+    failed-login-attempts (login-attempts)
+    */
+    leaf failed-login-attempts {
+      type uint8 {
+        range "0..99";
+      }
+      description
+        "Set the amount of failed login attempts before the user
+         is locked-out";
+    }
+    /*
+    account-expiration (in-day)
+    */
+    leaf account-expiration {
+      type uint8 {
+        range "0..180";
+      }
+      description
+        "Time period (in days) that the user account is disabled
+         after configured period of inactivity";
+    }
+    /*
+    timeout-session-idle (in-min)
+    */
+    leaf timeout-session-idle {
+      type uint32 {
+        range "0..99999";
+      }
+      description
+        "Set the user session inactivity timeout (in minutes)";
+    }
+  }
+
+  grouping security-profile-grp {
+    description
+      "Security profile configuration mode";
+    /*
+    failed-login-attempts (attempts-val)
+    */
+    leaf failed-login-attempts {
+      type uint8 {
+        range "0..99";
+      }
+      default "6";
+      description
+        "Set the amount of failed login attempts before the user
+         is locked-out (Default 6)";
+    }
+    /*
+    lockout-duration (period-val)
+    */
+    leaf lockout-duration {
+      type uint16 {
+        range "0..1440";
+      }
+      default "5";
+      description
+        "Time period (in mins.) that the user is locked after
+         consecutive failed login attempts (Default 5 Mins)";
+    }
+    /*
+    account-expiration (time-val)
+    */
+    leaf account-expiration {
+      type uint8 {
+        range "0..180";
+      }
+      description
+        "Time period (in days) the user account is disabled
+         after configured period of inactivity";
+    }
+  }
+
+  augment "/sys:system" {
+    description
+      "ericsson-aaa";
+    /*
+    ssh server {  max-retries [ (max-retry) ] | max-connections
+     [ (max-connection) ] | probe-interval [ (probe-interval) ] |
+     ciphers [ des-cbc ] [ aes128-cbc ] [ aes128-ctr ] [
+     aes128-gcm_openssh.com ] [ aes192-cbc ] [ aes192-ctr ] [
+     aes256-cbc ] [ aes256-ctr ] [ aes256-gcm_openssh.com ] [
+     arcfour ] [ arcfour128 ] [ arcfour256 ] [ blowfish-cbc ] [
+     cast128-cbc ] [ chacha20-poly1305_openssh.com ] | key-
+     exchange [ curve25519-sha256 ] [
+     curve25519-sha256_libssh.org ] [ diffie-hellman-group-
+     exchange-sha1 ] [ diffie-hellman-group-exchange-sha256 ] [
+     diffie-hellman-group1-sha1 ] [ diffie-hellman-group14-sha1 ]
+     [ diffie-hellman-group14-sha256 ] [ diffie-hellman-
+     group16-sha512 ] [ diffie-hellman-group18-sha512 ] [ ecdh-
+     sha2-nistp256 ] [ ecdh-sha2-nistp384 ] [ ecdh-sha2-nistp521
+     ] | macs [ hmac-md5 ] [ hmac-md5-96 ] [ hmac-
+     md5-96-etm_openssh.com ] [ hmac-md5-etm_openssh.com ] [
+     hmac-ripemd160 ] [ hmac-ripemd160-etm_openssh.com ] [ hmac-
+     sha1 ] [ hmac-sha1-96 ] [ hmac-sha1-96-etm_openssh.com ] [
+     hmac-sha1-etm_openssh.com ] [ hmac-sha2-256 ] [ hmac-
+     sha2-256-etm_openssh.com ] [ hmac-sha2-512 ] [ hmac-
+     sha2-512-etm_openssh.com ] [ umac-128-etm_openssh.com ] [
+     umac-128_openssh.com ] [ umac-64-etm_openssh.com ] [umac-
+     64_openssh.com ] | loglevel [ DEBUG | DEBUG1 | DEBUG2 |
+     DEBUG3 | ERROR | FATAL | INFO | QUIET | VERBOSE ] | rate-
+     drop [ ( rate-drop-value ) ] | start-drop [ ( start-drop-
+     value ) ] | full-drop [ ( full-drop-value ) ] }
+    */
+    container ssh-server {
+      description
+        "Set attributes for the server";
+      container max-retries {
+        presence "";
+        description
+          "Set the maximum retry limit for paswords";
+        leaf max-retry {
+          type uint8 {
+            range "1..100";
+          }
+          default "4";
+          description
+            "Set the maximum retry limit for paswords";
+        }
+      }
+      container max-connections {
+        presence "";
+        description
+          "Set the maximum client connections possible in one
+           second";
+        leaf max-connection {
+          type uint8 {
+            range "1..100";
+          }
+          default "3";
+          description
+            "Set the maximum client connections possible in one
+             second";
+        }
+      }
+      container probe-interval {
+        presence "";
+        description
+          "Set the probe interval for client activity in
+           seconds";
+        leaf probe-interval {
+          type uint16 {
+            range "1..600";
+          }
+          default "300";
+          description
+            "Set the probe interval for client liveliness in
+             seconds";
+        }
+      }
+      container ciphers {
+        description
+          "Configure the list of ciphers the ssh server
+           supports";
+        leaf des-cbc {
+          type empty;
+          description
+            "Cipher 3des-cbc";
+        }
+        leaf aes128-cbc {
+          type empty;
+          description
+            "Cipher aes128-cbc";
+        }
+        leaf aes128-ctr {
+          type empty;
+          description
+            "Cipher aes128-ctr";
+        }
+        leaf aes128-gcm_openssh.com {
+          type empty;
+          description
+            "Cipher aes128-gcm@openssh.com";
+        }
+        leaf aes192-cbc {
+          type empty;
+          description
+            "Cipher aes192-cbc";
+        }
+        leaf aes192-ctr {
+          type empty;
+          description
+            "Cipher aes192-ctr";
+        }
+        leaf aes256-cbc {
+          type empty;
+          description
+            "Cipher aes256-cbc";
+        }
+        leaf aes256-ctr {
+          type empty;
+          description
+            "Cipher aes256-ctr";
+        }
+        leaf aes256-gcm_openssh.com {
+          type empty;
+          description
+            "Cipher aes256-gcm@openssh.com";
+        }
+        leaf arcfour {
+          type empty;
+          status obsolete;
+          description
+            "[OBSOLETE]Cipher arcfour";
+        }
+        leaf arcfour128 {
+          type empty;
+          status obsolete;
+          description
+            "[OBSOLETE]Cipher arcfour128";
+        }
+        leaf arcfour256 {
+          type empty;
+          status obsolete;
+          description
+            "[OBSOLETE]Cipher arcfour256";
+        }
+        leaf blowfish-cbc {
+          type empty;
+          status obsolete;
+          description
+            "[OBSOLETE]Cipher blowfish-cbc";
+        }
+        leaf cast128-cbc {
+          type empty;
+          status obsolete;
+          description
+            "[OBSOLETE]Cipher cast128-cbc";
+        }
+        leaf chacha20-poly1305_openssh.com {
+          type empty;
+          description
+            "Cipher chacha20-poly1305@openssh.com";
+        }
+      }
+      container key-exchange {
+        description
+          "Configure the list of key-exchange algorithms the ssh
+           server supports";
+        leaf curve25519-sha256 {
+          type empty;
+          description
+            "Key-exchange curve25519-sha256";
+        }
+        leaf curve25519-sha256_libssh.org {
+          type empty;
+          description
+            "Key-exchange curve25519-sha256@libssh.org";
+        }
+        leaf diffie-hellman-group-exchange-sha1 {
+          type empty;
+          description
+            "Key-exchange diffie-hellman-group-exchange-sha1";
+        }
+        leaf diffie-hellman-group-exchange-sha256 {
+          type empty;
+          description
+            "Key-exchange diffie-hellman-group-exchange-sha256";
+        }
+        leaf diffie-hellman-group1-sha1 {
+          type empty;
+          description
+            "Key-exchange diffie-hellman-group1-sha1";
+        }
+        leaf diffie-hellman-group14-sha1 {
+          type empty;
+          description
+            "Key-exchange diffie-hellman-group14-sha1";
+        }
+        leaf diffie-hellman-group14-sha256 {
+          type empty;
+          description
+            "Key-exchange diffie-hellman-group14-sha256";
+        }
+        leaf diffie-hellman-group16-sha512 {
+          type empty;
+          description
+            "Key-exchange diffie-hellman-group16-sha512";
+        }
+        leaf diffie-hellman-group18-sha512 {
+          type empty;
+          description
+            "Key-exchange diffie-hellman-group18-sha512";
+        }
+        leaf ecdh-sha2-nistp256 {
+          type empty;
+          description
+            "Key-exchange ecdh-sha2-nistp256";
+        }
+        leaf ecdh-sha2-nistp384 {
+          type empty;
+          description
+            "Key-exchange ecdh-sha2-nistp384";
+        }
+        leaf ecdh-sha2-nistp521 {
+          type empty;
+          description
+            "Key-exchange ecdh-sha2-nistp521";
+        }
+      }
+      container macs {
+        description
+          "Configure the list of MACs the ssh server supports";
+        leaf hmac-md5 {
+          type empty;
+          description
+            "Mac hmac-md5";
+        }
+        leaf hmac-md5-96 {
+          type empty;
+          description
+            "Mac hmac-md5-96";
+        }
+        leaf hmac-md5-96-etm_openssh.com {
+          type empty;
+          description
+            "Mac hmac-md5-96-etm@openssh.com";
+        }
+        leaf hmac-md5-etm_openssh.com {
+          type empty;
+          description
+            "Mac hmac-md5-etm@openssh.com";
+        }
+        leaf hmac-ripemd160 {
+          type empty;
+          status obsolete;
+          description
+            "[OBSOLETE]Mac hmac-ripemd160";
+        }
+        leaf hmac-ripemd160-etm_openssh.com {
+          type empty;
+          status obsolete;
+          description
+            "[OBSOLETE]Mac hmac-ripemd160-etm@openssh.com";
+        }
+        leaf hmac-sha1 {
+          type empty;
+          description
+            "Mac hmac-sha1";
+        }
+        leaf hmac-sha1-96 {
+          type empty;
+          description
+            "Mac hmac-sha1-96";
+        }
+        leaf hmac-sha1-96-etm_openssh.com {
+          type empty;
+          description
+            "Mac hmac-sha1-96-etm@openssh.com";
+        }
+        leaf hmac-sha1-etm_openssh.com {
+          type empty;
+          description
+            "Mac hmac-sha1-etm@openssh.com";
+        }
+        leaf hmac-sha2-256 {
+          type empty;
+          description
+            "Mac hmac-sha2-256";
+        }
+        leaf hmac-sha2-256-etm_openssh.com {
+          type empty;
+          description
+            "Mac hmac-sha2-256-etm@openssh.com";
+        }
+        leaf hmac-sha2-512 {
+          type empty;
+          description
+            "Mac hmac-sha2-512";
+        }
+        leaf hmac-sha2-512-etm_openssh.com {
+          type empty;
+          description
+            "Mac hmac-sha2-512-etm@openssh.com";
+        }
+        leaf umac-128-etm_openssh.com {
+          type empty;
+          description
+            "Mac umac-128-etm@openssh.com";
+        }
+        leaf umac-128_openssh.com {
+          type empty;
+          description
+            "Mac umac-128@openssh.com";
+        }
+        leaf umac-64-etm_openssh.com {
+          type empty;
+          description
+            "Mac umac-64-etm@openssh.com";
+        }
+        leaf umac-64_openssh.com {
+          type empty;
+          description
+            "Mac umac-64@openssh.com";
+        }
+      }
+      container loglevel {
+        description
+          "Configure the log level the ssh server supports";
+        leaf loglevel-opt {
+          type enumeration {
+            enum DEBUG {
+              value 0;
+              description
+                "Log level DEBUG";
+            }
+            enum DEBUG1 {
+              value 1;
+              description
+                "Log level DEBUG1";
+            }
+            enum DEBUG2 {
+              value 2;
+              description
+                "Log level DEBUG2";
+            }
+            enum DEBUG3 {
+              value 3;
+              description
+                "Log level DEBUG3";
+            }
+            enum ERROR {
+              value 4;
+              description
+                "Log level ERROR";
+            }
+            enum FATAL {
+              value 5;
+              description
+                "Log level FATAL";
+            }
+            enum INFO {
+              value 6;
+              description
+                "Log level INFO";
+            }
+            enum QUIET {
+              value 7;
+              description
+                "Log level QUIET";
+            }
+            enum VERBOSE {
+              value 8;
+              description
+                "Log level VERBOSE";
+            }
+          }
+          description
+            "leaf loglevel-opt.";
+        }
+      }
+      container rate-drop {
+        presence "";
+        description
+          "Probability of dropping unauthenticated connections
+           (default 100%)";
+        leaf rate-drop-value {
+          type uint8 {
+            range "1..100";
+          }
+          default "100";
+          description
+            "Probability of dropping unauthenticated connections
+             (default 100%)";
+        }
+      }
+      container start-drop {
+        presence "";
+        description
+          "Maxinum number of concurrent unauthenticated
+           connections (default 16)";
+        leaf start-drop-value {
+          type uint8 {
+            range "1..36";
+          }
+          default "16";
+          description
+            "Maximum number of concurrent unauthenticated
+             connections (default 16)";
+        }
+      }
+      container full-drop {
+        presence "";
+        description
+          "Full drop of concurrent unauthenticated connections
+           (default 16)";
+        leaf full-drop-value {
+          type uint8 {
+            range "1..36";
+          }
+          default "16";
+          description
+            "Full drop of concurrent unauthenticated connections
+             (default 16)";
+        }
+      }
+    }
+    /*
+    timeout { login response (response-num) | session idle
+     (idle-num) }
+    */
+    container timeout {
+      description
+        "Set the amount of timeouts";
+      container login {
+        description
+          "Set the CLI login timeout";
+        leaf response {
+          type uint32 {
+            range "0..99999";
+          }
+          default "10";
+          description
+            "Set the CLI login timeout response time";
+        }
+      }
+      container session {
+        description
+          "Set the CLI session timeout";
+        leaf idle {
+          type uint32 {
+            range "0..99999";
+          }
+          default "3";
+          description
+            "Set the CLI session inactivity timeout";
+        }
+      }
+    }
+    /*
+    security { admin-eal3-compliance | profile admin-
+     eal3-compliance }
+    */
+    container security {
+      description
+        "Global security";
+      choice security {
+        description
+          "";
+        case admin-eal3-compliance {
+          leaf admin-eal3-compliance {
+            type empty;
+            status deprecated;
+            description
+              "[DEPRECATED]Apply profile with default
+               configuration";
+          }
+        }
+        case profile-admin-eal3-compliance {
+          container profile-admin-eal3-compliance {
+            presence "";
+            description
+              "Security profile name";
+            uses security-profile-grp;
+          }
+        }
+      }
+    }
+    /*
+    tacacsplus { < server (srv-srv) key [ port (tac-port) ] > |
+     timeout (timeout-val) | max-retries (count-val) | deadtime
+     (deadtime-val) | strip-domain }
+    */
+    container tacacsplus {
+      description
+        "Set TACACS+ attributes";
+      list server {
+        key "srv-srv port";
+        description
+          "Configure a TACACS+ server";
+        leaf srv-srv {
+          type string;
+          description
+            "Server IP address or host name";
+        }
+        leaf port {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "TACACS+ server port (default is 49)";
+        }
+        leaf key {
+          type tailf:aes-cfb-128-encrypted-string;
+          mandatory true;
+          description
+            "Set the server key";
+        }
+      }
+      leaf timeout {
+        type uint8 {
+          range "1..255";
+        }
+        default "10";
+        description
+          "Configure timeout";
+      }
+      leaf max-retries {
+        type uint8 {
+          range "1..10";
+        }
+        default "3";
+        description
+          "Configure maximum retries";
+      }
+      leaf deadtime {
+        type uint8 {
+          range "0..255";
+        }
+        default "5";
+        description
+          "TACACS+ deadtime for a non-responding server";
+      }
+      leaf strip-domain {
+        type empty;
+        description
+          "Strip domain portion of structured username for
+           TACACS+";
+      }
+    }
+  }
+
+  augment "/sys:system/sys:authentication/sys:user" {
+    description
+      "ericsson-aaa";
+    /*
+    administrator
+    */
+    container administrator {
+      description
+        "Configure administrator accounts";
+      uses administrator-grp;
+    }
+  }
+
+  augment "/sys:system/sys:radius" {
+    description
+      "ericsson-aaa";
+    /*
+    algorithm { first [ persistent ] | round-robin }
+    */
+    container algorithm {
+      description
+        "Configure server lookup algorithm";
+      choice algorithm {
+        description
+          "";
+        case first {
+          container first {
+            presence "";
+            description
+              "First server is always queried first (default)";
+            leaf persistent {
+              type empty;
+              description
+                "Query the first alive server persistently until
+                 it is no longer alive";
+            }
+          }
+        }
+        case round-robin {
+          leaf round-robin {
+            type empty;
+            description
+              "Servers are queried in round-robin format";
+          }
+        }
+      }
+    }
+    /*
+    attribute NAS-IP-Address interface (int-str)
+    */
+    container attribute-NAS-IP-Address-interface {
+      description
+        "Retrieve the NAS-IP-Address value from the interface";
+      leaf int-str {
+        type string;
+        description
+          "Interface name";
+      }
+    }
+    /*
+    attribute NAS-IPV6-Address interface (int-str)
+    */
+    container attribute-NAS-IPV6-Address-interface {
+      description
+        "Retrieve the NAS-IPV6-Address value from the interface";
+      leaf int-str {
+        type string;
+        description
+          "Interface name";
+      }
+    }
+    /*
+    deadtime (dead-val)
+    */
+    leaf deadtime {
+      type uint16 {
+        range "0..65535";
+      }
+      description
+        "Set server deadtime value (in minutes)";
+    }
+    /*
+    max-outstanding (out-val)
+    */
+    leaf max-outstanding {
+      type uint16 {
+        range "1..256";
+      }
+      description
+        "Limit the maximum number of outstanding requests";
+    }
+    /*
+    server-timeout [ (timeout-val) | none ]
+    */
+    container server-timeout {
+      description
+        "Set route download server timeout value (in seconds)";
+      choice server-timeout-opt {
+        description
+          "";
+        case timeout-val {
+          leaf timeout-val {
+            type uint32 {
+              range "30..2147483647";
+            }
+            description
+              "Mark the server as inactive if no response within
+               this period (seconds)";
+          }
+        }
+        case none {
+          leaf none {
+            type empty;
+            description
+              "Server is not be marked as inactive if
+               unresponsive";
+          }
+        }
+      }
+    }
+    /*
+    source-port ignore
+    */
+    leaf source-port-ignore {
+      type empty;
+      description
+        "Ignore source-port when matching RADIUS response packet
+         with request";
+    }
+    /*
+    strip-domain
+    */
+    leaf strip-domain {
+      type empty;
+      description
+        "Only Authenticate user name";
+    }
+  }
+
+  augment "/sys:system/sys:authentication/sys:user/sys:"
+  + "authorized-key" {
+    description
+      "ericsson-aaa";
+    /*
+    comment
+    */
+    leaf comment {
+      type string;
+      description
+        "The public key comment for this SSH key";
+    }
+  }
+
+  augment "/sys:system/sys:authentication/sys:user" {
+    leaf user-id {
+      config false;
+      tailf:cdb-oper {
+        tailf:persistent true;
+      }
+      type uint32;
+      description
+        "The Linux user identifier of the user";
+    }
+    leaf group-id {
+      config false;
+      tailf:cdb-oper {
+        tailf:persistent true;
+      }
+      type uint32;
+      description
+        "The Linux group identifier of the user";
+    }
+    leaf home-directory {
+      config false;
+      tailf:cdb-oper {
+        tailf:persistent true;
+      }
+      type string;
+      description
+        "The home directory of the user";
+    }
+    leaf default-shell {
+      config false;
+      tailf:cdb-oper {
+        tailf:persistent true;
+      }
+      type string;
+      description
+        "The default shell of the user";
+    }
+  }
+
+  augment "/sys:system/sys:authentication" {
+    description
+      "ericsson-aaa";
+    /*
+    administrator maximum sessions
+    */
+    leaf administrator-maximum-sessions {
+      type uint8 {
+        range "0..32";
+      }
+      default "10";
+      description
+        "Set method for administrator";
+    }
+    /*
+    authorization-mode { merge | separate }
+    */
+    leaf authorization-mode {
+      type enumeration {
+        enum merge {
+          value 0;
+          description
+            "The roles of remote user is merged with local
+             groups configuration for the same user.(default)";
+        }
+        enum separate {
+          value 1;
+          description
+            "The roles of remote user is seperated with local
+             groups configuration for the same user.";
+        }
+      }
+      must ". = 'merge' or count(/nacm:nacm/nacm:groups/nacm:"
+      + "group/nacm:user-name)=0" {
+        error-message "/nacm/groups/user-name must be empty if "
+        + "authorization-mode is separate. 'migrate-user-groups' "
+        + "command in operational mode could be used to support "
+        + "separate authorization mode";
+        description
+          "When authorization-mode is separate, /nacm/groups
+           must not be used, please use
+           /system/authentication/user/groups to configure user
+           groups.";
+      }
+      default "merge";
+      description
+        "Set authorization mode for remote authentication
+         users.";
+    }
+  }
+
+}

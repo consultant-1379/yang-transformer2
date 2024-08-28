@@ -1,0 +1,40 @@
+submodule identityref-simple-submodule {
+
+	belongs-to identityref-simple {
+    	prefix this;
+	}
+
+    revision "2021-01-31";
+
+	identity id-6;			// derived = {6, 7, 8}
+
+	identity id-7 {			// derived = {7, 8}
+		base this:id-6;
+	}
+
+	identity id-8 {			// derived = {8}
+		base this:id-1;
+		base this:id-7;
+		if-feature my-feature;
+	}
+
+	identity id-9 {			// derived = {9}
+		base this:id-1;
+		if-feature my-feature;
+	}
+
+	container cont2 {
+
+		leaf leaf21 {
+			type identityref {
+				base this:id-6;
+			}
+		}
+
+		leaf leaf22 {
+			type identityref {
+				base this:id-7;
+			}
+		}
+	}
+}

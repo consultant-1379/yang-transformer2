@@ -1,0 +1,39 @@
+module emodel-helper-one {
+
+	namespace "urn:test:emodel-helper-one";
+	prefix this;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	// note: no revision statement
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string;
+		}	
+
+		leaf leaf12 {
+			status deprecated;
+			type string;
+		}	
+
+		leaf leaf13 {
+			status obsolete;
+			type string;
+		}	
+
+		leaf leaf14 {
+			status current {
+				yexte:preliminary;
+			}
+			type string;
+		}	
+	}
+	
+	container cont2 {
+		presence "";
+	}
+}

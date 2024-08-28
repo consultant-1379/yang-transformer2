@@ -1,0 +1,69 @@
+module ericsson-cu-cp-rc-diagnostics-statistics {
+    yang-version 1.1;
+    namespace urn:rdns:com:ericsson:oammodel:ericsson-cu-cp-rc-diagnostics-statistics;
+    prefix rcdiagstatistics;
+    import tailf-common {
+        prefix tailf;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ericsson-common-types-diagnostics {
+        prefix commontypesdiag;
+    }
+    import ericsson-cu-cp-rc-diagnostics {
+        prefix rcdiag;
+    }
+    organization
+      'Ericsson AB';
+    contact
+      'Ericsson first line support via email';
+    description
+      'Diagnostics action:statistics for RC Service
+
+       Copyright (c) 2022 Ericsson AB. All rights reserved';
+    revision 2022-02-21 {
+        description
+        'Initial revision';
+        yexte:version 1;
+        yexte:release 0;
+        yexte:correction 0;
+    }
+
+    yexte:module-status preliminary;
+
+    augment "/rcdiag:rc-diagnostics" {
+        container statistics {
+            description "statistics related actions";
+            action reset {
+                description "reset all ObsEvent counters";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+            action getstat {
+                description "print ObsEvent counters, default only non-zero counters";
+                input {
+                    uses commontypesdiag:output-format;
+                    leaf all {
+                        description "include counters with value zero";
+                        type empty;
+                    }
+                    leaf filter {
+                        description "print ObsEvent counters with specified or partial event name";
+                        type string;
+                    }
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+        }
+    }
+}
+

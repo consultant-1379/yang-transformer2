@@ -1,0 +1,28 @@
+module two-nrm-versions-deviations-one {
+
+    namespace "urn:test:two-nrm-versions-deviations-one";
+    prefix this;
+
+    revision "2021-12-15";
+
+	import two-nrm-versions-base {
+		prefix base;
+	}
+
+	import two-nrm-versions-augmentations {
+		prefix augmentations;
+	}
+	
+	deviation /base:cont1/augmentations:leaf15 {
+		deviate replace {
+			type uint64;
+		}
+	}
+
+	deviation /base:cont1/augmentations:leaf16 {
+		deviate replace {
+			type int64;
+		}
+	}
+
+}

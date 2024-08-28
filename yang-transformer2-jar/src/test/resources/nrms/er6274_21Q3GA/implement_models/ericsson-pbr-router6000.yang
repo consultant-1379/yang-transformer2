@@ -1,0 +1,1267 @@
+module ericsson-pbr-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-pbr-router6000";
+
+  prefix "pbrrouter6000";
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-pbr-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-08-29" {
+    description
+      "redirect destination local can't support and should be
+       obsolete";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-07-05" {
+    description
+      "change redirect lsp command for L3 FEC mapping";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-07-03" {
+    description
+      "Remove when condition of tunnel-name for
+       redirect-destination lsp";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-04-24" {
+    description
+      "change when condition to must condition for drop and
+       redirect-destination";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-03-08" {
+    description
+      "ip-access-group and ipv6-access-group can be configured
+       with 'radius-guide' set";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-02-16" {
+    description
+      "redirect command additions for L3 FEC mapping FT
+       JIRA19026";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-22" {
+    description
+      "change must condition to mandatory to fix JIRA20396";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2016-12-29" {
+    description
+      "remove presence to fix JIRA-3655.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-12-20" {
+    description
+      "add back presence for container.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-15" {
+    description
+      "remove presence of container to non-presence.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  grouping config-policy-group-class-sub-pbr-grp {
+    description
+      "";
+    /*
+    redirect destination {local |  <redirect-destination-choice
+     { < ip <next-hopfake <next-hop {(host-addr) | default}>> [
+     context (ctxname-v4)]> | < ipv6 <next-hopfake <next-hop
+     {(host-addr) | default}> >[ context (ctxname-v6)]> }> | lsp
+     {<sr-te (tunnel-name) { <ip  (host-addr) [ context
+     (ctxname-v4)]> | < ipv6 (host-addr-v6) [ context
+     (ctxname-v6)]>} >|<rsvp-te (tunnel-name) { <ip  (host-addr)
+     [ context (ctxname-v4)]> | < ipv6 (host-addr-v6) [ context
+     (ctxname-v6)]>} >|<static-sr (tunnel-name) { <ip  (host-
+     addr) [ context (ctxname-v4)]> | < ipv6 (host-addr-v6) [
+     context (ctxname-v6)]>} >| < igp-sr [ isis-sr | ospf-sr ] {
+     <ip  (host-addr) [ context (ctxname-v4)]> | < ipv6 (host-
+     addr-v6) [ context (ctxname-v6)]>} > | < ldp { <ip  (host-
+     addr) [ context (ctxname-v4)]> | < ipv6 (host-addr-v6) [
+     context (ctxname-v6)]>} >} }
+    */
+    container redirect-destination {
+      description
+        "container redirect-destination.";
+      choice redirect-destination {
+        case local {
+          leaf local {
+            type empty;
+            must "not (../../drop)" {
+              error-message "must remove drop first";
+              description
+                "must remove drop first";
+            }
+            status obsolete;
+            description
+              "Specify redirect to local server";
+          }
+        }
+        case redirect-destination-choice {
+          container redirect-destination-choice {
+            description
+              "container redirect-destination-choice.";
+            container ip {
+              must "not (../../../drop) and ./next-hopfake/next-"
+              + "hop" {
+                error-message "must remove drop first and have "
+                + "sub's next-hop.";
+                description
+                  "must remove drop first and have sub's
+                   next-hop.";
+              }
+              presence "";
+              description
+                "Configure IPv4 attributes";
+              container next-hopfake {
+                description
+                  "next-hop-list";
+                leaf-list next-hop {
+                  type typesrouter6000:nexthop_ipv4_addr;
+                  min-elements 1;
+                  max-elements 8;
+                  ordered-by user;
+                  description
+                    "Specify next hop IPv4 addresses";
+                }
+              }
+              leaf context {
+                type leafref {
+                  path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                  + ":context-name";
+                }
+                description
+                  "leaf context.";
+              }
+            }
+            container ipv6 {
+              must "not (../../../drop) and ./next-hopfake/next-"
+              + "hop" {
+                error-message "must remove drop first and have "
+                + "sub's next-hop.";
+                description
+                  "must remove drop first and have sub's
+                   next-hop.";
+              }
+              presence "";
+              description
+                "Configure IPv6 attributes";
+              container next-hopfake {
+                description
+                  "next-hop-list";
+                leaf-list next-hop {
+                  type typesrouter6000:nexthop_ipv6_addr;
+                  min-elements 1;
+                  max-elements 8;
+                  ordered-by user;
+                  description
+                    "Specify next hop IPv6 addresses";
+                }
+              }
+              leaf context {
+                type leafref {
+                  path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                  + ":context-name";
+                }
+                description
+                  "leaf context.";
+              }
+            }
+          }
+        }
+        case lsp {
+          container lsp {
+            description
+              "Specify redirect over Label Switched Path (LSP)";
+            container sr-te {
+              description
+                "Redirect over PCE initiated SR-TE tunnel";
+              leaf tunnel-name {
+                type string;
+                description
+                  "Name of LSP tunnel";
+              }
+              container ip-choice {
+                description
+                  "Configure IP address";
+                container ip {
+                  description
+                    "Configure IPv4 attributes";
+                  leaf host-addr {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IPv4 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+                container ipv6 {
+                  description
+                    "Configure IPv6 attributes";
+                  leaf host-addr-v6 {
+                    when "../../ipv6" {
+                      description
+                        "IPv6 address is only accepted if ipv6
+                         keyword is present";
+                    }
+                    type inet:ipv6-address;
+                    description
+                      "IPv6 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+              }
+            }
+            container rsvp-te {
+              description
+                "Redirect over RSVP-TE tunnel";
+              leaf tunnel-name {
+                type string;
+                description
+                  "Name of LSP tunnel";
+              }
+              container ip-choice {
+                description
+                  "Configure IP address";
+                container ip {
+                  description
+                    "Configure IPv4 attributes";
+                  leaf host-addr {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IPv4 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+                container ipv6 {
+                  description
+                    "Configure IPv6 attributes";
+                  leaf host-addr-v6 {
+                    when "../../ipv6" {
+                      description
+                        "IPv6 address is only accepted if ipv6
+                         keyword is present";
+                    }
+                    type inet:ipv6-address;
+                    description
+                      "IPv6 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+              }
+            }
+            container static-sr {
+              description
+                "Redirect over statically configured SR tunnel";
+              leaf tunnel-name {
+                type string;
+                description
+                  "Name of LSP tunnel";
+              }
+              container ip-choice {
+                description
+                  "Configure IP address";
+                container ip {
+                  description
+                    "Configure IPv4 attributes";
+                  leaf host-addr {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IPv4 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+                container ipv6 {
+                  description
+                    "Configure IPv6 attributes";
+                  leaf host-addr-v6 {
+                    when "../../ipv6" {
+                      description
+                        "IPv6 address is only accepted if ipv6
+                         keyword is present";
+                    }
+                    type inet:ipv6-address;
+                    description
+                      "IPv6 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+              }
+            }
+            container igp-sr {
+              description
+                "Redirect over best-match IGP-SR LSP";
+              container ip {
+                description
+                  "Configure IPv4 attributes";
+                leaf host-addr {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IPv4 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path
+                    "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                    + ":context-name";
+                  }
+                  description
+                    "leaf context.";
+                }
+              }
+              container ipv6 {
+                description
+                  "Configure IPv6 attributes";
+                leaf host-addr-v6 {
+                  when "../../ipv6" {
+                    description
+                      "IPv6 address is only accepted if ipv6
+                       keyword is present";
+                  }
+                  type inet:ipv6-address;
+                  description
+                    "IPv6 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path
+                    "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                    + ":context-name";
+                  }
+                  description
+                    "leaf context.";
+                }
+              }
+              container isis-sr {
+                description
+                  "Redirect over best-match IGP-SR (IS-IS SR)
+                   LSP";
+                container ip {
+                  description
+                    "Configure IPv4 attributes";
+                  leaf host-addr {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IPv4 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+                container ipv6 {
+                  description
+                    "Configure IPv6 attributes";
+                  leaf host-addr-v6 {
+                    when "../../ipv6" {
+                      description
+                        "IPv6 address is only accepted if ipv6
+                         keyword is present";
+                    }
+                    type inet:ipv6-address;
+                    description
+                      "IPv6 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+              }
+              container ospf-sr {
+                description
+                  "Redirect over best-match IGP-SR (OSPF SR)
+                   LSP";
+                container ip {
+                  description
+                    "Configure IPv4 attributes";
+                  leaf host-addr {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IPv4 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+                container ipv6 {
+                  description
+                    "Configure IPv6 attributes";
+                  leaf host-addr-v6 {
+                    when "../../ipv6" {
+                      description
+                        "IPv6 address is only accepted if ipv6
+                         keyword is present";
+                    }
+                    type inet:ipv6-address;
+                    description
+                      "IPv6 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+              }
+            }
+            container ldp {
+              description
+                "Redirect over best-match LDP LSP";
+              container ip {
+                description
+                  "Configure IPv4 attributes";
+                leaf host-addr {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IPv4 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path
+                    "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                    + ":context-name";
+                  }
+                  description
+                    "leaf context.";
+                }
+              }
+              container ipv6 {
+                description
+                  "Configure IPv6 attributes";
+                leaf host-addr-v6 {
+                  when "../../ipv6" {
+                    description
+                      "IPv6 address is only accepted if ipv6
+                       keyword is present";
+                  }
+                  type inet:ipv6-address;
+                  description
+                    "IPv6 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path
+                    "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                    + ":context-name";
+                  }
+                  description
+                    "leaf context.";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    drop
+    */
+    leaf drop {
+      type empty;
+      must "(not (../redirect-destination/local) and not "
+      + "(../redirect-destination/redirect-destination-choice/ip) "
+      + "and not (../redirect-destination/redirect-destination-"
+      + "choice/ipv6))" {
+        error-message "conflict with redirect-destination.to "
+        + "config drop,must remove redirect-destination first.";
+        description
+          "conflict with redirect-destination.to config
+           drop,must remove redirect-destination first.";
+      }
+      description
+        "Drop intercepted traffic";
+    }
+  }
+
+  grouping config-policy-group-sub-pbr-grp {
+    description
+      "";
+    /*
+    class (class-name)
+    */
+    list class {
+      key "class";
+      description
+        "Class-definition class";
+      leaf class {
+        type string;
+        description
+          "Class-definition class name";
+      }
+      uses config-policy-group-class-sub-pbr-grp;
+    }
+  }
+
+  grouping policy-frwd-grp {
+    description
+      "Forward policy configuration mode";
+    /*
+    ip access-group (acl-name)(mirror-ctxname)
+    */
+    container ip-access-group {
+      must "((not(../radius-guided)) and acl-name and mirror-"
+      + "ctxname)or(../radius-guided)" {
+        error-message "acl-name and mirror-ctxname are mandatory "
+        + "if no radius-guided.";
+        description
+          "acl-name and mirror-ctxname are mandatory if no
+           radius-guided.";
+      }
+      presence "";
+      description
+        "Specify access list";
+      leaf acl-name {
+        type string;
+        must "../mirror-ctxname" {
+          error-message "mirror-ctxname must be configured with "
+          + "acl-name.";
+          description
+            "mirror-ctxname must be configured with acl-name.";
+        }
+        description
+          "Optional policy static access list name";
+      }
+      leaf mirror-ctxname {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        must "../acl-name" {
+          error-message "acl-name must be configured with "
+          + "mirror-ctxname.";
+          description
+            "acl-name must be configured with mirror-ctxname.";
+        }
+        description
+          "Name of the context in which the policy access list
+           is defined";
+      }
+      uses config-policy-group-sub-pbr-grp;
+    }
+    /*
+    ipv6 access-group (acl-name)(mirror-ctxname)
+    */
+    container ipv6-access-group {
+      must "((not(../radius-guided)) and acl-name and mirror-"
+      + "ctxname)or(../radius-guided)" {
+        error-message "acl-name and mirror-ctxname are mandatory "
+        + "if no radius-guided.";
+        description
+          "acl-name and mirror-ctxname are mandatory if no
+           radius-guided.";
+      }
+      presence "";
+      description
+        "Specify access list";
+      leaf acl-name {
+        type string;
+        must "../mirror-ctxname" {
+          error-message "mirror-ctxname must be configured with "
+          + "acl-name.";
+          description
+            "mirror-ctxname must be configured with acl-name.";
+        }
+        description
+          "Optional policy static access list name";
+      }
+      leaf mirror-ctxname {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        must "../acl-name" {
+          error-message "acl-name must be configured with "
+          + "mirror-ctxname.";
+          description
+            "acl-name must be configured with mirror-ctxname.";
+        }
+        description
+          "Name of the context in which the policy access list
+           is defined";
+      }
+      uses config-policy-group-sub-pbr-grp;
+    }
+    /*
+    redirect destination {local |  <redirect-destination-choice
+     { < ip <next-hopfake <next-hop {(host-addr) | default}>> [
+     context (ctxname-v4)]> | < ipv6 <next-hopfake <next-hop
+     {(host-addr) | default}> >[ context (ctxname-v6)]> }> | lsp
+     {<sr-te (tunnel-name) { <ip  (host-addr) [ context
+     (ctxname-v4)]> | < ipv6 (host-addr-v6) [ context
+     (ctxname-v6)]>} >|<rsvp-te (tunnel-name) { <ip  (host-addr)
+     [ context (ctxname-v4)]> | < ipv6 (host-addr-v6) [ context
+     (ctxname-v6)]>} >|<static-sr (tunnel-name) { <ip  (host-
+     addr) [ context (ctxname-v4)]> | < ipv6 (host-addr-v6) [
+     context (ctxname-v6)]>} >| < igp-sr [ isis-sr | ospf-sr ] {
+     <ip  (host-addr) [ context (ctxname-v4)]> | < ipv6 (host-
+     addr-v6) [ context (ctxname-v6)]>} > | < ldp { <ip  (host-
+     addr) [ context (ctxname-v4)]> | < ipv6 (host-addr-v6) [
+     context (ctxname-v6)]>} >} }
+    */
+    container redirect-destination {
+      when "(not (../drop))" {
+        description
+          "conflict with drop.to config
+           redirect-destination,must remove drop first.";
+      }
+      description
+        "container redirect-destination.";
+      choice redirect-destination {
+        case local {
+          leaf local {
+            type empty;
+            status obsolete;
+            description
+              "Specify redirect to local server";
+          }
+        }
+        case redirect-destination-choice {
+          container redirect-destination-choice {
+            description
+              "container redirect-destination-choice.";
+            container ip {
+              must "./next-hopfake/next-hop" {
+                error-message "must have sub's next-hop.";
+                description
+                  "must have sub's next-hop.";
+              }
+              presence "";
+              description
+                "Configure IPv4 attributes";
+              container next-hopfake {
+                description
+                  "next-hop-list";
+                leaf-list next-hop {
+                  type typesrouter6000:nexthop_ipv4_addr;
+                  min-elements 1;
+                  max-elements 8;
+                  ordered-by user;
+                  description
+                    "Specify next hop IPv4 addresses";
+                }
+              }
+              leaf context {
+                type leafref {
+                  path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                  + ":context-name";
+                }
+                description
+                  "leaf context.";
+              }
+            }
+            container ipv6 {
+              must "./next-hopfake/next-hop" {
+                error-message "must have sub's next-hop.";
+                description
+                  "must have sub's next-hop.";
+              }
+              presence "";
+              description
+                "Configure IPv6 attributes";
+              container next-hopfake {
+                description
+                  "next-hop-list";
+                leaf-list next-hop {
+                  type typesrouter6000:nexthop_ipv6_addr;
+                  min-elements 1;
+                  max-elements 8;
+                  ordered-by user;
+                  description
+                    "Specify next hop IPv6 addresses";
+                }
+              }
+              leaf context {
+                type leafref {
+                  path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                  + ":context-name";
+                }
+                description
+                  "leaf context.";
+              }
+            }
+          }
+        }
+        case lsp {
+          container lsp {
+            description
+              "Specify redirect over Label Switched Path (LSP)";
+            container sr-te {
+              description
+                "Redirect over PCE initiated SR-TE tunnel";
+              leaf tunnel-name {
+                type string;
+                description
+                  "Name of LSP tunnel";
+              }
+              container ip-choice {
+                description
+                  "Configure IP address";
+                container ip {
+                  description
+                    "Configure IPv4 attributes";
+                  leaf host-addr {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IPv4 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+                container ipv6 {
+                  description
+                    "Configure IPv6 attributes";
+                  leaf host-addr-v6 {
+                    when "../../ipv6" {
+                      description
+                        "IPv6 address is only accepted if ipv6
+                         keyword is present";
+                    }
+                    type inet:ipv6-address;
+                    description
+                      "IPv6 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+              }
+            }
+            container rsvp-te {
+              description
+                "Redirect over RSVP-TE tunnel";
+              leaf tunnel-name {
+                type string;
+                description
+                  "Name of LSP tunnel";
+              }
+              container ip-choice {
+                description
+                  "Configure IP address";
+                container ip {
+                  description
+                    "Configure IPv4 attributes";
+                  leaf host-addr {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IPv4 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+                container ipv6 {
+                  description
+                    "Configure IPv6 attributes";
+                  leaf host-addr-v6 {
+                    when "../../ipv6" {
+                      description
+                        "IPv6 address is only accepted if ipv6
+                         keyword is present";
+                    }
+                    type inet:ipv6-address;
+                    description
+                      "IPv6 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+              }
+            }
+            container static-sr {
+              description
+                "Redirect over statically configured SR tunnel";
+              leaf tunnel-name {
+                type string;
+                description
+                  "Name of LSP tunnel";
+              }
+              container ip-choice {
+                description
+                  "Configure IP address";
+                container ip {
+                  description
+                    "Configure IPv4 attributes";
+                  leaf host-addr {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IPv4 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+                container ipv6 {
+                  description
+                    "Configure IPv6 attributes";
+                  leaf host-addr-v6 {
+                    when "../../ipv6" {
+                      description
+                        "IPv6 address is only accepted if ipv6
+                         keyword is present";
+                    }
+                    type inet:ipv6-address;
+                    description
+                      "IPv6 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+              }
+            }
+            container igp-sr {
+              description
+                "Redirect over best-match IGP-SR LSP";
+              container ip {
+                description
+                  "Configure IPv4 attributes";
+                leaf host-addr {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IPv4 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path
+                    "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                    + ":context-name";
+                  }
+                  description
+                    "leaf context.";
+                }
+              }
+              container ipv6 {
+                description
+                  "Configure IPv6 attributes";
+                leaf host-addr-v6 {
+                  when "../../ipv6" {
+                    description
+                      "IPv6 address is only accepted if ipv6
+                       keyword is present";
+                  }
+                  type inet:ipv6-address;
+                  description
+                    "IPv6 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path
+                    "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                    + ":context-name";
+                  }
+                  description
+                    "leaf context.";
+                }
+              }
+              container isis-sr {
+                description
+                  "Redirect over best-match IGP-SR (IS-IS SR)
+                   LSP";
+                container ip {
+                  description
+                    "Configure IPv4 attributes";
+                  leaf host-addr {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IPv4 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+                container ipv6 {
+                  description
+                    "Configure IPv6 attributes";
+                  leaf host-addr-v6 {
+                    when "../../ipv6" {
+                      description
+                        "IPv6 address is only accepted if ipv6
+                         keyword is present";
+                    }
+                    type inet:ipv6-address;
+                    description
+                      "IPv6 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+              }
+              container ospf-sr {
+                description
+                  "Redirect over best-match IGP-SR (OSPF SR)
+                   LSP";
+                container ip {
+                  description
+                    "Configure IPv4 attributes";
+                  leaf host-addr {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IPv4 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+                container ipv6 {
+                  description
+                    "Configure IPv6 attributes";
+                  leaf host-addr-v6 {
+                    when "../../ipv6" {
+                      description
+                        "IPv6 address is only accepted if ipv6
+                         keyword is present";
+                    }
+                    type inet:ipv6-address;
+                    description
+                      "IPv6 host address";
+                  }
+                  leaf context {
+                    type leafref {
+                      path
+                      "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                      + ":context-name";
+                    }
+                    description
+                      "leaf context.";
+                  }
+                }
+              }
+            }
+            container ldp {
+              description
+                "Redirect over best-match LDP LSP";
+              container ip {
+                description
+                  "Configure IPv4 attributes";
+                leaf host-addr {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IPv4 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path
+                    "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                    + ":context-name";
+                  }
+                  description
+                    "leaf context.";
+                }
+              }
+              container ipv6 {
+                description
+                  "Configure IPv6 attributes";
+                leaf host-addr-v6 {
+                  when "../../ipv6" {
+                    description
+                      "IPv6 address is only accepted if ipv6
+                       keyword is present";
+                  }
+                  type inet:ipv6-address;
+                  description
+                    "IPv6 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path
+                    "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                    + ":context-name";
+                  }
+                  description
+                    "leaf context.";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    drop
+    */
+    leaf drop {
+      when "(not (../redirect-destination/local) and not "
+      + "(../redirect-destination/redirect-destination-choice))" {
+        description
+          "conflict with redirect-destination.to config
+           drop,must remove redirect-destination first.";
+      }
+      type empty;
+      description
+        "Drop intercepted traffic";
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-pbr";
+    /*
+    forward (fwd-polname) [ radius-guided ]
+    */
+    list forward {
+      key "fwd-polname";
+      description
+        "Configure forward policy parameters";
+      leaf fwd-polname {
+        type string;
+        description
+          "forward policy name";
+      }
+      leaf radius-guided {
+        type empty;
+        description
+          "Designate as Radius guided policy";
+      }
+      uses policy-frwd-grp;
+    }
+  }
+
+}

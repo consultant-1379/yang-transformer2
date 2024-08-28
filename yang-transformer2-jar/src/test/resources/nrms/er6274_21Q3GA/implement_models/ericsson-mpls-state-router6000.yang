@@ -1,0 +1,958 @@
+module ericsson-mpls-state-router6000 {
+
+  yang-version  1;
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-mpls-state-router6000";
+  prefix "mplsstrouter6000";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-context-state-router6000 {
+    prefix "ctxstrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "IPOS ERICSSON-MPLS-STATE model, based on yang file from IPOS DCL
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved.";
+
+  revision "2018-06-05" {
+    description "Change model namespace";
+    reference "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2015-12-07" {
+    description "Initial revision";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  typedef  MplsBooleanType {
+      type enumeration {
+        enum false { value 0;
+        description
+            "Boolean value is false.";   }
+        enum true { value 1;
+        description
+            "Boolean value is true.";   }
+       }
+       description
+           "Represents a boolean value.";
+  }
+
+  typedef InetAddress {
+    type binary {
+      length "0..255";
+    }
+    description
+     "A value that represents a type of Internet address.";
+  }
+
+  augment "/ctxsr6k:contexts-state/ctxstrouter6000:context/ctxstrouter6000:router" {
+    description "mpls-state";
+
+    list mpls {
+      key "instance-id";
+      config false;
+      description "mpls-state";
+
+      leaf context-id {
+        type uint32;
+        description "context-id";
+      }
+
+      leaf instance-id {
+        type uint32;
+        description "instance-id";
+      }
+
+      leaf Traffic-eng {
+        type string;
+        description "Traffic-eng";
+      }
+
+      leaf Feature {
+        type string;
+        description "Feature";
+      }
+
+      leaf mpls-slot-mask {
+        type uint32;
+        description "mpls-slot-mask";
+      }
+
+      /* Refer to sub-grouping circuit-grp */
+      uses circuit-grp;
+
+      /* Refer to sub-grouping interface-grp */
+      uses interface-grp;
+
+      /* Refer to sub-grouping ism-grp */
+      uses ism-grp;
+
+      /* Refer to sub-grouping summary-grp */
+      uses summary-grp;
+
+    }
+
+  }
+
+  grouping circuit-grp {
+    description "circuit";
+
+    list circuit {
+      key "slot port channel circuit-id";
+      config false;
+      description "circuit";
+
+      leaf slot {
+        type uint8;
+        description "slot";
+      }
+
+      leaf port {
+        type uint8;
+        description "port";
+      }
+
+      leaf channel {
+        type uint16;
+        description "channel";
+      }
+
+      leaf circuit-id {
+        type uint32;
+        description "circuit id";
+      }
+
+      leaf CCT-HANDLE {
+        type string;
+        description "circuit handle";
+      }
+
+      leaf lg-id {
+        type uint32;
+        description "lg-id";
+      }
+
+      leaf state {
+        type uint8;
+        description "state";
+      }
+
+      leaf flag {
+        type uint8;
+        description "flag";
+      }
+
+    }
+
+  }
+
+  grouping interface-grp {
+    description "interface";
+
+    list interface {
+      key "intf-grid";
+      config false;
+      description "interface";
+
+      leaf mpls-instance {
+        type uint32;
+        description "mpls-instance";
+      }
+
+      leaf intf-grid {
+        type uint32;
+        description "intf-grid";
+      }
+
+      leaf ip-addr {
+        type inet:ipv4-address;
+        description "ip-addr";
+      }
+
+      leaf ip-mask {
+        type inet:ipv4-address;
+        description "ip-mask";
+      }
+
+      leaf lfib-context-id {
+        type uint32;
+        description "lfib-context-id";
+      }
+
+      leaf intf-name {
+        type string;
+        description "intf-name";
+      }
+
+      leaf registered {
+        type enumeration {
+          enum No {
+              value 0;
+              description "no";
+          }
+          enum Yes {
+              value 1;
+              description "yes";
+          }
+        }
+        description "registered";
+      }
+      leaf flags {
+        type uint8;
+        description "flags";
+      }
+
+      leaf intf-state {
+        type enumeration {
+          enum Down {
+              value 0;
+              description "Down";
+          }
+          enum Up {
+              value 1;
+              description "Up";
+          }
+        }
+        description "intf-state";
+      }
+      leaf enabled {
+        type enumeration {
+          enum No {
+              value 0;
+              description "No";
+          }
+          enum Yes {
+              value 1;
+              description "Yes";
+          }
+        }
+        description "enabled";
+      }
+      leaf bound-to {
+        type string;
+        description "bound-to";
+      }
+
+    }
+
+  }
+
+  grouping ism-grp {
+    description "ism";
+
+    container ism {
+      config false;
+      description "ism";
+      leaf cnt-ipc-rcv {
+        type uint32;
+        description "cnt-ipc-rcv";
+      }
+
+      leaf cnt-ipc-err-rcv {
+        type uint32;
+        description "cnt-ipc-err-rcv";
+      }
+
+      leaf tot-events {
+        type uint32;
+        description "tot-events";
+      }
+
+      leaf id-if-state {
+        type uint32;
+        description "id-if-state";
+      }
+
+      leaf id-if-cfg {
+        type uint32;
+        description "id-if-cfg";
+      }
+
+      leaf id-if-ipcfg {
+        type uint32;
+        description "id-if-ipcfg";
+      }
+
+      leaf id-cct-state {
+        type uint32;
+        description "id-cct-state";
+      }
+
+      leaf id-cct-cfg {
+        type uint32;
+        description "id-cct-cfg";
+      }
+
+      leaf id-port-state {
+        type uint32;
+        description "id-port-state";
+      }
+
+      leaf id-port-cfg {
+        type uint32;
+        description "id-port-cfg";
+      }
+
+      leaf id-grpmac-cfg {
+        type uint32;
+        description "id-grpmac-cfg";
+      }
+
+      leaf id-hdr-only {
+        type uint32;
+        description "id-hdr-only";
+      }
+
+      leaf id-lg-cfg {
+        type uint32;
+        description "id-lg-cfg";
+      }
+
+      leaf id-l2tpsess-cfg {
+        type uint32;
+        description "id-l2tpsess-cfg";
+      }
+
+      leaf id-card-state {
+        type uint32;
+        description "id-card-state";
+      }
+
+      leaf id-cct-grp {
+        type uint32;
+        description "id-cct-grp";
+      }
+
+      leaf id-peer {
+        type uint32;
+        description "id-peer";
+      }
+
+      leaf id-version {
+        type uint32;
+        description "id-version";
+      }
+
+      leaf cct-down {
+        type uint32;
+        description "cct-down";
+      }
+
+      leaf cct-up {
+        type uint32;
+        description "cct-up";
+      }
+
+      leaf cct-parent-up {
+        type uint32;
+        description "cct-parent-up";
+      }
+
+      leaf cct-create {
+        type uint32;
+        description "cct-create";
+      }
+
+      leaf cct-del {
+        type uint32;
+        description "cct-del";
+      }
+
+      leaf cct-ethcfg {
+        type uint32;
+        description "cct-ethcfg";
+      }
+
+      leaf cct-ocncfg {
+        type uint32;
+        description "cct-ocncfg";
+      }
+
+      leaf cct-1qcfg {
+        type uint32;
+        description "cct-1qcfg";
+      }
+
+      leaf cct-tuncfg {
+        type uint32;
+        description "cct-tuncfg";
+      }
+
+      leaf cct-frcfg {
+        type uint32;
+        description "cct-frcfg";
+      }
+
+      leaf cct-pppcfg {
+        type uint32;
+        description "cct-pppcfg";
+      }
+
+      leaf cct-atmcfg {
+        type uint32;
+        description "cct-atmcfg";
+      }
+
+      leaf cct-lmcfg {
+        type uint32;
+        description "cct-lmcfg";
+      }
+
+      leaf cct-l2tpcfg {
+        type uint32;
+        description "cct-l2tpcfg";
+      }
+
+      leaf cct-cfg {
+        type uint32;
+        description "cct-cfg";
+      }
+
+      leaf cct-sub-clear {
+        type uint32;
+        description "cct-sub-clear";
+      }
+
+      leaf cct-sub-proto-clear {
+        type uint32;
+        description "cct-sub-proto-clear";
+      }
+
+      leaf cct-sub-down {
+        type uint32;
+        description "cct-sub-down";
+      }
+
+      leaf cct-sub-down-cplt {
+        type uint32;
+        description "cct-sub-down-cplt";
+      }
+
+      leaf cct-grp-join {
+        type uint32;
+        description "cct-grp-join";
+      }
+
+      leaf cct-grp-leave {
+        type uint32;
+        description "cct-grp-leave";
+      }
+
+      leaf if-down {
+        type uint32;
+        description "if-down";
+      }
+
+      leaf if-up {
+        type uint32;
+        description "if-up";
+      }
+
+      leaf if-create {
+        type uint32;
+        description "if-create";
+      }
+
+      leaf if-del {
+        type uint32;
+        description "if-del";
+      }
+
+      leaf if-bind {
+        type uint32;
+        description "if-bind";
+      }
+
+      leaf if-unbind {
+        type uint32;
+        description "if-unbind";
+      }
+
+      leaf if-ipcfg {
+        type uint32;
+        description "if-ipcfg";
+      }
+
+      leaf if-cfg {
+        type uint32;
+        description "if-cfg";
+      }
+
+      leaf port-down {
+        type uint32;
+        description "port-down";
+      }
+
+      leaf port-up {
+        type uint32;
+        description "port-up";
+      }
+
+      leaf port-del {
+        type uint32;
+        description "port-del";
+      }
+
+      leaf port-ethcfg {
+        type uint32;
+        description "port-ethcfg";
+      }
+
+      leaf port-stsncfg {
+        type uint32;
+        description "port-stsncfg";
+      }
+
+      leaf lg-grp-cfg {
+        type uint32;
+        description "lg-grp-cfg";
+      }
+
+      leaf lg-ungrp-cfg {
+        type uint32;
+        description "lg-ungrp-cfg";
+      }
+
+      leaf lg-protgrp-cfg {
+        type uint32;
+        description "lg-protgrp-cfg";
+      }
+
+      leaf lg-protgrp-action {
+        type uint32;
+        description "lg-protgrp-action";
+      }
+
+      leaf lg-prot-cct-cfg {
+        type uint32;
+        description "lg-prot-cct-cfg";
+      }
+
+      leaf l2tpsess-cfg {
+        type uint32;
+        description "l2tpsess-cfg";
+      }
+
+      leaf grpmac-ucast-reg {
+        type uint32;
+        description "grpmac-ucast-reg";
+      }
+
+      leaf grpmac-ucast-dereg {
+        type uint32;
+        description "grpmac-ucast-dereg";
+      }
+
+      leaf grpmac-mcast-reg {
+        type uint32;
+        description "grpmac-mcast-reg";
+      }
+
+      leaf grpmac-mcast-dereg {
+        type uint32;
+        description "grpmac-mcast-dereg";
+      }
+
+      leaf card-down {
+        type uint32;
+        description "card-down";
+      }
+
+      leaf card-up {
+        type uint32;
+        description "card-up";
+      }
+
+      leaf card-del {
+        type uint32;
+        description "card-del";
+      }
+
+      leaf card-create {
+        type uint32;
+        description "card-create";
+      }
+
+      leaf card-rate {
+        type uint32;
+        description "card-rate";
+      }
+
+      leaf card-mic {
+        type uint32;
+        description "card-mic";
+      }
+
+      leaf peer-mbe-list {
+        type uint32;
+        description "peer-mbe-list";
+      }
+
+      leaf walk-fob {
+        type uint32;
+        description "walk-fob";
+      }
+
+      leaf walk-lob {
+        type uint32;
+        description "walk-lob";
+      }
+
+    }
+
+  }
+
+  grouping summary-grp {
+    description "mpls summary";
+
+    container summary {
+      config false;
+      description "mpls-summary";
+      leaf lsp-cnt {
+        type uint32;
+        description "lsp-cnt";
+      }
+
+      leaf lsp-cnt-local-ctx {
+        type uint32;
+        description "lsp-cnt-local-ctx";
+      }
+
+      leaf lbl-cnt {
+        type uint32;
+        description "lbl-cnt";
+      }
+
+      leaf ism-dwload-q-size {
+        type uint32;
+        description "ism-dwload-q-size";
+      }
+
+      leaf sm-update-q-size {
+        type uint32;
+        description "sm-update-q-size";
+      }
+
+      leaf last-intf-tree-ver {
+        type uint32;
+        description "last-intf-tree-ver";
+      }
+
+      leaf intf-tree-ver {
+        type uint32;
+        description "intf-tree-ver";
+      }
+
+      leaf send-client {
+        type MplsBooleanType;
+        description "send-client";
+      }
+
+      leaf send-bypass-lsp {
+        type MplsBooleanType;
+        description "send-bypass-lsp";
+      }
+
+      leaf send-all-bypass-lsp {
+        type MplsBooleanType;
+        description "send-all-bypass-lsp";
+      }
+
+      leaf send-all-non-bypass-lsp {
+        type MplsBooleanType;
+        description "send-all-non-bypass-lsp";
+      }
+
+      leaf process-rib-reset {
+        type MplsBooleanType;
+        description "process-rib-reset";
+      }
+
+      leaf rib-client-created {
+        type MplsBooleanType;
+        description "rib-client-created";
+      }
+
+      leaf rib-msg-ok {
+        type MplsBooleanType;
+        description "rib-msg-ok";
+      }
+
+      leaf rib-rt-ok {
+        type MplsBooleanType;
+        description "rib-rt-ok";
+      }
+
+      leaf rib-ok {
+        type MplsBooleanType;
+        description "rib-ok";
+      }
+
+      leaf process-client-reset {
+        type MplsBooleanType;
+        description "process-client-reset";
+      }
+
+      leaf rib-client-reg-pending {
+        type MplsBooleanType;
+        description "rib-client-reg-pending";
+      }
+
+      leaf process-lc-reg {
+        type MplsBooleanType;
+        description "process-lc-reg";
+      }
+
+      leaf process-ism-death {
+        type MplsBooleanType;
+        description "process-ism-death";
+      }
+
+      leaf ism-restarted {
+        type MplsBooleanType;
+        description "ism-restarted";
+      }
+
+      leaf send-ism-EOF {
+        type MplsBooleanType;
+        description "send-ism-EOF";
+      }
+
+      leaf ism-mbe-ep-ok {
+        type MplsBooleanType;
+        description "ism-mbe-ep-ok";
+      }
+
+      leaf ism-ep-ok {
+        type MplsBooleanType;
+        description "ism-ep-ok";
+      }
+
+      leaf ism-ok {
+        type MplsBooleanType;
+        description "ism-ok";
+      }
+
+      leaf ism-dwload-lsp {
+        type MplsBooleanType;
+        description "ism-dwload-lsp";
+      }
+
+      leaf ism-stale-cleanup {
+        type MplsBooleanType;
+        description "ism-stale-cleanup";
+      }
+
+      leaf rcvd-ism-EOF {
+        type MplsBooleanType;
+        description "rcvd-ism-EOF";
+      }
+
+      leaf ism-flags {
+        type uint8;
+        description "ism-flags";
+      }
+
+      leaf linkgroup-change {
+        type MplsBooleanType;
+        description "linkgroup-change";
+      }
+
+      leaf cfg-EOF-rcvd {
+        type MplsBooleanType;
+        description "cfg-EOF-rcvd";
+      }
+
+      leaf ipc-msg-ep-registered {
+        type MplsBooleanType;
+        description "ipc-msg-ep-registered";
+      }
+
+      leaf l2-fec-download-done {
+        type MplsBooleanType;
+        description "l2-fec-download-done";
+      }
+
+      leaf vxlan-lcl-dnld-done {
+        type MplsBooleanType;
+        description "vxlan-lcl-dnld-done";
+      }
+
+      leaf nh-flat {
+        type MplsBooleanType;
+        description "nh-flat";
+      }
+
+      leaf l2vpn-client-route-eof-mask {
+        type uint32;
+        description "l2vpn-client-route-eof-mask";
+      }
+
+      leaf l2vpn-client-eof-to-rib-mask {
+        type uint32;
+        description "l2vpn-client-eof-to-rib-mask";
+      }
+
+      leaf l2vpn-client-lbl-eof-mask {
+        type uint32;
+        description "l2vpn-client-lbl-eof-mask";
+      }
+
+      leaf l2vpn-client-eof-fec-version {
+        type uint32;
+        description "l2vpn-client-eof-fec-version";
+      }
+
+      leaf l2vpn-client-eof-rib-version {
+        type uint32;
+        description "l2vpn-client-eof-rib-version";
+      }
+
+    }
+
+  }
+
+  grouping lbl-nexthop-grp {
+    description "lbl-nexthop";
+
+    list lbl-nexthop {
+      key "lbl-nhop-afi lbl-nhop";
+      config false;
+      description "lbl-nexthop";
+
+      leaf lbl-nhop {
+        type InetAddress;
+        description "label nhop-addr";
+      }
+      leaf lbl-nhop-afi {
+        type enumeration {
+          enum AF-IPV4 {
+              value 1;
+              description "AF_IPV4";
+          }
+          enum AF-IPV6 {
+              value 2;
+              description "AF_IPV6";
+          }
+          enum AF-NONIP {
+              value 3;
+              description "AF_NONIP";
+          }
+          enum AF-UNKNOWN {
+              value 4;
+              description "AF_UNKNOWN";
+          }
+        }
+        description "label nhop address afi";
+      }
+      leaf rib-reg {
+        type enumeration {
+          enum N/A {
+              value 0;
+              description "N/A";
+          }
+          enum Nexthop {
+              value 1;
+              description "Nexthop";
+          }
+          enum Prefix {
+              value 2;
+              description "Prefix";
+          }
+          enum Both {
+              value 3;
+              description "Both";
+          }
+        }
+        description "rib-reg";
+      }
+      leaf psn {
+        type enumeration {
+          enum N/A {
+              value 0;
+              description "N/A";
+          }
+          enum mpls {
+              value 1;
+              description "mpls";
+          }
+          enum ip {
+              value 2;
+              description "ip";
+          }
+          enum ipsec {
+              value 3;
+              description "ipsec";
+          }
+          enum ip/ipsec {
+              value 4;
+              description "ip/ipsec";
+          }
+          enum ip/mpls {
+              value 5;
+              description "ip/mpls";
+          }
+          enum ipsec/mpls {
+              value 6;
+              description "ipsec/mpls";
+          }
+          enum ip/ipsec/mpls {
+              value 7;
+              description "ip/ipsec/mpls";
+          }
+          enum soft-gre {
+              value 8;
+              description "soft-gre";
+          }
+        }
+        description "psn";
+      }
+      leaf adj-id {
+        type uint32;
+        description "label nhop adj-id";
+      }
+      leaf active-nhop-status {
+        type enumeration {
+          enum Invalid {
+              value 0;
+              description "Invalid";
+          }
+          enum Valid {
+              value 1;
+              description "Valid";
+          }
+        }
+        description "whether active RIB nhop valid or not";
+      }
+      leaf active-RIB-nhop {
+        type string;
+        description "Active NHOP address rcvd frm RIB";
+      }
+
+    }
+
+  }
+
+}

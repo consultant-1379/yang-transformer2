@@ -1,0 +1,167 @@
+module ericsson-loopback-ethernet-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-loopback-ethernet-router6000";
+
+  prefix "loopbackr6k";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-l2-service-router6000 {
+    prefix "l2servicer6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-loopback-ethernet-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-02-19" {
+    description
+      "change loopback-ethernet to list ";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-07-23" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet/l"
+  + "2servicer6k:service-instance" {
+    description
+      "ericsson-loopback-ethernet";
+    /*
+    loopback-ethernet (cfg-name) [ priority (priority-val) ] [
+     timeout { (loopback-timeout) | none } ]
+    */
+    container loopback-ethernet {
+      presence "";
+      status obsolete;
+      description
+        "Configure Ethernet loopback";
+      leaf cfg-name {
+        type string;
+        mandatory true;
+        description
+          "Ethernet loopback instance name";
+      }
+      leaf priority {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Configure dot1q priority value";
+      }
+      container timeout {
+        description
+          "Configure Ethernet loopback timeout";
+        choice timeout {
+          case loopback-timeout {
+            leaf loopback-timeout {
+              type uint32 {
+                range "5..86400";
+              }
+              default "60";
+              description
+                "timeout value in seconds (5-86400, default is
+                 60)";
+            }
+          }
+          case none {
+            leaf none {
+              type empty;
+              description
+                "no (infinite) timeout";
+            }
+          }
+        }
+      }
+    }
+    /*
+    loopback (cfg-name) [ [ priority (priority-val) ] [ timeout
+     { (loopback-timeout) | none } ] ]
+    */
+    list loopback {
+      key "cfg-name";
+      description
+        "Configure Ethernet loopback";
+      leaf cfg-name {
+        type string;
+        description
+          "Ethernet loopback instance name";
+      }
+      container loopback-opt {
+        description
+          "container loopback-opt.";
+        leaf priority {
+          type uint8 {
+            range "0..7";
+          }
+          description
+            "Configure dot1q priority value";
+        }
+        container timeout {
+          description
+            "Configure Ethernet loopback timeout";
+          choice timeout {
+            case loopback-timeout {
+              leaf loopback-timeout {
+                type uint32 {
+                  range "5..86400";
+                }
+                default "60";
+                description
+                  "timeout value in seconds (5-86400, default is
+                   60)";
+              }
+            }
+            case none {
+              leaf none {
+                type empty;
+                description
+                  "no (infinite) timeout";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,24 @@
+module duplicate-moc-3gpp-ext {
+
+	namespace "urn:test:duplicate-moc-3gpp-ext";
+	prefix this;
+
+	revision "2023-06-09";
+
+	grouping Moc7_Grouping {
+
+		list Moc7 {
+
+			key "id";
+			leaf id {
+				type string;
+			}
+
+			container attributes {
+				leaf leaf11 {
+					type string;
+				}
+			}
+		}
+	}
+}

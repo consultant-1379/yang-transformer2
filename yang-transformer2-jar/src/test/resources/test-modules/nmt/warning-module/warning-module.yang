@@ -1,0 +1,16 @@
+module warning-module {
+
+    namespace "urn:test:warning-module";
+    prefix this;
+
+    revision "2021-11-10";
+
+    import unknown-module {
+        prefix other;
+    }
+
+	container cont1 {
+		presence "";
+	}
+
+}

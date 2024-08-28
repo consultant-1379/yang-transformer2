@@ -1,0 +1,80 @@
+module identityref-simple {
+
+    namespace "urn:test:identityref-simple";
+    prefix this;
+
+	include identityref-simple-submodule;
+
+    revision "2021-10-15";
+
+	feature my-feature;
+
+	identity id-1;			// derived = {1, 3, 4, 5, 8, 9}
+	identity id-2;			// derived = {2, 4}
+
+	identity id-3 {			// derived = {3, 4}
+		base this:id-1;
+	}
+
+	identity id-4 {			// derived = {4}
+		base this:id-3;
+		base this:id-2;
+	}
+	
+	identity id-5 {			// derived = {5}
+		base this:id-1;
+	}
+	
+	container cont1 {
+	
+		leaf leaf11 {
+			type identityref {
+				base this:id-1;
+			}
+		}
+
+		leaf leaf12 {
+			type identityref {
+				base this:id-2;
+			}
+		}
+
+		leaf leaf13 {
+			type identityref {
+				base this:id-3;
+				base this:id-6;
+			}
+		}
+		
+		leaf leaf14 {
+			type union {
+				type identityref {
+					base this:id-4;
+				}
+				type string;
+			}
+		}
+
+		leaf leaf15 {
+			type union {
+				type int16;
+				type identityref {
+					base this:id-4;
+					base this:id-5;
+				}
+			}
+		}
+
+		leaf leaf16 {
+			type identityref {
+				base id-4;
+			}
+		}
+
+		leaf leaf17 {
+			type identityref {
+				base unknown-prefix:id-99;
+			}
+		}
+	}
+}

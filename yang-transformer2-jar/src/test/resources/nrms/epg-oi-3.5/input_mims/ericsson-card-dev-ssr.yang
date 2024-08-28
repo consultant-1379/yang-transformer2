@@ -1,0 +1,63 @@
+module ericsson-card-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-card-dev-ssr";
+
+  prefix "carddevssr";
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-card-ipr {
+    prefix "cardipr";
+  }
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-card-dev-ssr
+     Copyright (c) 2017 Ericsson AB. 
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-04-25" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+}

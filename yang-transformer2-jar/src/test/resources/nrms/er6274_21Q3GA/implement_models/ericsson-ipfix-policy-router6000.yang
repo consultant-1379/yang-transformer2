@@ -1,0 +1,206 @@
+module ericsson-ipfix-policy-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ipfix-policy-router6000";
+
+  prefix "ipfixpolicyr6k";
+
+  import ietf-ipfix-psamp {
+    prefix "ipfix";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-ipfix-policy-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-12-01" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping sample-policy-acl-grp {
+    description
+      "IPFIX sample policy acl configuration";
+    /*
+    ip access-group (acl-name) (ctxname)
+    */
+    container ip-access-group {
+      presence "";
+      description
+        "Specify ip access group";
+      leaf acl-name {
+        type string;
+        must "../ctxname" {
+          error-message "ctxname must be configured with acl- "
+          + "name.";
+          description
+            "ctxname must be configured with acl-name.";
+        }
+        mandatory true;
+        description
+          "Policy ip access group name";
+      }
+      leaf ctxname {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        must "../acl-name" {
+          error-message "acl-name must be configured with "
+          + "ctxname.";
+          description
+            "acl-name must be configured with ctxname.";
+        }
+        mandatory true;
+        description
+          "Name of the context in which the policy access group
+           is defined";
+      }
+      uses ipfix-policy-ip-class-grp;
+    }
+    /*
+    ipv6 access-group (acl-name) (ctxname)
+    */
+    container ipv6-access-group {
+      presence "";
+      description
+        "Specify ipv6 access group";
+      leaf acl-name {
+        type string;
+        must "../ctxname" {
+          error-message "ctxname must be configured with acl- "
+          + "name.";
+          description
+            "ctxname must be configured with acl-name.";
+        }
+        mandatory true;
+        description
+          "Policy access list name";
+      }
+      leaf ctxname {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        must "../acl-name" {
+          error-message "acl-name must be configured with "
+          + "ctxname.";
+          description
+            "acl-name must be configured with ctxname.";
+        }
+        mandatory true;
+        description
+          "Name of the context in which the ipv6 access group is
+           defined";
+      }
+      uses ipfix-policy-ip-class-grp;
+    }
+    /*
+    observation-point (ipfix-op)
+    */
+    leaf-list observation-point {
+      if-feature ipfix:meter;
+      type leafref {
+        path "/ipfix:ipfix/ipfix:observationPoint/ipfix:name";
+      }
+      max-elements 2;
+      description
+        "IPFIX observation point. The maximum of IPFIX
+         observation point under IPFIX sample policy is 2. One is
+         for sampling ipv4 traffic, the other is for sampling
+         ipv6 traffic.";
+    }
+  }
+
+  grouping ipfix-policy-ip-class-grp {
+    description
+      "Policy class group configuration mode";
+    /*
+    class (class-name)
+    */
+    list class {
+      key "class";
+      description
+        "Acl class name";
+      leaf class {
+        type string;
+        description
+          "Policy acl class name";
+      }
+      uses ipfix-policy-op-grp;
+    }
+  }
+
+  grouping ipfix-policy-op-grp {
+    description
+      "Policy group class configuration mode";
+    /*
+    observation-point (ipfix-op)
+    */
+    leaf-list observation-point {
+      if-feature ipfix:meter;
+      type leafref {
+        path "/ipfix:ipfix/ipfix:observationPoint/ipfix:name";
+      }
+      max-elements 2;
+      description
+        "IPFIX observation point. The maximum of IPFIX
+         observation point under IPFIX sample policy is 2. One is
+         for sampling ipv4 traffic, the other is for sampling
+         ipv6 traffic.";
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-ipfix-policy";
+    /*
+    ipfix-sample policy (policy-name)
+    */
+    container ipfix-sample {
+      description
+        "Configure IPFIX sample policy";
+      list policy {
+        key "policy";
+        description
+          "Configure IPFIX sample policy parameters. For IPFIX
+           observation point: the observation point must be the
+           same for one traffic type in an IPFIX sample policy.
+           For example, there could be at most one observation
+           point for sampling ipv4 traffic in an IPFIX sample
+           policy.";
+        leaf policy {
+          type string;
+          description
+            "IPFIX sample policy name";
+        }
+        uses sample-policy-acl-grp;
+      }
+    }
+  }
+
+}

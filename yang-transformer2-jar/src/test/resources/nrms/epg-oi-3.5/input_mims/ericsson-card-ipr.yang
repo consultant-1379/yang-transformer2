@@ -1,0 +1,900 @@
+module ericsson-card-ipr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-card-ipr";
+
+  prefix "cardipr";
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-card-ipr
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-05" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "4";
+  }
+
+  revision "2018-06-27" {
+    description
+      "changing the range for card-slot to support ssr with
+       range 1...20";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision "2018-04-24" {
+    description
+      "Fabric FAP Drop alarm FT264825";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-04-17" {
+    description
+      "adding default values under rate-limit for arp as the
+       rate-limit is default configuration when vfrwd card is
+       configured";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-04" {
+    description
+      "VRE-162 32-VM Support";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-04-25" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+
+   typedef cards_evr{
+      type enumeration{
+      enum vfrwd {
+            value 0;
+            description
+              "Virtual Forwarder card";
+          }
+          enum vsrvc {
+	    value 1;
+            description
+              "Virtual Smart Services card";
+          }
+          enum vsfo {
+	    value 2;
+            description
+              "Virtual Service Forwarding Card";
+          }
+      }
+   }
+
+
+   typedef cards_ssr {
+       type enumeration {
+          enum 40-100ge-2-port {
+	    value 0;
+            description
+              "2-port 40GE or 1-port 100GE card";
+          }
+          enum ssc3 {
+            value 1;
+            description
+              "Smart Services Card 3";
+          }
+          enum 10-100ge-4-4-port {
+            value 2;
+            description
+              "4-port 10GE and 4-port 100GE card";
+          }
+          enum 10-100ge-2-2-port {
+            value 3;
+            description
+              "2-port 10GE and 2-port 100GE card";
+          }
+          enum 1-10ge-20-4-port {
+            value 4;
+            description
+              "20-port 1GE and 4-port 10GE card";
+          }
+          enum 1-10ge-20-port {
+            value 5;
+            description
+              "20-port 1GE or 10GE card";
+          }
+          enum 1-10ge-40-port {
+            value 6;
+            description
+              "40-port 1GE or 10GE card";
+          }
+          enum 10ge-10-port {
+            value 7;
+            description
+              "10-port 10GE card";
+          }
+          enum ge-40-port {
+            value 8;
+            description
+              "40-port 1GE card";
+          }
+          enum ssc1 {
+            value 9;
+            description
+              "Smart Services Card";
+          }
+          enum ssc1-v2 {
+            value 10;
+            description
+              "Smart Services Card v2";
+          }
+	}
+     }
+
+   typedef flw {
+      type enumeration {
+        enum rx {
+            value 0;
+          description
+            "Set flow-control negotiated set to Wish to Receive";
+        }
+        enum tx {
+            value 1;
+          description
+            "Set flow-control negotiated set to Wish to Send";
+        }
+        enum txrx {
+            value 2;
+          description
+            "Set flow-control negotiated set to Wish to Send and
+             Receive";
+        }
+      }
+        description
+           "Set flow-control negotiated set";
+    }
+
+  grouping card-chain-0-grp {
+    description
+      "";
+    /*
+    fabric { fap-drop-alarm [ options { clear-threshold-drop-
+     rate (clear-rate-num)  | clear-threshold-duration (clear-
+     duration-num) | delay-disable-card-alarm-duration (delay-
+     duration-num) | raise-threshold-drop-rate (raise-rate-num) |
+     raise-threshold-duration (raise-duration-num) } ] }
+    */
+    container fabric {
+      when "../type='1-10ge-20-4-port' or ../type="
+      + "'1-10ge-20-port' or ../type='1-10ge-40-port' or ../type="
+      + "'10-100ge-2-2-port' or ../type='10-100ge-4-4-port' or ../"
+      + "type='10ge-10-port' or ../type='40-100ge-2-port' or ../"
+      + "type='ge-40-port' or ../type='ssc1' or ../type='ssc1-v2' "
+      + "or ../type='ssc3'" {
+        description
+          "";
+      }
+      description
+        "Set parameters for fabric";
+      container fap-drop-alarm {
+        presence "";
+        description
+          "Set fabric parameters for triggering FAP drop alarm";
+        container options {
+          description
+            "enter the option";
+          leaf clear-threshold-drop-rate {
+            type uint16 {
+              range "100..65535";
+            }
+            default "100";
+            description
+              "Set drop counters to clear alarm";
+          }
+          leaf clear-threshold-duration {
+            type uint16 {
+              range "5..300";
+            }
+            default "5";
+            description
+              "Set time in secs to clear alarm";
+          }
+          leaf delay-disable-card-alarm-duration {
+            type uint16 {
+              range "0..36000";
+            }
+            default "0";
+            description
+              "Set delay time to disable card when drops are
+               persistent";
+          }
+          leaf raise-threshold-drop-rate {
+            type uint16 {
+              range "1000..65535";
+            }
+            default "1000";
+            description
+              "Set drop counters to raise alarm";
+          }
+          leaf raise-threshold-duration {
+            type uint16 {
+              range "3..300";
+            }
+            default "3";
+            description
+              "Set time in secs to raise alarm (0 to disable
+               feature)";
+          }
+        }
+      }
+    }
+    /*
+    deactivate
+    */
+    leaf deactivate {
+      when "../type='ssc1-v2' or ../type='ssc3' or ../type='ssc1' "
+      + "or ../type='1-10ge-20-4-port' or ../type="
+      + "'1-10ge-20-port' or ../type='1-10ge-40-port' or ../type="
+      + "'10-100ge-2-2-port' or ../type='10-100ge-4-4-port' or ../"
+      + "type='10ge-10-port' or ../type='40-100ge-2-port' or ../"
+      + "type='ge-40-port'" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Power down this card";
+    }
+    /*
+    diag{ pod [ level (level-num) ] }
+    */
+    container diag {
+      when "../type='1-10ge-20-4-port' or ../type="
+      + "'1-10ge-20-port' or ../type='1-10ge-40-port' or ../type="
+      + "'10-100ge-2-2-port' or ../type='10-100ge-4-4-port' or ../"
+      + "type='10ge-10-port' or ../type='40-100ge-2-port' or ../"
+      + "type='ge-40-port' or ../type='ssc1' or ../type='ssc1-v2' "
+      + "or ../type='ssc3'" {
+        description
+          "";
+      }
+      description
+        "Set Diagnostics mode";
+      container pod {
+        description
+          "Set Power-On Diagnostic mode";
+        leaf pod-enable {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable pod-enable";
+        }
+        leaf level {
+          when "../pod-enable='true'" {
+            description
+              "";
+          }
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Set POD level";
+        }
+      }
+    }
+    /*
+    out-of-service-diag
+    */
+    leaf out-of-service-diag {
+      when "../type='1-10ge-20-4-port' or ../type="
+      + "'1-10ge-20-port' or ../type='1-10ge-40-port' or ../type="
+      + "'10-100ge-2-2-port' or ../type='10-100ge-4-4-port' or ../"
+      + "type='10ge-10-port' or ../type='40-100ge-2-port' or ../"
+      + "type='ge-40-port' or ../type='ssc1' or ../type='ssc1-v2' "
+      + "or ../type='ssc3'" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Reload this card with diag image";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      when "../type='1-10ge-20-4-port' or ../type="
+      + "'1-10ge-20-port' or ../type='1-10ge-40-port' or ../type="
+      + "'10-100ge-2-2-port' or ../type='10-100ge-4-4-port' or ../"
+      + "type='10ge-10-port' or ../type='40-100ge-2-port' or ../"
+      + "type='ge-40-port' or ../type='ssc1' or ../type='ssc1-v2' "
+      + "or ../type='ssc3'" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Disable this card";
+    }
+    /*
+    auto-negotiate [ flc  {off | tx-only  | txrx | txrx-or-rx-
+     only } | speed { 1000 | 100 } |  duplex {  full | half  |
+     full-or-half } | force { disable | enable} ]
+    */
+    container auto-negotiate {
+      when "../mode/mode-1-10ge or ../type='ge-40-port'" {
+        description
+          "";
+      }
+      description
+        "Set auto negotiation parameters for all ports";
+      leaf flc {
+        type enumeration {
+          enum off {
+            value 0;
+            description
+              "Set flow-control negotiated set to off";
+          }
+          enum tx-only {
+            value 1;
+            description
+              "Set flow-control negotiated set to Wish to Send";
+          }
+          enum txrx {
+            value 2;
+            description
+              "Set flow-control negotiated set to Wish to Send
+               and Receive";
+          }
+          enum txrx-or-rx-only {
+            value 3;
+            description
+              "Set flow-control negotiated set to Wish to Send
+               and Receive, or just Receive";
+          }
+        }
+        description
+          "Set flow-control negotiated set";
+      }
+      leaf speed {
+        when "../../type='ge-40-port'" {
+          description
+            "";
+        }
+        type enumeration {
+          enum 1000 {
+            value 0;
+            description
+              "Set speed negotiated set to 1000 Mbps";
+          }
+          enum 100 {
+            value 1;
+            description
+              "Set speed negotiated set to 100 Mbps";
+          }
+        }
+        description
+          "Set speed negotiated set";
+      }
+      leaf duplex {
+        type enumeration {
+          enum full {
+            value 0;
+            description
+              "Set duplex mode negotiated set to full duplex";
+          }
+          enum half {
+            value 1;
+            description
+              "Set duplex mode negotiated set to half duplex";
+          }
+          enum full-or-half {
+            value 2;
+            description
+              "Set duplex mode negotiated set to full duplex or
+               half duplex";
+          }
+        }
+        description
+          "Set port duplex mode negotiated set";
+      }
+      leaf force {
+        type enumeration {
+          enum disable {
+            value 0;
+            description
+              "Set port to remain DOWN if auto negotiation
+               fails";
+          }
+          enum enable {
+            value 1;
+            description
+              "Force port UP if auto negotiation fails";
+          }
+        }
+        description
+          "Set port state if auto negotiation fails";
+      }
+    }
+    /*
+    clock-source { local | global-reference }
+    */
+    leaf clock-source {
+      when "../mode/mode-1-10ge or ../mode/mode-10ge or ../mode/"
+      + "oc3-12-48-oc192" {
+        description
+          "";
+      }
+      type enumeration {
+        enum local {
+          value 0;
+          description
+            "Utilize Oscillator local to card";
+        }
+        enum global-reference {
+          value 1;
+          description
+            "Utilize System defined Oscillator";
+        }
+      }
+      description
+        "Configure clock source";
+    }
+    /*
+    enable-unsup-xcvr
+    */
+    leaf enable-unsup-xcvr {
+      when "../type='1-10ge-20-4-port' or ../type="
+      + "'1-10ge-20-port' or ../type='1-10ge-40-port' or ../type="
+      + "'10-100ge-2-2-port' or ../type='10-100ge-4-4-port' or ../"
+      + "type='10ge-10-port' or ../type='40-100ge-2-port' or ../"
+      + "type='ge-40-port' " {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Enable unsupported transceivers";
+    }
+    /*
+    exclude-from-fib-lookup
+    */
+    leaf exclude-from-fib-lookup {
+      when "../type='1-10ge-20-4-port' or ../type='10ge-10-port' "
+      + "or ../type='40-100ge-2-port' or ../type='ge-40-port'" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Disable the packet forwarding from RP to the card";
+    }
+    /*
+    duplex { full | half }
+    */
+    leaf duplex {
+      when "../mode/mode-1-10ge or ../type='ge-40-port'" {
+        description
+          "";
+      }
+      type enumeration {
+        enum full {
+          value 0;
+          description
+            "Set duplex mode to full duplex";
+        }
+        enum half {
+          value 1;
+          description
+            "Set duplex mode to half duplex";
+        }
+      }
+      description
+        "Set duplex mode for all ports";
+    }
+    /*
+    flow-control (option_flw)
+    */
+    leaf flow-control {
+      when "../mode/mode-1-10ge or ../type='ge-40-port'" {
+        description
+          "";
+      }
+      type flw;
+      description
+        "leaf flow-control.";
+    }
+    /*
+    rate-limit {  dhcp (dhcp-rate) [ burst (dhcp-burstlimit) ]
+     |  nd (nd-rate) [ burst (nd-burstlimit) ]  |  arp (arp-rate)
+     [ burst (arp-burstlimit) ]  |  padi (padi-rate) [ burst
+     (padi-burstlimit) ]  |  dhcpv6 (dhcpv6-rate) [ burst
+     (dhcpv6-burstlimit) ] |  ccod (ccod-rate) [ burst (ccod-
+     burstlimit) ] | ipv6-ext-header (ipv6eh-rate) [ burst
+     (ipv6eh-burstlimit)] }
+    */
+    container rate-limit {
+      when "../type='1-10ge-20-4-port' or ../type="
+      + "'1-10ge-20-port' or ../type='1-10ge-40-port' or ../type="
+      + "'10-100ge-2-2-port' or ../type='10-100ge-4-4-port' or ../"
+      + "type='vfrwd' or ../type='vsfo'" {
+        description
+          "";
+      }
+      description
+        "Set rate-limit parameters";
+      choice rate-limit {
+        default arp;
+        description
+          "IPOS choice";
+        case dhcp {
+          list dhcp {
+            key "dhcp-rate";
+            description
+              "Set DHCP rate-limit parameters";
+            leaf dhcp-rate {
+              type uint32 {
+                range "0..4294967295";
+              }
+              description
+                "DHCP packets per second";
+            }
+            leaf burst {
+              type uint32 {
+                range "0..4294967295";
+              }
+              description
+                "Set DHCP burst-limit";
+            }
+          }
+        }
+        case nd {
+          list nd {
+            key "nd-rate";
+            description
+              "Set ND rate-limit parameters";
+            leaf nd-rate {
+              type uint32 {
+                range "0..4294967295";
+              }
+              description
+                "ND packets per second";
+            }
+            leaf burst {
+              type uint32 {
+                range "0..4294967295";
+              }
+              description
+                "Set ND burst-limit";
+            }
+          }
+        }
+        case arp {
+          container arp {
+            description
+              "Set ARP rate-limit parameters";
+            leaf arp-rate {
+              type uint32 {
+                range "0..4294967295";
+              }
+              default "1024";
+              description
+                "ARP packets per second";
+            }
+            leaf burst {
+              type uint32 {
+                range "0..4294967295";
+              }
+              default "1000";
+              description
+                "Set ARP burst-limit";
+            }
+          }
+        }
+        case padi {
+          list padi {
+            when "../../type='1-10ge-20-4-port' or ../../type="
+            + "'1-10ge-20-port' or ../../type='vfrwd' or ../../"
+            + "type='vsfo'" {
+              description
+                "";
+            }
+            key "padi-rate";
+            description
+              "Set PADI rate-limit parameters";
+            leaf padi-rate {
+              type uint16 {
+                range "0..1000";
+              }
+              description
+                "PADI packets per second";
+            }
+            leaf burst {
+              type uint16 {
+                range "0..1000";
+              }
+              description
+                "Set PADI burst-limit";
+            }
+          }
+        }
+        case dhcpv6 {
+          list dhcpv6 {
+            when "../../type='1-10ge-20-4-port' or ../../type="
+            + "'1-10ge-20-port' or ../../type='vfrwd' or ../../"
+            + "type='vsfo'" {
+              description
+                "";
+            }
+            key "dhcpv6-rate";
+            description
+              "Set DHCPv6 rate-limit parameters";
+            leaf dhcpv6-rate {
+              type uint32 {
+                range "0..4294967295";
+              }
+              description
+                "DHCPv6 packets per second";
+            }
+            leaf burst {
+              type uint32 {
+                range "0..4294967295";
+              }
+              description
+                "Set DHCPv6 burst-limit";
+            }
+          }
+        }
+        case ccod {
+          list ccod {
+            when "../../type='1-10ge-20-port' and not(../../mode/"
+            + "oc3-12-48-oc192) or ../../type='vfrwd' or ../../"
+            + "type='vsfo'" {
+              description
+                "";
+            }
+            key "ccod-rate";
+            description
+              "Set CCOD rate-limit parameters";
+            leaf ccod-rate {
+              type uint16 {
+                range "0..1000";
+              }
+              description
+                "CCOD packets per second";
+            }
+            leaf burst {
+              type uint16 {
+                range "0..1000";
+              }
+              description
+                "Set CCOD burst-limit";
+            }
+          }
+        }
+        case ipv6-ext-header {
+          list ipv6-ext-header {
+            when "../../type='1-10ge-20-4-port'" {
+              description
+                "";
+            }
+            key "ipv6eh-rate";
+            description
+              "Set IPv6 Extension Header rate-limit parameters";
+            leaf ipv6eh-rate {
+              type uint32 {
+                range "0..4294967295";
+              }
+              description
+                "IPv6 Extension Header packets per second";
+            }
+            leaf burst {
+              type uint32 {
+                range "0..4294967295";
+              }
+              description
+                "Set IPv6 Extension Header burst-limit";
+            }
+          }
+        }
+      }
+    }
+    /*
+    speed { 1000 | 100 }
+    */
+    leaf speed {
+      when "../type='ge-40-port'" {
+        description
+          "";
+      }
+      type enumeration {
+        enum 1000 {
+          value 0;
+          description
+            "Set speed negotiated set to 1000 Mbps";
+        }
+        enum 100 {
+          value 1;
+          description
+            "Set speed negotiated set to 100 Mbps";
+        }
+      }
+      description
+        "Set speed for all ports";
+    }
+  }
+
+  /*
+  card { (type) } [mode{ mode-100ge | mode-40ge | mode-100ge-
+   cfp4 | mode-100ge-qsfp28 | mode-10ge | mode-1-10ge |
+   oc3-12-48-oc192 | mode-100ge-cfp1-2 | mode-100ge-cfp2 } ]
+   (card-slot)
+  */
+  list card {
+    key "card-slot";
+    description
+      "select card to configure";
+    leaf card-slot {
+      type uint8 {
+        range "1..20";
+      }
+      description
+        "1...10 slot number for N10 chassis; 1...20 slot number
+         for N20 chassis; 1...30 for 32-VM chassis;";
+    }
+    leaf type {
+      type cards_ssr;
+      description
+        "Enter the card type";
+    }
+    container mode {
+      when "../type='40-100ge-2-port' or ../type="
+      + "'10-100ge-4-4-port' or ../type='10-100ge-2-2-port' or ../"
+      + "type='1-10ge-20-4-port' or ../type='1-10ge-20-port' " {
+        description
+          "";
+      }
+      description
+        "Select mode to configure card mode";
+      choice mode {
+        description
+          "IPOS choice";
+        case mode-100ge {
+          leaf mode-100ge {
+            when "../../type='40-100ge-2-port'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "100GE mode";
+          }
+        }
+        case mode-40ge {
+          leaf mode-40ge {
+            when "../../type='40-100ge-2-port'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "40GE mode";
+          }
+        }
+        case mode-100ge-cfp4 {
+          leaf mode-100ge-cfp4 {
+            when "../../type='10-100ge-4-4-port'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "100GE CFP4 mode";
+          }
+        }
+        case mode-100ge-qsfp28 {
+          leaf mode-100ge-qsfp28 {
+            when "../../type='10-100ge-4-4-port'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "100GE QSFP28 mode";
+          }
+        }
+        case mode-10ge {
+          leaf mode-10ge {
+            when "../../type='1-10ge-20-4-port'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "10GE mode";
+          }
+        }
+        case mode-1-10ge {
+          leaf mode-1-10ge {
+            when "../../type='1-10ge-20-4-port'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "1GE and 10GE mode";
+          }
+        }
+        case oc3-12-48-oc192 {
+          leaf oc3-12-48-oc192 {
+            when "../../type='1-10ge-20-port'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "OC3-192 mode";
+          }
+        }
+        case mode-100ge-cfp1-2 {
+          leaf mode-100ge-cfp1-2 {
+            when "../../type='10-100ge-2-2-port'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "100GE CFP1-2 mode";
+          }
+        }
+        case mode-100ge-cfp2 {
+          leaf mode-100ge-cfp2 {
+            when "../../type='10-100ge-2-2-port'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "100GE CFP2 mode";
+          }
+        }
+      }
+    }
+    uses card-chain-0-grp;
+  }
+
+}

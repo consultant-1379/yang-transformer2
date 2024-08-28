@@ -1,0 +1,105 @@
+module if-feature-handling-module6 {
+
+	namespace "urn;test;if-feature-handling-module6";
+	prefix this;
+
+	revision "2022-09-26";
+
+	feature feature61;
+	feature feature62;
+	feature feature63;
+	feature feature67;
+	feature feature68;
+	feature feature69;
+	feature feature70;
+
+	identity identity61;
+
+	identity identity62 {
+		if-feature this:feature61;
+		base identity61;
+	}
+
+	identity identity63 {
+		base identity61;
+	}
+
+	container cont61 {
+
+		leaf leaf61 {
+			type identityref {
+				base identity61;
+			}
+		}
+
+		leaf leaf62 {
+			type enumeration {
+				enum RED;
+				enum YELLOW {
+					if-feature feature61;
+				}
+				enum GREEN {
+					if-feature feature62;
+				}
+			}
+		}
+	}
+
+	container cont65 {
+	}
+
+	augment /this:cont65 {
+		if-feature feature63;
+
+		leaf leaf65 {
+			type string;
+		}
+	}
+
+	container cont66 {
+
+		choice choice66 {
+
+			case case66 {
+				if-feature feature63;
+				leaf leaf66 {
+					type string;
+				}
+			}
+
+			case case67 {
+				leaf leaf67 {
+					type string;
+				}
+			}
+		}
+	}
+
+	container cont68 {
+
+		uses grouping68 {
+			if-feature feature68;
+
+			refine leaf68 {
+				if-feature feature69;
+			}
+		}
+	}
+
+	grouping grouping68 {
+
+		leaf leaf68 {
+			type string;
+			default "hello";
+		}
+	}
+
+	rpc rpc69 {
+		if-feature feature69;
+		if-feature feature70;
+	}
+
+	rpc rpc70 {
+		if-feature unknown-prefix:feature69;
+	}
+}

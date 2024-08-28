@@ -1,0 +1,52 @@
+module moc-naming-one {
+
+    namespace "urn*test*moc-naming-one";
+    prefix this;
+
+    revision "2021-03-07";
+
+	container cont1 {								// not unique
+
+		container cont11 {							// unique
+
+			container cont14 {						// not unique
+				leaf leafXx { type string; }
+				
+				container cont16 {					// unique
+					leaf leafXx { type string; }
+				}
+			}		
+		}	
+
+		container cont12 {							// unique
+		
+			container cont14 {						// not unique
+				leaf leafXx { type string; }
+			}		
+		}	
+
+		container cont1 {							// not unique
+			leaf leafXx { type string; }
+		}
+		
+		container cont18 {							// not unique
+			leaf leafXx { type string; }
+		}
+	}
+
+	container cont2 {								// unique
+	
+		container cont18 {							// not unique
+			leaf leafXx { type string; }
+		}
+	}
+
+	container cont3 {								// unique
+	
+		container cont31 {							// unique
+		}
+	
+		container cont32 {							// unique
+		}
+	}
+}

@@ -1,0 +1,134 @@
+module ericsson-ethernet-ext-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ethernet-ext-dev-ssr";
+
+  prefix "ethxdevssr";
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-ipos {
+    prefix "ethxipos";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-card-ipr {
+    prefix "cardipr";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-ethernet-ext-dev-ipos
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-04-28" {
+    description
+      "obsolete and deviate profile and admission-control-choice under flow apply";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+  revision "2017-04-18" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet/ethxipos:flow-apply/ethxipos:admission-control/ethxipos:profile" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet/ethxipos:flow-apply/ethxipos:admission-control/ethxipos:admission-control-choice" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet/ethxipos:subscribe-micro-bfd" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet/ethxipos:port-type" {
+      deviate replace {
+      type enumeration {
+        enum wan-phy {
+          value 0;
+          description
+            "Select WAN-PHY as port physical layer type";
+        }
+        enum 1ge {
+          value 1;
+          description
+            "Select 1GE port type";
+        }
+        enum 10ge {
+          value 2;
+          description
+            "Select 10GE port type";
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+      container card-checks {
+
+          description "add binding condition check between ethernet and card";
+
+          must "(../if:type != 'ianaift:ethernetCsmacd') or 
+                ((../if:type = 'ianaift:ethernetCsmacd') 
+                and ((/cardipr:card[cardipr:card-slot=substring-before(current()/../if:name, '/')])
+                or (current()/../if:name = 'management')))" {
+
+                error-message "missing card or interface name not follow slot/port format";
+                description "ethernet requires the underlying card";
+          }
+      }
+  }
+
+}

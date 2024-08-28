@@ -1,0 +1,145 @@
+module ericsson-cu-cp-rc-diagnostics-nwif {
+    yang-version 1.1;
+    namespace urn:rdns:com:ericsson:oammodel:ericsson-cu-cp-rc-diagnostics-nwif;
+    prefix rcdiagnwif;
+    import tailf-common {
+        prefix tailf;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ericsson-common-types-diagnostics {
+        prefix commontypesdiag;
+    }
+    import ericsson-cu-cp-rc-diagnostics {
+        prefix rcdiag;
+    }
+    organization
+      'Ericsson AB';
+    contact
+      'Ericsson first line support via email';
+    description
+      'Diagnostics action:nwif for RC Service
+
+       Copyright (c) 2022 Ericsson AB. All rights reserved';
+    revision 2022-02-21 {
+        description
+        'Initial revision';
+        yexte:version 1;
+        yexte:release 0;
+        yexte:correction 0;
+    }
+
+    yexte:module-status preliminary;
+
+    augment "/rcdiag:rc-diagnostics" {
+        container ng {
+            description "ng interface actions";
+            action status {
+                description "ng status";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+        }
+    }
+
+    augment "/rcdiag:rc-diagnostics" {
+        container x2 {
+            description "x2 interface actions";
+            action debug {
+                description "x2 debug";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+            action status {
+                description "x2 status";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+        }
+    }
+
+    augment "/rcdiag:rc-diagnostics" {
+        container xn {
+            description "xn interface actions";
+            action debug {
+                description "xn debug";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+            action status {
+                description "xn status";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+        }
+    }
+
+    augment "/rcdiag:rc-diagnostics" {
+        container f1 {
+            description "f1 interface actions";
+            action debug {
+                description "f1 debug";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+            action status {
+                description "f1 status";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+        }
+    }
+
+    augment "/rcdiag:rc-diagnostics" {
+        container e1 {
+            description "e1 interface actions";
+            action ppinfo {
+                description "VPP priority information";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+        }
+    }
+}
+

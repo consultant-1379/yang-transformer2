@@ -1,0 +1,30 @@
+module threegpp-module {
+
+	namespace "urn:3gpp:threegpp-module";
+	prefix this;
+
+	revision "2020-12-08";
+
+	list ManagedElement {
+		key id;
+		leaf id { type string; }
+
+		container attributes {
+			leaf leafXx { type string; }
+		}
+	}
+
+	// Even though the container name makes little sense and does not follow 3GPP naming rules,
+	// and there is a separate leaf inside the container that otherwise would prevent the container
+	// from being considered a 3GPP MOC, it is considered a 3GPP container due to the namespace of
+	// the module.
+
+	container cont.ainer.8 {
+
+		leaf leaf81 { type string; }			// should not be generated
+
+		container attributes {
+			leaf leaf82 { type string; }
+		}
+	}
+}

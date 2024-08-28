@@ -1,0 +1,210 @@
+module ericsson-interfaces-ext-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interfaces-ext-pc5gc";
+  prefix ifxpc5gc;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ericsson-if-types-pc5gc {
+    prefix pcift;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model extends IETF RFC 8343,
+     used to present PC specific requirement.
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-08-09 {
+    description
+      "Change interface type";
+    reference
+      "EN/LZN 704 0249";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2019-09-11 {
+    description
+      "Initial revision";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "if:type = 'pcift:activeBackupBonding'";
+      description
+        "Design activeBackupBonding interface.";
+
+    leaf-list member-if {
+      status current {
+        yexte:preliminary;
+      }
+      type if:interface-ref;
+      must "/if:interfaces/if:interface[if:name = current()]"
+         + "/if:type = 'pcift:ethernetCsmacd'" {
+        description
+          "The member interface must be a configured ethernetCsmacd type interface";
+        error-message
+          "The member interface must be a configured ethernetCsmacd type interface";
+      }
+      min-elements 1;
+      max-elements 32;
+      description
+        "The list of member interfaces";
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    description
+      "Design the action on the IETF interface.";
+    action status {
+      status current {
+        yexte:preliminary;
+      }
+      description
+        "A collection of interface-related operational objects.";
+      //      input {
+      //        leaf instance-id {
+      //          type string;
+      //        }
+      //      }
+      output {
+        list status {
+          config false;
+          key "instance-id";
+          description
+            "The current operational state of the interface for each instance.";
+          leaf instance-id {
+            type string;
+            description
+              "The instance which interface is locating on.";
+          }
+          leaf oper-status {
+            type enumeration {
+              enum up {
+                value 1;
+                description
+                  "Ready to pass packets.";
+              }
+              enum down {
+                value 2;
+                description
+                  "The interface does not pass any packets.";
+              }
+              enum testing {
+                value 3;
+                description
+                  "In some test mode.  No operational packets can
+                   be passed.";
+              }
+              enum unknown {
+                value 4;
+                description
+                  "Status cannot be determined for some reason.";
+              }
+              enum dormant {
+                value 5;
+                description
+                  "Waiting for some external event.";
+              }
+              enum not-present {
+                value 6;
+                description
+                  "Some component (typically hardware) is missing.";
+              }
+              enum lower-layer-down {
+                value 7;
+                description
+                  "Down due to state of lower-layer interface(s).";
+              }
+            }
+            mandatory true;
+            description
+              "The current operational state of the interface.
+
+               This leaf has the same semantics as ifOperStatus.";
+            reference
+              "RFC 2863: The Interfaces Group MIB - ifOperStatus";
+          }
+          leaf phys-address {
+            type yang:phys-address;
+            description
+              "The interface's address at its protocol sub-layer.  For
+               example, for an 802.x interface, this object normally
+               contains a Media Access Control (MAC) address.  The
+               interface's media-specific modules must define the bit
+               and byte ordering and the format of the value of this
+               object.  For interfaces that do not have such an address
+               (e.g., a serial line), this node is not present.";
+            reference
+              "RFC 2863: The Interfaces Group MIB - ifPhysAddress";
+          }
+          leaf speed {
+            type yang:gauge64;
+            units "bits/second";
+            description
+              "An estimate of the interface's current bandwidth in bits
+               per second.  For interfaces that do not vary in
+               bandwidth or for those where no accurate estimation can
+               be made, this node should contain the nominal bandwidth.
+               For interfaces that have no concept of bandwidth, this
+               node is not present.";
+            reference
+              "RFC 2863: The Interfaces Group MIB -
+                         ifSpeed, ifHighSpeed";
+          }
+          leaf mtu {
+            type uint16;
+            description
+              "The maximum size of packet that the interface will send
+               and receive.";
+            reference
+               "RFC XXX, Section 3.5 Layer 2 MTU
+                RFC 791: Internet Protocol
+                RFC 8200: Internet Protocol, Version 6 (IPv6)
+                          Specification Section 5";
+          }
+          leaf ipv4-address {
+            type inet:ipv4-address-no-zone;
+            description
+              "The IPv4 address on the interface.";
+          }
+          leaf ipv6-address {
+            type inet:ipv6-address-no-zone;
+            description
+              "The IPv6 address on the interface.";
+          }
+          leaf ipv6-link-local {
+            type inet:ipv6-address;
+            description
+              "The IPv6 link-local address on the interface.";
+          }
+          leaf member-if {
+            type string;
+            description
+              "The active interface in bonding interface.";
+          }
+        }
+      }
+    }
+  }
+}

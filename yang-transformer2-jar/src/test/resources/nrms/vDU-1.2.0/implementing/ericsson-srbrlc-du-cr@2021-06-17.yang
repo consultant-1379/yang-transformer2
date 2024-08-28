@@ -1,0 +1,173 @@
+module ericsson-srbrlc-du-cr {
+    yang-version 1.1;
+    namespace "urn:rdns:com:ericsson:oammodel:ericsson-srbrlc-du-cr";
+    prefix "srbrlc";
+
+    import _3gpp-common-managed-element {
+        prefix me3gpp;
+    }
+    import _3gpp-common-top {
+        prefix top3gpp;
+    }
+    import _3gpp-common-yang-types {
+        prefix types3gpp;
+    }
+    import _3gpp-nr-nrm-gnbdufunction {
+        prefix gnbdu3gpp;
+    }
+    import ericsson-radiolinkcontrol-du-cr {
+        prefix rlc;
+    }
+    import ericsson-uecc-du-cr {
+        prefix uecc;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ietf-inet-types {
+        prefix "inet";
+    }
+
+    organization
+      "Ericsson AB";
+    contact
+      "Ericsson first line support via email";
+    description
+      "Defines the YANG mapping of the Signaling Radio Bearer Radio Link Control.
+       
+       Copyright (c) 2021 Ericsson AB. All rights reserved.";
+    revision 2021-06-17 {
+        description
+          "First version.";
+        yexte:version 0;
+        yexte:release 1;
+        yexte:correction 0;
+    }
+    yexte:module-status preliminary;
+
+    grouping SrbRLCGrp {
+        description
+          "Represents the SrbRLC IOC.";
+
+        leaf dlMaxRetxThreshold {
+            description
+              "Maximum number of AM RLC DL retransmissions.
+               
+               When this value is reached, AM RLC DL retransmission is stopped and RRC is notified.";
+            type int32 {
+                range "1|2|3|4|6|8|16|32";
+            }
+            default "8";
+            reference
+              "3GPP TS 38.322, 3GPP TS 38.331";
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf tPollRetransmitDl {
+            description
+              "Timer supervising the poll for STATUS PDU.
+               
+               AM RLC DL transmitter to wait for RLC STATUS feedback after sending a poll for STATUS before retransmitting the poll.";
+            type int32 {
+                range "5|10|15|20|25|30|35|40|45|50|55|60|65|70|75|80|85|90|95|100|105|110|115|120|125|130|135|140|145|150|155|160|165|170|175|180|185|190|195|200|205|210|215|220|225|230|235|240|245|250|300|350|400|450|500|800|1000|2000|4000";
+            }
+            default "45";
+            units "ms";
+            reference
+              "3GPP TS 38.322, 3GPP TS 38.331";
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf tPollRetransmitUl {
+            description
+              "Timer for the UE to supervise the poll for STATUS PDU.
+               
+               AM RLC UL transmitter waits for RLC STATUS feedback after sending a poll for STATUS before retransmitting the poll.";
+            type int32 {
+                range "5|10|15|20|25|30|35|40|45|50|55|60|65|70|75|80|85|90|95|100|105|110|115|120|125|130|135|140|145|150|155|160|165|170|175|180|185|190|195|200|205|210|215|220|225|230|235|240|245|250|300|350|400|450|500|800|1000|2000|4000";
+            }
+            default "45";
+            units "ms";
+            reference
+              "3GPP TS 38.322, 3GPP TS 38.331";
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf tReassemblyDl {
+            description
+              "Timer for the UE used by the receiving side of AM RLC and receiving UM RLC.
+               
+               Detects loss of RLC PDUs at lower layers.";
+            type int32 {
+                range "0|5|10|15|20|25|30|35|40|45|50|55|60|65|70|75|80|85|90|95|100|110|120|130|140|150|160|170|180|190|200";
+            }
+            default "35";
+            units "ms";
+            reference
+              "3GPP TS 38.322, 3GPP TS 38.331";
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf tReassemblyUl {
+            description
+              "Timer for receiving side of AM RLC and receiving UM RLC.
+               
+               Detects loss of RLC PDUs at lower layers.";
+            type int32 {
+                range "0|5|10|15|20|25|30|35|40|45|50|55|60|65|70|75|80|85|90|95|100|110|120|130|140|150|160|170|180|190|200";
+            }
+            default "35";
+            units "ms";
+            reference
+              "3GPP TS 38.322, 3GPP TS 38.331";
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf ulMaxRetxThreshold {
+            description
+              "Maximum number of AM RLC UL retransmissions.
+               
+               When this value is reached, AM RLC UL retransmission is stopped and RRC is notified.";
+            type int32 {
+                range "1|2|3|4|6|8|16|32";
+            }
+            default "8";
+            reference
+              "3GPP TS 38.322, 3GPP TS 38.331";
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+    }
+
+    augment "/me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/uecc:UeCC/rlc:RadioLinkControl" {
+        when "true()";
+        list SrbRLC {
+            description
+              "Signaling radio bearer Radio Link Control settings.";
+            key id;
+            uses top3gpp:Top_Grp;
+            min-elements 1;
+            max-elements 4;
+            container attributes {
+                uses SrbRLCGrp;
+            }
+        }
+    }
+}

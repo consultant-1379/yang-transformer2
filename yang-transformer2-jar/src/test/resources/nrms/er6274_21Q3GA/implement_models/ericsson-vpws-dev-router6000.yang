@@ -1,0 +1,82 @@
+module ericsson-vpws-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-vpws-dev-router6000";
+
+  prefix "vpwsr6000";
+
+  import ericsson-vpws-router6000 {
+    prefix "vpwsrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+   prefix "ctxsr6k";
+  }
+  
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-vpws-ipos
+     Copyright (c) 2015-2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-16" {
+    description
+      "deviation for ericsson-vpws-ipos.yang file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-20" {
+    description
+      "deviation for ericsson-vpws-ipos.yang file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  
+
+  deviation "/ctxsr6k:contexts/vpwsrouter6000:pseudowire/vpwsrouter6000:peer-profile/vpwsrouter6000:peer/vpwsrouter6000:ipv4/vpwsrouter6000:tunnel/vpwsrouter6000:tunnel/vpwsrouter6000:soft-gre" {
+    deviate not-supported;
+  }
+  
+  deviation "/ctxsr6k:contexts/vpwsrouter6000:pseudowire/vpwsrouter6000:peer-profile/vpwsrouter6000:peer/vpwsrouter6000:context" {
+    deviate not-supported;
+  }
+   
+  deviation "/ctxsr6k:contexts/vpwsrouter6000:pseudowire/vpwsrouter6000:peer-profile/vpwsrouter6000:backup-peer/vpwsrouter6000:context" {
+    deviate not-supported;
+  }  
+
+  deviation "/ctxsr6k:contexts/vpwsrouter6000:pseudowire/vpwsrouter6000:instance/vpwsrouter6000:peer-profile/vpwsrouter6000:peer-profile-opt/vpwsrouter6000:vxlan" {
+    deviate not-supported;
+  }
+  
+  deviation "/ctxsr6k:contexts/vpwsrouter6000:pseudowire/vpwsrouter6000:instance/vpwsrouter6000:vlan-rewrite" {
+    deviate not-supported;
+  }  
+     
+}

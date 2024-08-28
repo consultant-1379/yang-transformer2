@@ -1,0 +1,1094 @@
+module ericsson-l2-service-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-l2-service-ipos";
+
+  prefix "l2serviceipos";
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-ipos {
+    prefix "ethxipos";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-mirror-policy-ipos {
+    prefix "mirrorpolicyipos";
+  }
+
+  import ericsson-lag-ext-ipos {
+    prefix "lagxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-l2-service-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1, Delete some redundant node";
+    reference
+      "rfc7950";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision "2019-05-08" {
+    description
+      "Add description to service-instance";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2019-03-27" {
+    description
+      "removed when condition of service-instance";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-09-04" {
+    description
+      "Add obsolete/deprecated/preliminary label to the
+       description of the obsolete/deprecated/preliminary node";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-07-02" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-03-22" {
+    description
+      "add arp proxy";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-03-19" {
+    description
+      "Only default mode LAG support link-pinning under
+       service-instance";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-03-06" {
+    description
+      "changed the leaf type profile from string to leafref";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-03-04" {
+    description
+      "Add 'when' condition for service-intance under link-group
+       and ethernet";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-01-25" {
+    description
+      "set status obsolete for subscribe micro-bfd";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-10" {
+    description
+      "Attribute type change from uint32 to int32 for
+       service-instance id";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-08-16" {
+    description
+      "Change special character in description";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-08-08" {
+    description
+      "Add mirror policy command in 'service-instance-grp'";
+    reference
+      "exec_cli from R6K";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-15" {
+    description
+      "IPOS-11938 New command for subscribe micro-bfd";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-07-03" {
+    description
+      "Update the 'must' condition of egress-seq-choice,
+       checking 'egress-seq-choice1='outer''
+       Update the 'must' condition of 'ingress-seq-choice',
+       checking 'ingress-seq-choice1='outer''
+       Update the description of 'egress-seq-choice' and
+       'ingress-seq-choice'
+       'spec-instance-id' and 'end-instance-id' type changed
+       from unit16 to unit32
+       'spec-instance-id' and 'end-instance-id' range changed
+       from 1-65535 to 1-262143";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-06-27" {
+    description
+      "add new container 'mirror'in 'service-instance-grp'.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-26" {
+    description
+      "L2-service yang model in REL_171 and oam_dev version is
+       not compatible with REL_164 version.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-28" {
+    description
+      "Add gc_flag for match priority_tagged and untagged ";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-17" {
+    description
+      "JIRA: IPOS-8030 L2-service yang model in REL_171 and
+       oam_dev version is not compatible with REL_164 version.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-22" {
+    description
+      "Modify the side-effect/when/must point for model l2
+       service.del l2 presense";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-08" {
+    description
+      "Add a feature name for l2 access list";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-25" {
+    description
+      "add l2 access-group";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature encapsulation {
+    description
+      "This feature indicates that the device supports the
+       encapsulation in L2_SERVICE.";
+  }
+
+  feature fallback-c-tag {
+    description
+      "This feature indicates that the device supports the
+       fallback-c-tag in L2_SERVICE.";
+  }
+
+  feature priority-tagged {
+    description
+      "This feature indicates that the device supports the
+       priority-tagged in L2_SERVICE.";
+  }
+
+  feature shutdown {
+    description
+      "This feature indicates that the device supports the
+       shutdown in L2_SERVICE.";
+  }
+
+  feature mac-address {
+    description
+      "This feature indicates that the device supports the
+       mac-address in L2_SERVICE.";
+  }
+
+  grouping vlan-rewrite-grp {
+    description
+      "Vlan-rewrite options";
+    /*
+    egress-seq (seq-num) { push | swap | pop } { outer | inner }
+     { priority-tagged | {dot1q (dot1q-id)} | {dot1ad (dot1ad-
+     id)} }
+    */
+    list egress-seq {
+      key "seq-num";
+      max-elements 2;
+      description
+        "Rewrite option on egress traffic with order";
+      leaf seq-num {
+        type uint8 {
+          range "1..2";
+        }
+        description
+          "Order of rewrites";
+      }
+      leaf egress-seq-choice {
+        type enumeration {
+          enum push {
+            value 0;
+            description
+              "Push a new tag on the packet";
+          }
+          enum swap {
+            value 1;
+            description
+              "Swap the tag on the packet with a new tag";
+          }
+          enum pop {
+            value 2;
+            description
+              "Pop the tag on the packet";
+          }
+        }
+        must "((.='pop') and  not (../priority-tagged) and not "
+        + "(../dot1q) and not (../dot1ad)) or ((.!='pop') and  "
+        + "(((../egress-seq-choice1='outer') and (../"
+        + "priority-tagged)) or (../dot1q) or (../dot1ad)))" {
+          error-message "If vlan-rewrite operation is Pop, "
+          + "Please do NOT configure priority-tagged or dot1q or "
+          + "dot1ad parameter. If it is Swap/push, please configure "
+          + "one of these three parameters!";
+          description
+            "Pop operation can't support priority-tagged or
+             dot1q or dot1ad parameter, and Swap/Push operation
+             must have one of these three parameters.  Must
+             configure the match rules!";
+        }
+        mandatory true;
+        description
+          "Egress-seq-choice:push,swap or pop";
+      }
+      leaf egress-seq-choice1 {
+        type enumeration {
+          enum outer {
+            value 0;
+            description
+              "Operation applied on outer tag";
+          }
+          enum inner {
+            value 1;
+            description
+              "Operation applied on inner tag";
+          }
+        }
+        mandatory true;
+        description
+          "leaf egress-seq-choice1.";
+      }
+      choice egress-seq-choice2 {
+        description
+          "";
+        case priority-tagged {
+          leaf priority-tagged {
+            type enumeration {
+              enum priority-tagged {
+                value 0;
+                description
+                  "Rewrite tags with VLAN 0";
+              }
+            }
+            description
+              "Rewrite tags with VLAN 0";
+          }
+        }
+        case dot1q {
+          leaf dot1q {
+            type string;
+            description
+              "Rewrite VLAN tags of Dot1q packets";
+          }
+        }
+        case dot1ad {
+          leaf dot1ad {
+            type string;
+            description
+              "Rewrite VLAN tags of Dot1ad packets";
+          }
+        }
+      }
+    }
+    /*
+    ingress-seq (seq-num) { push | swap | pop }  { outer | inner
+     } { priority-tagged | {dot1q (dot1q-id)} | {dot1ad (dot1ad-
+     id)} } [symmetric]
+    */
+    list ingress-seq {
+      key "seq-num";
+      max-elements 2;
+      description
+        "Rewrite option on ingress traffic with order";
+      leaf seq-num {
+        type uint8 {
+          range "1..2";
+        }
+        description
+          "Order of rewrites";
+      }
+      leaf ingress-seq-choice {
+        type enumeration {
+          enum push {
+            value 0;
+            description
+              "Push a new tag on the packet";
+          }
+          enum swap {
+            value 1;
+            description
+              "Swap the tag on the packet with a new tag";
+          }
+          enum pop {
+            value 2;
+            description
+              "Pop the tag on the packet";
+          }
+        }
+        must "((.='pop') and  not (../priority-tagged) and not "
+        + "(../dot1q) and not (../dot1ad)) or ((.!='pop') and  "
+        + "(((../ingress-seq-choice1='outer') and (../"
+        + "priority-tagged)) or (../dot1q) or (../dot1ad)))" {
+          error-message "If vlan-rewrite operation is Pop, "
+          + "Please do NOT configure priority-tagged or dot1q or "
+          + "dot1ad parameter. If it is Swap/push, please configure "
+          + "one of these three parameters!";
+          description
+            "Pop operation can't support priority-tagged or
+             dot1q or dot1ad parameter, and Swap/Push operation
+             must have one of these three parameters.  Must
+             configure the match rules!";
+        }
+        mandatory true;
+        description
+          "Ingress-seq-choice:push,swsp or pop";
+      }
+      leaf ingress-seq-choice1 {
+        type enumeration {
+          enum outer {
+            value 0;
+            description
+              "Operation applied on outer tag";
+          }
+          enum inner {
+            value 1;
+            description
+              "Operation applied on inner tag";
+          }
+        }
+        mandatory true;
+        description
+          "leaf ingress-seq-choice1.";
+      }
+      choice ingress-seq-choice2 {
+        description
+          "";
+        case priority-tagged {
+          leaf priority-tagged {
+            type enumeration {
+              enum priority-tagged {
+                value 0;
+                description
+                  "Rewrite tags with VLAN 0";
+              }
+            }
+            description
+              "Rewrite tags with VLAN 0";
+          }
+        }
+        case dot1q {
+          leaf dot1q {
+            type string;
+            description
+              "Rewrite VLAN tags of Dot1q packets";
+          }
+        }
+        case dot1ad {
+          leaf dot1ad {
+            type string;
+            description
+              "Rewrite VLAN tags of Dot1ad packets";
+          }
+        }
+      }
+      leaf symmetric {
+        type empty;
+        description
+          "Apply rewrite option on both directions";
+      }
+    }
+  }
+
+  grouping service-instance-grp {
+    description
+      "Service instance for L2 CCTS";
+    /*
+    vlan-rewrite
+    */
+    container vlan-rewrite {
+      description
+        "VLAN rewrite options";
+      uses vlan-rewrite-grp;
+    }
+    /*
+    match
+    */
+    container match {
+      description
+        "Match options";
+      uses si-match-grp;
+    }
+    /*
+    profile (profile-name)
+    */
+    leaf profile {
+      type leafref {
+        path "/ctxsipos:contexts/ctxipos:dot1q/ctxipos:profile";
+      }
+      description
+        "Attach Dot1q profile to this service instance";
+    }
+    /*
+    l2 {<access-group (cls-name) (direction) [ count ]>}
+    */
+    container l2 {
+      description
+        "Configure L2 options";
+      list access-group {
+        key "direction";
+        description
+          "Configure access group on this circuit";
+        leaf direction {
+          type typesipos:access_group_dir;
+          description
+            "Direction on which the ACL is to be applied";
+        }
+        leaf cls-name {
+          type string {
+            length "0..256";
+            pattern '(\S+)|(\S+(\s\S+)*)';
+          }
+          mandatory true;
+          description
+            "Access list name (up to 10 names); more than one
+             ACL enter with \"\" and space separator";
+        }
+        leaf count {
+          type empty;
+          description
+            "Access list per rule packet counting";
+        }
+      }
+    }
+    /*
+    circuit-group-member [ (member-name) ]
+    */
+    container circuit-group-member {
+      presence "";
+      description
+        "Specify the circuit group for the service instance(s)";
+      leaf member-name {
+        type string;
+        description
+          "Name of the circuit group";
+      }
+    }
+    /*
+    description (desc-str)
+    */
+    leaf description {
+      type string {
+        length "1..255";
+      }
+      description
+        "Set description string";
+    }
+    /*
+    mac-address (addr-set)
+    */
+    leaf mac-address {
+      if-feature mac-address;
+      type yang:mac-address;
+      description
+        "Configure a specific MAC address for the PVC";
+    }
+    /*
+    subscribe micro-bfd
+    */
+    leaf subscribe-micro-bfd {
+      type empty;
+      status obsolete;
+      description
+        "[OBSOLETE]Micro BFD events for the link group";
+    }
+    /*
+    mirror { <policy (mirror-name) { in | out }> | <destination
+     (dest-name)> }
+    */
+    container mirror {
+      description
+        "Configure mirror policy or destination";
+      choice mirror {
+        description
+          "Mirror choice:policy or destination";
+        case policy {
+          list policy {
+            key "policy-choice";
+            max-elements 2;
+            description
+              "Configure mirror policy";
+            leaf policy-choice {
+              type enumeration {
+                enum in {
+                  value 0;
+                  description
+                    "Inbound mirror policy";
+                }
+                enum out {
+                  value 1;
+                  description
+                    "Outbound mirror policy";
+                }
+              }
+              description
+                "Policy choice:in or out";
+            }
+            leaf mirror-name {
+              type leafref {
+                path "/ctxsipos:contexts/mirrorpolicyipos:"
+                + "mirror-policy/mirrorpolicyipos:mirror-polname";
+              }
+              mandatory true;
+              description
+                "Mirror policy name";
+            }
+          }
+        }
+        case destination {
+          leaf destination {
+            type string {
+              length "1..39";
+            }
+            description
+              "Configure mirror destination";
+          }
+        }
+      }
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      if-feature shutdown;
+      type empty;
+      description
+        "Shutdown the SI CCT";
+    }
+  }
+
+  grouping service-instance-lag-grp {
+    description
+      "Service instance for L2 CCTS";
+    /*
+    mac-address (addr-set)
+    */
+    leaf mac-address {
+      if-feature mac-address;
+      type yang:mac-address;
+      description
+        "Configure a specific MAC address for the PVC";
+    }
+    /*
+    profile (profile-name)
+    */
+    leaf profile {
+      type leafref {
+        path "/ctxsipos:contexts/ctxipos:dot1q/ctxipos:profile";
+      }
+      description
+        "Attach Dot1q profile to this service instance";
+    }
+    /*
+    match
+    */
+    container match {
+      description
+        "Match options";
+      uses si-match-grp;
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      if-feature shutdown;
+      type empty;
+      description
+        "Shutdown the SI CCT";
+    }
+    /*
+    description (desc-str)
+    */
+    leaf description {
+      type string {
+        length "1..255";
+      }
+      description
+        "Set description string";
+    }
+    /*
+    circuit-group-member [ (member-name) ]
+    */
+    container circuit-group-member {
+      presence "";
+      description
+        "Specify the circuit group for the service instance(s)";
+      leaf member-name {
+        type string;
+        description
+          "Name of the circuit group";
+      }
+    }
+    /*
+    vlan-rewrite
+    */
+    container vlan-rewrite {
+      description
+        "VLAN rewrite options";
+      uses vlan-rewrite-grp;
+    }
+    /*
+    arp proxy
+    */
+    leaf arp-proxy {
+      type empty;
+      description
+        "Process L2 ARP proxy for ARP request or reply";
+    }
+  }
+
+  grouping si-match-grp {
+    description
+      "Match options";
+    /*
+    untagged [ pppoe | ipv4oe | ipv6oe ]
+    */
+    container untagged {
+      presence "";
+      description
+        "Match all untagged frames";
+      choice untagged-opt {
+        description
+          "";
+        case pppoe {
+          leaf pppoe {
+            if-feature encapsulation;
+            type empty;
+            description
+              "PPPoE encapsulation";
+          }
+        }
+        case ipv4oe {
+          leaf ipv4oe {
+            if-feature encapsulation;
+            type empty;
+            description
+              "IPv4oE encapsulation";
+          }
+        }
+        case ipv6oe {
+          leaf ipv6oe {
+            if-feature encapsulation;
+            type empty;
+            description
+              "IPv6oE encapsulation";
+          }
+        }
+      }
+    }
+    /*
+    fallback-c-tag
+    */
+    leaf fallback-c-tag {
+      if-feature fallback-c-tag;
+      type empty;
+      description
+        "Match all 8100 C tag frames not matched by other
+         options";
+    }
+    /*
+    priority-tagged [ pppoe | ipv4oe | ipv6oe ]
+    */
+    container priority-tagged {
+      if-feature priority-tagged;
+      presence "";
+      description
+        "Matches all priority C VLAN with tag zero";
+      choice priority-tagged-opt {
+        description
+          "";
+        case pppoe {
+          leaf pppoe {
+            type empty;
+            description
+              "PPPoE encapsulation";
+          }
+        }
+        case ipv4oe {
+          leaf ipv4oe {
+            type empty;
+            description
+              "IPv4oE encapsulation";
+          }
+        }
+        case ipv6oe {
+          leaf ipv6oe {
+            type empty;
+            description
+              "IPv6oE encapsulation";
+          }
+        }
+      }
+    }
+    /*
+    dot1ad (dot1ad-type) {(spec-dot1ad)| all-dot1ad} [(end-
+     dot1ad)] (dot1q-type) {(spec-dot1q)| all-dot1q | null-dot1q}
+     [(end-dot1q)] [(encap-type)]
+    */
+    list dot1ad {
+      key "dot1ad-type dot1ad-choice dot1q-type dot1ad-choice1";
+      max-elements 4;
+      description
+        "Match single tagged S VLAN or double tagged S+C VLAN";
+      leaf dot1ad-type {
+        type typesipos:tag_value_type;
+        description
+          "Set the Dot1ad value";
+      }
+      leaf dot1ad-choice {
+        type union {
+          type string;
+          type enumeration {
+            enum all-dot1ad {
+              value 0;
+              description
+                "Dot1q all  tag";
+            }
+          }
+        }
+        description
+          "Dot1ad choice";
+      }
+      leaf dot1q-type {
+        type typesipos:tag_map_type;
+        description
+          "Match single tagged S VLAN or double tagged S+C VLAN";
+      }
+      leaf dot1ad-choice1 {
+        type union {
+          type enumeration {
+            enum all-dot1q {
+              value 0;
+              description
+                "Dot1q all  tag";
+            }
+            enum null-dot1q {
+              value 1;
+              description
+                "Dot1q null tag";
+            }
+          }
+          type string;
+        }
+        description
+          "Dot1ad choice1";
+      }
+      leaf end-dot1ad {
+        type string;
+        description
+          "Outer VLAN range";
+      }
+      leaf end-dot1q {
+        type string;
+        description
+          "Outer VLAN range";
+      }
+      leaf encap-type {
+        if-feature encapsulation;
+        type typesipos:l2_encap_type;
+        description
+          "Encapsulation type";
+      }
+    }
+    /*
+    dot1q (dot1q-type) {(spec-dot1q)| all-dot1q} [(end-dot1q)]
+     [(encap-type)]
+    */
+    list dot1q {
+      key "dot1q-type dot1q-choice";
+      max-elements 4;
+      description
+        "Match single tagged C VLAN frames";
+      leaf dot1q-type {
+        type typesipos:tag_value_type;
+        description
+          "Set the Dot1ad value";
+      }
+      leaf dot1q-choice {
+        type union {
+          type string;
+          type enumeration {
+            enum all-dot1q {
+              value 0;
+              description
+                "Dot1q all  tag";
+            }
+          }
+        }
+        description
+          "Dot1q choice";
+      }
+      leaf end-dot1q {
+        type string;
+        description
+          "VLAN ID ID range";
+      }
+      leaf encap-type {
+        if-feature encapsulation;
+        type typesipos:l2_encap_type;
+        description
+          "Encapsulation type";
+      }
+    }
+    /*
+    default
+    */
+    leaf default {
+      type empty;
+      description
+        "Captures frames not matched by other options";
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-l2-service";
+    /*
+    service-instance [(egress-check)] [(ignore)]
+    */
+    container service-instance {
+      must "egress-check and ignore" {
+        error-message "egress-check and ignore are required "
+        + "together.";
+        description
+          "";
+      }
+      presence "";
+      description
+        "Service Instance configuration commands";
+      leaf egress-check {
+        type empty;
+        description
+          "Set egress check rules service instance CCTs";
+      }
+      leaf ignore {
+        type empty;
+        description
+          "Ignore checking on egress traffic with ingress
+           configuration";
+      }
+    }
+    /*
+    service-instance-pm-report-tags
+    */
+    leaf service-instance-pm-report-tags {
+      type empty;
+      description
+        "Set service-instance S/C tags to xpath";
+    }
+  }
+
+  augment "/if:interfaces/if:interface/lagxipos:link-group" {
+    description
+      "ericsson-l2-service";
+    /*
+    service-instance {(spec-instance-id)} [(end-instance-id)]
+     [link-pinning]
+    */
+    list service-instance {
+      key "spec-instance-id";
+      description
+        "service-instance defining L2 ccts. When using
+         link-group? to get the possible completions, the service
+         instance is listed even encapsulation-dot1q is not
+         configured before. Ensure to configure
+         encapsulation-dot1q first.";
+      leaf spec-instance-id {
+        type int32 {
+          range "1..262143";
+        }
+        description
+          "Service-instance id";
+      }
+      leaf end-instance-id {
+        type int32 {
+          range "1..262143";
+        }
+        description
+          "End range of service instance IDs";
+      }
+      leaf link-pinning {
+        type empty;
+        description
+          "enable circuit-based hashing";
+      }
+      uses service-instance-lag-grp;
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxipos:ethernet" {
+    description
+      "ericsson-l2-service";
+    /*
+    service-instance {(spec-instance-id)} [(end-instance-id)]
+    */
+    list service-instance {
+      when "(../ethxipos:encapsulation-dot1q)" {
+        description
+          "";
+      }
+      key "spec-instance-id";
+      description
+        "service-instance defining L2 ccts";
+      leaf spec-instance-id {
+        type int32 {
+          range "1..262143";
+        }
+        description
+          "Service-instance id";
+      }
+      leaf end-instance-id {
+        type int32 {
+          range "1..262143";
+        }
+        description
+          "End range of service instance IDs";
+      }
+      uses service-instance-grp;
+    }
+  }
+
+}

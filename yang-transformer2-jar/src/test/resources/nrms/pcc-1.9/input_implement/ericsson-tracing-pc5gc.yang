@@ -1,0 +1,35 @@
+module ericsson-tracing-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-tracing-pc5gc";
+  prefix trcpc5gc;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "ericsson-tracing-pc5gc
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-07-07 {
+    description
+      "Initial revision.";
+    reference "EN/LZN 704 0249";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  container tracing {
+    status current {
+      yexte:preliminary;
+    }
+    description
+      "Tracing tools";
+  }
+}

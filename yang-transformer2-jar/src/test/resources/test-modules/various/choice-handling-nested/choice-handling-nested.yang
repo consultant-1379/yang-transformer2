@@ -1,0 +1,56 @@
+module choice-handling-nested {
+
+	namespace "urn~test~choice-handling-nested";
+	prefix this;
+
+	revision "2022-03-23";
+
+	container cont1 {
+
+		choice choice-outer {
+
+			case case-outer1 {
+				choice choice-inner2 {
+					case case-inner3 {
+
+						container cont-inner3 {
+							choice choice-inner3 {
+								leaf leaf31 { type empty; }
+								leaf leaf32 { type empty; }
+							}
+						}
+
+					}
+					case case-inner4 {
+						leaf leaf41 { type empty; }
+					}
+				}
+
+				container cont-inner5 {
+					leaf leaf51 { type empty; }
+				}
+			}				// end 'case case-outer1'
+
+			case case-outer6 {
+
+				choice choice-inner7 {
+					case case-inner8 {
+						container cont-inner8 {
+							leaf leaf81 { type empty; }
+						}
+					}
+					case case-inner9 {
+						leaf leaf91 { type empty; }
+					}
+				}
+
+				leaf leaf101 {
+					type empty;
+				}
+			}				// end 'case case-outer6'
+
+		}		// end 'choice choice-outer'
+
+	}
+
+}

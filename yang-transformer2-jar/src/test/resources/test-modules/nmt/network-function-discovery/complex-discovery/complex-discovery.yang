@@ -1,0 +1,14 @@
+module complex-discovery {
+
+	namespace "urn:test:complex-discovery";
+	prefix this;
+
+	revision "2022-07-01";
+
+	container ManagedElement {
+	}
+
+	container pgw-xx {
+		leaf sgw-xx { type string; }
+	}
+}

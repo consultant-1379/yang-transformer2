@@ -1,0 +1,73 @@
+module extraction-helper {
+
+	namespace "urn:test:extraction-helper";
+	prefix this;
+
+	revision 2021-11-03;
+
+	leaf leaf01 {
+		type string;
+	}
+
+	leaf-list leaflist02 {
+		type string;
+	}
+
+	rpc rpc3 {
+		input {
+			leaf leaf03 {
+				type string;
+			}
+		}
+	}
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string;
+		}
+
+		choice choice1 {
+			case case1 {
+				leaf leaf12 {
+					type string;
+				}
+			}
+			case case2 {
+				leaf leaf13 {
+					type string;
+				}
+			}
+		}
+
+		action action3 {
+			input {
+				leaf leaf31 {
+					type string;
+				}
+			}
+			output {
+				leaf leaf32 {
+					type string;
+				}
+			}
+		}
+
+		container cont5 {
+
+			leaf leaf51 {
+				type string;
+			}
+
+			action action6 {
+				input {
+					container struct7 {
+						leaf leaf71 {
+							type string;
+						}
+					}
+				}
+			}
+		}
+	}
+}

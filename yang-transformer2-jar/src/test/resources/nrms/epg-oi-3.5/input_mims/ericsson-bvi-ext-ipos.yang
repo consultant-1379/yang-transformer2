@@ -1,0 +1,318 @@
+module ericsson-bvi-ext-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bvi-ext-ipos";
+
+  prefix "bvixipos";
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bvi-ext-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2019-02-02" {
+    description
+      "update mtu description";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-09-04" {
+    description
+      "Add obsolete/deprecated/preliminary label to the
+       description of the obsolete/deprecated/preliminary node";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-20" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-01-30" {
+    description
+      "change intf-name from leaf to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-01-25" {
+    description
+      "set status obsolete for subscribe micro-bfd";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-01-24" {
+    description
+      "Add restriction max-element=4 to leaf-list route-prefix";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-15" {
+    description
+      "IPOS-11938 New command for subscribe micro-bfd";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-30" {
+    description
+      "Add ip host function.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-09" {
+    description
+      "For CLI2Yang models data node change bvi prensence.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature ip-host {
+    description
+      "This feature indicates that the device supports ip-host
+       in bvi.";
+  }
+
+  grouping port_bvi-grp {
+    description
+      "Port bvi config mode";
+    /*
+    bridge name (bridge-name)
+    */
+    container bridge {
+      description
+        "Bind bridge";
+      leaf name {
+        type string;
+        description
+          "Bind a bridge to the bvi port";
+      }
+    }
+    /*
+    bind interface (intf-name) (intf-ctx)
+    */
+    container bind-interface {
+      presence "";
+      description
+        "Bind to an interface";
+      leaf intf-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Interface to bind to";
+      }
+      leaf intf-ctx {
+        type leafref {
+          path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+          + "context-name";
+        }
+        mandatory true;
+        description
+          "Context name to be bound";
+      }
+    }
+    /*
+    ip host { (route-prefix) | (host-addr) [ (host-mac) ] }
+    */
+    container ip-host {
+      if-feature ip-host;
+      presence "";
+      description
+        "Configure IP Host on this circuit";
+      choice ip-host {
+        description
+          "";
+        case route-prefix {
+          leaf-list route-prefix {
+            type typesipos:ipv4-address-mask;
+            max-elements 4;
+            description
+              "Specify the destination subnet on this circuit";
+          }
+        }
+        case host-addr {
+          container host-addr {
+            description
+              "container host-addr.";
+            leaf host-addr {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP Address of the remote host on this circuit";
+            }
+            leaf host-mac {
+              type yang:mac-address;
+              description
+                "MAC-Address of the host on this circuit";
+            }
+          }
+        }
+      }
+    }
+    /*
+    subscribe micro-bfd
+    */
+    leaf subscribe-micro-bfd {
+      type empty;
+      status obsolete;
+      description
+        "[OBSOLETE]Micro-bfd events for the link group";
+    }
+    /*
+    mtu (value)
+    */
+    leaf mtu {
+      type uint16 {
+        range "256..9216";
+      }
+      description
+        "Specify the Maximum Transmission Unit (MTU) size of the
+         payload.
+        Note:
+        1.To avoid any packet loss due to MTU incompatibilities
+         and networking device limitations, it is recommended to
+         transmit packets only up to 9000 bytes of payload
+         (aligned with Jumbo frame size) across the network.
+        2.The normal traffic between LC and LC supports packet
+         size up to 9200.The traffic between LC and RP support
+         packet size up to 9116.";
+    }
+    /*
+    encapsulation dot1q
+    */
+    leaf encapsulation-dot1q {
+      type empty;
+      description
+        "Encapsulate dot1q";
+    }
+    /*
+    mac-address (port-mac)
+    */
+    leaf mac-address {
+      type yang:mac-address;
+      description
+        "Set the MAC address";
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    description
+      "ericsson-bvi";
+    /*
+    bvi
+    */
+    container bvi {
+      when "../if:type = 'ianaift:bridge'" {
+        description
+          "";
+      }
+      description
+        "Select port to configure";
+      uses port_bvi-grp;
+    }
+  }
+
+}

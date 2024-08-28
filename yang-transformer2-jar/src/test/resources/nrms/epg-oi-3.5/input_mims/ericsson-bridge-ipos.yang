@@ -1,0 +1,551 @@
+module ericsson-bridge-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bridge-ipos";
+
+  prefix "bridgeipos";
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bridge-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "8";
+  }
+
+  revision "2018-06-14" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-03-05" {
+    description
+      "the type of leaf split-horizon-group under
+       service-instance is changed to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-02-06" {
+    description
+      "change type of profile to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-01-25" {
+    description
+      "IPOS-21242 The bridge aging-time should be default";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-12-11" {
+    description
+      "IPOS-18766 For bridge yang model, change the type of
+       si-id from uint32 to int32";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-07-26" {
+    description
+      "IPOS-13767 Modify the range of si-id of bridge model";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-30" {
+    description
+      "Change Mac Address type";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-17" {
+    description
+      "JIRA IPOS-11937 New command for bridge
+       split-horizon-group under service-instance";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-21" {
+    description
+      "JIRA IPOS-10743 New command for model bridging";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-27" {
+    description
+      "Bridge instance and profile sequence change; remove
+       unused import";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature restricted {
+    description
+      "This feature indicates that the device supports the
+       restricted in bridge profile.";
+  }
+
+  grouping bridge-grp {
+    description
+      "Bridge configuration mode";
+    /*
+    learning
+    */
+    leaf learning {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable learning";
+    }
+    /*
+    qualified-learning
+    */
+    leaf qualified-learning {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable qualified-learning";
+    }
+    /*
+    split-horizon-group (shg-name)
+    */
+    list split-horizon-group {
+      key "split-horizon-group";
+      description
+        "Create split-horizon-group";
+      leaf split-horizon-group {
+        type string;
+        description
+          "Split-horizon-group name";
+      }
+    }
+    /*
+    mac-drop
+    */
+    container mac-drop {
+      description
+        "Drop mac-address";
+      list mac {
+        key "mac-address";
+        description
+          "Mac-entry mac-addr";
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "Mac-entry mac-addr";
+        }
+      }
+      list vlan-mac {
+        key "vlan mac";
+        description
+          "Mac-entry vlan";
+        leaf vlan {
+          type uint16 {
+            range "1..4094";
+          }
+          description
+            "Mac-entry vlan";
+        }
+        leaf mac {
+          type yang:mac-address;
+          description
+            "Mac-entry mac-addr";
+        }
+      }
+    }
+    /*
+    mac-move-drop
+    */
+    leaf mac-move-drop {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable mac-move-drop";
+    }
+    /*
+    aging-time (time-val)
+    */
+    leaf aging-time {
+      type uint32 {
+        range "60..655350";
+      }
+      default "300";
+      description
+        "Set or reset aging timer in seconds";
+    }
+    /*
+    description (desc-str)
+    */
+    leaf description {
+      type string {
+        length "1..63";
+      }
+      description
+        "Add descriptive text for this bridge";
+    }
+    /*
+    profile (prof-name)
+    */
+    leaf profile {
+      type leafref {
+	path "/bridgeipos:bridge/bridgeipos:profile/bridgeipos:"
+	+ "profile";
+      }
+      description
+        "Configure default bridge profile";
+    }
+    /*
+    service-instance {interface(if-name)} {si-id(si-id-val)}
+    */
+    list service-instance {
+      key "interface si-id";
+      description
+        "Service instances created on Ethernet ports";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Bridge attachment cct";
+      }
+      leaf si-id {
+        type int32 {
+          range "1..262143";
+        }
+        description
+          "Service-instance identifier";
+      }
+      uses bridge-cct-grp;
+    }
+  }
+
+  grouping bridge-profile-grp {
+    description
+      "Bridge profile configuration mode";
+    /*
+    mac-limit (limit-val)
+    */
+    leaf mac-limit {
+      type uint32 {
+        range "1..524288";
+      }
+      description
+        "Restrict the number of learned MAC addresses on a
+         circuit";
+    }
+    /*
+    restricted
+    */
+    leaf restricted {
+      if-feature restricted;
+      type empty;
+      description
+        "Restrict the MACs on this profile to statically
+         configured MACs";
+    }
+    /*
+    broadcast rate-limit (limit-value) burst (size-value)
+    */
+    container broadcast-rate-limit {
+      presence "";
+      description
+        "Specifies the rate limit and tolerated burst for
+         broadcast traffic for circuits associated with the
+         bridge profile";
+      leaf limit-value {
+        type uint32 {
+          range "5..1000000";
+        }
+        mandatory true;
+        description
+          "Rate limit in kilobits per second. The range of
+           values is 5-1,000,000";
+      }
+      leaf burst {
+        type empty;
+        mandatory true;
+        description
+          "Burst size";
+      }
+      leaf size-value {
+        type uint32 {
+          range "1..1250000000";
+        }
+        mandatory true;
+        description
+          "Burst size in bytes";
+      }
+    }
+    /*
+    multicast rate-limit (limit-value) burst (size-value)
+    */
+    container multicast-rate-limit {
+      presence "";
+      description
+        "Specifies the rate limit and tolerated burst for
+         multicast traffic for circuits associated with the
+         bridge profile";
+      leaf limit-value {
+        type uint32 {
+          range "5..1000000";
+        }
+        mandatory true;
+        description
+          "Rate limit in kilobits per second. The range of
+           values is 5-1,000,000";
+      }
+      leaf burst {
+        type empty;
+        mandatory true;
+        description
+          "Burst size";
+      }
+      leaf size-value {
+        type uint32 {
+          range "1..1250000000";
+        }
+        mandatory true;
+        description
+          "Burst size in bytes";
+      }
+    }
+    /*
+    unknown-dest rate-limit (limit-value) burst (size-value)
+    */
+    container unknown-dest-rate-limit {
+      presence "";
+      description
+        "Specifies the rate limit and tolerated burst for
+         unknown destination traffic for circuits associated with
+         the bridge profile";
+      leaf limit-value {
+        type uint32 {
+          range "5..1000000";
+        }
+        mandatory true;
+        description
+          "Rate limit in kilobits per second. The range of
+           values is 5-1,000,000";
+      }
+      leaf burst {
+        type empty;
+        mandatory true;
+        description
+          "Burst size";
+      }
+      leaf size-value {
+        type uint32 {
+          range "1..1250000000";
+        }
+        mandatory true;
+        description
+          "Burst size in bytes";
+      }
+    }
+    /*
+    description (desc-str)
+    */
+    leaf description {
+      type string {
+        length "1..63";
+      }
+      description
+        "Add descriptive text for this profile";
+    }
+    /*
+    flood unknown-unicast
+    */
+    leaf flood-unknown-unicast {
+      type empty;
+      description
+        "Flood unknown unicast frames";
+    }
+  }
+
+  grouping bridge-cct-grp {
+    description
+      "Bridge cct mode";
+    /*
+    profile (prof-name)
+    */
+    leaf profile {
+      type leafref {
+	path "/bridgeipos:bridge/bridgeipos:profile/bridgeipos:"
+	+ "profile";
+      }
+      description
+        "Configure default bridge profile";
+    }
+    /*
+    split-horizon-group (shg-name)
+    */
+    list split-horizon-group {
+      key "split-horizon-group";
+      description
+        "Split Horizon Group of the service-instance";
+      leaf split-horizon-group {
+        type leafref {
+          path "/bridgeipos:bridge/bridgeipos:bridge-instance/"
+	  + "bridgeipos:split-horizon-group/bridgeipos:"
+	  + "split-horizon-group";
+        }
+        description
+          "Split-horizon-group name";
+      }
+    }
+    /*
+    static-mac-entry
+    */
+    container static-mac-entry {
+      description
+        "Mac forwarding table entry";
+      list mac {
+        key "mac-address";
+        description
+          "MAC address list";
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "MAC address";
+        }
+      }
+      list vlan-mac {
+        key "vlan-id mac-address";
+        description
+          "MAC address list";
+        leaf vlan-id {
+          type uint16 {
+            range "1..4094";
+          }
+          description
+            "Specify the vlan for the mac-entry";
+        }
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "MAC address";
+        }
+      }
+    }
+  }
+
+  container bridge-state {
+    config "false";
+    description
+      "Root model for get";
+  }
+
+  /*
+  bridge
+  */
+  container bridge {
+    description
+      "Configure a bridge";
+    list profile {
+      key "profile";
+      description
+        "Configure a bridge profile";
+      leaf profile {
+        type string {
+          length "1..31";
+        }
+        description
+          "Name of the bridge profile";
+      }
+      uses bridge-profile-grp;
+    }
+    list bridge-instance {
+      key "bridge-instance";
+      description
+        "Configure a bridge instance";
+      leaf bridge-instance {
+        type string {
+          length "1..31";
+        }
+        description
+          "Name of the bridge";
+      }
+      uses bridge-grp;
+    }
+  }
+
+}

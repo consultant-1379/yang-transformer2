@@ -1,0 +1,60 @@
+module ericsson-vpls-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-vpls-dev-router6000";
+
+  prefix "vplsr6000";
+
+  import ericsson-vpls-router6000 {
+    prefix "vplsrouter6000";
+  }
+
+  import ericsson-bridge-router6000 {
+   prefix "bridgerouter6000";
+  }
+  
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-vpls-ipos
+     Copyright (c) 2015-2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-20" {
+    description
+      "deviation for ericsson-vpls-ipos.yang file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  
+
+  deviation "/bridgerouter6000:bridge/bridgerouter6000:bridge-instance/vplsrouter6000:vpls/vplsrouter6000:pseudowire/vplsrouter6000:instance/vplsrouter6000:split-horizon-group" {
+    deviate not-supported;
+  }
+ 
+  deviation "/bridgerouter6000:bridge/bridgerouter6000:bridge-instance/vplsrouter6000:vpls/vplsrouter6000:pseudowire/vplsrouter6000:instance/vplsrouter6000:native" {
+    deviate not-supported;
+  }     
+   
+}

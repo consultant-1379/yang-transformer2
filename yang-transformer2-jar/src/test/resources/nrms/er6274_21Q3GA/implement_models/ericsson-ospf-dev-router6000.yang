@@ -1,0 +1,106 @@
+module ericsson-ospf-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ospf-dev-router6000";
+
+  prefix "ospfrouter6000";
+
+  import ericsson-ospf-router6000 {
+   prefix "ospfr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+   prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+   prefix "ctxr6k";
+  }
+  
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-ospf-dev-router6000
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-05-12" {
+    description
+      "Remove deviation for OSPFV2 route authentication crypto commands";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2021-02-25" {
+    description
+      "Added deviation for OSPFV2 route authentication commands";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2020-10-05" {
+    description
+      "Remove deviation for ospf segment-routing commands";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2020-09-23" {
+    description
+      "removed deviation for ospf maximum-paths command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2020-06-30" {
+    description
+      "added deviation for ospf segment-routing commands";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+ revision "2018-03-06" {
+    description
+      "deviation for ospf maximum paths";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "1";
+      yexte:correction "0";
+  } 
+  
+
+  }

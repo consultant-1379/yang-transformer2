@@ -1,0 +1,349 @@
+module ericsson-igmp-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-igmp-ipos";
+
+  prefix "igmpipos";
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-igmp-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision "2018-07-10" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-05-22" {
+    description
+      "Add container destination with presence due to
+       bootfromlegacy failed";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-04-20" {
+    description
+      "JIRA:IPOS-6938 Addition of new leaf 'throtle-drop' under
+       context configuration mode for local context only";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2016-12-20" {
+    description
+      "Add default value";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-04-27" {
+    description
+      "Initial revision";
+    reference
+      "rfc6020";
+  }
+
+  grouping igmp-service-profile-grp {
+    description
+      "IGMP service profile mode";
+    /*
+    priority (priority-val)
+    */
+    leaf priority {
+      type uint8 {
+        range "0..10";
+      }
+      default "0";
+      description
+        "Specify IGMP service priority";
+    }
+    /*
+    max-groups (group-val) [ drop-old ]
+    */
+    container max-groups {
+      presence "";
+      description
+        "Specify maximum number of groups per circuit";
+      leaf group-val {
+        type uint32 {
+          range "1..100000";
+        }
+        mandatory true;
+        description
+          "Maximum number of joiners";
+      }
+      leaf drop-old {
+        type empty;
+        description
+          "Drop old group if max-groups is exceeded";
+      }
+    }
+    /*
+    instant-leave
+    */
+    leaf instant-leave {
+      type empty;
+      description
+        "Turn on instant leave on this interface";
+    }
+    /*
+    bulkstats
+    */
+    leaf bulkstats {
+      type empty;
+      description
+        "Generate IGMP statistics for bulkstats";
+    }
+    /*
+    sticky-groups (acl-name)
+    */
+    leaf sticky-groups {
+      type string;
+      description
+        "Specify list of sticky groups";
+    }
+    /*
+    access-group (acl-name)
+    */
+    leaf access-group {
+      type string;
+      description
+        "Specify IGMP access group list";
+    }
+    /*
+    static-group (grp-addr)
+    */
+    list static-group {
+      key "static-group";
+      description
+        "Specify list of static groups";
+      leaf static-group {
+        type typesipos:ipv4-muticast-address;
+        description
+          "Multicast group IP address should be in the range
+           224.0.1.0 to 239.255.255.255";
+      }
+    }
+    /*
+    multicast { < destination (dest-intf) (dest-cxt) [ group-
+     list (acl-name) ] > | < adjust-qos-rate { queuing [ minimum-
+     rate (rate-val) ] | delay-interval (intvl-val) } > }
+    */
+    container multicast {
+      description
+        "Configure multicast specific commands";
+      container destination {
+        presence "";
+        description
+          "Configure multicast destination";
+        leaf dest-intf {
+          type string;
+          mandatory true;
+          description
+            "Multicast destination interface name";
+        }
+        leaf dest-cxt {
+          type string;
+          mandatory true;
+          description
+            "Multicast destination context name";
+        }
+        leaf group-list {
+          type string;
+          description
+            "Specify group list for multicast destination";
+        }
+      }
+      container adjust-qos-rate {
+        description
+          "Adjust QoS binding rate";
+        container queuing {
+          presence "";
+          description
+            "Apply adjusted QoS rate on queuing binding";
+          leaf minimum-rate {
+            type uint32 {
+              range "64..4294967295";
+            }
+            default "64";
+            description
+              "Minimum rate to avoid starving unicast traffic";
+          }
+        }
+        leaf delay-interval {
+          type uint8 {
+            range "1..10";
+          }
+          default "5";
+          description
+            "Time interval after which rate adjustment applies";
+        }
+      }
+    }
+    /*
+    ssm-map (map-source) (acl-name)
+    */
+    list ssm-map {
+      key "map-source acl-name";
+      description
+        "Configure SSM mapping";
+      leaf map-source {
+        type inet:ipv4-address;
+        description
+          "Multicast source IP address";
+      }
+      leaf acl-name {
+        type string;
+        description
+          "Group access list name";
+      }
+    }
+    /*
+    static-group-src (grp-addr) (src-addr)
+    */
+    list static-group-src {
+      key "grp-addr src-addr";
+      description
+        "Specify list of static groups";
+      leaf grp-addr {
+        type typesipos:ipv4-muticast-address;
+        description
+          "Multicast group IP address should be in the range
+           224.0.1.0 to 239.255.255.255";
+      }
+      leaf src-addr {
+        type inet:ipv4-address;
+        description
+          "Multicast source IP address";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context" {
+    description
+      "ericsson-igmp";
+    /*
+    igmp { mtrace-prohibit | < group-bandwidth (rate-val)
+     {group-list (list-name)} [ qos-adjust [ average-packet-size
+     (size-val) ] [ no-oif ] ] > | service-profile (profile-tag)
+     | throtle-drop }
+    */
+    container igmp {
+      description
+        "IGMP global configuration command";
+      leaf mtrace-prohibit {
+        type empty;
+        description
+          "Administratively prohibit mtrace";
+      }
+      list group-bandwidth {
+        key "group-list";
+        description
+          "Configure group bandwidth recommendation";
+        leaf group-list {
+          type string;
+          description
+            "Specify access list for IGMP groups";
+        }
+        leaf rate-val {
+          type uint16 {
+            range "1..65535";
+          }
+          mandatory true;
+          description
+            "1-65535 kbps";
+        }
+        container qos-adjust {
+          presence "";
+          description
+            "Adjust QoS rate for this multicast group";
+          leaf average-packet-size {
+            type uint16 {
+              range "64..9000";
+            }
+            description
+              "Average multicast packet size in bytes";
+          }
+          leaf no-oif {
+            type empty;
+            description
+              "Do not create OIF for this multicast group";
+          }
+        }
+      }
+      list service-profile {
+        key "service-profile";
+        description
+          "Configure service profile for IGMP";
+        leaf service-profile {
+          type string;
+          description
+            "Name of service profile";
+        }
+        uses igmp-service-profile-grp;
+      }
+      leaf throtle-drop {
+        when "../../ctxipos:context-name='local'" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "Turn ON/OFF igmp throttle drop on IPPA";
+      }
+    }
+  }
+
+}

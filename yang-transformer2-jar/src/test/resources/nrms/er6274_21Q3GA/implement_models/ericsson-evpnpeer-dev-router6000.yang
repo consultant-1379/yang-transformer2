@@ -1,0 +1,52 @@
+module ericsson-evpnpeer-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-evpnpeer-dev-router6000";
+
+  prefix "evpnpeerdevrouter6000";
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-evpnpeer-router6000 {
+    prefix "evpnpeerrouter6000";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:    <http://www.ericsson.com>";
+
+  description
+    "ericsson-evpnpeer-dev-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-10-05" {
+    description
+      "Remove deviation for ospf-sr";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2020-07-03" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+}
+

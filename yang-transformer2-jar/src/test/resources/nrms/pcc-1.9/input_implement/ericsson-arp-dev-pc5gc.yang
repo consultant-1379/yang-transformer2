@@ -1,0 +1,67 @@
+module ericsson-arp-dev-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-arp-dev-pc5gc";
+  prefix arpdpc5gc;
+
+  import ietf-interfaces {
+    prefix if;
+    reference
+      "RFC 8343: A Yang Data Model for Interface Management";
+  }
+  import ietf-ip {
+    prefix ip;
+    reference
+      "RFC 8344: A Yang Data Model for IP Management";
+  }
+  import ietf-arp {
+    prefix arp;
+    reference
+      "RFC 826: An Ethernet Address Resolution Protocol";
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model deviate IETF arp.
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-02-07 {
+    description
+      "Deviation on IETF arp YANG";
+    reference
+      "rfc826";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/arp:arp" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4/arp:arp/arp:statistics" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4/arp:arp/arp:expiry-time" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4/arp:arp/arp:dynamic-learning" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4/arp:arp/arp:proxy-arp" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4/arp:arp/arp:gratuitous-arp" {
+    deviate not-supported;
+  }
+}

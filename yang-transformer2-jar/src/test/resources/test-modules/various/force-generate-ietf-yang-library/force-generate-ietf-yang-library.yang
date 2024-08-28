@@ -1,0 +1,13 @@
+module force-generate-ietf-yang-library {
+
+	namespace "urn:test:force-generate-ietf-yang-library";
+	prefix this;
+
+	revision "2022-06-03";
+
+	container cont1 {
+		leaf leaf11 {
+			type string;
+		}
+	}
+}

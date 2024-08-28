@@ -1,0 +1,156 @@
+module ericsson-ratelimit-cct-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ratelimit-cct-router6000";
+
+  prefix "rlcctrouter6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-ratelimit-cct-router6000
+     Copyright (c) 2018-2019 Ericsson AB.
+     All rights reserved";
+  revision "2018-08-21" {
+    description
+      "modify remove operation";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-21" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-ratelimit-cct";
+    /*
+    rate-limit circuit dhcp (cnt-num) interval (interval-num)
+     drop-interval (drop-interval-num) { per-mac | per-mac-and-
+     relay }
+    */
+    container rate-limit-circuit-dhcp {
+      presence "";
+      description
+            "Configure rate-limit for dhcp";
+        leaf cnt-num {
+          type uint8 {
+            range "1..255";
+          }
+          mandatory true;
+          description
+            "Max no of packets";
+        }
+        leaf interval {
+          type empty;
+          mandatory true;
+          description
+            "Set interval for the max packets allowed";
+        }
+        leaf interval-num {
+          type uint8 {
+            range "1..127";
+          }
+          mandatory true;
+          description
+            "interval";
+        }
+        leaf drop-interval {
+          type empty;
+          mandatory true;
+          description
+            "Set drop-interval";
+        }
+        leaf drop-interval-num {
+          type uint8 {
+            range "1..127";
+          }
+          mandatory true;
+          description
+            "Duration of drop period";
+        }
+      container rate-limit-circuit-dhcp-choice {
+          description
+          "container rate-limit-circuit-dhcp-choice.";
+            leaf per-mac {
+              type empty;
+              description
+                "Set rate-limit based on per-mac";
+            }
+            leaf per-mac-and-relay {
+              type empty;
+              description
+                "Set rate-limit based on per-mac-and-relay";
+            }
+          }
+        }
+    /*
+    rate-limit-v6 circuit-v6 dhcpv6 (cnt-num) interval
+     (interval-num) drop-interval (drop-interval-num)
+    */
+    container rate-limit-v6-circuit-v6-dhcpv6 {
+      presence "";
+          description
+            "Configure rate-limit for dhcpv6";
+        leaf cnt-num {
+          type uint8 {
+            range "1..255";
+          }
+          mandatory true;
+          description
+            "Max no of packets";
+        }
+        leaf interval {
+          type empty;
+          mandatory true;
+          description
+            "Set interval for the max packets allowed";
+        }
+        leaf interval-num {
+          type uint8 {
+            range "1..127";
+          }
+          mandatory true;
+          description
+            "interval";
+        }
+        leaf drop-interval {
+          type empty;
+          mandatory true;
+          description
+            "Set drop-interval";
+        }
+        leaf drop-interval-num {
+          type uint8 {
+            range "1..127";
+          }
+          mandatory true;
+          description
+            "Duration of drop period";
+        }
+      }
+    }
+
+}

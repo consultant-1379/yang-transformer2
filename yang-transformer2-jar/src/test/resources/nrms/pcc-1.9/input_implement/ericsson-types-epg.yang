@@ -1,0 +1,363 @@
+submodule ericsson-types-epg {
+  yang-version 1.1;
+  belongs-to "ericsson-epg" {
+    prefix "epg";
+  }
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization "Ericsson AB";
+  contact "Ericsson AB first line support by email";
+  description "Epg model.
+               Copyright (c) 2017 Ericsson AB. All rights reserved.
+               This submodule defines typedefs used by ericsson-epg";
+
+  revision 2020-12-22 {
+    description
+     "Remove version/release/correction info for revision statement";
+  }
+
+
+  typedef eipv4-prefix{
+    type string{
+      pattern
+         '(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}'
+       +  '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+       + '(/(([0-9])|([1-2][0-9])|(3[0-2])))';
+    }
+  }
+
+  typedef eipv6-prefix{
+    type string{
+      pattern '((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}'
+            + '((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|'
+            + '(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}'
+            + '(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))'
+            + '(/(([0-9])|([0-9]{2})|(1[0-1][0-9])|(12[0-8])))';
+      pattern '(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|'
+            + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'
+            + '(/.+)';
+    }
+  }
+
+  typedef eip-prefix{
+    type union{
+      type eipv4-prefix;
+      type eipv6-prefix;
+    }
+  }
+
+  typedef eipv4-prefix-optional{
+    type string{
+      pattern
+         '(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}'
+       +  '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+       + '(/(([0-9])|([1-2][0-9])|(3[0-2])))?';
+    }
+  }
+
+  typedef eipv6-prefix-optional{
+    type string{
+      pattern '((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}'
+            + '((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|'
+            + '(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}'
+            + '(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))'
+            + '(/(([0-9])|([0-9]{2})|(1[0-1][0-9])|(12[0-8])))?';
+      pattern '(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|'
+            + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'
+            + '(/.+)?';
+    }
+  }
+
+  typedef eip-prefix-optional{
+    type union{
+      type eipv4-prefix-optional;
+      type eipv6-prefix-optional;
+    }
+  }
+
+
+  typedef eipv4-address{
+    type string{
+      pattern
+      '(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}'
+      +  '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+      + '(%[\p{N}\p{L}]+)?';
+    }
+  }
+
+  typedef eipv6-address{
+    type string{
+      pattern '((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}'
+            + '((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|'
+            + '(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}'
+            + '(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))'
+            + '(%[\p{N}\p{L}]+)?';
+      pattern '(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|'
+            + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'
+            + '(%.+)?';
+    }
+  }
+
+  typedef eip-address{
+    type union{
+      type eipv4-address;
+      type eipv6-address;
+    }
+  }
+
+  typedef common-string-id {
+    type string {
+      pattern '[0-9A-Za-z._-]+' {
+        error-message "Must be a string consisting of letters, numbers, dots, dashes, and underscores.";
+      }
+      length "1..255";
+    }
+    description
+      "A common type for name or string type id";
+  }
+
+  typedef common-domain-string-id {
+    type string {
+      pattern '[.0-9A-Za-z_-]*[*]?[.0-9A-Za-z_-]*[*]?[.0-9A-Za-z_-]*' {
+        error-message "ip-server-domain-name string must contain only letters, numbers, dots, asterisks, underscores or dashes.";
+      }
+    length "1..255";
+    }
+    description
+      "A common type for name or string domain type id";
+  }
+
+  typedef common-string-id-32 {
+    type string {
+      pattern '[0-9A-Za-z._-]+' {
+        error-message "Must be a string consisting of letters, numbers, dots, dashes, and underscores.";
+      }
+      length "1..32";
+    }
+    description
+      "A common type for name or string type id";
+  }
+
+  typedef common-http-https-uri-string {
+    type string {
+      pattern 'https?://.{1,249}' {
+        error-message "redirect-http-uri string must start by 'http:// or https://'. Optionally it can be added the next formating codes: %S(imsi), %M(msisdn) and %U(requri) codes.";
+      }
+    length "1..256";
+    }
+    description
+      "Redirect destination URI. It may contain the next formating codes: %S(imsi), %M(msisdn), %U(requri)";
+  }
+
+  typedef common-rat-type-value {
+    type enumeration {
+      enum 0 {
+        description
+          "unknown";
+      }
+      enum 1 {
+        description
+          "utran";
+      }
+      enum 2 {
+        description
+          "geran";
+      }
+      enum 3 {
+        description
+          "wlan";
+      }
+      enum 4 {
+        description
+          "gan";
+      }
+      enum 5 {
+        description
+          "hspa";
+      }
+      enum 6 {
+        description
+          "eutran";
+      }
+      enum 7 {
+        description
+          "virtual";
+      }
+      enum 8 {
+        description
+          "nb-iot";
+      }
+      enum 9 {
+        description
+          "lte-m";
+      }
+      enum 10 {
+        description
+          "nr";
+      }
+      enum 102 {
+        description
+          "ehrpd";
+      }
+      enum 103 {
+        description
+          "hrpd";
+      }
+    }
+    description
+      "Radio access technology (RAT)";
+  }
+
+  typedef common-rat-type {
+    type enumeration {
+      enum "ehrpd" {
+        value 1;
+        description
+          "Evolved high rate packet data radio access network";
+      }
+      enum "hrpd" {
+        value 2;
+        description
+          "High rate packet data radio access network";
+      }
+      enum "geran" {
+        value 3;
+        description
+          "GSM/EDGE radio access network";
+      }
+      enum "utran" {
+        value 4;
+        description
+          "WCDMA/UMTS terrestrial radio access network";
+      }
+      enum "eutran" {
+        value 5;
+        description
+          "LTE/Evolved UMTS terrestrial radio access network";
+      }
+      enum "wlan" {
+        value 6;
+        description
+          "Wireless local area network";
+      }
+      enum "gan" {
+        value 7;
+        description
+          "Generic access network";
+      }
+      enum "hspa" {
+        value 8;
+        description
+          "High speed packet access evolution network";
+      }
+      enum "nb-iot" {
+        value 9;
+        description
+          "Narrowband internet of things radio access network";
+      }
+       enum "nr" {
+        value 10;
+        description
+          "New radio";
+      }
+    }
+    description
+      "Radio access technology (RAT)";
+  }
+
+  typedef common-rat-type-extend {
+    type union{
+      type enumeration {
+        enum "unknown" {
+          value 0;
+          description
+            "Unknown or missing";
+        }
+      }
+      type common-rat-type;
+    }
+    description
+      "Radio access technology (RAT)";
+  }
+  typedef common-node-type {
+    type enumeration {
+      enum sgw-c {
+        description
+          "standalone sgw-c";
+      }
+      enum pgw-c {
+        description
+          "standalone pgw-c";
+      }
+      enum gw-c {
+        description
+          "combined node of sgw-c and pgw-c";
+      }
+      enum gw-u {
+        description
+          "standalone user plane";
+      }
+      enum sgw-c-gw-u {
+        description
+          "combined node of sgw-c and user plane";
+      }
+      enum pgw-c-gw-u {
+        description
+          "combined node of pgw-c and user plane";
+      }
+      enum gw-c-gw-u {
+        description
+          "combined node of sgw-c, pgw-c and user plane";
+      }
+    }
+  }
+  typedef network-port-or-range {
+    type string {
+      pattern '((([1-9](([0-9]){0,3}))|([1-5](([0-9]){0,4}))'
+            + '|(6[0-4]([0-9]{3}))|(65[0-4]([0-9]{2}))|(655[0-2][0-9])'
+            + '|6553[0-5])(-((([1-9](([0-9]){0,3}))|([1-5](([0-9]){0,4}))'
+            + '|(6[0-4]([0-9]{3}))|(65[0-4]([0-9]{2}))|(655[0-2][0-9])|6553[0-5])))?)' {
+               error-message "Value must be a number from 1 to 65535 or a range";
+      }
+    }
+  }
+  typedef common-service-control-odb {
+    type enumeration {
+      enum "active" {
+        description
+          "Active state of GTPv1(ODB) or GTPv2(WI_Denied) private extension";
+      }
+      enum "inactive" {
+        description
+          "Inactive state of GTPv1(ODB) or GTPv2(WI_Denied) private extension";
+      }
+    }
+  }
+  typedef common-service-control-quota-expired {
+    type enumeration {
+      enum "active" {
+        description
+          "Active state of Gy(OCS) result-code 2101-2102 quota expiration handling";
+      }
+      enum "inactive" {
+        description
+          "Inactive state of Gy(OCS) result-code 2101-2102 quota expiration handling";
+      }
+    }
+  }
+  typedef common-ps-data-off {
+    type enumeration {
+      enum "active" {
+        description
+          "Active state of PS data off";
+      }
+      enum "inactive" {
+        description
+          "Inactive state of PS data off";
+      }
+    }
+  }
+}

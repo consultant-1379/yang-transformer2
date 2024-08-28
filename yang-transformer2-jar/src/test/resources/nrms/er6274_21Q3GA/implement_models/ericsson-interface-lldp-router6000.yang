@@ -1,0 +1,89 @@
+module ericsson-interface-lldp-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-lldp-router6000";
+
+  prefix "iflldprouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-lldp-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-05-24" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-03-08" {
+    description
+      "Bug fix for no enable";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-03" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping port-lldp-protocol-grp {
+    description
+      "LLDP config undr port";
+    /*
+    enable
+    */
+    leaf enable {
+      type boolean;
+      default "false";
+      description
+        "Enable lldp protocol under port";
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet" {
+    description
+      "ericsson-lldp-interface";
+    /*
+    lldp
+    */
+    container lldp {
+      presence "";
+      description
+        "LLDP protocol";
+      uses port-lldp-protocol-grp;
+    }
+  }
+
+}

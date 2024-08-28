@@ -1,0 +1,874 @@
+module ericsson-nrcelldu-vdu-ext {
+    yang-version 1.1;
+    namespace urn:rdns:com:ericsson:oammodel:ericsson-nrcelldu-vdu-ext;
+    prefix nrcelldu3gppext;
+
+    import _3gpp-common-managed-element {
+        prefix me3gpp;
+    }
+    import _3gpp-common-yang-types {
+        prefix types3gpp;
+    }
+    import _3gpp-nr-nrm-gnbdufunction {
+        prefix gnbdu3gpp;
+    }
+    import _3gpp-nr-nrm-nrcelldu {
+        prefix nrcelldu3gpp;
+    }
+    import ericsson-radiolinkcontrol-du-cr {
+        prefix rlc;
+    }
+    import ericsson-srbrlc-du-cr {
+        prefix srbrlc;
+    }
+    import ericsson-uecc-du-cr {
+        prefix uecc;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ericsson-notifications {
+        prefix notife;
+    }
+    
+    organization
+      "Ericsson AB";
+    contact
+      "Ericsson first line support via email";
+    description
+      "The module defines the NRCellDU data model additional leafs for the Ericsson vDU.
+       
+       Copyright (c) 2021 Ericsson AB. All rights reserved.";
+
+    revision 2021-07-27 {
+        description
+            "Bug Fix, leaf-list state notifiable compatibility issue. Adds extension notife:notifiable-state-data false to availabilityStatus.";
+        yexte:version 1;
+        yexte:release 1;
+        yexte:correction 0;
+        reference
+            "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+
+    revision 2021-06-17 {
+        description
+          "Introduction of srbRLCRef.";
+        yexte:version 0;
+        yexte:release 7;
+        yexte:correction 0;
+    }
+
+    revision 2021-06-14 {
+        description
+          "Add csiRsPeriodicity, csiRsConfig2P, csiRsConfig4P, csiRsConfig8P, csiRsConfig16P and csiRsConfig32P.";
+        yexte:version 0;
+        yexte:release 6;
+        yexte:correction 0;
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+
+    revision 2021-06-09 {
+        description
+          "Change endcDlLegSwitchEnabled to default false.";
+        yexte:version 0;
+        yexte:release 5;
+        yexte:correction 1;
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+
+    revision 2021-05-25 {
+        description
+          "Add dependencies attribute to puschStartPrbStrategy and pdschStartPrbStrategy.";
+        yexte:version 0;
+        yexte:release 5;
+        yexte:correction 0;
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+
+    revision 2021-05-10 {
+        description
+          "Add MOM attributes for DRX.";
+        yexte:version 0;
+        yexte:release 4;
+        yexte:correction 0;
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+
+    revision 2021-05-03 {
+        description
+          "Add MOM attributes for MICIS.";
+        yexte:version 0;
+        yexte:release 3;
+        yexte:correction 0;
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+
+    revision 2021-04-20 {
+        description
+          "Add MOM attributes for ENDC leg switch.";
+        yexte:version 0;
+        yexte:release 2;
+        yexte:correction 0;
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+
+    yexte:module-status preliminary;
+
+    revision 2021-03-11 {
+        description
+          "Copy of ericsson-nrcelldu-vdu-add@2020-09-17.yang";
+        yexte:version 0;
+        yexte:release 1;
+        yexte:correction 0;
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+
+    typedef StartPrbStrategy {
+        description
+          "Mitigate interference strategy that chooses way to allocate PRBs to UEs.";
+        type enumeration {
+            enum START_LOWER_EDGE {
+                value 0;
+                description
+                  "Mitigate interference strategy that chooses way of allocating PRBs to UEs.
+                   From lower frequency band edge, START_LOWER_EDGE is chosen.";
+            }
+            enum START_HIGHER_EDGE {
+                value 1;
+                description
+                  "Mitigate interference strategy that chooses way of allocating PRBs to UEs.
+                   From lower frequency band edge, START_HIGHER_EDGE is chosen.";
+            }
+            enum RANDOM_START_LOWER_OR_HIGHER {
+                value 2;
+                description
+                  "Mitigate interference strategy that chooses way of allocating PRBs to UEs.
+                   Both from lower and higher frequency band edges by random for each slot, RANDOM_START_LOWER_OR_HIGHER is chosen.";
+            }
+        }
+    }
+
+    grouping NRCellDUVduGrp {
+        description
+          "Ericsson extensions to the 3gpp IOC.";
+        reference
+          "Ericsson documentaion";
+
+        leaf-list availabilityStatus {
+            description
+              "The availability status.
+               It contains details about operationalState.";
+            config false;
+            notife:notifiable-state-data false;
+            min-elements 0;
+            type types3gpp:AvailabilityStatus;
+            reference
+              "ITU-T Rec. X.731";
+        }
+        leaf endcUlLegSwitchEnabled {
+            description
+              "Whether EN-DC uplink leg switching is enabled.";
+            type boolean;
+            default false;
+            yexte:takes-effect
+        "Next cell unlock";
+        }
+        leaf endcDlLegSwitchEnabled {
+            description
+              "Whether EN-DC downlink leg switching is enabled.
+               Not applicable in High-Band cells. EN-DC downlink leg switching is "
+            + "always enabled in High-Band cells.";
+            type boolean;
+            default false;
+            yexte:takes-effect
+        "Next cell unlock";
+        }
+        leaf endcDlNrLowQualThresh {
+            description
+              "NR radio quality level threshold used for SN terminated split bearer.
+               Below this threshold the NR leg is not used for downlink user data "
+            + "transmission.
+               SINR is used to represent quality. Value -16 correspond to zero "
+            + "throughput, and lower values have no further impact.";
+            type int32 {
+                range "-40..40";
+            }
+            default 5;
+            units dB;
+            yexte:takes-effect
+        "Next cell unlock";
+        }
+        leaf endcUlNrLowQualThresh {
+            description
+              "NR radio quality level threshold used for SN Terminated split bearer.
+               Below this threshold the NR leg will not be used for uplink user "
+            + "data transmission.
+               SINR is used to represent quality.";
+            type int32 {
+                range "-40..145";
+            }
+            default 17;
+            units dB;
+            yexte:takes-effect
+        "Next cell unlock";
+        }
+        leaf endcUlNrQualHyst {
+            description
+              "NR radio quality hysteresis used for SN Terminated split "
+            + "bearer.
+               Quality need to be hysteresis better than endcUlNrLowQualThresh to "
+            + "start using the NR leg for uplink user data transmission again.
+               SINR is used to represent quality.";
+            type int32 {
+                range "1..60";
+            }
+            default 6;
+            units dB;
+            yexte:takes-effect
+        "Next cell unlock";
+        }
+        leaf endcDlNrQualHyst {
+            description
+              "NR radio quality hysteresis used for SN terminated split bearer.
+               Quality needs to be hysteresis more than endcDlNrLowQualThresh to "
+            + "start using NR leg for downlink user data transmission again.
+               SINR is used to represent quality.";
+            type int32 {
+                range "0..60";
+            }
+            default 5;
+            units dB;
+            yexte:takes-effect
+        "Next cell unlock";
+        }
+
+        leaf srbRLCRef {
+            description
+              "Reference to an instance of SrbRLCRef MO.";
+            mandatory false;
+            type types3gpp:DistinguishedName;
+            yexte:takes-effect "New connection";
+            must 're-match(.,concat("ManagedElement=", ../../../../me3gpp:id,",GNBDUFunction=", ../../../gnbdu3gpp:id,",UeCC=[^,]+,RadioLinkControl=[^,]+,SrbRLC=[^,]+"))' {
+                error-message
+                  "Must refer to a SrbRLC in the same GNBDUFunction as the NRCellDU.";
+            }
+            must 'boolean(../../../uecc:UeCC[uecc:id = substring-before(substring-after(current(),",UeCC="),",")]/rlc:RadioLinkControl[rlc:id = substring-before(substring-after(current(),",RadioLinkControl="),",")]/srbrlc:SrbRLC[srbrlc:id = substring-after(current(),",SrbRLC=")])' {
+                error-message
+                  "Referenced SrbRLC must exist.";
+            }
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf puschStartPrbStrategy {
+            description
+              "Mitigate interference strategy that chooses one of following ways to allocate PRBs to UEs for UL.
+               
+               - From lower frequency band edge, START_LOWER_EDGE.
+               - From higher frequency band edge, START_HIGHER_EDGE.
+               - Both from lower and higher frequency band edges by random for each slot, RANDOM_START_LOWER_OR_HIGHER.";
+            type StartPrbStrategy;
+            default "START_LOWER_EDGE";
+            yexte:dependencies "If EUtranCellRelation::essEnabled is true, this attribute has no impact 
+      and puschStartPrbStrategy is forced to START_HIGHER_EDGE";
+            yexte:takes-effect "Next cell unlock";
+        }
+        leaf pdschStartPrbStrategy {
+            description
+              "Mitigate interference strategy that chooses one of following ways to allocate PRBs to UEs for DL.
+               
+               - From lower frequency band edge, START_LOWER_EDGE.
+               - From higher frequency band edge, START_HIGHER_EDGE.
+               - Both from lower and higher frequency band edges by random for each slot, RANDOM_START_LOWER_OR_HIGHER.";
+            type StartPrbStrategy;
+            default "START_LOWER_EDGE";
+            yexte:dependencies "If EUtranCellRelation::essEnabled is true, this attribute has no impact 
+      and pdschStartPrbStrategy is forced to START_LOWER_EDGE";
+            yexte:takes-effect "Next cell unlock";
+        }
+        leaf drxEnable {
+            description
+              "Whether DRX function in cell is enabled.";
+            type boolean;
+            default "true";
+            yexte:takes-effect "Next cell unlock";
+        }
+        leaf drxInactivityTimer {
+            description
+              "Duration after PDCCH ocassion in which PDCCH indicates new UL or DL transmission.";
+            type uint16{
+                range "0..6|8|10|20|30|40|50|60|80|100|200|300|500|750|1280|1920|2560";
+            }
+            units "ms";
+            default "100";
+            reference
+              "3GPP TS 38.321, 3GPP TS 38.331";
+            yexte:takes-effect "Next cell unlock";
+        }
+
+        leaf drxLongCycle {
+            description
+              "Duration of one complete DRX cycle.";
+            type uint16{
+                range "10|20|32|40|60|64|70|80|128|160|256|320|512|640|1024|2048|2560|5120|10240";
+            }
+            units "ms";
+            default "160";
+            reference
+              "3GPP TS 38.321, 3GPP TS 38.331";
+            yexte:takes-effect "Next cell unlock";
+        }
+
+        leaf drxOnDurationTimer {
+            description
+              "Duration at the beginning of a DRX cycle.";
+            type uint16{
+                range "1..6|8|10|20|30|40|50|60|80|100|200|300|400|500|600|800|1000|1200|1600";
+            }
+            units "ms";
+            default "10";
+            must ". <= ../drxLongCycle" {
+                error-message
+                  "drxOnDurationTimer cannot be greater than drxLongCycle";
+            }
+            reference
+              "3GPP TS 38.321, 3GPP TS 38.331";
+            yexte:takes-effect "Next cell unlock";
+        }
+
+        container csiRsConfig32P {
+            description
+              "Settings related to 32-port CSI and associated port to antenna mapping.";
+            when "../nrcelldu3gpp:ssbSubCarrierSpacing != 15";
+            must "../csiRsConfig16P/csiRsControl16Ports = 'OFF' or csiRsControl32Ports = 'OFF'" {
+                error-message
+                  "Only one of csiRsControl16Ports or csiRsControl32Ports can be configured at a time.";
+            }
+            must "csiRsControl32Ports != 'OFF' or (string-length(i11Restriction) = 0 and string-length(i12Restriction) = 0)" {
+                error-message
+                  "If csiRsControl32Ports is set to OFF:
+                   - value of i11Restriction must be an empty string.
+                   - value of i12Restriction must be an empty string.";
+            }
+            must "csiRsControl32Ports != 'EIGHT_TWO_N1AZ' or (string-length(i11Restriction) = 8 and string-length(i12Restriction) = 2)" {
+                error-message
+                  "If csiRsControl32Ports is set to EIGHT_TWO_N1AZ:
+                   - value of i11Restriction must be a hexadecimal string of eight digits.
+                   - value of i12Restriction must be a hexadecimal string of two digits.";
+            }
+            must "csiRsControl32Ports != 'FOUR_FOUR' or (string-length(i11Restriction) = 4 and string-length(i12Restriction) = 4)" {
+                error-message
+                  "If csiRsControl32Ports is set to FOUR_FOUR:
+                   - value of i11Restriction must be a hexadecimal string of four digits.
+                   - value of i12Restriction must be a hexadecimal string of four digits.";
+            }
+            leaf csiRsControl32Ports {
+                description
+                  "Emission of 32-port CSI-RS and selected associated CSI feedback settings.
+                   
+                   Has an impact on port-to-antenna mapping for CSI-RS.
+                   
+                   Applies only to cells based on radios with at least 32 transmit branches. Otherwise, ignored.";
+                type enumeration {
+                    enum OFF {
+                        value 0;
+                        description
+                          "32 port CSIRS is disabled.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                    enum EIGHT_TWO_N1AZ {
+                        value 1;
+                        description
+                          "32 port CSI-RS is enabled; PMI feedback will be based on Type 1 single panel codebook (N1=8 N2=2).
+                           
+                           The N1 (i11) codebook dimension is associated with azimuth.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                    enum FOUR_FOUR {
+                        value 2;
+                        description
+                          "32 port CSI-RS is enabled; PMI feedback will be based on Type 1 single panel codebook (N1=4 N2=4).";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                }
+                default "OFF";
+                yexte:dependencies "If secondaryCellOnly is false, csiRsControl32Ports can be set to a value other than OFF only if csiRsControl8Ports is also set to a value other than OFF and csiRsControl16Ports is set to OFF.";
+                reference
+                  "3GPP TS 38.211, 3GPP TS 38.214";
+            }
+            leaf i11Restriction {
+                description
+                  "Codebook subset restriction applicable to i11 PMI component for 32-port CSI feedback.
+                   
+                   Value of bit at index i11 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i11 = 0. Expressed as a hexadecimal string.";
+                type string {
+                    length "0..8";
+                    pattern
+                      '[0-9A-F]*' {
+                        description
+                          "Value of bit at index i11 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i11 = 0. Expressed as a hexadecimal string.
+                           
+                           Example of valid value is 1F";
+                        error-message
+                          "Incorrect format. Allowed characters are 0-9, A-F.";
+                    }
+                }
+                default "";
+                reference
+                  "3GPP TS 38.214";
+            }
+            leaf i12Restriction {
+                description
+                  "Codebook subset restriction applicable to i12 PMI component for 32-port CSI feedback.
+                   
+                   Value of bit at index i12 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i12 = 0. Expressed as a hexadecimal string.";
+                type string {
+                    length "0..4";
+                    pattern
+                      '[0-9A-F]*' {
+                        description
+                          "Value of bit at index i12 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i12 = 0. Expressed as a hexadecimal string.
+                           
+                           Example of valid value is 1F";
+                        error-message
+                          "Incorrect format. Allowed characters are 0-9, A-F.";
+                    }
+                }
+                default "";
+                reference
+                  "3GPP TS 38.214";
+            }
+            reference
+              "3GPP TS 38.211, 3GPP TS 38.214";
+            yexte:takes-effect "Next cell unlock";
+        }
+
+        container csiRsConfig16P {
+            description
+              "Settings related to 16-port CSI and associated port to antenna mapping.";
+            when "../nrcelldu3gpp:ssbSubCarrierSpacing != 15";
+            must "csiRsControl16Ports = 'OFF' or ../csiRsConfig32P/csiRsControl32Ports = 'OFF'" {
+                error-message
+                  "Only one of csiRsControl16Ports or csiRsControl32Ports can be configured at a time.";
+            }
+            must "csiRsControl16Ports != 'OFF' or (string-length(i11Restriction) = 0 and string-length(i12Restriction) = 0)" {
+                error-message
+                  "If csiRsControl16Ports is set to OFF:
+                   - value of i11Restriction must be an empty string.
+                   - value of i12Restriction must be an empty string.";
+            }
+            must "csiRsControl16Ports != 'EIGHT_ONE_N1AZ' or (string-length(i11Restriction) = 8 and string-length(i12Restriction) = 0)" {
+                error-message
+                  "If csiRsControl16Ports is set to EIGHT_ONE_N1AZ:
+                   - value of i11Restriction must be a hexadecimal string of eight digits.
+                   - value of i12Restriction must be an empty string.";
+            }
+            must "csiRsControl16Ports != 'EIGHT_ONE_N1EL' or (string-length(i11Restriction) = 8 and string-length(i12Restriction) = 0)" {
+                error-message
+                  "If csiRsControl16Ports is set to EIGHT_ONE_N1EL:
+                   - value of i11Restriction must be a hexadecimal string of eight digits.
+                   - value of i12Restriction must be an empty string.";
+            }
+            must "csiRsControl16Ports != 'FOUR_TWO_N1AZ' or (string-length(i11Restriction) = 4 and string-length(i12Restriction) = 2)" {
+                error-message
+                  "If csiRsControl16Ports is set to FOUR_TWO_N1AZ:
+                   - value of i11Restriction must be a hexadecimal string of four digits.
+                   - value of i12Restriction must be a hexadecimal string of two digits.";
+            }
+            must "csiRsControl16Ports != 'FOUR_TWO_N1EL' or (string-length(i11Restriction) = 4 and string-length(i12Restriction) = 2)" {
+                error-message
+                  "If csiRsControl16Ports is set to FOUR_TWO_N1EL:
+                   - value of i11Restriction must be a hexadecimal string of four digits.
+                   - value of i12Restriction must be a hexadecimal string of two digits.";
+            }
+
+            leaf csiRsControl16Ports {
+                description
+                  "Emission of 16-port CSI-RS and selected associated CSI feedback settings.
+                   
+                   Has an impact on port-to-antenna mapping for CSI-RS.
+                   
+                   Applies only to cells based on radios with at least 16 transmit branches. Otherwise, ignored.";
+                type enumeration {
+                    enum OFF {
+                        value 0;
+                        description
+                          "The 16 port CSIRS is disabled.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                    enum EIGHT_ONE_N1AZ {
+                        value 1;
+                        description
+                          "16 port CSI-RS is enabled; PMI feedback will be based on Type 1 single panel codebook (N1=8 N2=1).
+                           
+                           The N1 (i11) codebook dimension is associated with azimuth.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                    enum FOUR_TWO_N1AZ {
+                        value 2;
+                        description
+                          "16 port CSI-RS is enabled; PMI feedback will be based on Type 1 single panel codebook (N1=4 N2=2).
+                           
+                           The N1 (i11) codebook dimension is associated with azimuth.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                    enum FOUR_TWO_N1EL {
+                        value 3;
+                        description
+                          "16 port CSI-RS is enabled; PMI feedback will be based on Type 1 single panel codebook (N1=4 N2=2).
+                           
+                           The N1 (i11) codebook dimension is associated with elevation.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                }
+                default "OFF";
+                yexte:dependencies "If secondaryCellOnly is false, csiRsControl16Ports can be set to a value other than OFF only if csiRsControl8Ports is also set to a value other than OFF and csiRsControl32Ports is set to OFF.";
+                reference
+                  "3GPP TS 38.211, 3GPP TS 38.214";
+            }
+
+            leaf i11Restriction {
+                description
+                  "Codebook subset restriction applicable to i11 PMI component for 16-port CSI feedback.
+                   
+                   Value of bit at index i11 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i11 = 0. Expressed as a hexadecimal string.";
+                type string {
+                    length "0..8";
+                    pattern
+                      '[0-9A-F]*' {
+                        description
+                          "Value of bit at index i11 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i11 = 0. Expressed as a hexadecimal string.
+                           
+                           Example of valid value is 1F";
+                        error-message
+                          "Incorrect format. Allowed characters are 0-9, A-F.";
+                    }
+                }
+                default "";
+                reference
+                  "3GPP TS 38.214";
+            }
+
+            leaf i12Restriction {
+                description
+                  "Codebook subset restriction applicable to i12 PMI component for 16-port CSI feedback.
+                   
+                   Value of bit at index i12 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i12 = 0. Expressed as a hexadecimal string.";
+                type string {
+                    length "0..2";
+                    pattern
+                      '[0-9A-F]*' {
+                        description
+                          "Value of bit at index i12 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i12 = 0. Expressed as a hexadecimal string.
+                           
+                           Example of valid value is 1F";
+                        error-message
+                          "Incorrect format. Allowed characters are 0-9, A-F.";
+                    }
+                }
+                default "";
+                reference
+                  "3GPP TS 38.214";
+            }
+            reference
+              "3GPP TS 38.211,3GPP TS 38.214";
+            yexte:takes-effect "Next cell unlock";
+        }
+
+        container csiRsConfig8P {
+            description
+              "Settings related to 8-port CSI and associated port to antenna mapping.";
+            when "../nrcelldu3gpp:ssbSubCarrierSpacing != 15";
+            must "csiRsControl8Ports != 'OFF' or (string-length(i11Restriction) = 0 and string-length(i12Restriction) = 0)" {
+                error-message
+                  "If csiRsControl8Ports is set to OFF:
+                   - value of i11Restriction must be an empty string.
+                   - value of i12Restriction must be an empty string.";
+            }
+            must "csiRsControl8Ports != 'FOUR_ONE_N1AZ' or (string-length(i11Restriction) = 4 and string-length(i12Restriction) = 0)" {
+                error-message
+                  "If csiRsControl8Ports is set to FOUR_ONE_N1AZ:
+                   - value of i11Restriction must be a hexadecimal string of four digits.
+                   - value of i12Restriction must be an empty string.";
+            }
+            must "csiRsControl8Ports != 'FOUR_ONE_N1EL' or (string-length(i11Restriction) = 4 and string-length(i12Restriction) = 0)" {
+                error-message
+                  "If csiRsControl8Ports is set to FOUR_ONE_N1EL:
+                   - value of i11Restriction must be a hexadecimal string of four digits.
+                   - value of i12Restriction must be an empty string.";
+            }
+            must "csiRsControl8Ports != 'TWO_TWO' or (string-length(i11Restriction) = 2 and string-length(i12Restriction) = 2)" {
+                error-message
+                  "If csiRsControl8Ports is set to TWO_TWO:
+                   - value of i11Restriction must be a hexadecimal string of two digits.
+                   - value of i12Restriction must be a hexadecimal string of two digits.";
+            }
+            leaf csiRsControl8Ports {
+                description
+                  "Emission of 8-port CSI-RS and selected associated CSI feedback settings.
+                   
+                   Has an impact on port-to-antenna mapping for CSI-RS.
+                   
+                   Applies only to cells based on radios with at least eight transmit branches. Otherwise, ignored.";
+                type enumeration {
+                    enum OFF {
+                        value 0;
+                        description
+                          "The 8 port CSI-RS is disabled.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                    enum FOUR_ONE_N1AZ {
+                        value 1;
+                        description
+                          "8 port CSI-RS is enabled; PMI feedback will be based on Type 1 single panel codebook (N1=4 N2=1).
+                           
+                           The N1 (i11) codebook dimension is associated with azimuth.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                    enum FOUR_ONE_N1EL {
+                        value 2;
+                        description
+                          "8 port CSI-RS is enabled; PMI feedback will be based on Type 1 single panel codebook (N1=4 N2=1).
+                           
+                           The N1 (i11) codebook dimension is associated with elevation.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                    enum TWO_TWO {
+                        value 3;
+                        description
+                          "8 port CSI-RS is enabled; PMI feedback will be based on Type 1 single panel codebook (N1=2 N2=2).";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                }
+                default "FOUR_ONE_N1AZ";
+                yexte:dependencies "If secondaryCellOnly is false, csiRsControl8Ports has to be set to a value other than OFF in cells based on radios with at least 8 transmit branches.";
+                reference
+                  "3GPP TS 38.211, 3GPP TS 38.214";
+            }
+            leaf i11Restriction {
+                description
+                  "Codebook subset restriction applicable to i11 PMI component for 8-port CSI feedback.
+                   
+                   Value of bit at index i11 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i11 = 0. Expressed as a hexadecimal string.";
+                type string {
+                    length "0..4";
+                    pattern
+                      '[0-9A-F]*' {
+                        description
+                          "Value of bit at index i11 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i11 = 0. Expressed as a hexadecimal string.
+                           
+                           Example of valid value is 1F";
+                        error-message
+                          "Incorrect format. Allowed characters are 0-9, A-F.";
+                    }
+                }
+                default "FFFF";
+                reference
+                  "3GPP TS 38.214";
+            }
+            leaf i12Restriction {
+                description
+                  "Codebook subset restriction applicable to i12 PMI component for 8-port CSI feedback.
+                   
+                   Value of bit at index i12 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i12 = 0.
+                   Expressed as a hexadecimal string.";
+                type string {
+                    length "0..2";
+                    pattern
+                      '[0-9A-F]*' {
+                        description
+                          "Value of bit at index i12 can be set to 0 = disabled or to 1 for all other options. Least significant bit has index i12 = 0. Expressed as a hexadecimal string.
+                           
+                           Example of valid value is 1F";
+                        error-message
+                          "Incorrect format. Allowed characters are 0-9, A-F.";
+                    }
+                }
+                default "";
+                reference
+                  "3GPP TS 38.214";
+            }
+            yexte:dependencies "If nullSteeringMode is not set to COMMON_BEAMFORMING in NRSectorCarrier and at least one of azimuthNull or elevationNull attribute is not set to empty, csiRsControl8Ports member of csiRsConfig8P in NRCellDU must not be set to OFF.";
+            reference
+              "3GPP TS 38.211, 3GPP TS 38.214";
+            yexte:takes-effect "Next cell unlock";
+        }
+
+        container csiRsConfig4P {
+            description
+              "4-port CSI and associated port to antenna mapping settings.";
+            when "../nrcelldu3gpp:ssbSubCarrierSpacing = 15";
+            must "csiRsControl4Ports != 'OFF' or (string-length(i11Restriction) = 0)" {
+                error-message
+                  "If csiRsControl4Ports is set to OFF:
+                   - value of i11Restriction must be an empty string.";
+            }
+            must "csiRsControl4Ports != 'TWO_ONE' or (string-length(i11Restriction) = 2)" {
+                error-message
+                  "If csiRsControl4Ports is set to TWO_ONE:
+                   - value of i11Restriction must be a hexadecimal string of two digits.";
+            }
+            leaf csiRsControl4Ports {
+                description
+                  "Emission of 4-port CSI-RS and selected associated CSI feedback settings.
+                   
+                   Has impact on port-to-antenna mapping for CSI-RS.
+                   
+                   Applies only to cells based on radios with four transmit branches. Otherwise, ignored.";
+                type enumeration {
+                    enum OFF {
+                        value 0;
+                        description
+                          "4-port CSI-RS is disabled.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                    enum TWO_ONE {
+                        value 1;
+                        description
+                          "4-port CSI-RS enabled.
+                           
+                           PMI feedback based on Type 1 single panel codebook (N1=2 N2=1).";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                }
+                default "TWO_ONE";
+                reference
+                  "3GPP TS 38.211, 3GPP TS 38.214";
+            }
+            leaf i11Restriction {
+                description
+                  "Codebook subset restriction applicable to i11 PMI component for 4-port CSI feedback.
+                   
+                   Value of bit at index i11 can be 0 = disabled or 1 = all other options. Least significant bit has index i11 = 0. Expressed as hexadecimal string.";
+                type string {
+                    length "0..2";
+                    pattern
+                      '[0-9A-F]*' {
+                        description
+                          "Value of bit at index i11 can be 0 = disabled or 1 = all other options. Least significant bit has index i11 = 0. Expressed as hexadecimal string.
+                           
+                           Example of valid value is
+                           1F";
+                        error-message
+                          "Incorrect format. Allowed characters are 0-9, A-F.";
+                    }
+                }
+                default "FF";
+                reference
+                  "3GPP TS 38.214";
+            }
+            reference
+              "3GPP TS 38.211, 3GPP TS 38.214";
+            yexte:takes-effect "Next cell unlock";
+        }
+
+        container csiRsConfig2P {
+            description
+              "2-port CSI and associated port to antenna mapping settings.";
+            when "../nrcelldu3gpp:ssbSubCarrierSpacing = 15";
+            must "csiRsControl2Ports != 'ON' or (string-length(aRestriction) = 2)" {
+                error-message
+                  "If csiRsControl2Ports is set to ON:
+                   - value of aRestriction must be a hexadecimal string of two digits.";
+            }
+            must "csiRsControl2Ports != 'OFF' or (string-length(aRestriction) = 0)" {
+                error-message
+                  "If csiRsControl2Ports is set to OFF:
+                   - value of aRestriction must be an empty string.";
+            }
+            leaf aRestriction {
+                description
+                  "Codebook subset restriction applicable to bit sequence a CSI feedback.
+                   
+                   Value of bit at the bit sequence a can be set to 0 = disabled or to 1 for all other options. Expressed as a hexadecimal string.";
+                type string {
+                    length "0..2";
+                    pattern
+                      '([0-3][0-9A-F])?' {
+                        description
+                          "Value of bit at the bit sequence a can be set to 0 = disabled or to 1 for all other options. Expressed as a hexadecimal string.
+                           
+                           Example of valid values is
+                           1F";
+                        error-message
+                          "Incorrect format. Allowed characters are [0-3][0-9, A-F].";
+                    }
+                }
+                default "3F";
+                reference
+                  "3GPP TS 38.214";
+            }
+            leaf csiRsControl2Ports {
+                description
+                  "Emission of 2-port CSI-RS and selected associated CSI feedback settings.
+                   
+                   Has impact on port-to-antenna mapping for CSI-RS.
+                   
+                   Applies only to cells based on radios with two transmit branches. Otherwise, ignored.";
+                type enumeration {
+                    enum OFF {
+                        value 0;
+                        description
+                          "2-port CSI-RS disabled.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                    enum ON {
+                        value 1;
+                        description
+                          "2-port CSI-RS enabled.";
+                        reference
+                          "3GPP TS 38.214";
+                    }
+                }
+                default "ON";
+                reference
+                  "3GPP TS 38.211, 3GPP TS 38.214";
+            }
+            reference
+              "3GPP TS 38.211, 3GPP TS 38.214";
+            yexte:takes-effect "Next cell unlock";
+        }
+
+        leaf csiRsPeriodicity {
+            description
+              "Periodicity of CSI-RS transmission.";
+            type int32 {
+                range "10|20|40|80|160|320|640";
+            }
+            default "40";
+            units "slot";
+            yexte:dependencies "Must be 20 if cell uses NRSectorCarrier with essScPairId configured.";
+            reference
+              "3GPP TS 38.211";
+            yexte:takes-effect "Next cell unlock";
+        }
+    }
+
+    augment "/me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrcelldu3gpp:NRCellDU/nrcelldu3gpp:attributes" {
+        description
+          "Adds Ericsson attributes to 3gpp NRCellDU";
+        uses NRCellDUVduGrp;
+    }
+}

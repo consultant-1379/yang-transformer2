@@ -1,0 +1,464 @@
+module ericsson-dhcpv6-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-dhcpv6-router6000";
+
+  prefix "ctxdhcpv6router6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-dhcpv6-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-04-26" {
+    description
+      "Bug fixing related to server-name-str and subnet-prefix";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-07-16" {
+    description
+      "Description context dhcpv6  ";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+    typedef server-name-str {
+        type string {
+        }
+        description
+          "Server name string";
+     }
+     typedef duid-client-str {
+        type string {
+          pattern '([0-9a-fA-F]{2})(:[0-9a-fA-F]{2}){15}';
+        }
+        description
+          "duid client name string,hh:hh:hh:...:hh:hh:hh";
+    }
+
+  grouping dhcpv6-relay-grp {
+    description
+      "DHCPv6 Relay on the context mode";
+    /*
+    option { interface-id [ separator (separator-id) ] | remote-
+     id }
+    */
+    container option {
+      description
+        "Add the DHCPv6 Relay Agent Option";
+      container interface-id {
+        presence "";
+        description
+          "Set DHCPv6 interface-id option";
+        leaf separator {
+          type string {
+            pattern '(.)';
+          }
+          default "#";
+          description
+            "Configure a separator for interface-id option";
+        }
+      }
+      leaf remote-id {
+        type empty;
+        description
+          "Set DHCPv6 remote-id option";
+      }
+    }
+    /*
+    server (server-ip) [ server-group (server-group-id) ]
+    */
+    list server {
+      key "server-ip";
+      description
+        "Configure a DHCPv6 Server";
+      leaf server-ip {
+        type inet:ipv6-address;
+        description
+          "IPV6 address of the DHCPv6 Server";
+      }
+      leaf server-group {
+        type string;
+        description
+          "Associate a dhcpv6 server to server-group";
+      }
+    }
+  }
+
+  grouping dhcpv6-server-grp {
+    description
+      "Configure DHCPv6 Server on the context";
+    /*
+    option { aftr-name (aftr-name) | domain-name-server (server-
+     ip) | domain-search (domain-search-name) | information-
+     refresh-time (refresh-time) |  ntp-server { domain-name
+     (domain-name) | multicast-address-group (multi-ip) |
+     unicast-address (unicast-ip) } | preference (pre-num) |
+     rapid-commit | secgw (secgw-ip) | www-server (www-server-ip)
+     }
+    */
+    container option {
+      description
+        "Configure DHCPv6 server option";
+      leaf aftr-name {
+        type server-name-str;
+        description
+          "Configure Address Family Transition Router (AFTR)
+           name";
+      }
+      leaf domain-name-server {
+        type inet:ipv6-address;
+        description
+          "Configure DNS name server";
+      }
+      leaf domain-search {
+        type server-name-str;
+        description
+          "Configure Address Family Transition Router (AFTR)
+           name";
+      }
+      leaf information-refresh-time {
+        type uint32 {
+          range "600..4294967295";
+        }
+        description
+          "Configure DHCPv6 option information refresh time";
+      }
+      container ntp-server {
+        description
+          "Configure NTP server";
+        leaf-list domain-name {
+          type server-name-str;
+          description
+            "Configure NTP server domain-name";
+        }
+        leaf-list multicast-address-group {
+          type inet:ipv6-address;
+          description
+            "Configure NTP server multicast group address";
+        }
+        leaf-list unicast-address {
+          type inet:ipv6-address;
+          description
+            "Configure NTP server unicast address";
+        }
+      }
+      leaf preference {
+        type uint8 {
+          range "0..255";
+        }
+        description
+          "Configure DHCPv6 option preference";
+      }
+      leaf rapid-commit {
+        type empty;
+        description
+          "Configure DHCPv6 option rapid-commit";
+      }
+      leaf-list secgw {
+        type inet:ipv6-address;
+        description
+          "Configure secure gateway";
+      }
+      leaf-list www-server {
+        type inet:ipv6-address;
+        description
+          "Configure www server";
+      }
+    }
+    /*
+    prefix lifetime { infinite | preferred (pre-time) valid
+     (valid-time) }
+    */
+    container prefix-lifetime {
+      presence "";
+      description
+        "Configure preferred time to be given out to clients";
+      leaf infinite {
+        type empty;
+        description
+          "Configure infinite lifetime to be given out to
+           clients";
+      }
+      container preferred {
+        presence "";
+        description
+          "container preferred.";
+        leaf preferred {
+          type uint32 {
+            range "600..4294967295";
+          }
+          mandatory true;
+          description
+            "Configure preferred lifetime to be given out to
+             clients";
+        }
+        leaf valid {
+          type uint32 {
+            range "600..4294967295";
+          }
+          mandatory true;
+          description
+            "Configure valid lifetime to be given out to
+             clients";
+        }
+      }
+    }
+    /*
+    prefix (prefix-assign) { duid (client-duid) }
+    */
+    list prefix {
+      key "prefix-assign duid";
+      description
+        "Configure client prefix suboption or statically mapped
+         prefix";
+      leaf prefix-assign {
+        type inet:ipv6-address;
+        description
+          "Configure prefix to assign";
+      }
+      leaf duid {
+        type duid-client-str;
+        description
+          "Statically assign prefix to matching DUID";
+      }
+    }
+    /*
+    prefix-ext (prefix-assign) duid (client-duid) iaid (client-
+     iaid)
+    */
+    list prefix-ext {
+      key "prefix-assign client-duid client-iaid";
+      description
+        "Configure client prefix suboption or statically mapped
+         prefix";
+      leaf prefix-assign {
+        type inet:ipv6-address;
+        description
+          "Configure prefix to assign";
+      }
+      leaf client-duid {
+        type duid-client-str;
+        description
+          "Client DUID to match (colon delimited hex string)";
+      }
+      leaf client-iaid {
+        type string {
+          pattern '0(x|X)([0-9a-fA-F]{1,8})';
+        }
+        description
+          " Client IAID to match (hex value)";
+      }
+      leaf duid {
+        type empty;
+        mandatory true;
+        description
+          "Statically assign prefix to matching DUID";
+      }
+      leaf iaid {
+        type empty;
+        mandatory true;
+        description
+          "Additionally match client IAID";
+      }
+    }
+    /*
+    subnet (subnet-prefix) [ name (prefix-name) ]
+    */
+    list subnet {
+      key "subnet-prefix";
+      status obsolete;
+      description
+        "Configure subnet IP address and prefix length for DHCP
+         Server";
+      leaf subnet-prefix {
+        type inet:ipv6-address;
+        description
+          "Address followed by prefix length";
+      }
+      leaf name {
+        type string;
+        description
+          "Configure name of the subnet";
+      }
+      uses dhcpv6-subnet-grp;
+    }
+    /*
+    subnet-conf (subnet-prefix) [ name (prefix-name) ]
+    */
+    list subnet-conf {
+      key "subnet-prefix";
+      description
+        "Configure subnet IP address and prefix length for DHCP
+         Server";
+      leaf subnet-prefix {
+        type inet:ipv6-prefix;
+        description
+          "Address followed by prefix length";
+      }
+      leaf name {
+        type string;
+        description
+          "Configure name of the subnet";
+      }
+      uses dhcpv6-subnet-grp;
+    }
+  }
+
+  grouping dhcpv6-subnet-grp {
+    description
+      "Configure subnet IP address and prefix length for DHCP
+       Server";
+    /*
+    option { aftr-name (aftr-name) | domain-name-server (server-
+     ip) | domain-search (domain-search-name) | ntp-server {
+     domain-name (domain-name) | multicast-address-group (multi-
+     ip) | unicast-address (unicast-ip) } | secgw (secgw-ip) |
+     www-server (www-server-ip) }
+    */
+    container option {
+      description
+        "Configure DHCPv6 server option";
+      leaf aftr-name {
+        type server-name-str;
+        description
+          "Configure Address Family Transition Router (AFTR)
+           name";
+      }
+      leaf domain-name-server {
+        type inet:ipv6-address;
+        description
+          "Configure DNS name server";
+      }
+      leaf domain-search {
+        type server-name-str;
+        description
+          "Configure Address Family Transition Router (AFTR)
+           name";
+      }
+      container ntp-server {
+        description
+          "Configure NTP server";
+        leaf-list domain-name {
+          type server-name-str;
+          description
+            "Configure NTP server domain-name";
+        }
+        leaf-list multicast-address-group {
+          type inet:ipv6-address;
+          description
+            "Configure NTP server multicast group address";
+        }
+        leaf-list unicast-address {
+          type inet:ipv6-address;
+          description
+            "Configure NTP server unicast address";
+        }
+      }
+      leaf-list secgw {
+        type inet:ipv6-address;
+        description
+          "Configure secure gateway";
+      }
+      leaf-list www-server {
+        type inet:ipv6-address;
+        description
+          "Configure www server";
+      }
+    }
+    /*
+    prefix lifetime { infinite | preferred (pre-time) valid
+     (valid-time) }
+    */
+    container prefix-lifetime {
+      presence "";
+      description
+        "Configure preferred time to be given out to clients";
+      leaf infinite {
+        type empty;
+        description
+          "Configure infinite lifetime to be given out to
+           clients";
+      }
+      container preferred {
+        presence "";
+        description
+          "container preferred.";
+        leaf preferred {
+          type uint32 {
+            range "600..4294967295";
+          }
+          mandatory true;
+          description
+            "Configure preferred lifetime to be given out to
+             clients";
+        }
+        leaf valid {
+          type uint32 {
+            range "600..4294967295";
+          }
+          mandatory true;
+          description
+            "Configure valid lifetime to be given out to
+             clients";
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context" {
+    description
+      "ericsson-dhcpv6";
+    /*
+    dhcpv6 { relay | server }
+    */
+    container dhcpv6 {
+      description
+        "Configure context dhcpv6 ";
+      container relay {
+        presence "";
+        description
+          "Configure DHCPv6 Relay on the context";
+        uses dhcpv6-relay-grp;
+      }
+      container server {
+        presence "";
+        description
+          "Configure DHCPv6 Server on the context";
+        uses dhcpv6-server-grp;
+      }
+    }
+  }
+
+}

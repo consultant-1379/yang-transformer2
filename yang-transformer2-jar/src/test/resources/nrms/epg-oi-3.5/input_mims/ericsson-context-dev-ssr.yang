@@ -1,0 +1,115 @@
+module ericsson-context-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-context-dev-ssr";
+
+  prefix "ctxdevssr";
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-context-dev-ssr-ipos
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-07-02" {
+    description
+      "Modify the dev model namespace";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+  revision "2017-07-04" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:ip/ctxipos:log/ctxipos:slot/ctxipos:slot-num" {
+      deviate replace {
+        type union {
+          type uint16 {
+              range "1..20";
+          }
+          type enumeration {
+            enum alsw1{
+            value 0;
+            description "ALSW1";
+            }
+            enum alsw2{
+            value 1;
+            description "ALSW2";
+            }
+            enum rpsw1{
+            value 2;
+            description "RPSW1";
+            }
+            enum rpsw2{
+            value 3;
+            description "RPSW2";
+            }
+            enum sw1{
+            value 4;
+            description "SW1";
+            }
+            enum sw2{
+            value 5;
+            description "SW2";
+            }
+            enum sw3{
+            value 6;
+            description "SW3";
+            }
+            enum sw4{
+            value 7;
+            description "SW4";
+            }
+          }
+       }
+     }
+  }
+}

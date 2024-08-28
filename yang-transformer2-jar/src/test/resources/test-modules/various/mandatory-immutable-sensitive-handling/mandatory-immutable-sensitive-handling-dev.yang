@@ -1,0 +1,54 @@
+module mandatory-immutable-sensitive-handling-dev {
+
+    namespace "urn?test?mandatory-immutable-sensitive-handling-dev";
+    prefix this;
+
+	import mandatory-immutable-sensitive-handling {
+		prefix mih;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	import _3gpp-common-yang-extensions {
+		prefix yext3gpp;
+	}
+	
+    revision "2021-04-21";
+
+	deviation "/mih:list1/mih:leaf13" {
+		deviate replace {
+			mandatory false;
+		}
+	}
+
+	deviation "/mih:list1/mih:leaf15" {
+		deviate replace {
+			mandatory true;
+		}
+	}
+
+	deviation "/mih:list2/mih:leaf23" {
+		deviate replace {
+			mandatory true;
+		}
+	}
+
+	deviation "/mih:cont4/mih:leaf42" {
+		deviate delete {
+			yexte:restricted;
+		}
+	}
+
+	deviation "/mih:cont5/mih:leaf52" {
+		deviate delete {
+			yext3gpp:inVariant;
+		}
+	}
+
+	deviation "/mih:cont6/mih:leaf64" {
+		deviate add {
+			yexte:is-passphrase;
+		}
+	}
+
+}

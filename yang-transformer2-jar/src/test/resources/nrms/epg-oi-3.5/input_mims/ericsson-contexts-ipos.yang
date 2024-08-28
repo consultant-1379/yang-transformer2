@@ -1,0 +1,467 @@
+module ericsson-contexts-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-contexts-ipos";
+
+  prefix "ctxsipos";
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-contexts-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "4";
+    yexte:correction "1";
+  }
+
+  revision "2019-02-22" {
+    description
+      "Add static-context-id";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2018-08-22" {
+    description
+      "L3/L4 based hashing on bridge";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2018-07-13" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "5";
+  }
+
+  revision "2018-07-05" {
+    description
+      "Add default value of multiple-contexts to make it
+       consistent with legacy command.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "4";
+  }
+
+  revision "2018-05-03" {
+    description
+      "Add container for nameserver.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "3";
+  }
+
+  revision "2018-04-04" {
+    description
+      "Remove the default value of multiple-contexts.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "2";
+  }
+
+  revision "2018-01-16" {
+    description
+      "Add router node in configuration mode.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2017-12-07" {
+    description
+      "VRE 2366 Adding redistribute seg and service
+       fabric-hello-interval yang commands";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2017-11-13" {
+    description
+      "Add system confirmation node.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2017-10-24" {
+    description
+      "Leaf ifindex-persistence added for ifindex persistence
+       control.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-09-29" {
+    description
+      "update revision for align the revision with released
+       version";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-15" {
+    description
+      "rate-limit-circuit-nd There is some issues when deleting
+       rate-limit-circuit-nd in conf cli";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-02" {
+    description
+      "New commands for Dot1q";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-15" {
+    description
+      "add subcommand for service";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-08" {
+    description
+      "Remove presence of command system";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-08" {
+    description
+      "Add a feature name for l2 access list";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  container contexts {
+    description
+      "Transport configuration";
+    /*
+    l2
+    */
+    container l2 {
+      description
+        "Layer 2 configuration under contexts";
+    }
+    /*
+    rate-limit circuit nd (cnt-num) {interval (interval-num)}
+     {drop-interval (drop-interval-num)}
+    */
+    container rate-limit-circuit-nd {
+      presence "";
+      description
+        "Configure rate-limit for nd";
+      leaf cnt-num {
+        type uint8 {
+          range "1..255";
+        }
+        mandatory true;
+        description
+          "Maxinum number of packets";
+      }
+      leaf interval {
+        type uint8 {
+          range "1..127";
+        }
+        mandatory true;
+        description
+          "Set interval for the maximum packets allowed";
+      }
+      leaf drop-interval {
+        type uint8 {
+          range "1..127";
+        }
+        mandatory true;
+        description
+          "Set drop interval";
+      }
+    }
+    /*
+    service < { static-context-id | multiple-contexts | inter-
+     context routing} >
+    */
+    container service {
+      description
+        "Service commands";
+      leaf static-context-id {
+        type boolean;
+        default "false";
+        description
+          "Enable/Disable static-context-id";
+      }
+      leaf multiple-contexts {
+        type boolean;
+        default "false";
+        description
+          "Enable/Disable multiple-contexts";
+      }
+      leaf inter-context-routing {
+        type empty;
+        description
+          "Inter-context static routing between non-local
+           contexts";
+      }
+      container load-balance {
+        description
+          "Config load balancing hash key";
+        container ip {
+          description
+            "Config load balancing hash key for IP";
+          choice ip {
+            description
+              "";
+            case layer-3 {
+              leaf layer-3 {
+                type empty;
+                description
+                  "Hash key is from layer 3 header only";
+              }
+            }
+            case layer-4 {
+              leaf layer-4 {
+                type empty;
+                description
+                  "Hash key is from layer 3 and layer 4 headers";
+              }
+            }
+            case source-only {
+              leaf source-only {
+                type empty;
+                description
+                  "Hash key is from source IP Header";
+              }
+            }
+          }
+        }
+        container link-group {
+          description
+            "Config load balancing hash key for link-group";
+          choice link-group {
+            description
+              "";
+            case layer-3 {
+              leaf layer-3 {
+                type empty;
+                description
+                  "Hash key is from layer 3 header only";
+              }
+            }
+            case layer-4 {
+              leaf layer-4 {
+                type empty;
+                description
+                  "Hash key is from layer 3 and layer 4 headers";
+              }
+            }
+            case source-only {
+              leaf source-only {
+                type empty;
+                description
+                  "Hash key is from source IP Header";
+              }
+            }
+          }
+        }
+        leaf mpls-payload {
+          type empty;
+          description
+            "Config load balancing hash key for mpls payload";
+        }
+        leaf prefer-local-egress {
+          type empty;
+          description
+            "Prefer same card/pfe egress for ecmp/link-group";
+        }
+        container bridge {
+          description
+            "Config load-balancing hash key for bridge Layer-2
+             ports";
+          choice bridge {
+            description
+              "";
+            case layer-3 {
+              leaf layer-3 {
+                type empty;
+                description
+                  "Hash key is from layer 3 header only";
+              }
+            }
+            case layer-4 {
+              leaf layer-4 {
+                type empty;
+                description
+                  "Hash key is from layer 3 and layer 4 headers";
+              }
+            }
+            case source-only {
+              leaf source-only {
+                type empty;
+                description
+                  "Hash key is from source IP address of the IP
+                   header";
+              }
+            }
+            case default {
+              leaf default {
+                type empty;
+                description
+                  "Hash key is from source MAC and destination
+                   MAC";
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    system { lacp { priority (priority-val) | mac-addr (addr-
+     val) } | confirmations { context | port-encapsulation |
+     removal-warn (removal-str) } }
+    */
+    container system {
+      description
+        "Set system parameters";
+      container lacp {
+        description
+          "Set system LACP parameters";
+        leaf priority {
+          type uint16 {
+            range "0..65535";
+          }
+          description
+            "Configure LACP system priority";
+        }
+        leaf mac-addr {
+          type yang:mac-address;
+          description
+            "Configure LACP system mac addr";
+        }
+      }
+      container confirmations {
+        description
+          "Set system confirmations";
+        leaf context {
+          type empty;
+          description
+            "Ask for confirmation on context creation";
+        }
+        leaf port-encapsulation {
+          type empty;
+          description
+            "Ask for confirmation on port encapsulation changes";
+        }
+        leaf removal-warn {
+          type string {
+            length "1..255";
+          }
+          description
+            "Set warning message for feature removal";
+        }
+      }
+    }
+    /*
+    ifindex-persistence
+    */
+    leaf ifindex-persistence {
+      type empty;
+      description
+        "Enable ifindex persistence";
+    }
+    /*
+    router
+    */
+    container router {
+      description
+        "Configure a routing protocol under contexts";
+    }
+    /*
+    nameserver timeout (timeout-sec)
+    */
+    container nameserver {
+      description
+        "Configure nameserver";
+      leaf timeout {
+        type uint8 {
+          range "3..60";
+        }
+        description
+          "Configure nameserver timeout.Unit is seconds";
+      }
+    }
+  }
+
+  container contexts-state {
+    config "false";
+    description
+      "Root container of state data under contexts";
+  }
+
+}

@@ -1,0 +1,73 @@
+module leafref-two {
+
+    namespace "urn/test/leafref-two";
+    prefix two;
+
+    revision "2021-03-09";
+
+	import leafref-one {
+		prefix one;
+	}
+
+	augment "/one:list1" {
+	
+		leaf-list leaflist19 {
+			type decimal64 {
+				fraction-digits 5;
+			}
+		}
+	}
+
+	augment "/one:cont2" {
+	
+		leaf leaf29 {
+			type leafref {
+				path "/one:list1/two:leaflist19";
+			}
+		}
+	}
+
+	// The deviation causes the EDT to be generated version-specific.
+	// Any leafref pointing to leaflist17 must therefore reference
+	// the version-specific EDT, not the base EDT.
+
+	deviation "/one:list1/one:leaflist17" {
+		deviate replace {
+			type enumeration {
+				enum VENUS;
+				enum MARS;
+				enum MERCURY;
+			}
+		}
+	}
+	
+	container cont5 {
+	
+		choice choice1 {
+		
+			case case51 {
+			
+				leaf leaf51 {
+					type leafref {
+						path "/one:list1/one:leaflist11";
+					}
+				}			
+			}
+
+			case case52 {
+			
+				leaf leaf52 {
+					type leafref {
+						path "/one:list1[one:key1='abc']/one:leaflist13";
+					}
+				}
+			}
+		}
+
+		leaf leaf53 {
+			type leafref {
+				path "../leaf52";
+			}
+		}
+	}
+}

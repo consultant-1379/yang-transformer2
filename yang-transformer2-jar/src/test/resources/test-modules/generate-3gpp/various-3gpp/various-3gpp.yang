@@ -1,0 +1,119 @@
+module various-3gpp {
+
+	namespace "urn:test:various-3gpp";
+	prefix this;
+
+	revision "2019-01-08";
+
+	// Not a 3GPP MOC due to the leaf.
+
+	container Cont1 {
+		leaf leaf11 { type string; }
+	}
+
+	// Not a 3GPP MOC due to MOC naming convention.
+
+	container Cont.2 {
+
+		container attributes {
+			leaf leaf21 { type string; }
+		}
+	}
+
+	// Not a 3GPP MOC due to the extra "leaf31".
+
+	list List3 {
+		key "id";
+		leaf id { type string; }
+		leaf leaf31 { type string; }
+
+		container attributes {
+			leaf leaf32 { type string; }
+		}
+	}
+
+	// Not a 3GPP MOC due to the key.
+
+	list List4 {
+		key "id leaf41";
+		leaf id { type string; }
+		leaf leaf41 { type string; }
+
+		container attributes {
+			leaf leaf42 { type string; }
+		}
+	}
+
+	// Normal 3GPP MOC. An artificial key "id" should be generated
+	// for "Cont5"
+
+	container Cont5 {
+
+		list List6 {
+			key "id";
+			leaf id { type string; }
+
+			container attributes {
+				leaf leaf61 { type string; }
+			}
+		}
+	}
+
+	// Not a 3GPP MOC due to keyless list (error in model,
+	// 'config true' lists must have a key).
+
+	list List7 {
+		leaf id { type string; }
+	}
+
+	// Not a 3GPP MOC due to wrong key (error in model).
+
+	list List8 {
+		key "id";
+		leaf leaf81 { type string; }
+	}
+
+	// Not a 3GPP MOC due to wrong key (error in model).
+
+	list List9 {
+		key "id leaf91";
+		leaf leaf91 { type string; }
+	}
+
+	// Not a 3GPP MOC due to naming convention (note
+	// "list10" starts with lowercase 'l')
+
+	list list10 {
+		key "leaf101";
+		leaf leaf101 { type string; }
+	}
+
+	list list11 {						// Not a 3GPP MOC due to naming convention
+		key "leaf111";
+		leaf leaf111 { type string; }
+	}
+
+	list List12 {
+		key "leaf121";
+		leaf leaf121 { type string; }
+
+		list attributes {				// results in child MOC, as it is a list!
+			key "leafXxx";
+			leaf leafXxx { type string; }
+		}
+	}
+
+	list List13 {
+		key "leaf131";
+		leaf leaf131 { type string; }
+
+		container atributes {				// results in child MOC, spelling mistake in 'atributes'
+			leaf leafXxx { type string; }
+		}
+	}
+
+	list 3list14 {							// Not a 3GPP MOC due to naming convention
+		key "leaf141";
+		leaf leaf141 { type string; }
+	}
+}

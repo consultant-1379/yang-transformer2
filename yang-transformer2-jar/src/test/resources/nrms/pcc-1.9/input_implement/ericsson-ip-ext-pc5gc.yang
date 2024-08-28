@@ -1,0 +1,80 @@
+module ericsson-ip-ext-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ip-ext-pc5gc";
+  prefix ipxpc5gc;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-ip {
+    prefix ip;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model extends IETF RFC 8343,
+     used to present PC specific requirement.
+     Copyright (c) 2019, 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-03-03 {
+    description
+      "modify ip-range to optional leaf";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+  revision 2019-09-11 {
+    description
+      "initial revision";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when 'ip:ipv4 or ip:ipv6';
+    description
+      "Extend the IETF interface.";
+    container address-type {
+
+      status current {
+        yexte:preliminary;
+      }
+
+      choice address-type {
+        mandatory true;
+        case pool {
+          leaf ip-range {
+            type uint32 {
+              range "1..max";
+            }
+            description
+              "The interface gets the ip address from the pool.";
+          }
+        }
+        case single {
+          leaf single {
+            type empty;
+            description
+              "The interfaces in different pods use the same configured ip address";
+          }
+        }
+        description
+          "The IP address type choice.";
+      }
+      description
+        "The IP address type.";
+    }
+  }
+}

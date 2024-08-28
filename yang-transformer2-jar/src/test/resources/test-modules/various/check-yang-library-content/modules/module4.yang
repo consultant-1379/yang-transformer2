@@ -1,0 +1,18 @@
+module module4 {
+
+	namespace "urn:test:module4";
+	prefix this;
+
+	revision "2022-09-26" {
+		yexte:version 2;
+		yexte:release 4;
+		yexte:correction 6;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	feature feature47;
+	feature feature48;
+}

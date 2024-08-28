@@ -1,0 +1,146 @@
+module ericsson-interface-igmp-ext-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-igmp-ext-router6000";
+
+  prefix "ifigmpxrouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-igmp-ext-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-07" {
+    description
+      "Update the description of all parameters";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-04-27" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  augment
+  "/if:interfaces/if:interface/ifxrouter6000:l3-interface" {
+    description
+      "ericsson-igmp-interface";
+    /*
+    igmp { join-group (join-grp) | last-member-query-interval
+     (mq-val) | query-interval (intvl-val) | query-max-response-
+     time (intvl-val) | access-group (acl-name) | service-
+     profile-name (profile-name) | version (ver-val) | robust
+     (robust-val) | query-solicitation | verify source subnet }
+    */
+    container igmp {
+      description
+        "IGMP interface configuration";
+      list join-group {
+        key "join-group";
+        description
+          "IGMP join multicast group";
+        leaf join-group {
+          type inet:ipv4-address;
+          description
+            "Group address";
+        }
+      }
+      leaf last-member-query-interval {
+        type uint16 {
+          range "1..65535";
+        }
+        description
+          "IGMP last member query interval";
+      }
+      leaf query-interval {
+        type uint16 {
+          range "1..65535";
+        }
+        description
+          "IGMP host query interval in seconds";
+      }
+      leaf query-max-response-time {
+        type uint8 {
+          range "1..25";
+        }
+        description
+          "IGMP query max response time interval in seconds";
+      }
+      leaf access-group {
+        type string;
+        description
+          "IGMP group access group";
+      }
+      leaf service-profile-name {
+        type string;
+        description
+          "specify IGMP service profile tag";
+      }
+      leaf version {
+        type uint8 {
+          range "1..3";
+        }
+        default "2";
+        description
+          "IGMP version";
+      }
+      leaf robust {
+        type uint8 {
+          range "2..7";
+        }
+        default "2";
+        description
+          "Tune for the expected packet loss";
+      }
+      leaf query-solicitation {
+        type empty;
+        description
+          "IGMP query-solicitation";
+      }
+      leaf verify-source-subnet {
+        type empty;
+        description
+          "IGMP per packet validation for source subnet";
+      }
+    }
+  }
+
+}

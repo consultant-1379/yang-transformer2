@@ -1,0 +1,46 @@
+module dnref-simple-ext {
+
+	namespace "urn#test#dnref-simple-ext";
+	prefix this;
+
+	revision "2023-04-19";
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	import dnref-simple {
+		prefix simple;
+	}
+
+	deviation /simple:MocA/attributes/moRef11 {
+		deviate add {
+			yexte:dnref;
+		}
+	}
+
+	deviation /simple:MocA/attributes/moRef12 {
+		deviate delete {
+			yexte:dnref;
+		}
+	}
+
+	deviation /simple:MocA/attributes/moRef13 {
+		deviate replace {
+			yexte:dnref "/MocC";
+		}
+	}
+
+	deviation /simple:MocA/attributes/moRef14 {
+		deviate delete {
+			yexte:dnref "/MocC";
+		}
+	}
+
+	augment /simple:MocB/attributes {
+		leaf moRef41 {
+			type string;
+			yexte:dnref "/MocC";
+		}
+	}
+}

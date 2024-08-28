@@ -1,0 +1,70 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-lag-ext-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-lag-ext-dev-router6000";
+    prefix "lagxvrouter60000";
+  
+  import ericsson-lag-ext-router6000 {
+    prefix "lagxrouter6000";
+  }  
+
+  import ietf-interfaces {
+    prefix "if";
+  } 
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+  
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-lag-ext-dev-router6000
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-07-24" {
+    description
+      "deviation for ericsson-lag-ext-ipos.yang.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  } 
+  
+  /*link-group*/ 
+  
+  /*hide link-group->protect-group*/
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/lagxrouter6000:protect-group" {
+    deviate not-supported;
+  }
+  
+  /*hide link-group->multi-chassis*/
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/lagxrouter6000:multi-chassis" {
+    deviate not-supported;
+  } 
+  
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/lagxrouter6000:mirror" {
+    deviate not-supported;
+  } 
+
+}

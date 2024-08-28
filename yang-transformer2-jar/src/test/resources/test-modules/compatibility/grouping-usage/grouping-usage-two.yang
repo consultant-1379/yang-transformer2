@@ -1,0 +1,27 @@
+module grouping-usage-two {
+
+    namespace "urn+test+grouping-usage-two";
+    prefix this;
+	
+    revision "2021-12-18";
+
+	import grouping-usage-one {
+		prefix one;
+	}
+	
+	grouping grouping51 {
+	
+		leaf leaf51 { type string; }
+		leaf leaf52 { type string; }
+	}
+
+	grouping grouping61 {
+	
+		leaf leaf61 { type string; }
+		leaf leaf62 { type string; }
+	}
+
+	augment "/one:cont7" {
+		uses this:grouping61;
+	}
+}

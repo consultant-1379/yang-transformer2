@@ -1,0 +1,366 @@
+module ericsson-key-chain-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-key-chain-router6000";
+
+  prefix "keychainrouter6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-key-chain-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-03-22" {
+    description
+      "MD5 support under key-chain algorithm ";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2021-02-09" {
+    description
+      "Add hmac-md5 part of supported authentication algorithms";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-05-24" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-30" {
+    description
+      "add hex choice for key chain";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-12-22" {
+    description
+      "add default value; modify spi only-value order; remove
+       unused import";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  grouping key-chain-grp {
+    description
+      "Key chain configuration mode";
+    /*
+    key-string  { (clear-text) | encrypted(encrypted-set) | hex
+     (hex-value)}
+    */
+    container key-string {
+      description
+        "Set key-string";
+      choice key-string {
+        case clear-text {
+          leaf clear-text {
+            type string {
+              length "1..24";
+            }
+            description
+              "Key string clear text";
+          }
+        }
+        case encrypted {
+          leaf encrypted {
+            type string {
+              length "1..48";
+            }
+            description
+              "Key string encrypted value";
+          }
+        }
+        case hex {
+          leaf hex {
+            type string;
+            description
+              "Hexadecimal key input";
+          }
+        }
+      }
+    }
+    /*
+    accept-lifetime (lifetime-start) [ infinite | duration
+     (duration-value) | (end-date) ]
+    */
+    container accept-lifetime {
+      presence "";
+      description
+        "Set accept lifetime of a key";
+      leaf lifetime-start {
+        type string;
+        mandatory true;
+        description
+          "Date and time to start accepting key, format is
+           yyyy:mm:dd:hh:mm[:ss]";
+      }
+      choice accept-lifetime-opt {
+        default infinite;
+        case infinite {
+          leaf infinite {
+            type empty;
+            description
+              "Never stop accepting key";
+          }
+        }
+        case duration {
+          leaf duration {
+            type uint32 {
+              range "1..2147483646";
+            }
+            description
+              "Set accept key duration";
+          }
+        }
+        case end-date {
+          leaf end-date {
+            type string;
+            description
+              "Date and time to stop accepting key, format is
+               yyyy:mm:dd:hh:mm[:ss]";
+          }
+        }
+      }
+    }
+    /*
+    send-lifetime (lifetime-start) [ infinite | duration
+     (duration-value) | (end-date) ]
+    */
+    container send-lifetime {
+      presence "";
+      description
+        "Set send lifetime of a key";
+      leaf lifetime-start {
+        type string;
+        mandatory true;
+        description
+          "Date and time to start sending key, format is
+           yyyy:mm:dd:hh:mm[:ss]";
+      }
+      choice send-lifetime-opt {
+        case infinite {
+          leaf infinite {
+            type empty;
+            description
+              "Never stop sending key";
+          }
+        }
+        case duration {
+          leaf duration {
+            type uint32 {
+              range "1..2147483646";
+            }
+            description
+              "Set stop key duration";
+          }
+        }
+        case end-date {
+          leaf end-date {
+            type string;
+            description
+              "Date and time to stop sending key, format is
+               yyyy:mm:dd:hh:mm[:ss]";
+          }
+        }
+      }
+    }
+    /*
+    spi { < in {in (in-value)} {out (out-value)} > | (only-
+     value)}
+    */
+    container spi {
+      description
+        "Security Parameter Index (SPI)";
+      choice spi {
+        case in {
+          container in {
+            description
+              "Accept or Inbound SPI";
+            leaf in {
+              type uint32 {
+                range "256..4294967295";
+              }
+              mandatory true;
+              description
+                "Accept or Inbound SPI value";
+            }
+            leaf out {
+              type uint32 {
+                range "256..4294967295";
+              }
+              mandatory true;
+              description
+                "Send or Outbound SPI";
+            }
+          }
+        }
+        case only-value {
+          leaf only-value {
+            type uint32 {
+              range "256..4294967295";
+            }
+            description
+              "Bidirectional SPI value (256 - 4294967295)";
+          }
+        }
+      }
+    }
+    /*
+    algorithm { HMAC-SHA-1 | HMAC-SHA-256 | HMAC-SHA-384 | HMAC-
+     SHA-512 | HMAC-MD5 | MD5 }
+    */
+    container algorithm {
+      description
+        "Associated Algorithm";
+      choice algorithm {
+        case HMAC-SHA-1 {
+          leaf HMAC-SHA-1 {
+            type empty;
+            description
+              "Hashed Message Auth Code (HMAC) Secure Hash
+               Algorithm (SHA) 1";
+          }
+        }
+        case HMAC-SHA-256 {
+          leaf HMAC-SHA-256 {
+            type empty;
+            description
+              "Hashed Message Auth Code (HMAC) Secure Hash
+               Algorithm (SHA) 256";
+          }
+        }
+        case HMAC-SHA-384 {
+          leaf HMAC-SHA-384 {
+            type empty;
+            description
+              "Hashed Message Auth Code (HMAC) Secure Hash
+               Algorithm (SHA) 384";
+          }
+        }
+        case HMAC-SHA-512 {
+          leaf HMAC-SHA-512 {
+            type empty;
+            description
+              "Hashed Message Auth Code (HMAC) Secure Hash
+               Algorithm (SHA) 512";
+          }
+        }
+        case HMAC-MD5 {
+          leaf HMAC-MD5 {
+            type empty;
+            description
+              "Hashed Message Auth Code (HMAC) Message Digest
+               (MD) 5";
+          }
+        }
+        case MD5 {
+          leaf MD5 {
+            type empty;
+            description
+              "Message Digest(MD) 5";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context" {
+    description
+      "ericsson-key-chain";
+    /*
+    key-chain (chain-name)
+    */
+    list key-chain {
+      key "key-chain";
+      description
+        "Configure a key chain key";
+      leaf key-chain {
+        type string {
+          length "1..39";
+        }
+        description
+          "Key chain name";
+      }
+      leaf description {
+        type string {
+          length "1..79";
+        }
+        description
+          "Configure a key chain description";
+      }
+      list key-id {
+        key "key-id";
+        description
+          "Key Identifier";
+        leaf key-id {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Key Id value";
+        }
+        uses key-chain-grp;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,232 @@
+module ericsson-dot1x-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-dot1x-router6000";
+
+  prefix "dot1xrouter6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-dot1x-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-09-12" {
+    description
+      "add default value and adjust value range";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2019-09-11" {
+    description
+      "add primary keyword";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2019-09-03" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping dot1x-grp {
+    description
+      "DOT1X configuration mode";
+    /*
+    enable
+    */
+    leaf enable {
+      type empty;
+      description
+        "Enable 802.1x function globally";
+    }
+    /*
+    re-authentication
+    */
+    leaf re-authentication {
+      type empty;
+      description
+        "Enable 802.1x periodic re-authentication";
+    }
+    /*
+    radius server { ip | ipv6 } (address) { encrypted-key | key
+     } (key-value)  [ port (port-num) ] [ context (ctx-id) ]
+     [primary]
+    */
+    list radius-server {
+      key "address";
+      description
+        "Set Radius Server for 802.1x";
+      leaf address {
+        type string;
+        description
+          "IPv4/IPv6 address of Radius Server";
+      }
+      choice radius-server-choice {
+        case ip {
+          leaf ip {
+            type empty;
+            description
+              "IPv4 address of Radius Server";
+          }
+        }
+        case ipv6 {
+          leaf ipv6 {
+            type empty;
+            description
+              "IPv6 address of Radius Server";
+          }
+        }
+      }
+      choice radius-server-choice1 {
+        case encrypted-key {
+          leaf encrypted-key {
+            type empty;
+            description
+              "encrypted server key";
+          }
+        }
+        case key {
+          leaf key {
+            type empty;
+            description
+              "Set the server key";
+          }
+        }
+      }
+      leaf key-value {
+        type string;
+        mandatory true;
+        description
+          "The server key";
+      }
+      leaf port {
+        type uint16 {
+          range "1..65535";
+        }
+        default "1812";
+        description
+          "Set the server authentication port";
+      }
+      leaf context {
+        type string;
+        description
+          "Set routing context for Radius server";
+      }
+      leaf primary {
+        type empty;
+        description
+          "Set primary Radius server";
+      }
+    }
+    /*
+    max-retransmission (retrans-value)
+    */
+    leaf max-retransmission {
+      type uint16 {
+        range "0..65535";
+      }
+      default "2";
+      description
+        "Set max retransmission before aborting authentication
+         process";
+    }
+    /*
+    retransmission-period (period-value)
+    */
+    leaf retransmission-period {
+      type uint16 {
+        range "0..65535";
+      }
+      default "30";
+      description
+        "Set waiting time before resending request";
+    }
+    /*
+    quiet-period (period-value)
+    */
+    leaf quiet-period {
+      type uint16 {
+        range "0..65535";
+      }
+      default "60";
+      description
+        "Set quiet time after failed authentication exchange";
+    }
+    /*
+    radius-server-retry (retry-value)
+    */
+    leaf radius-server-retry {
+      type uint16 {
+        range "0..65535";
+      }
+      default "2";
+      description
+        "Set Radius client retry times to server";
+    }
+    /*
+    radius-server-retry-period (period-value)
+    */
+    leaf radius-server-retry-period {
+      type uint16 {
+        range "0..65535";
+      }
+      default "30";
+      description
+        "Set waiting time that Radius client will wait for
+         response from server";
+    }
+    /*
+    re-authentication-period (period-value)
+    */
+    leaf re-authentication-period {
+      type uint16 {
+        range "0..65535";
+      }
+      default "3600";
+      description
+        "Set seconds between periodic re-authentication
+         attempts";
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-dot1x";
+    /*
+    dot1x authenticator
+    */
+    container dot1x-authenticator {
+      presence "";
+      description
+        "802.1x authenticator configuration mode";
+      uses dot1x-grp;
+    }
+  }
+
+}

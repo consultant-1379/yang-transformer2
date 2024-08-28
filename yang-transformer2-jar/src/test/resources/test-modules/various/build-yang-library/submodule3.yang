@@ -1,0 +1,16 @@
+submodule submodule3 {
+
+	belongs-to module1 {
+		prefix mod1;
+	}
+
+	revision "2023-08-24" {
+		yexte:version 7;
+		yexte:release 8;
+		yexte:correction 9;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+}

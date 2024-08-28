@@ -1,0 +1,78 @@
+module ericsson-nrcelldu-vdu-dev {
+    yang-version 1.1;
+    namespace urn:rdns:com:ericsson:oammodel:ericsson-nrcelldu-vdu-dev;
+    prefix nrcelldu3gppdev;
+
+    import ericsson-yang-extensions { prefix yexte; }
+    import _3gpp-common-managed-element { prefix me3gpp; }
+    import _3gpp-nr-nrm-gnbdufunction { prefix gnbdu3gpp; }
+    import _3gpp-nr-nrm-nrcelldu { prefix nrcelldu3gpp; }
+    
+    organization
+      "Ericsson AB";
+    contact
+      "Ericsson first line support via email";
+    description
+      "The module defines the NrCellDU data model for the Ericsson vDU.
+       
+       Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+    revision 2020-12-17 {
+       description
+          "Add deviations for vnfParametersList on _3gpp-nr-nrm-nrcelldu.";
+        yexte:version 0;
+        yexte:release 3;
+        yexte:correction 0;
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+    revision 2020-10-22 {
+       description
+          "Deviations on _3gpp-nr-nrm-nrcelldu.";
+        yexte:version 0;
+        yexte:release 2;
+        yexte:correction 0;
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+    revision 2020-03-23 {
+       description
+          "Deviations on _3gpp-nr-nrm-nrcelldu.";
+        yexte:version 0;
+        yexte:release 1;
+        yexte:correction 0;
+        reference
+          "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+
+    deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrcelldu3gpp:NRCellDU/nrcelldu3gpp:attributes/nrcelldu3gpp:sNSSAIList {
+        description "Network slicing feature is not supported.";
+        deviate not-supported;
+    }
+    deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrcelldu3gpp:NRCellDU/nrcelldu3gpp:attributes/nrcelldu3gpp:arfcnSUL {
+        description "Supplementary uplink configuration is not supported.";
+        deviate not-supported;
+    }
+    deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrcelldu3gpp:NRCellDU/nrcelldu3gpp:attributes/nrcelldu3gpp:bSChannelBwSUL {
+        description "Supplementary uplink configuration is not supported.";
+        deviate not-supported;
+    }
+    deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrcelldu3gpp:NRCellDU/nrcelldu3gpp:attributes/nrcelldu3gpp:nRFrequencyRef {
+        description "Non-split deployment scenario is not supported.";
+        deviate not-supported;
+    }
+    deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrcelldu3gpp:NRCellDU/nrcelldu3gpp:attributes/nrcelldu3gpp:vnfParametersList {
+        description "NRCellDU::vnfParametersList is not supported.";
+        deviate not-supported;
+    }
+
+    deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrcelldu3gpp:NRCellDU/nrcelldu3gpp:attributes/nrcelldu3gpp:peeParametersList {
+        description "Monitoring of PEE parameters is not supported for Ericsson vDU.";
+        deviate not-supported;
+    }
+
+    deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrcelldu3gpp:NRCellDU/nrcelldu3gpp:attributes/nrcelldu3gpp:priorityLabel {
+        description "Label value for management system to take into account is not supported for Ericsson vDU.";
+        deviate not-supported;
+    }
+}

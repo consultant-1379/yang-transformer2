@@ -1,0 +1,14 @@
+module nmt-three {
+
+    namespace "urn:test:nmt-three";
+    prefix this;
+
+    revision "2021-11-21";
+
+	include nmt-three-submodule;
+
+	container cont3 {
+		presence "";
+	}
+
+}

@@ -1,0 +1,49 @@
+module rename-schema-nodes-one {
+
+    namespace "urn*test*rename-schema-nodes-one";
+    prefix this;
+
+    revision "2021-03-07";
+
+	container cont1 {
+	
+		leaf leaf11 {
+			type string;
+		}
+
+		leaf leaf12 {				// will be renamed
+			type string;
+		}
+		
+		action action15 {
+			input {
+				leaf leaf16 {		// will be renamed
+					type string;
+				}
+			}
+		}
+	}
+
+	list list2 {
+		key leaf21;
+	
+		leaf leaf21 {
+			type string;
+		}
+		
+		choice choice24 {
+			case case1 {
+				leaf leaf26 {
+					type string;
+				}
+			}
+			case case2 {
+				leaf leaf27 {		// will be renamed
+					type string;
+				}
+			}
+		}		
+	}
+
+	rpc rpc3;				// will be renamed
+}

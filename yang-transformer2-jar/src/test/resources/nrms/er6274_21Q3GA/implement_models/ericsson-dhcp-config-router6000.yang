@@ -1,0 +1,161 @@
+module ericsson-dhcp-config-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-dhcp-config-router6000";
+
+  prefix "dhcpcfgrouter6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-dhcp-config-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-21" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-dhcp-config";
+    /*
+    dhcp { dbg-internal { cct | req } | monitor file-device-
+     degradation |  log { off | size (cnt-num) } }
+    */
+    container dhcp {
+      description
+        "Configure DHCP";
+      container dbg-internal {
+        description
+          "Enable internal debug, viz, thread-safety";
+        choice dbg-internal {
+          case cct {
+            leaf cct {
+              type empty;
+              description
+                "Enable internal debug for CCT";
+            }
+          }
+          case req {
+            leaf req {
+              type empty;
+              description
+                "Enable internal debug for REQ";
+            }
+          }
+        }
+      }
+      leaf monitor-file-device-degradation {
+        type empty;
+        description
+          "Enable lease file device degradation monitoring";
+      }
+      container log {
+        description
+          "Configure DHCP logging";
+        choice log {
+          case off {
+            leaf off {
+              type empty;
+              description
+                "Turn off the dhcp event logging";
+            }
+          }
+          case size {
+            leaf size {
+              type uint16 {
+                range "100..40000";
+              }
+              description
+                "Configure the number of entries in the internal
+                 DHCP log";
+            }
+          }
+        }
+      }
+    }
+    /*
+    dhcpv6 { allow-duplicate-mac | duid [duid-ll] |  log { off |
+     size (cnt-num) } | negative-reply-if-no-ips }
+    */
+    container dhcpv6 {
+      description
+        "Configure rate-limit for dhcpv6";
+      leaf allow-duplicate-mac {
+        type empty;
+        description
+          "Assign multiple leases to same MAC on different
+           circuits";
+      }
+      container duid {
+        presence "";
+        description
+          "Configure DHCPv6 Unique Identifier (DUID)";
+        leaf duid-ll {
+          type empty;
+          description
+            "Configure DUID type 3 using Link Layer address";
+        }
+      }
+      container log {
+        description
+          "Configure DHCPv6 logging";
+        choice log {
+          case off {
+            leaf off {
+              type empty;
+              description
+                "Stop the DHCPv6 event logging";
+            }
+          }
+          case size {
+            leaf size {
+              type uint16 {
+                range "100..40000";
+              }
+              description
+                "Configure the number of entries in the internal
+                 DHCPv6 log";
+            }
+          }
+        }
+      }
+      leaf negative-reply-if-no-ips {
+        type empty;
+        description
+          "Configure DHCPv6 not to send NOADDR or NOPREFIX if
+           either IANA or IAPD can be honoured";
+      }
+    }
+  }
+
+}

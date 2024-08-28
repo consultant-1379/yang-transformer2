@@ -1,0 +1,29 @@
+module moc-naming-weird-two {
+
+    namespace "urn*test*moc-naming-weird-two";
+    prefix this;
+
+    revision "2021-05-12";
+
+	import moc-naming-weird-one {
+		prefix one;
+	}
+
+	// Non-unique "cont2" exists both at the top-level of the
+	// schema and one level down under cont1.
+
+	container cont2 {
+		leaf leafXx { type string; }
+	}
+
+	augment /one:cont1 {
+		container cont2 {
+			leaf leafXx { type string; }
+		}
+	}
+
+	container cont7 {
+		leaf leafXx { type string; }
+	}
+
+}

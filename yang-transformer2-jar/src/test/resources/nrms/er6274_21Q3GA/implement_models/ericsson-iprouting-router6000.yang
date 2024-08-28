@@ -1,0 +1,605 @@
+module ericsson-iprouting-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-iprouting-router6000";
+
+  prefix "iproutingrouter6000";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-iprouting-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-06-22" {
+    description
+      "Remove soft-gre for ip under context";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-03-28" {
+    description
+      "Add soft-gre for ip under context";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-12-19" {
+    description
+      "delete router-id";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-01-18" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-iprouting";
+    /*
+    ipv6
+    */
+    container ipv6 {
+      description
+        "Set IPv6 parameters";
+      container path-mtu-discovery {
+        description
+          "Set path MTU discovery parameters";
+        leaf discovery-interval {
+          type uint32 {
+            range "300..2000000000";
+          }
+          description
+            "Set discovery interval";
+        }
+      }
+    }
+    /*
+    tcp
+    */
+    container tcp {
+      description
+        "Set TCP parameters";
+      leaf path-mtu-discovery {
+        type empty;
+        description
+          "Enable/disable TCP path mtu discovery";
+      }
+      container persist-state {
+        description
+          "Drop TCP sessions in persist too long";
+        leaf min-system-memory {
+          type uint16 {
+            range "1..32767";
+          }
+          default "50";
+          description
+            "Drop sessions if system memory less than this";
+        }
+        leaf timeout {
+          type uint16 {
+            range "1..32767";
+          }
+          default "600";
+          description
+            "Drop sessions in persist for longer than this";
+        }
+      }
+      container keepalive {
+        description
+          "Modify TCP keepalive parameters";
+        leaf idle {
+          type uint16 {
+            range "1..14400";
+          }
+          default "14400";
+          description
+            "Set keepalive idle time";
+        }
+        leaf interval {
+          type uint16 {
+            range "1..300";
+          }
+          default "150";
+          description
+            "Set keepalive interval time";
+        }
+        leaf count {
+          type uint8 {
+            range "1..32";
+          }
+          default "8";
+          description
+            "Set keepalive count";
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip" {
+    description
+      "ericsson-iprouting";
+    /*
+    default-network (def-prefix)
+    */
+    leaf default-network {
+      type inet:ipv4-prefix;
+      description
+        "Flags networks as candidates for default routes";
+    }
+    /*
+    martian (martian-prefix) [ ge (ge-value) | le (le-value) |
+     eq (eq-value) ]
+    */
+    list martian {
+      key "martian-prefix";
+      description
+        "Martian network, ignore routing information";
+      leaf martian-prefix {
+        type inet:ipv4-prefix;
+        description
+          "Martian network";
+      }
+      choice martian-opt {
+        case ge {
+          leaf ge {
+            type uint8 {
+              range "1..32";
+            }
+            must "number(.) >= number(substring-after"
+            + "(../martian-prefix, '/'))" {
+              error-message "invalid length or prefix "
+              + "range.Ensure 32 >= le-val >= ge-val >= len >= 0";
+              description
+                "";
+            }
+            description
+              "Prefix length greater than or equal
+               specification";
+          }
+        }
+        case le {
+          leaf le {
+            type uint8 {
+              range "1..32";
+            }
+            must "number(.) >= number(substring-after"
+            + "(../martian-prefix, '/'))" {
+              error-message "invalid length or prefix "
+              + "range.Ensure 32 >= le-val >= ge-val >= len >= 0";
+              description
+                "";
+            }
+            description
+              "Prefix length less than or equal specification";
+          }
+        }
+        case eq {
+          leaf eq {
+            type uint8 {
+              range "1..32";
+            }
+            must "number(.) >= number(substring-after"
+            + "(../martian-prefix, '/'))" {
+              error-message "invalid length or prefix "
+              + "range.Ensure 32 >= le-val >= ge-val >= len >= 0";
+              description
+                "";
+            }
+            description
+              "Prefix length equal specification";
+          }
+        }
+      }
+    }
+    /*
+    maximum-routes  { multicast (multicast) [ multicast-opt-set
+     { log-only | threshold (threshold) [ mid-threshold (mid-
+     threshold) ] } ] | { vpn (rt-num) | (rt-num) } [ vpn-rt-opt-
+     set { log-only | threshold (threshold) [ mid-threshold (mid-
+     threshold) ] } ] }
+    */
+    container maximum-routes {
+      description
+        "Maximum number of routes for a table";
+      container multicast {
+        description
+          "set maximum limit for unicast routes in multicast
+           topology";
+        leaf multicast {
+          type uint32 {
+            range "1..4294967295";
+          }
+          description
+            "route limit";
+        }
+        container multicast-opt-set {
+          when "(../multicast)" {
+            description
+              "";
+          }
+          description
+            "Set multicast option configuration.";
+          choice multicast-opt-set {
+            case log-only {
+              leaf log-only {
+                type empty;
+                description
+                  "Generate warning messages only";
+              }
+            }
+            case threshold {
+              container threshold {
+                description
+                  "Percentage of limit to start high-threshold
+                   warnings";
+                leaf threshold {
+                  type uint8 {
+                    range "1..100";
+                  }
+                  mandatory true;
+                  description
+                    "high-threshold value";
+                }
+                leaf mid-threshold {
+                  when "(../threshold)" {
+                    description
+                      "";
+                  }
+                  type uint8 {
+                    range "1..100";
+                  }
+                  description
+                    "Percentage of limit to start mid-threshold
+                     warnings";
+                }
+              }
+            }
+          }
+        }
+      }
+      container ipos-choice {
+        description
+          "container ipos-choice.";
+        choice ipos-choice-choice {
+          case vpn {
+            leaf vpn {
+              when "../../../../ctxr6k:context-name='local'" {
+                description
+                  "";
+              }
+              type uint32 {
+                range "1..4294967295";
+              }
+              description
+                "set maximum route limit for all non-local
+                 context unicast table";
+            }
+          }
+          case rt-num {
+            leaf rt-num {
+              type uint32 {
+                range "1..4294967295";
+              }
+              description
+                "route limit";
+            }
+          }
+        }
+        container vpn-rt-opt-set {
+          when "((../vpn) or (../rt-num))" {
+            description
+              "";
+          }
+          description
+            "Set vpn or route number option configuration.";
+          choice vpn-rt-opt-set {
+            case log-only {
+              leaf log-only {
+                type empty;
+                description
+                  "Generate warning messages only";
+              }
+            }
+            case threshold {
+              container threshold {
+                description
+                  "Percentage of limit to start high-threshold
+                   warnings";
+                leaf threshold {
+                  type uint8 {
+                    range "1..100";
+                  }
+                  mandatory true;
+                  description
+                    "high-threshold value";
+                }
+                leaf mid-threshold {
+                  when "(../threshold)" {
+                    description
+                      "";
+                  }
+                  type uint8 {
+                    range "1..100";
+                  }
+                  description
+                    "Percentage of limit to start mid-threshold
+                     warnings";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    mstatic-rpf-ip-addr (src-prefix) (rpf-ip-addr) [ (mrt-dist)
+     ]
+    */
+    list mstatic-rpf-ip-addr {
+      key "src-prefix rpf-ip-addr";
+      description
+        "Static route for multicast RPF lookup (IP address used
+         for RPF lookup).";
+      leaf src-prefix {
+        type inet:ipv4-prefix;
+        description
+          "Source address and network mask";
+      }
+      leaf rpf-ip-addr {
+        type inet:ipv4-address;
+        description
+          "RPF neighbor address or route";
+      }
+      leaf mrt-dist {
+        type uint8 {
+          range "1..255";
+        }
+        description
+          "Administrative distance for mstatic";
+      }
+    }
+    /*
+    mstatic-rpf-ifname (src-prefix) (rpf-ifname) [ (mrt-dist) ]
+    */
+    list mstatic-rpf-ifname {
+      key "src-prefix rpf-ifname";
+      description
+        "Static route for multicast RPF lookup (interface name
+         used for RPF lookup).";
+      leaf src-prefix {
+        type inet:ipv4-prefix;
+        description
+          "Source address and network mask";
+      }
+      leaf rpf-ifname {
+        type string;
+        must "/if:interfaces/if:interface/if:name=concat(.,'@',."
+        + "./../../ctxr6k:context-name)" {
+          error-message "The invalid interface, or the interface "
+          + "deleted is being used";
+          description
+            "";
+        }
+        description
+          "Interface name used for the RPF lookup.";
+      }
+      leaf mrt-dist {
+        type uint8 {
+          range "1..255";
+        }
+        description
+          "Administrative distance for mstatic";
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ipv6" {
+    description
+      "ericsson-iprouting";
+    /*
+    maximum-routes { multicast (multicast) [ multicast-opt-set {
+     log-only | threshold (threshold) [ mid-threshold (mid-
+     threshold) ] } ] | { vpn (rt-num) | (rt-num) } [ vpn-rt-opt-
+     set { log-only | threshold (threshold) [ mid-threshold (mid-
+     threshold) ] } ] }
+    */
+    container maximum-routes {
+      description
+        "Maximum number of routes for a table";
+      container multicast {
+        description
+          "set maximum limit for unicast routes in multicast
+           topology";
+        leaf multicast {
+          type uint32 {
+            range "1..4294967295";
+          }
+          description
+            "route limit";
+        }
+        container multicast-opt-set {
+          when "(../multicast)" {
+            description
+              "";
+          }
+          description
+            "Set multicast option configuration.";
+          choice multicast-opt-set {
+            case log-only {
+              leaf log-only {
+                type empty;
+                description
+                  "Generate warning messages only";
+              }
+            }
+            case threshold {
+              container threshold {
+                description
+                  "Percentage of limit to start high-threshold
+                   warnings";
+                leaf threshold {
+                  type uint8 {
+                    range "1..100";
+                  }
+                  mandatory true;
+                  description
+                    "high-threshold value";
+                }
+                leaf mid-threshold {
+                  when "(../threshold)" {
+                    description
+                      "";
+                  }
+                  type uint8 {
+                    range "1..100";
+                  }
+                  description
+                    "Percentage of limit to start mid-threshold
+                     warnings";
+                }
+              }
+            }
+          }
+        }
+      }
+      container ipos-choice {
+        description
+          "container ipos-choice.";
+        choice ipos-choice-choice {
+          case vpn {
+            leaf vpn {
+              when "../../../../ctxr6k:context-name='local'" {
+                description
+                  "";
+              }
+              type uint32 {
+                range "1..4294967295";
+              }
+              description
+                "set maximum route limit for all non-local
+                 context unicast table";
+            }
+          }
+          case rt-num {
+            leaf rt-num {
+              type uint32 {
+                range "1..4294967295";
+              }
+              description
+                "route limit";
+            }
+          }
+        }
+        container vpn-rt-opt-set {
+          when "((../vpn) or (../rt-num))" {
+            description
+              "";
+          }
+          description
+            "Set vpn or route number option configuration.";
+          choice vpn-rt-opt-set {
+            case log-only {
+              leaf log-only {
+                type empty;
+                description
+                  "Generate warning messages only";
+              }
+            }
+            case threshold {
+              container threshold {
+                description
+                  "Percentage of limit to start high-threshold
+                   warnings";
+                leaf threshold {
+                  type uint8 {
+                    range "1..100";
+                  }
+                  mandatory true;
+                  description
+                    "high-threshold value";
+                }
+                leaf mid-threshold {
+                  when "(../threshold)" {
+                    description
+                      "";
+                  }
+                  type uint8 {
+                    range "1..100";
+                  }
+                  description
+                    "Percentage of limit to start mid-threshold
+                     warnings";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

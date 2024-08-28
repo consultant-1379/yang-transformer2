@@ -1,0 +1,79 @@
+module ericsson-qos-config-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-qos-config-dev-router6000";
+
+  prefix "qoscfgrouter6000";
+
+  import ericsson-qos-config-router6000 {
+    prefix "qoscfgr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-mpls-router6000 {
+    prefix "mplsr6k";
+  }
+
+    import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+  
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-qos-dev-router6000
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+
+  revision "2020-12-08" {
+    description
+      "deviation for qos propagate mpls from l2vpn";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-07" {
+    description
+      "deviation for ericsson-qos-ipos.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/mplsr6k:mpls/mplsr6k:propagate/qoscfgr6k:qos/qoscfgr6k:from/qoscfgr6k:mpls-lsr"
+  {
+         deviate not-supported;
+
+  }
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/mplsr6k:mpls/mplsr6k:propagate/qoscfgr6k:qos/qoscfgr6k:from/qoscfgr6k:mpls/qoscfgr6k:class-map-option/qoscfgr6k:l2vpn-class-map"
+  {
+     deviate not-supported;
+  }
+}

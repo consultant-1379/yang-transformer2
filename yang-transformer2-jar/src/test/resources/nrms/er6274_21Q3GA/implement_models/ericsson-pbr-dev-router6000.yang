@@ -1,0 +1,56 @@
+module ericsson-pbr-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-pbr-dev-router6000";
+
+  prefix "pbrr6000";
+
+  import ericsson-pbr-router6000 {
+    prefix "pbrrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+   prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-pbr-ipos
+     Copyright (c) 2015-2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-01-17" {
+    description
+      "deviation for ericsson-pbr-ipos.yang file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+  deviation "/ctxsr6k:contexts/pbrrouter6000:forward/pbrrouter6000:radius-guided" {
+    deviate not-supported;
+  }
+
+}

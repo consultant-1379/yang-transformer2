@@ -1,0 +1,72 @@
+module ericsson-rsvp-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-rsvp-dev-ssr";
+
+  prefix "rsvpdevssr";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-rsvp-ipos {
+    prefix "rsvpipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-rsvp-dev-pd
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-01-03" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:router/rsvpipos:rsvp/rsvpipos:tunnel-shortcut" {
+      deviate not-supported;
+  }
+  deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:router/rsvpipos:rsvp/rsvpipos:lsp/rsvpipos:tunnel-shortcut" {
+      deviate not-supported;
+  }
+}

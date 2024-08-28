@@ -1,0 +1,67 @@
+module ericsson-bgp-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bgp-dev-ssr";
+
+  prefix "bgpdevssr";
+
+  import ericsson-bgp-ipos {
+      prefix "bgpipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bgp-dev-ssr
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-05-25" {
+    description
+      "Modify prefix error.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  revision "2017-01-29" {
+    description
+      "Creation of deviation file.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:router/bgpipos:bgp/bgpipos:address-family/bgpipos:ipv4/bgpipos:vpn/bgpipos:distance" {
+      deviate not-supported;
+  }
+}

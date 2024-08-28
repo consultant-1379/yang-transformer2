@@ -1,0 +1,15 @@
+module module2 {
+
+	namespace "urn:test:module2";
+	prefix this;
+
+	revision "2023-08-25" {
+		yexte:version 4;
+		yexte:release 5;
+		yexte:correction 6;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+}

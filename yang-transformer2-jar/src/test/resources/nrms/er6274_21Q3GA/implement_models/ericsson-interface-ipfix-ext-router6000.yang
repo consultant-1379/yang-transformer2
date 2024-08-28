@@ -1,0 +1,544 @@
+module ericsson-interface-ipfix-ext-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-ipfix-ext-router6000";
+
+  prefix "ifipfixrouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-l2vlan-ext-router6000 {
+    prefix "l2vlanxrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-bvi-ext-router6000 {
+    prefix "bvixrouter6000";
+  }
+
+  import ericsson-ipfix-policy-router6000 {
+    prefix "ipfixpolicyr6k";
+  }
+
+  import ericsson-lag-ext-router6000 {
+    prefix "lagxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-ipfix-ext-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-12-21" {
+    description
+      "First version";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/if:interfaces/if:interface/lagxrouter6000:link-"
+  + "group" {
+    description
+      "ericsson-ipfix-interface";
+    /*
+    ipfix-sample policy (pol-name)  in [ ip [ ipv6 ] acl-
+     counters | ipv6 acl-counters ]
+    */
+    list ipfix-sample-policy {
+      must "(../lagxrouter6000:bind-interface)" {
+        error-message "bind this circuit to an interface first "
+        + "before configuring this type of binding.";
+        description
+          "bind this circuit to an interface first before
+           configuring this type of binding.";
+      }
+      key "pol-name";
+      description
+        "Configure IPFIX sample policy";
+      leaf pol-name {
+        type leafref {
+          path "/ctxsr6k:contexts/ipfixpolicyr6k:ipfix-"
+          + "sample/ipfixpolicyr6k:policy/ipfixpolicyr6k:policy";
+        }
+        description
+          "IPFIX sample policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound ipfix-sample policy";
+      }
+      choice ipfix-sample-policy-opt {
+        description
+          "ipfix samp policy option";
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet" {
+    description
+      "ericsson-ipfix-interface";
+    /*
+    ipfix-sample policy (pol-name)  in [ ip [ ipv6 ] acl-
+     counters | ipv6 acl-counters ]
+    */
+    container ipfix-sample-policy {
+      presence "";
+      description
+        "Configure IPFIX sample policy";
+      leaf pol-name {
+        type leafref {
+          path "/ctxsr6k:contexts/ipfixpolicyr6k:ipfix-"
+          + "sample/ipfixpolicyr6k:policy/ipfixpolicyr6k:policy";
+        }
+        must "(../../ethxrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "IPFIX sample policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound IPFIX sample policy";
+      }
+      choice ipfix-sample-policy-opt {
+        description
+          "ipfix sample policy option";
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/bvixrouter6000:bvi" {
+    description
+      "ericsson-ipfix-interface";
+    /*
+    ipfix-sample policy (pol-name) in [ ip acl-counters | ipv6
+     acl-counters | ip ipv6 acl-counters ]
+    */
+    container ipfix-sample-policy {
+      presence "";
+      description
+        "Configure IPFIX sample policy";
+      leaf pol-name {
+        type leafref {
+          path "/ctxsr6k:contexts/ipfixpolicyr6k:ipfix-"
+          + "sample/ipfixpolicyr6k:policy/ipfixpolicyr6k:policy";
+        }
+        must "(../../bvixrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        description
+          "IPFIX sample policy name";
+      }
+      leaf in {
+        type empty;
+        description
+          "Configure inbound IPFIX sample policy";
+      }
+      choice ipfix-sample-policy-opt {
+        description
+          "ipfix sample policy option";
+        case ip-acl-counters {
+          leaf ip-acl-counters {
+            type empty;
+            description
+              "ACL counters";
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "ACL counters";
+          }
+        }
+        case ip-ipv6-acl-counters {
+          leaf ip-ipv6-acl-counters {
+            type empty;
+            description
+              "ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet/l"
+  + "2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc" {
+    description
+      "ericsson-ipfix-interface";
+    /*
+    ipfix-sample policy (pol-name)  in [ ip [ ipv6 ] acl-
+     counters | ipv6 acl-counters ]
+    */
+    container ipfix-sample-policy {
+      presence "";
+      description
+        "Configure ipfix policy";
+      leaf pol-name {
+        type leafref {
+          path "/ctxsr6k:contexts/ipfixpolicyr6k:ipfix-"
+          + "sample/ipfixpolicyr6k:policy/ipfixpolicyr6k:policy";
+        }
+        must "(../../l2vlanxrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "IPFIX sample policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound IPFIX sample policy";
+      }
+      choice ipfix-sample-policy-opt {
+        description
+          "ipfix sample policy option";
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l"
+  + "2vlanxrouter6000:pvc-list" {
+    description
+      "ericsson-ipfix-interface";
+    /*
+    ipfix-sample policy (pol-name)  in [ ip [ ipv6 ] acl-
+     counters | ipv6 acl-counters ]
+    */
+    container ipfix-sample-policy {
+      presence "";
+      description
+        "Configure ipfix policy";
+      leaf pol-name {
+        type leafref {
+          path "/ctxsr6k:contexts/ipfixpolicyr6k:ipfix-"
+          + "sample/ipfixpolicyr6k:policy/ipfixpolicyr6k:policy";
+        }
+        must "(../../l2vlanxrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "IPFIX sample policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound IPFIX sample policy";
+      }
+      choice ipfix-sample-policy-opt {
+        description
+          "ipfix sample policy option";
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/lagxrouter6000:link-"
+  + "group/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc" {
+    description
+      "ericsson-ipfix-interface";
+    /*
+    ipfix-sample policy (pol-name)  in [ ip [ ipv6 ] acl-
+     counters | ipv6 acl-counters ]
+    */
+    container ipfix-sample-policy {
+      presence "";
+      description
+        "Configure IPFIX sample policy";
+      leaf pol-name {
+        type leafref {
+          path "/ctxsr6k:contexts/ipfixpolicyr6k:ipfix-"
+          + "sample/ipfixpolicyr6k:policy/ipfixpolicyr6k:policy";
+        }
+        must "(../../l2vlanxrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "IPFIX sample policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound IPFIX sample policy";
+      }
+      choice ipfix-sample-policy-opt {
+        description
+          "ipfix sample policy option";
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l"
+  + "2vlanxrouter6000:pvc" {
+    description
+      "ericsson-ipfix-interface";
+    /*
+    ipfix-sample policy (pol-name)  in [ ip [ ipv6 ] acl-
+     counters | ipv6 acl-counters ]
+    */
+    container ipfix-sample-policy {
+      presence "";
+      description
+        "Configure IPFIX sample policy";
+      leaf pol-name {
+        type leafref {
+          path "/ctxsr6k:contexts/ipfixpolicyr6k:ipfix-"
+          + "sample/ipfixpolicyr6k:policy/ipfixpolicyr6k:policy";
+        }
+        must "(../../l2vlanxrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "IPFIX sample policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound IPFIX sample policy";
+      }
+      choice ipfix-sample-policy-opt {
+        description
+          "ipfix sample policy option";
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+}

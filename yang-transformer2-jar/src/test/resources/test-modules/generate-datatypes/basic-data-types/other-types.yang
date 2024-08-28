@@ -1,0 +1,45 @@
+module other-types {
+
+    namespace "urn&test&other-types";
+    prefix this;
+
+    revision "2021-02-30";
+	
+	container cont1 {
+	
+		leaf leaf11 {
+			type boolean;
+		}
+
+		leaf leaf12 {
+			type empty;
+		}
+
+		leaf leaf13 {
+			type instance-identifier;
+		}
+	
+		leaf leaf14 {
+			type binary;
+		}
+
+		leaf leaf15 {
+			type bits {
+				bit red;
+				bit yellow;
+				bit green;
+			}
+		}
+		
+		leaf leaf16 {
+			type this:unresolvable-type;
+		}
+
+		leaf leaf17 {
+			type not-a-yang-type;
+		}
+
+		leaf leaf18 {		// missing type altogether
+		}
+	}
+}

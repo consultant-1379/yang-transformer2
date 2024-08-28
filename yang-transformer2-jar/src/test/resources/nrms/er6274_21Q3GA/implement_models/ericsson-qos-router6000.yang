@@ -1,0 +1,5048 @@
+module ericsson-qos-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-qos-router6000";
+
+  prefix "qosrouter6000";
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-qos-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-30" {
+    description
+      "modify syntax error";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "1";
+  }
+
+  revision "2020-12-05" {
+    description
+      "add low-latency-buffer-only";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2020-06-05" {
+    description
+      "add mpls-ip class-map";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2020-02-18" {
+    description
+      "add queue rate minimum";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-06" {
+    description
+      "modify protocol tacacs+ definition name.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "4";
+  }
+
+  revision "2018-08-31" {
+    description
+      "Delete protocol ping in qos dscp command to keep align
+       with exec cli.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision "2018-08-23" {
+    description
+      "Combine netconf-yang and netconf-ecim to one protocol
+       netconf and delete protocol ptp in qos dscp command to
+       keep align with exec cli.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-08-09" {
+    description
+      "Modify protocol dhcp name in qos dscp command to keep
+       align with exec cli.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-07-10" {
+    description
+      "Add subcommand dscp for qos.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-04-23" {
+    description
+      "add card-family condition for burst under qos policy pwfq
+       rate, add missed counters daul-stack as well.
+       JIRA:21722,IPOS-21257";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "17";
+  }
+
+  revision "2018-04-11" {
+    description
+      "delete redundant default value of burst under rate
+       minimum.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "16";
+  }
+
+  revision "2018-04-10" {
+    description
+      "fix IPOS-22494.change must condition for
+       queuing(priority, weight and rate-maximum)";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "15";
+  }
+
+  revision "2018-04-09" {
+    description
+      "change overhead and resource to mandatory add QOS
+       queues-num constraint condition is 2,4,8";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "14";
+  }
+
+  revision "2018-04-08" {
+    description
+      "The ip, ethernet and mpls container are changed from
+       non-presence container to presence container.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "13";
+  }
+
+  revision "2018-03-29" {
+    description
+      "add when condition of burst:only no card-family or
+       card-family 1 can configure burst. fix JIRA:23325";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "12";
+  }
+
+  revision "2018-03-28" {
+    description
+      "the when condition of exponential-weight is deleted
+       because both mdrr and pwfq can configure. JIRA:23326";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "11";
+  }
+
+  revision "2018-03-22" {
+    description
+      "add use-ip, split class-map-grp into three type.
+       JIRA:21722";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "10";
+  }
+
+  revision "2018-02-09" {
+    description
+      "fix IPOS-21675 correct the length range of name string.
+       IPOS-21666 add when condition which restricts l2
+       access-group can't be configured under card-family 2 or
+       3.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "9";
+  }
+
+  revision "2018-02-02" {
+    description
+      "fix JIRA IPOS-21250 support to configure weight under
+       pwfq by card-family1 and card-family2, IPOS-21048 support
+       to configure more than 8 instances for qos
+       class-definition, IPOS-21253 rate is not accessible in
+       card-family 2, IPOS-21257 adjust the rate range for
+       different card-family, IPOS-21295 and HW602941 add
+       card-family for congestion-avoidance-map.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "8";
+  }
+
+  revision "2018-01-29" {
+    description
+      "fix IPOS-21252. replace mandatory with must condition for
+       queuing(priority, weight and rate-maximum)";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-01-23" {
+    description
+      "delete complicated must condition";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-01-13" {
+    description
+      "fix JIRA IPOS-20708";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2017-11-14" {
+    description
+      "mdrr num-queues 'number' ,'number' should compatibility
+       with previous version";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2017-08-01" {
+    description
+      "JIRA - 13984";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-07-27" {
+    description
+      "add omissive ssr command";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-07-25" {
+    description
+      "remove if-feature and add command for spitfire";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-05" {
+    description
+      "Fix jira IPOS-11928 DUIPTT-892";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-22" {
+    description
+      "Fix jira IPOS-11915 IPOS-11913 IPOS-8797 IPOS-9418";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-02" {
+    description
+      "Fix jira IPOS-8797";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-11" {
+    description
+      "Fix jira IPOS-7942 and IPOS-8012";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-15" {
+    description
+      "Add qos for ssr";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-08" {
+    description
+      "Add a feature name for l2 access list";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-25" {
+    description
+      "add l2 access-group";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-03" {
+    description
+      "fix EV275158";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-02-29" {
+    description
+      "fix EV274552";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature qos-resource {
+    description
+      "This feature indicates that the device supports resource
+       in QoS profile.";
+  }
+
+  feature qos-radius-guided {
+    description
+      "This feature indicates that the device supports radius
+       guided in QoS policy.";
+  }
+
+  feature qos-mark-dscp {
+    description
+      "This feature indicates that the device supports mark dscp
+       in QoS policing.";
+  }
+
+  feature qos-mark-precedence {
+    description
+      "This feature indicates that the device supports mark
+       precedence in QoS policing.";
+  }
+
+  feature qos-rate-mark-priority {
+    description
+      "This feature indicates that the device supports mark
+       priority in QoS policing rate.";
+  }
+
+  feature qos-rate-no-action {
+    description
+      "This feature indicates that the device supports no action
+       in QoS policing rate.";
+  }
+
+  feature qos-queue-map {
+    description
+      "This feature indicates that the device supports queue map
+       in QoS policing pwfq.";
+  }
+
+  feature qos-rate-conform {
+    description
+      "This feature indicates that the device supports conform
+       in QoS policing rate.";
+  }
+
+  feature qos-profile-resource-port {
+    description
+      "This feature indicates that the device supports resource
+       port in QoS profile.";
+  }
+
+  feature qos-profile-resource-tm {
+    description
+      "This feature indicates that the device supports resource
+       tm in QoS profile.";
+  }
+
+  feature qos-card-family {
+    description
+      "This feature indicates that the device supports
+       card-family in QoS.";
+  }
+
+  feature qos-rate-maximum {
+    description
+      "This feature indicates that the device supports rate
+       maximum in QoS policing pwfq.";
+  }
+
+  feature qos-rate-minimum {
+    description
+      "This feature indicates that the device supports rate
+       minimum in QoS policing pwfq.";
+  }
+
+  feature qos-mark-precendency {
+    description
+      "This feature indicates that the device supports mark
+       precendency in QoS policing pwfq.";
+  }
+
+  feature qos-rate-informational {
+    description
+      "This feature indicates that the device supports rate
+       informational in QoS policing.";
+  }
+
+  feature qos-rate-time-burst {
+    description
+      "This feature indicates that the device supports rate
+       time-burst in QoS policing.";
+  }
+
+  feature qos-rate-counters-dual-stack {
+    description
+      "This feature indicates that the device supports dual
+       stack of counters in QoS policing.";
+  }
+
+  feature qos-rate-time-excess-burst {
+    description
+      "This feature indicates that the device supports rate
+       time-excess-burst in QoS policing.";
+  }
+
+  feature qos-rate-hierarchical-dual-stack {
+    description
+      "This feature indicates that the device supports dual
+       stack of hierarchical in QoS policing.";
+  }
+
+  feature qos-overhead-encaps-ethernet {
+    description
+      "This feature indicates that the device supports encaps
+       ethernet in QoS overhead.";
+  }
+
+  feature qos-overhead-data-link {
+    description
+      "This feature indicates that the device supports data link
+       in QoS overhead.";
+  }
+
+  feature qos-protocol-rate-limit {
+    description
+      "This feature indicates that the device supports
+       protocol-rate-limit in QoS.";
+  }
+
+  feature qos-congestion-dscp {
+    description
+      "This feature indicates that the device supports queue
+       dscp in QoS congestion.";
+  }
+
+  feature qos-overhead-type {
+    description
+      "This feature indicates that the device supports overhead
+       type in QoS profile.";
+  }
+
+  feature qos-overhead-rate-factor {
+    description
+      "This feature indicates that the device supports overhead
+       rate factor in QoS profile.";
+  }
+
+  feature qos-overhead-encaps-pppoa {
+    description
+      "This feature indicates that the device supports overhead
+       encaps factor in QoS profile.";
+  }
+
+  feature qos-overhead-encaps-ipoa {
+    description
+      "This feature indicates that the device supports overhead
+       encaps factor in QoS profile.";
+  }
+
+  feature qos-overhead-encaps-ether-aal5 {
+    description
+      "This feature indicates that the device supports overhead
+       encaps factor in QoS profile.";
+  }
+
+  feature qos-class-map-use-ip {
+    description
+      "This feature indicates that the device supports use ip in
+       QoS class map.";
+  }
+
+  feature qos-class-map-use-ethernet {
+    description
+      "This feature indicates that the device supports use
+       ethernet in QoS class map.";
+  }
+
+  feature qos-class-mark-precedence {
+    description
+      "This feature indicates that the device supports
+       precedence in QoS class mark.";
+  }
+
+  feature qos-parent-class {
+    description
+      "This feature indicates that the device supports parent
+       class in QoS policy.";
+  }
+
+  feature qos-hierarchical-counter {
+    description
+      "This feature indicates that the device supports
+       hierarchical-counter in QoS policy.";
+  }
+
+  feature qos-mef-sharing {
+    description
+      "This feature indicates that the device supports
+       qos-mef-sharing in QoS policy.";
+  }
+
+  feature qos-encaps-access-line {
+    description
+      "This feature indicates that the device supports
+       encaps-access-line in QoS profile.";
+  }
+
+  feature qos-queue-guaranteed {
+    description
+      "This feature indicates that the device supports
+       qos-queue-guaranteed in QoS tm.";
+  }
+
+  feature qos-rate-class-for-sp {
+    description
+      "This feature indicates that the device supports
+       qos-rate-class-for-sp in QoS policy.";
+  }
+
+  feature qos-rate-class-for-ssr {
+    description
+      "This feature indicates that the device supports
+       qos-rate-class-for-ssr in QoS policy.";
+  }
+
+  feature qos-overhead-reserved {
+    description
+      "This feature indicates that the device supports
+       qos-overhead-reserved in QoS profile.";
+  }
+
+  feature qos-rate-calculation {
+    description
+      "This feature indicates that the device supports
+       rate-calculation in QoS policy.";
+  }
+
+  feature qos-ssr {
+    description
+      "This feature indicates that the device supports ssr in
+       Qos.";
+  }
+
+  feature qos-counter-hierarchical-counter {
+    description
+      "This feature indicates that the device supports
+       hierarchical-counter in QoS policy.";
+  }
+
+
+      identity num-queues {
+        description
+          "Base identity from which identities describing num of
+           queues are derived.";
+      }
+
+      identity one {
+        base num-queues;
+        description
+          "This identity represents 1 queues.";
+      }
+
+      identity two {
+        base num-queues;
+        description
+          "This identity represents 2 queues.";
+      }
+
+      identity four {
+        base num-queues;
+        description
+          "This identity represents 4 queues.";
+      }
+
+      identity eight {
+        base num-queues;
+        description
+          "This identity represents 8 queues.";
+      }
+
+
+    typedef dscp-protocol-type {
+     type enumeration {
+         enum bfd {
+           value 0;
+           description
+             "BFD";
+         }
+         enum bgp {
+           value 1;
+           description
+             "BGP";
+         }
+         enum cmpv2 {
+           value 2;
+           description
+             "CMPv2(PKI)";
+         }
+         enum dhcp-client {
+           value 3;
+           description
+             "DHCP Client";
+         }
+         enum dhcp-server-v4 {
+           value 4;
+           description
+             "DHCP Server/Relay/Proxy v4";
+         }
+         enum dhcp-server-v6 {
+           value 5;
+           description
+             "DHCP Server/Relay/Proxy v6";
+         }
+         enum ftp {
+           value 6;
+           description
+             "FTP";
+         }
+         enum icmp {
+           value 7;
+           description
+             "ICMP";
+         }
+         enum igmp {
+           value 8;
+           description
+             "IGMP";
+         }
+         enum ipsec {
+           value 9;
+           description
+             "IP Sec(IKE)";
+         }
+         enum ldap {
+           value 10;
+           description
+             "LDAP";
+         }
+         enum ldp {
+           value 11;
+           description
+             "LDP";
+         }
+         enum mld {
+           value 12;
+           description
+             "MLD";
+         }
+         enum msdp {
+           value 13;
+           description
+             "MSDP";
+         }
+         enum nd {
+           value 14;
+           description
+             "ND";
+         }
+         enum netconf {
+           value 15;
+           description
+             "Netconf";
+         }
+         enum ospfv2 {
+           value 16;
+           description
+             "OSPFv2";
+         }
+         enum ospfv3 {
+           value 17;
+           description
+             "OSPFv3";
+         }
+         enum pim {
+           value 18;
+           description
+             "PIM";
+         }
+         enum radius {
+           value 19;
+           description
+             "Radius";
+         }
+         enum rsvp {
+           value 20;
+           description
+             "RSVP";
+         }
+         enum snmp {
+           value 21;
+           description
+             "SNMP";
+         }
+         enum ssh-scp-sftp {
+           value 22;
+           description
+             "SSH/SCP/SFTP";
+         }
+         enum syslog {
+           value 23;
+           description
+             "Syslog";
+         }
+         enum tacacsplus {
+           value 24;
+           description
+             "TACACS+";
+         }
+         enum telnet {
+           value 25;
+           description
+             "Telnet";
+         }
+         enum vrrpv2 {
+           value 26;
+           description
+             "Virtual Router Redundancy Protocol v2";
+         }
+     }
+     description
+       "Dscp Protocol";
+   }
+
+
+  grouping policy-pwfq-grp {
+    description
+      "QoS priority weighted fair queues policy configuration
+       mode";
+    /*
+    num-queues (8)
+    */
+    leaf num-queues {
+      type identityref {
+        base num-queues;
+      }
+      description
+        "Total number of queues of the policy";
+    }
+    /*
+    queue (queue-num) { priority (priority-num) { weight
+     (weight-num) | strict-priority (priority-num) } | rate
+     { maximum | minimum-guarantee } { (rate-num) [ burst (burst-num) ] | Percentage
+     (percentage-num)}}
+    */
+    list queue {
+      key "queue-num";
+      description
+        "Specific queue configuration";
+      leaf queue-num {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Queue number";
+      }
+      container queue-choice {
+        description
+          "container queue-choice.";
+        container priority {
+          description
+            "container priority.";
+          leaf priority {
+            type empty;
+            description
+              "Select queue priority group";
+          }
+          leaf priority-num {
+            type uint8 {
+              range "0..7";
+            }
+            description
+              "Priority group number";
+          }
+          choice priority-choice {
+            case weight {
+              leaf weight {
+                type uint16 {
+                  range "1..256";
+                }
+                must "((not (../../../../card-family)) and "
+                + "number(.) <=1023 and number(.) >=1) or "
+                + "((../../../../card-family=1) and number(.) "
+                + "<=1023 and number(.) >=1) or ((../../../../card-family=2) and number(.) <= 100 and number(.) >= "
+                + "5) or ((../../../../card-family=3) and number(.) "
+                + "<= 100 and number(.) >=1)" {
+                  error-message "rang (1..1023) not exit card- "
+                  + "family or range (1..1023) for card-famuly 1 or "
+                  + "range (5..100) for card-family 2 or range "
+                  + "(1..100) for card-family 3.";
+                  description
+                    "range (1..1023) not exit card-family or
+                     range (1..1023) for card-family 1 or range
+                     (5..100) for card-family 2 or range (1..100)
+                     for card-family 3.";
+                }
+                description
+                  "Queue weight";
+              }
+            }
+            case strict-priority {
+              leaf strict-priority {
+                type uint8 {
+                  range "0..3";
+                }
+                description
+                  "Queue strict priority";
+              }
+            }
+          }
+        }
+        container rate {
+          description
+            "container rate.";
+          leaf rate {
+            type empty;
+            mandatory true;
+            description
+              "Queue rate";
+          }
+          container rate-choice {
+            description
+              "container rate-choice.";
+            container maximum {
+              description
+                "Maximum queue rate";
+              choice maximum-choice {
+                case rate-num {
+                  container rate-num {
+                    description
+                      "container rate-num.";
+                    leaf rate-num {
+                      type uint32 {
+                        range "0..10000000";
+                      }
+                      description
+                        "Rate in kbps";
+                    }
+                    leaf burst {
+                      type uint32 {
+                        range "1000..524288";
+                      }
+                      default "16384";
+                      description
+                        "Burst size";
+                    }
+                  }
+                }
+                case Percentage {
+                  leaf Percentage {
+                    type uint8 {
+                      range "0..100";
+                    }
+                    description
+                      "Percentage (%) of policy's rate";
+                  }
+                }
+              }
+            }
+            container minimum-guarantee {
+              description
+                "Minimum queue rate";
+              choice minimum-guarantee-choice {
+                case rate-num {
+                  container rate-num {
+                    description
+                      "container rate-num.";
+                    leaf rate-num {
+                      type uint32 {
+                        range "0..10000000";
+                      }
+                      description
+                        "Rate in kbps";
+                    }
+                    leaf burst {
+                      type uint32 {
+                        range "1000..524288";
+                      }
+                      default "16384";
+                      description
+                        "Burst size";
+                    }
+                  }
+                }
+                case Percentage {
+                  leaf Percentage {
+                    type uint8 {
+                      range "0..100";
+                    }
+                    description
+                      "Percentage (%) of policy's rate";
+                  }
+                }
+              }
+            }
+          }
+        }
+        container rate-maximum {
+          when "not(../../../card-family=2)" {
+            description
+              "";
+          }
+          status obsolete;
+          description
+            "Maximum queue rate";
+          choice rate-maximum {
+            case max-num {
+              container max-num {
+                description
+                  "container max-num.";
+                leaf max-num {
+                  type uint32 {
+                    range "325..10000000";
+                  }
+                  description
+                    "Rate in kbps";
+                }
+                leaf burst {
+                  type uint32 {
+                    range "1000..524288";
+                  }
+                  default "100352";
+                  description
+                    "Burst size";
+                }
+              }
+            }
+            case Percentage {
+              leaf Percentage {
+                type uint8 {
+                  range "1..100";
+                }
+                description
+                  "Percentage (%) of policy's maximum rate";
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    rate { pir (rate-num) [ burst (burst-num) ] | cir (rate-num)
+     [ burst (burst-num) ] | maximum (rate-num)[ burst (burst-
+     num)] [counters dual-stack] | minimum (rate-num) [ burst
+     (burst-num) ] }
+    */
+    container rate {
+      description
+        "Rate";
+      container pir {
+        presence "";
+        description
+          "Peak information rate in kbps";
+        leaf rate-num {
+          type uint32 {
+            range "325..10000000";
+          }
+          mandatory true;
+          description
+            "Rate in kbps";
+        }
+        leaf burst {
+          type uint32 {
+            range "1000..523264";
+          }
+          default "100352";
+          description
+            "Burst size";
+        }
+      }
+      container cir {
+        presence "";
+        description
+          "Committed information rate in kbps";
+        leaf rate-num {
+          type uint32 {
+            range "325..10000000";
+          }
+          must "(../../pir) and (number(.)<= number(../../pir"
+          + "/rate-num))" {
+            error-message "cir must be less than or equal to "
+            + "pir.";
+            description
+              "min rate must be less than or equal to max rate";
+          }
+          mandatory true;
+          description
+            "Rate in kbps";
+        }
+        leaf burst {
+          type uint32 {
+            range "1000..523264";
+          }
+          default "100352";
+          description
+            "Burst size";
+        }
+      }
+      container maximum {
+        if-feature qos-rate-maximum;
+        presence "";
+        description
+          "Maximum rate";
+        leaf rate-num {
+          type uint32 {
+            range "64..1000000";
+          }
+          mandatory true;
+          description
+            "Rate in kbps";
+        }
+        leaf burst {
+          when "(not(../../../card-family)) or (../../../card-family = 1) " {
+            description
+              "burst can be accessible when card-family is not
+               configured or card-family is 1";
+          }
+          type uint32 {
+            range "1024..524288";
+          }
+          description
+            "Burst size";
+        }
+        leaf counters-dual-stack {
+          when "../../../card-family = 3 " {
+            description
+              "counters can be accessible when card-family is 3";
+          }
+          type empty;
+          description
+            "Record dual-stack statistics";
+        }
+      }
+      container minimum {
+        if-feature qos-rate-minimum;
+        presence "";
+        description
+          "Minimum rate";
+        leaf rate-num {
+          type uint32 {
+            range "64..1000000";
+          }
+          mandatory true;
+          description
+            "Rate in kbps";
+        }
+        leaf burst {
+          when "(not(../../../card-family)) or (../../../card-family = 1) " {
+            description
+              "burst can be accessible when card-family is not
+               configured or card-family is 1";
+          }
+          if-feature qos-card-family;
+          type uint32 {
+            range "1024..524288";
+          }
+          description
+            "Burst size";
+        }
+      }
+    }
+    /*
+    weight (weight-num)
+    */
+    leaf weight {
+      when "(not(../card-family)) or (../card-family=1) or "
+      + "(../card-family=2)" {
+        description
+          "weight can be accessible when card-family is not
+           configured or card-family is 1 or 2.";
+      }
+      type uint8 {
+        range "1..253";
+      }
+      description
+        "Node weight";
+    }
+    /*
+    congestion-map (map-obj)
+    */
+    leaf congestion-map {
+      type leafref {
+        path "/qosrouter6000:qos/qosrouter6000:congestion-"
+        + "avoidance-map/qosrouter6000:map-name";
+      }
+      description
+        "Congestion-avoidance map";
+    }
+    /*
+     queue priority-group (priority-num)< rate { rate-num (rate-
+     num) [ exceed ] | percentage (percentage-num) [ exceed ] } <
+     minimum { (rate-num) | percentage (percentage-num) } >>
+    */
+    list queue-priority-group {
+      if-feature qos-ssr;
+      must "./rate/rate-num or ./rate/percentage or "
+      + "./rate/minimum/percentage or ./rate/minimum/rate-num" {
+        error-message "Must configure priority group rate rate- "
+        + "num or percentage or minimum";
+        description
+          "Must configure priority group rate rate-num or
+           percentage or minimum ";
+      }
+      key "priority-num";
+      description
+        "priority group";
+      leaf priority-num {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Priority group number";
+      }
+      container rate {
+        description
+          "Priority group rate";
+        choice rate-choice {
+          case rate-num {
+            container rate-num {
+              description
+                "container rate-num.";
+              leaf rate-num {
+                type uint32 {
+                  range "8..100000000";
+                }
+                description
+                  "Maximum rate in kbps";
+              }
+              leaf exceed {
+                type empty;
+                description
+                  "Allow queue priority-group to exceed
+                   specified rate";
+              }
+            }
+          }
+          case percentage {
+            container percentage {
+              description
+                "Percentage (%) of policy's priority group
+                 maximum rate";
+              leaf percentage-num {
+                type uint8 {
+                  range "1..100";
+                }
+                description
+                  "Priority group maximum rate in percentage (%)
+                   value";
+              }
+              leaf exceed {
+                type empty;
+                description
+                  "Allow queue priority-group to exceed
+                   specified rate";
+              }
+            }
+          }
+        }
+        container minimum {
+          when "../../../card-family=3" {
+            description
+              "";
+          }
+          description
+            "Priority group minimum rate";
+          choice minimum {
+            case rate-num {
+              leaf rate-num {
+                type uint32 {
+                  range "8..100000000";
+                }
+                must "number(.) <= number(../../rate-num/rate-"
+                + "num) or not(../../rate-num/rate-num)" {
+                  error-message "Priority group maximum rate "
+                  + "must be greater than or equal to priority "
+                  + "group minimum rate";
+                  description
+                    "Priority group maximum rate must be greater
+                     than or equal to priority group minimum
+                     rate";
+                }
+                description
+                  "Minimum rate in kbps";
+              }
+            }
+            case percentage {
+              leaf percentage {
+                type uint8 {
+                  range "1..100";
+                }
+                description
+                  "Percentage (%) of policy's priority group
+                   minimum rate";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping policy-mdrr-grp {
+    description
+      "QoS modified deficit round robin queues policy
+       configuration mode";
+    /*
+    num-queues (queue-num)
+    */
+    leaf num-queues {
+      type uint8 {
+        range "1..8";
+      }
+      must "number(.) = 1 or number(.) = 2 or number(.) = 4 or "
+      + "number(.) = 8" {
+        error-message "queue-num must be 1, 2, 4 or 8,can not be "
+        + "other numbers";
+        description
+          "queue-num must be 1, 2, 4 or 8";
+      }
+      description
+        "Total number of queues of the policy: 1, 2, 4 or
+         8(default is 8)";
+    }
+    /*
+    rate (rate-num) burst (burst-num)
+    */
+    container rate {
+      presence "";
+      description
+        "Maximum rate";
+      leaf rate {
+        type uint32 {
+          range "56..10000000";
+        }
+        mandatory true;
+        description
+          "Rate in kbps";
+      }
+      leaf burst {
+        type uint32 {
+          range "1..8000000";
+        }
+        mandatory true;
+        description
+          "Burst size";
+      }
+    }
+    /*
+    queue-map {(qmap-obj) | default}
+    */
+    container queue-map {
+      description
+        "Queue priority map";
+      choice queue-map {
+        case qmap-obj {
+          leaf qmap-obj {
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:queue-"
+              + "map/qosrouter6000:queue-map";
+            }
+            description
+              "QoS queue map name";
+          }
+        }
+        case default {
+          leaf default {
+            type empty;
+            description
+              "QoS map name";
+          }
+        }
+      }
+    }
+    /*
+    congestion-map (map-obj)
+    */
+    leaf congestion-map {
+      type string {
+        length "1..39";
+      }
+      description
+        "Congestion-avoidance map";
+    }
+    /*
+    queue (queue-num) weight (pkt-val)
+    */
+    list queue {
+      key "queue";
+      description
+        "Priority group";
+      leaf queue {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Priority group number";
+      }
+      container weight {
+        description
+          "weight on the queue";
+        leaf weight {
+          type uint8 {
+            range "5..100";
+          }
+          mandatory true;
+          description
+            "Traffic weight (% of bandwidth)";
+        }
+      }
+    }
+    /*
+    qos mode { priority | strict | wrr }
+    */
+    container qos-mode {
+      presence "";
+      description
+        "Configure QOS mode";
+      choice qos-mode {
+        mandatory true;
+        case priority {
+          leaf priority {
+            type empty;
+            mandatory true;
+            description
+              "Priority queuing mode";
+          }
+        }
+        case strict {
+          leaf strict {
+            type empty;
+            mandatory true;
+            description
+              "Weighted round robin in strict mode";
+          }
+        }
+        case wrr {
+          leaf wrr {
+            type empty;
+            mandatory true;
+            description
+              "Weighted round robin";
+          }
+        }
+      }
+    }
+  }
+
+  grouping policy-policing-metering-grp {
+    description
+      "QoS rate limit policy configuration mode";
+    /*
+    rate [ informational ] (rate-num) { burst (burst-num) |
+     time-burst (burst-num) } [ excess-rate (rate-num) ] [
+     excess-burst (burst-num) | time-excess-burst (burst-num) ] [
+     counters [hierarchical-counters] [dual-stack] ] [
+     hierarchical-counters [dual-stack] ]
+    */
+    container rate {
+      must "(not(../mark)) and ./rate-num" {
+        error-message "please remove overall marking settings "
+        + "first";
+        description
+          "rate can be configured once without mark
+           configuration";
+      }
+      presence "";
+      description
+        "Maximum rate of policy";
+      leaf informational {
+        if-feature qos-rate-informational;
+        type empty;
+        description
+          "Policy rate is for information purposes only";
+      }
+      leaf rate-num {
+        type uint32 {
+          range "20..300000000";
+        }
+        mandatory true;
+        description
+          "Rate in kbps";
+      }
+      choice rate-choice {
+        mandatory true;
+        case burst {
+          leaf burst {
+            type uint32 {
+              range "1000..523264";
+            }
+            description
+              "Burst size";
+          }
+        }
+        case time-burst {
+          leaf time-burst {
+            if-feature qos-rate-time-burst;
+            type uint16 {
+              range "0..33292";
+            }
+            mandatory true;
+            description
+              "Burst time";
+          }
+        }
+      }
+      leaf excess-rate {
+        type uint32 {
+          range "20..300000000";
+        }
+        description
+          "Excess rate of policy";
+      }
+      choice rate-opt1 {
+        case excess-burst {
+          leaf excess-burst {
+            type uint16 {
+              range "0..33292";
+            }
+            description
+              "Max burst size";
+          }
+        }
+        case time-excess-burst {
+          leaf time-excess-burst {
+            if-feature qos-rate-time-excess-burst;
+            type uint16 {
+              range "0..33292";
+            }
+            description
+              "Max burst time";
+          }
+        }
+      }
+      container counters {
+        must "not (../hierarchical-counters)" {
+          error-message "Hierarchical-counters and Counters are "
+          + "mutually exclusive.";
+          description
+            "";
+        }
+        presence "";
+        description
+          "Record policing/metering statistics";
+        leaf hierarchical-counters {
+          if-feature qos-counter-hierarchical-counter;
+          type empty;
+          description
+            "Record hierarchical policing/metering statistics";
+        }
+        leaf dual-stack {
+          type empty;
+          description
+            "Record dual-stack policing/metering statistics";
+        }
+      }
+      container hierarchical-counters {
+        if-feature qos-hierarchical-counter;
+        must "not (../counters)" {
+          error-message "Hierarchical-counters and Counters are "
+          + "mutually exclusive.";
+          description
+            "";
+        }
+        presence "";
+        description
+          "Record hierarchical policing/metering statistics";
+        leaf dual-stack {
+          if-feature qos-rate-counters-dual-stack;
+          type empty;
+          description
+            "Record dual-stack policing/metering statistics";
+        }
+      }
+      uses policy-rate-grp;
+    }
+    /*
+    ip access-group (gpol-aclname) (gpol-ctxname)
+    */
+    list ip-access-group {
+      when "not (../radius-guided)" {
+        description
+          "";
+      }
+      must "not (../class-group)" {
+        error-message "please remove the existing class- "
+        + "definition reference first";
+        description
+          "class-group can be configured once without acl
+           configuration";
+      }
+      key "gpol-aclname gpol-ctxname";
+      max-elements 1;
+      description
+        "Specify a policy access list to define classes for this
+         policy";
+      leaf gpol-aclname {
+        type string {
+          length "1..39";
+        }
+        description
+          "Policy access list name";
+      }
+      leaf gpol-ctxname {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        description
+          "Name of the context in which the policy access list
+           is defined";
+      }
+      uses policy-access-group-grp;
+    }
+    /*
+    ipv6 access-group (gpol-aclname) (gpol-ctxname)
+    */
+    list ipv6-access-group {
+      when "not (../radius-guided)" {
+        description
+          "";
+      }
+      must "not (../class-group)" {
+        error-message "please remove the existing class- "
+        + "definition reference first";
+        description
+          "class-group can be configured once without acl
+           configuration";
+      }
+      key "gpol-aclname gpol-ctxname";
+      max-elements 1;
+      description
+        "Specify a policy access list to define classes for this
+         policy";
+      leaf gpol-aclname {
+        type string {
+          length "1..39";
+        }
+        description
+          "Policy access list name";
+      }
+      leaf gpol-ctxname {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        description
+          "Name of the context in which the policy access list
+           is defined";
+      }
+      uses policy-access-group-grp;
+    }
+    /*
+    l2 access-group [ (aclname-rg) (gpol-ctxname) ] (gpol-
+     aclname)
+    */
+    list l2-access-group {
+      when "not (../radius-guided) and not (../card-family=2) "
+      + "and not (../card-family=3)" {
+        description
+          "";
+      }
+      key "gpol-aclname";
+      max-elements 1;
+      description
+        "Specify a policy access list to define classes for this
+         policy";
+      leaf gpol-aclname {
+        type string {
+          length "1..39";
+        }
+        description
+          "Policy access list name";
+      }
+      container l2-access-group-opt {
+        description
+          "container l2-access-group-opt.";
+        leaf aclname-rg {
+          type string {
+            length "1..39";
+          }
+          mandatory true;
+          description
+            "Optional policy access list name";
+        }
+        leaf gpol-ctxname {
+          type string {
+            length "1..63";
+          }
+          mandatory true;
+          description
+            "Name of the context in which the policy access list
+             is defined";
+        }
+      }
+      uses policy-access-group-grp;
+    }
+    /*
+    class-group (def-name)
+    */
+    list class-group {
+      must "not(../ip-access-group) and  not (../ipv6-access-"
+      + "group)" {
+        error-message "please remove the existing ACL reference "
+        + "first";
+        description
+          "class-group can be configured once without acl
+           configuration";
+      }
+      key "class-group";
+      max-elements 1;
+      description
+        "Specify a class-definition to define classes for this
+         policy";
+      leaf class-group {
+        type leafref {
+          path "/qosrouter6000:qos/qosrouter6000:class-"
+          + "definition/qosrouter6000:class-definition";
+        }
+        description
+          "Class definition name";
+      }
+      uses policy-class-group-grp;
+    }
+    /*
+    rate-calculation exclude layer-2-overhead
+    */
+    leaf rate-calculation-exclude-layer-2-overhead {
+      if-feature qos-rate-calculation;
+      type empty;
+      description
+        "Exclude L2 Overhead when calculating rate-limits";
+    }
+    /*
+    mark { dscp (dscp-value) | < priority { ignore | (priority-
+     num) } > [ drop-precedence { ignore | (prec-num) } | af-drop
+     (drop-num) ] | precedence (prec-num) }
+    */
+    container mark {
+      must "(not(../rate)) and (./priority or ./dscp or "
+      + "./precedence)" {
+        error-message "please remove rate limiting settings "
+        + "first";
+        description
+          "mark can be configured once without rate
+           configuration";
+      }
+      presence "";
+      description
+        "Mark IP packets";
+      choice mark {
+        mandatory true;
+        case dscp {
+          leaf dscp {
+            if-feature qos-mark-dscp;
+            type typesrouter6000:dscp-value;
+            mandatory true;
+            description
+              "Mark IP DSCP";
+          }
+        }
+        case priority {
+          container priority {
+            description
+              "container priority.";
+            container priority {
+              description
+                "Mark packet internal priority and
+                 drop-precedence";
+              choice priority {
+                mandatory true;
+                case ignore {
+                  leaf ignore {
+                    type empty;
+                    mandatory true;
+                    description
+                      "Leave the packet's internal priority
+                       unmodified";
+                  }
+                }
+                case priority-num {
+                  leaf priority-num {
+                    type uint8 {
+                      range "0..7";
+                    }
+                    description
+                      "Priority group number";
+                  }
+                }
+              }
+            }
+            choice priority-opt {
+              case drop-precedence {
+                container drop-precedence {
+                  description
+                    "Select the internal drop-precedence value
+                     marking";
+                  choice drop-precedence {
+                    case ignore {
+                      leaf ignore {
+                        type empty;
+                        description
+                          "Leave the packet's internal
+                           drop-precedence unmodified";
+                      }
+                    }
+                    case prec-num {
+                      leaf prec-num {
+                        type uint8 {
+                          range "0..7";
+                        }
+                        description
+                          "Desired three-bit internal drop
+                           precedence value";
+                      }
+                    }
+                  }
+                }
+              }
+              case af-drop {
+                leaf af-drop {
+                  type uint8 {
+                    range "1..3";
+                  }
+                  description
+                    "Select the internal drop-precedence using
+                     Assured Forwarding values";
+                }
+              }
+            }
+          }
+        }
+        case precedence {
+          leaf precedence {
+            if-feature qos-mark-precendency;
+            if-feature qos-mark-precedence;
+            type uint8 {
+              range "1..3";
+            }
+            description
+              "Mark IP drop-precedence";
+          }
+        }
+      }
+    }
+  }
+
+  grouping queue-map-grp {
+    description
+      "QoS queue priority mapping configuration mode";
+    /*
+    num-queues (queues-num)
+    */
+    list num-queues {
+      if-feature qos-ssr;
+      key "num-queues";
+      max-elements 3;
+      description
+        "Total number of queues of the policy: 2, 4 or 8";
+      leaf num-queues {
+        type uint8 {
+          range "2..8";
+        }
+        must "number(.) = 2 or number(.) = 4 or number(.) = 8" {
+          error-message "queue-num must be 2, 4 or 8,can not be "
+          + "other numbers";
+          description
+            "queue-num must be 2, 4 or 8";
+        }
+        description
+          "2, 4 or 8";
+      }
+      uses num-queues-grp;
+    }
+  }
+
+  grouping num-queues-grp {
+    description
+      "QoS queue priority number queue configuration mode";
+    /*
+    queue (queue-num)  {< priority {priority (priorities-num)}
+     >}
+    */
+    list queue {
+      key "queue-num";
+      description
+        "Queue";
+      leaf queue-num {
+        type uint8 {
+          range "0..7";
+        }
+        must "number(.) < number(../../num-queues)" {
+          error-message "queue number is invalid for current "
+          + "num-queues";
+          description
+            "queue number must less than num-queues";
+        }
+        description
+          "Queue number";
+      }
+      container priority {
+        description
+          "queue mapping priority";
+        leaf-list priority {
+          type uint8 {
+            range "0..7";
+          }
+          min-elements 1;
+          max-elements 8;
+          description
+            "queue mapping priority";
+        }
+      }
+    }
+  }
+
+  grouping policy-rate-grp {
+    description
+      "QoS policy rate limit configuration mode";
+    /*
+    conform { mark { <priority { ignore | (prio-num) } [ drop-
+     precedence { ignore | (prec-num) } | af-drop (drop-num) ] >|
+     precedence (prec-num) | dscp (dscp-value) } | drop | no-
+     action}
+    */
+    container conform {
+      if-feature qos-rate-conform;
+      presence "";
+      description
+        "Conform action of rate limit";
+      choice conform {
+        mandatory true;
+        case mark {
+          container mark {
+            description
+              "Mark packets";
+            choice mark {
+              case priority {
+                container priority {
+                  description
+                    "Mark packet internal priority and
+                     drop-precedence";
+                  choice priority-choice {
+                    mandatory true;
+                    case ignore {
+                      leaf ignore {
+                        type empty;
+                        mandatory true;
+                        description
+                          "Leave the packet's internal priority
+                           unmodified";
+                      }
+                    }
+                    case prio-num {
+                      leaf prio-num {
+                        type uint8 {
+                          range "0..7";
+                        }
+                        mandatory true;
+                        description
+                          "Priority group number";
+                      }
+                    }
+                  }
+                  choice priority-opt1 {
+                    case drop-precedence {
+                      container drop-precedence {
+                        description
+                          "Select the internal drop-precedence
+                           value marking";
+                        choice drop-precedence {
+                          case ignore {
+                            leaf ignore {
+                              type empty;
+                              description
+                                "Leave the packet's internal
+                                 drop-precedence unmodified";
+                            }
+                          }
+                          case prec-num {
+                            leaf prec-num {
+                              type uint8 {
+                                range "0..7";
+                              }
+                              description
+                                "Desired three-bit internal drop
+                                 precedence value";
+                            }
+                          }
+                        }
+                      }
+                    }
+                    case af-drop {
+                      leaf af-drop {
+                        type uint8 {
+                          range "1..3";
+                        }
+                        description
+                          "Select the internal drop-precedence
+                           using Assured Forwarding values";
+                      }
+                    }
+                  }
+                }
+              }
+              case precedence {
+                leaf precedence {
+                  type uint8 {
+                    range "1..3";
+                  }
+                  description
+                    "Mark IP drop-precedence";
+                }
+              }
+              case dscp {
+                leaf dscp {
+                  type typesrouter6000:dscp-value;
+                  description
+                    "Mark IP DSCP";
+                }
+              }
+            }
+          }
+        }
+        case drop {
+          leaf drop {
+            type empty;
+            description
+              "Drop packets";
+          }
+        }
+        case no-action {
+          leaf no-action {
+            type empty;
+            description
+              "No action needed for the packet";
+          }
+        }
+      }
+    }
+    /*
+    exceed { mark { <priority { ignore | (prio-num) } [ drop-
+     precedence { ignore | (prec-num) } | af-drop (drop-num) ]> |
+     precedence (prec-num) | dscp (dscp-value) } | drop | no-
+     action | red}
+    */
+    container exceed {
+      presence "";
+      description
+        "Exceed action of rate limit";
+      choice exceed {
+        mandatory true;
+        case mark {
+          container mark {
+            if-feature qos-rate-class-for-ssr;
+            description
+              "Mark packets";
+            choice mark {
+              case priority {
+                container priority {
+                  description
+                    "Mark packet internal priority and
+                     drop-precedence";
+                  choice priority-choice {
+                    mandatory true;
+                    case ignore {
+                      leaf ignore {
+                        type empty;
+                        mandatory true;
+                        description
+                          "Leave the packet's internal priority
+                           unmodified";
+                      }
+                    }
+                    case prio-num {
+                      leaf prio-num {
+                        type uint8 {
+                          range "0..7";
+                        }
+                        mandatory true;
+                        description
+                          "Priority group number";
+                      }
+                    }
+                  }
+                  choice priority-opt1 {
+                    case drop-precedence {
+                      container drop-precedence {
+                        description
+                          "Select the internal drop-precedence
+                           value marking";
+                        choice drop-precedence {
+                          case ignore {
+                            leaf ignore {
+                              type empty;
+                              description
+                                "Leave the packet's internal
+                                 drop-precedence unmodified";
+                            }
+                          }
+                          case prec-num {
+                            leaf prec-num {
+                              type uint8 {
+                                range "0..7";
+                              }
+                              description
+                                "Desired three-bit internal drop
+                                 precedence value";
+                            }
+                          }
+                        }
+                      }
+                    }
+                    case af-drop {
+                      leaf af-drop {
+                        type uint8 {
+                          range "1..3";
+                        }
+                        description
+                          "Select the internal drop-precedence
+                           using Assured Forwarding values";
+                      }
+                    }
+                  }
+                }
+              }
+              case precedence {
+                leaf precedence {
+                  type uint8 {
+                    range "1..3";
+                  }
+                  description
+                    "Mark IP drop-precedence";
+                }
+              }
+              case dscp {
+                leaf dscp {
+                  type typesrouter6000:dscp-value;
+                  description
+                    "Mark IP DSCP";
+                }
+              }
+            }
+          }
+        }
+        case drop {
+          leaf drop {
+            type empty;
+            description
+              "Drop packets";
+          }
+        }
+        case no-action {
+          leaf no-action {
+            if-feature qos-rate-class-for-ssr;
+            type empty;
+            description
+              "No action needed for the packet";
+          }
+        }
+        case red {
+          leaf red {
+            type empty;
+            description
+              "Mark packets red";
+          }
+        }
+      }
+    }
+    /*
+    mef { color { aware | blind } |  coupling { on | off } |
+     sharing { class (class-name) | global }  }
+    */
+    container mef {
+      description
+        "Metro Ethernet Forum";
+      leaf color {
+        type enumeration {
+          enum aware {
+            value 0;
+            description
+              "aware";
+          }
+          enum blind {
+            value 1;
+            description
+              "blind";
+          }
+        }
+        description
+          "Metro Ethernet Forum Color Mode";
+      }
+      leaf coupling {
+        type enumeration {
+          enum on {
+            value 0;
+            description
+              "on";
+          }
+          enum off {
+            value 1;
+            description
+              "off";
+          }
+        }
+        description
+          "Metro Ethernet Forum Coupling Flag";
+      }
+      container sharing {
+        description
+          "Metro Ethernet Forum Sharing Meter Target";
+        choice sharing {
+          case class {
+            leaf class {
+              type leafref {
+                path "/qosrouter6000:qos/qosrouter6000:class-"
+                + "definition/qosrouter6000:class-definition";
+              }
+              description
+                "Class as a sharing target";
+            }
+          }
+          case global {
+            leaf global {
+              type empty;
+              description
+                "Global as a sharing target";
+            }
+          }
+        }
+      }
+    }
+    /*
+    violate { { mark { <priority { ignore | (prio-num) } [ drop-
+     precedence { ignore | (prec-num) } | af-drop (drop-num) ]> |
+     precedence (prec-num) | dscp (dscp-value)} } | no-action |
+     red | drop }
+    */
+    container violate {
+      when "../excess-burst" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Violate action of rate limit";
+      choice violate {
+        mandatory true;
+        case mark {
+          container mark {
+            if-feature qos-rate-class-for-ssr;
+            description
+              "Mark packets";
+            choice mark {
+              case priority {
+                container priority {
+                  if-feature qos-rate-mark-priority;
+                  description
+                    "Mark packet internal priority and
+                     drop-precedence";
+                  choice priority-choice {
+                    mandatory true;
+                    case ignore {
+                      leaf ignore {
+                        type empty;
+                        mandatory true;
+                        description
+                          "Leave the packet's internal priority
+                           unmodified";
+                      }
+                    }
+                    case prio-num {
+                      leaf prio-num {
+                        type uint8 {
+                          range "0..7";
+                        }
+                        mandatory true;
+                        description
+                          "Priority group number";
+                      }
+                    }
+                  }
+                  choice priority-opt1 {
+                    case drop-precedence {
+                      container drop-precedence {
+                        description
+                          "Select the internal drop-precedence
+                           value marking";
+                        choice drop-precedence {
+                          case ignore {
+                            leaf ignore {
+                              type empty;
+                              description
+                                "Leave the packet's internal
+                                 drop-precedence unmodified";
+                            }
+                          }
+                          case prec-num {
+                            leaf prec-num {
+                              type uint8 {
+                                range "0..7";
+                              }
+                              description
+                                "Desired three-bit internal drop
+                                 precedence value";
+                            }
+                          }
+                        }
+                      }
+                    }
+                    case af-drop {
+                      leaf af-drop {
+                        type uint8 {
+                          range "1..3";
+                        }
+                        description
+                          "Select the internal drop-precedence
+                           using Assured Forwarding values";
+                      }
+                    }
+                  }
+                }
+              }
+              case precedence {
+                leaf precedence {
+                  if-feature qos-mark-precedence;
+                  type uint8 {
+                    range "1..3";
+                  }
+                  description
+                    "Mark IP drop-precedence";
+                }
+              }
+              case dscp {
+                leaf dscp {
+                  if-feature qos-mark-dscp;
+                  type typesrouter6000:dscp-value;
+                  description
+                    "Mark IP DSCP";
+                }
+              }
+            }
+          }
+        }
+        case no-action {
+          leaf no-action {
+            if-feature qos-rate-no-action;
+            type empty;
+            description
+              "No action needed for the packet";
+          }
+        }
+        case red {
+          leaf red {
+            type empty;
+            description
+              "Mark packets red";
+          }
+        }
+        case drop {
+          leaf drop {
+            type empty;
+            description
+              "Drop packets";
+          }
+        }
+      }
+    }
+  }
+
+  grouping policy-class-rate-grp {
+    description
+      "QoS policy class rate limit configuration mode";
+    /*
+    conform { mark { <priority { ignore | (prio-num) } [ drop-
+     precedence { ignore | (prec-num) } | af-drop (drop-num) ]> |
+     precedence (prec-num) | dscp  (dscp-value) }}
+    */
+    container conform {
+      if-feature qos-rate-conform;
+      presence "";
+      description
+        "Conform action of rate limit";
+      container mark {
+        description
+          "Mark packets";
+        choice mark {
+          mandatory true;
+          case priority {
+            container priority {
+              description
+                "Mark packet internal priority and
+                 drop-precedence";
+              choice priority-choice {
+                mandatory true;
+                case ignore {
+                  leaf ignore {
+                    type empty;
+                    mandatory true;
+                    description
+                      "Leave the packet's internal priority
+                       unmodified";
+                  }
+                }
+                case prio-num {
+                  leaf prio-num {
+                    type uint8 {
+                      range "0..7";
+                    }
+                    mandatory true;
+                    description
+                      "Priority group number";
+                  }
+                }
+              }
+              choice priority-opt1 {
+                case drop-precedence {
+                  container drop-precedence {
+                    description
+                      "Select the internal drop-precedence value
+                       marking";
+                    choice drop-precedence {
+                      case ignore {
+                        leaf ignore {
+                          type empty;
+                          description
+                            "Leave the packet's internal
+                             drop-precedence unmodified";
+                        }
+                      }
+                      case prec-num {
+                        leaf prec-num {
+                          type uint8 {
+                            range "0..7";
+                          }
+                          description
+                            "Desired three-bit internal drop
+                             precedence value";
+                        }
+                      }
+                    }
+                  }
+                }
+                case af-drop {
+                  leaf af-drop {
+                    type uint8 {
+                      range "1..3";
+                    }
+                    description
+                      "Select the internal drop-precedence using
+                       Assured Forwarding values";
+                  }
+                }
+              }
+            }
+          }
+          case precedence {
+            leaf precedence {
+              type uint8 {
+                range "1..3";
+              }
+              description
+                "Mark IP drop-precedence";
+            }
+          }
+          case dscp {
+            leaf dscp {
+              type typesrouter6000:dscp-value;
+              description
+                "Mark IP DSCP";
+            }
+          }
+        }
+      }
+    }
+    /*
+    exceed { { mark { <priority { ignore | (prio-num) } [ drop-
+     precedence { ignore | (prec-num) } | af-drop (drop-num) ] >|
+     precedence (prec-num) | dscp (dscp-value) }} | red | drop |
+     no-action}
+    */
+    container exceed {
+      presence "";
+      description
+        "Exceed action of rate limit";
+      choice exceed {
+        mandatory true;
+        case mark {
+          container mark {
+            if-feature qos-rate-class-for-ssr;
+            description
+              "Mark packets";
+            choice mark {
+              case priority {
+                container priority {
+                  description
+                    "Mark packet internal priority and
+                     drop-precedence";
+                  choice priority-choice {
+                    mandatory true;
+                    case ignore {
+                      leaf ignore {
+                        type empty;
+                        mandatory true;
+                        description
+                          "Leave the packet's internal priority
+                           unmodified";
+                      }
+                    }
+                    case prio-num {
+                      leaf prio-num {
+                        type uint8 {
+                          range "0..7";
+                        }
+                        mandatory true;
+                        description
+                          "Priority group number";
+                      }
+                    }
+                  }
+                  choice priority-opt1 {
+                    case drop-precedence {
+                      container drop-precedence {
+                        description
+                          "Select the internal drop-precedence
+                           value marking";
+                        choice drop-precedence {
+                          case ignore {
+                            leaf ignore {
+                              type empty;
+                              description
+                                "Leave the packet's internal
+                                 drop-precedence unmodified";
+                            }
+                          }
+                          case prec-num {
+                            leaf prec-num {
+                              type uint8 {
+                                range "0..7";
+                              }
+                              description
+                                "Desired three-bit internal drop
+                                 precedence value";
+                            }
+                          }
+                        }
+                      }
+                    }
+                    case af-drop {
+                      leaf af-drop {
+                        type uint8 {
+                          range "1..3";
+                        }
+                        description
+                          "Select the internal drop-precedence
+                           using Assured Forwarding values";
+                      }
+                    }
+                  }
+                }
+              }
+              case precedence {
+                leaf precedence {
+                  type uint8 {
+                    range "1..3";
+                  }
+                  description
+                    "Mark IP drop-precedence";
+                }
+              }
+              case dscp {
+                leaf dscp {
+                  type typesrouter6000:dscp-value;
+                  description
+                    "Mark IP DSCP";
+                }
+              }
+            }
+          }
+        }
+        case red {
+          leaf red {
+            type empty;
+            description
+              "Mark packets red";
+          }
+        }
+        case drop {
+          leaf drop {
+            type empty;
+            description
+              "Drop packets";
+          }
+        }
+        case no-action {
+          leaf no-action {
+            if-feature qos-rate-no-action;
+            type empty;
+            description
+              "No action needed for the packet";
+          }
+        }
+      }
+    }
+    /*
+    mef { color { aware | blind } |  coupling { on | off } |
+     sharing { class (class-name) | global }  }
+    */
+    container mef {
+      description
+        "Metro Ethernet Forum";
+      leaf color {
+        type enumeration {
+          enum aware {
+            value 0;
+            description
+              "aware";
+          }
+          enum blind {
+            value 1;
+            description
+              "blind";
+          }
+        }
+        description
+          "Metro Ethernet Forum Color Mode";
+      }
+      leaf coupling {
+        type enumeration {
+          enum on {
+            value 0;
+            description
+              "on";
+          }
+          enum off {
+            value 1;
+            description
+              "off";
+          }
+        }
+        description
+          "Metro Ethernet Forum Coupling Flag";
+      }
+      container sharing {
+        if-feature qos-mef-sharing;
+        description
+          "Metro Ethernet Forum Sharing Meter Target";
+        choice sharing {
+          case class {
+            leaf class {
+              type leafref {
+                path "/qosrouter6000:qos/qosrouter6000:class-"
+                + "definition/qosrouter6000:class-definition";
+              }
+              description
+                "Class as a sharing target";
+            }
+          }
+          case global {
+            leaf global {
+              type empty;
+              description
+                "Global as a sharing target";
+            }
+          }
+        }
+      }
+    }
+    /*
+    violate { { mark { <priority { ignore | (prio-num) } [ drop-
+     precedence { ignore | (prec-num) } | af-drop (drop-num) ]> |
+     precedence (prec-num) | dscp (dscp-value) } } | no-action |
+     red | drop}
+    */
+    container violate {
+      when "../rate-num/excess-burst" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Violate action of rate limit";
+      choice violate {
+        mandatory true;
+        case mark {
+          container mark {
+            if-feature qos-rate-class-for-ssr;
+            description
+              "Mark packets";
+            choice mark {
+              case priority {
+                container priority {
+                  if-feature qos-rate-mark-priority;
+                  description
+                    "Mark packet internal priority and
+                     drop-precedence";
+                  choice priority-choice {
+                    mandatory true;
+                    case ignore {
+                      leaf ignore {
+                        type empty;
+                        mandatory true;
+                        description
+                          "Leave the packet's internal priority
+                           unmodified";
+                      }
+                    }
+                    case prio-num {
+                      leaf prio-num {
+                        type uint8 {
+                          range "0..7";
+                        }
+                        mandatory true;
+                        description
+                          "Priority group number";
+                      }
+                    }
+                  }
+                  choice priority-opt1 {
+                    case drop-precedence {
+                      container drop-precedence {
+                        description
+                          "Select the internal drop-precedence
+                           value marking";
+                        choice drop-precedence {
+                          case ignore {
+                            leaf ignore {
+                              type empty;
+                              description
+                                "Leave the packet's internal
+                                 drop-precedence unmodified";
+                            }
+                          }
+                          case prec-num {
+                            leaf prec-num {
+                              type uint8 {
+                                range "0..7";
+                              }
+                              description
+                                "Desired three-bit internal drop
+                                 precedence value";
+                            }
+                          }
+                        }
+                      }
+                    }
+                    case af-drop {
+                      leaf af-drop {
+                        type uint8 {
+                          range "1..3";
+                        }
+                        description
+                          "Select the internal drop-precedence
+                           using Assured Forwarding values";
+                      }
+                    }
+                  }
+                }
+              }
+              case precedence {
+                leaf precedence {
+                  if-feature qos-mark-precedence;
+                  type uint8 {
+                    range "1..3";
+                  }
+                  description
+                    "Mark IP drop-precedence";
+                }
+              }
+              case dscp {
+                leaf dscp {
+                  if-feature qos-mark-dscp;
+                  type typesrouter6000:dscp-value;
+                  description
+                    "Mark IP DSCP";
+                }
+              }
+            }
+          }
+        }
+        case no-action {
+          leaf no-action {
+            if-feature qos-rate-no-action;
+            type empty;
+            description
+              "No action needed for the packet";
+          }
+        }
+        case red {
+          leaf red {
+            type empty;
+            description
+              "Mark packets red";
+          }
+        }
+        case drop {
+          leaf drop {
+            type empty;
+            description
+              "Drop packets";
+          }
+        }
+      }
+    }
+  }
+
+  grouping congestion-avoidance-map-grp {
+    description
+      "QoS congestion-avoidance map configuration mode";
+    /*
+    queue (num-no) { guaranteed (pkts-val) | average-packet-size
+     (size-val) | exponential-weight (weight-val) | depth (depth-
+     val) |<red {default | profile-1 | profile-2} [<dscp {dscp-
+     value (dscp-value)}>] [ dp { green | yellow | red } ] { min-
+     threshold (min-val)} { max-threshold (max-val)} {probability
+     (prob-val)} >}
+    */
+    list queue {
+      key "num-no";
+      description
+        "Congestion-Avoidance map queue number";
+      leaf num-no {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Congestion-Avoidance map queue number";
+      }
+      container queue-choice {
+        description
+          "container queue-choice.";
+        leaf guaranteed {
+          if-feature qos-queue-guaranteed;
+          type uint8 {
+            range "1..128";
+          }
+          description
+            "Random Early Detection (RED) guaranteed number of
+             packets";
+        }
+        leaf average-packet-size {
+          type uint16 {
+            range "128..9600";
+          }
+          description
+            "Random Early Detection (RED) average packet size";
+        }
+        leaf exponential-weight {
+          type uint8 {
+            range "1..31";
+          }
+          description
+            "Random Early Detection (RED) exponent weighting";
+        }
+        container depth {
+          must "not (../red/max-threshold) or number(.) >= "
+          + "number(../red/max-threshold)" {
+            error-message "maximum threshold exceeds queue "
+            + "depth";
+            description
+              "depth of queue must not less than max-threshold";
+          }
+          presence "";
+          description
+            "Random Early Detection (RED) queue depth";
+          leaf depth-val {
+            type uint32 {
+              range "0..65536";
+            }
+            mandatory true;
+            description
+              "Number of packets(in the closest multiples of
+               32)";
+          }
+          leaf low-latency-buffer-only {
+            type empty;
+            description
+              "Low latency buffer only";
+          }
+        }
+        list red {
+          key "red-choice";
+          description
+            "Random Early Detection (RED) drop profile";
+          leaf red-choice {
+            type enumeration {
+              enum default {
+                value 0;
+                description
+                  "default drop profile";
+              }
+              enum profile-1 {
+                value 1;
+                description
+                  "drop profile 1";
+              }
+              enum profile-2 {
+                value 2;
+                description
+                  "drop profile 2";
+              }
+            }
+            description
+              "leaf red-choice.";
+          }
+          container dscp {
+            when "(../red-choice='profile-1') or (../red-"
+            + "choice='profile-2')" {
+              description
+                "";
+            }
+            if-feature qos-congestion-dscp;
+            description
+              "dscp container";
+            leaf-list dscp-value {
+              type typesrouter6000:dscp-value;
+              min-elements 1;
+              max-elements 64;
+              description
+                "dscp list";
+            }
+          }
+          leaf dp {
+            when "(../red-choice='profile-1') or (../red-"
+            + "choice='profile-2')" {
+              description
+                "";
+            }
+            type enumeration {
+              enum green {
+                value 0;
+                description
+                  "conform color (0)";
+              }
+              enum yellow {
+                value 1;
+                description
+                  "conform color (1)";
+              }
+              enum red {
+                value 2;
+                description
+                  "conform color (2)";
+              }
+            }
+            description
+              "Drop precedence";
+          }
+          leaf min-threshold {
+            type uint16 {
+              range "1..9999";
+            }
+            must "(number(.) <= number(../max-threshold))" {
+              error-message "min-threshold can't exceed max- "
+              + "threshold";
+              description
+                "min-threshold must not bigger than
+                 max-threshold";
+            }
+            mandatory true;
+            description
+              "mininum threshold";
+          }
+          leaf max-threshold {
+            type uint16 {
+              range "2..10000";
+            }
+            must "(not (../../depth) or number(.) <= "
+            + "number(../../depth)) and (number(.) >= number"
+            + "(../min-threshold))" {
+              error-message "max-threshold must not less than "
+              + "min-threshold or bigger than depth of queue";
+              description
+                "max-threshold must not less than min-threshold
+                 and bigger than depth of queue";
+            }
+            mandatory true;
+            description
+              "maximum threshold";
+          }
+          leaf probability {
+            type uint16 {
+              range "1..1023";
+            }
+            mandatory true;
+            description
+              "probability";
+          }
+        }
+      }
+    }
+  }
+
+  grouping class-definition-grp {
+    description
+      "QoS class definition configuration mode";
+    /*
+    qos { (internal-qos-value) { class (class-name) } }
+    */
+    list qos {
+      key "internal-qos-value";
+      description
+        "internal packet-descriptor priority and precedence";
+      leaf internal-qos-value {
+        type uint8 {
+          range "0..31";
+        }
+        description
+          "Differentiated services codepoint value";
+      }
+      leaf class {
+        type string {
+          length "1..39";
+        }
+        mandatory true;
+        description
+          "specify the class for packets with this pd-value";
+      }
+    }
+  }
+
+  grouping policy-group-class-grp {
+    description
+      "Policy group class configuration mode";
+    /*
+    mark { <priority { ignore | (priority-num)} [drop-precedence
+     { ignore | (prec-num) } | af-drop (drop-num) ] >| precedence
+     (precedence-num) | dscp (dscp-value) }
+    */
+    container mark {
+      must "not(../rate)" {
+        error-message "please remove rate limiting settings "
+        + "first";
+        description
+          "mark can be configured once without rate
+           configuration";
+      }
+      presence "";
+      description
+        "Mark IP packets";
+      choice mark {
+        mandatory true;
+        case priority {
+          container priority {
+            description
+              "Mark packet internal priority and
+               drop-precedence";
+            choice priority-choice {
+              mandatory true;
+              case ignore {
+                leaf ignore {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Leave the packet's internal priority
+                     unmodified";
+                }
+              }
+              case priority-num {
+                leaf priority-num {
+                  type uint8 {
+                    range "0..7";
+                  }
+                  mandatory true;
+                  description
+                    "Priority group number";
+                }
+              }
+            }
+            choice priority-opt1 {
+              case drop-precedence {
+                container drop-precedence {
+                  description
+                    "Select the internal drop-precedence value
+                     marking";
+                  choice drop-precedence {
+                    case ignore {
+                      leaf ignore {
+                        type empty;
+                        description
+                          "Leave the packet's internal
+                           drop-precedence unmodified";
+                      }
+                    }
+                    case prec-num {
+                      leaf prec-num {
+                        type uint8 {
+                          range "0..7";
+                        }
+                        description
+                          "Desired three-bit internal drop
+                           precedence value";
+                      }
+                    }
+                  }
+                }
+              }
+              case af-drop {
+                leaf af-drop {
+                  type uint8 {
+                    range "1..3";
+                  }
+                  description
+                    "Select the internal drop-precedence using
+                     Assured Forwarding values";
+                }
+              }
+            }
+          }
+        }
+        case precedence {
+          leaf precedence {
+            if-feature qos-class-mark-precedence;
+            type uint8 {
+              range "1..3";
+            }
+            description
+              "Mark IP drop-precedence";
+          }
+        }
+        case dscp {
+          leaf dscp {
+            if-feature qos-mark-dscp;
+            type typesrouter6000:dscp-value;
+            description
+              "Mark IP DSCP";
+          }
+        }
+      }
+    }
+    /*
+    rate { percentage (percentage-num)| (rate-num) {burst
+     (burst-num)}  [ excess-rate (rate-num) ] [excess-burst
+     (burst-num)] }  [counters [hierarchical-counters] [dual-
+     stack] ] [hierarchical-counters [dual-stack] ]
+    */
+    container rate {
+      must "not(../mark)" {
+        error-message "please remove overall marking settings "
+        + "and configure percentage-based class rates first.";
+        description
+          "rate can be configured once without mark
+           configuration";
+      }
+      presence "";
+      description
+        "Maximum rate of class";
+      choice rate-choice {
+        mandatory true;
+        case percentage {
+          leaf percentage {
+            type uint8 {
+              range "1..100";
+            }
+            must "../../../../rate" {
+              error-message "A policy-level rate must be defined "
+              + "before configuring percentage-based class rates.";
+              description
+                "A policy-level rate must be defined before
+                 configuring percentage-based class rates.";
+            }
+            mandatory true;
+            description
+              "Percentage (%) of policy's maximum rate";
+          }
+        }
+        case rate-num {
+          container rate-num {
+            description
+              "container rate-num.";
+            leaf rate-num {
+              type uint32 {
+                range "5..10000000";
+              }
+              mandatory true;
+              description
+                "Data rate in kbps";
+            }
+            leaf burst {
+              type uint16 {
+                range "0..33292";
+              }
+              mandatory true;
+              description
+                "Burst size";
+            }
+            leaf excess-rate {
+              type uint32 {
+                range "20..300000000";
+              }
+              description
+                "Excess rate of class";
+            }
+            leaf excess-burst {
+              type uint16 {
+                range "0..33292";
+              }
+              description
+                "Max burst size";
+            }
+          }
+        }
+      }
+      container counters {
+        must "not (../hierarchical-counters)" {
+          error-message "Hierarchical-counters and Counters are "
+          + "mutually exclusive.";
+          description
+            "";
+        }
+        presence "";
+        description
+          "Record policing/metering statistics";
+        leaf hierarchical-counters {
+          if-feature qos-counter-hierarchical-counter;
+          type empty;
+          description
+            "Record hierarchical policing/metering statistics";
+        }
+        leaf dual-stack {
+          when "(../../../../../../policing) or "
+          + "(../../../../../../metering)" {
+            description
+              "";
+          }
+          type empty;
+          description
+            "Record dual-stack policing/metering statistics";
+        }
+      }
+      container hierarchical-counters {
+        if-feature qos-hierarchical-counter;
+        must "not (../counters)" {
+          error-message "Hierarchical-counters and Counters are "
+          + "mutually exclusive.";
+          description
+            "";
+        }
+        presence "";
+        description
+          "Record hierarchical policing/metering statistics";
+        leaf dual-stack {
+          when "(../../../../../../policing) or "
+          + "(../../../../../../metering)" {
+            description
+              "";
+          }
+          if-feature qos-rate-hierarchical-dual-stack;
+          type empty;
+          description
+            "Record dual-stack policing/metering statistics";
+        }
+      }
+      uses policy-class-rate-grp;
+    }
+    /*
+    parent-class (class-name)
+    */
+    leaf parent-class {
+      if-feature qos-parent-class;
+      type string {
+        length "1..39";
+      }
+      description
+        "Mapped parent class used for hierarchical metering";
+    }
+  }
+
+  grouping policy-access-group-grp {
+    description
+      "Policy class group configuration mode";
+    /*
+    acl-class (class-name)
+    */
+    list acl-class {
+      key "acl-class";
+      max-elements 8;
+      description
+        "Acl class name";
+      leaf acl-class {
+        type string {
+          length "1..39";
+        }
+        description
+          "Policy acl class name";
+      }
+      uses policy-group-class-grp;
+    }
+  }
+
+  grouping policy-class-group-grp {
+    description
+      "Policy class group configuration mode";
+    /*
+    class (class-name)
+    */
+    list class {
+      key "class";
+      max-elements 8;
+      description
+        "Class-definition class";
+      leaf class {
+        type leafref {
+          path "/qosrouter6000:qos/qosrouter6000:class-"
+          + "definition/qosrouter6000:qos/qosrouter6000:class";
+        }
+        description
+          "Class-definition class name";
+      }
+      uses policy-group-class-grp;
+    }
+  }
+
+  grouping profile-overhead-grp {
+    description
+      "QoS overhead profile configuration mode";
+    /*
+    rate-factor (factor-percent)
+    */
+    leaf rate-factor {
+      when "(../card-family=2) or (../card-family=3)" {
+        description
+          "";
+      }
+      if-feature qos-overhead-rate-factor;
+      type uint8 {
+        range "1..100";
+      }
+      description
+        "rate factor";
+    }
+    /*
+    type { adsl1 | adsl2 | adsl2+ | vdsl1 | vdsl2 | sdsl }
+    */
+    list type {
+      when "(../card-family=2) or (../card-family=3)" {
+        description
+          "";
+      }
+      if-feature qos-overhead-type;
+      key "type";
+      description
+        "type of access line";
+      leaf type {
+        type enumeration {
+          enum adsl1 {
+            value 0;
+            description
+              "Access Line is adsl1. Also used for TR-101 ATM
+               based encapsulation.";
+          }
+          enum adsl2 {
+            value 1;
+            description
+              "Access Line is adsl2";
+          }
+          enum adsl2+ {
+            value 2;
+            description
+              "Access Line is adsl2+";
+          }
+          enum vdsl1 {
+            value 3;
+            description
+              "Access Line is vdsl1";
+          }
+          enum vdsl2 {
+            value 4;
+            description
+              "Access Line is vdsl2";
+          }
+          enum sdsl {
+            value 5;
+            description
+              "Access Line is sdsl";
+          }
+        }
+        description
+          "leaf type.";
+      }
+      uses overhead-type-grp;
+    }
+    /*
+    encaps-access-line { pppoa-llc | pppoa-null | ipoa-llc |
+     ipoa-null | ether-aal5-llc-fcs | ether-aal5-llc | ether-aal5
+     -null-fcs | ether-aal5-null | ethernet | value (default-val)
+     [ data-link { atm | ethernet } ] }
+    */
+    container encaps-access-line {
+      if-feature qos-encaps-access-line;
+      description
+        "encapsulation overhead on the access line";
+      choice encaps-access-line {
+        case pppoa-llc {
+          leaf pppoa-llc {
+            when "(../../card-family=2) or (../../card-"
+            + "family=3)" {
+              description
+                "";
+            }
+            if-feature qos-overhead-encaps-pppoa;
+            type empty;
+            description
+              "ppp over atm llc";
+          }
+        }
+        case pppoa-null {
+          leaf pppoa-null {
+            when "(../../card-family=2) or (../../card-"
+            + "family=3)" {
+              description
+                "";
+            }
+            if-feature qos-overhead-encaps-pppoa;
+            type empty;
+            description
+              "ppp over atm null";
+          }
+        }
+        case ipoa-llc {
+          leaf ipoa-llc {
+            when "(../../card-family=2) or (../../card-"
+            + "family=3)" {
+              description
+                "";
+            }
+            if-feature qos-overhead-encaps-ipoa;
+            type empty;
+            description
+              "ip over atm llc";
+          }
+        }
+        case ipoa-null {
+          leaf ipoa-null {
+            when "(../../card-family=2) or (../../card-"
+            + "family=3)" {
+              description
+                "";
+            }
+            if-feature qos-overhead-encaps-ipoa;
+            type empty;
+            description
+              "ip over atm null";
+          }
+        }
+        case ether-aal5-llc-fcs {
+          leaf ether-aal5-llc-fcs {
+            when "(../../card-family=2) or (../../card-"
+            + "family=3)" {
+              description
+                "";
+            }
+            if-feature qos-overhead-encaps-ether-aal5;
+            type empty;
+            description
+              "ethernet over AAL5 LLC with FCS";
+          }
+        }
+        case ether-aal5-llc {
+          leaf ether-aal5-llc {
+            when "(../../card-family=2) or (../../card-"
+            + "family=3)" {
+              description
+                "";
+            }
+            if-feature qos-overhead-encaps-ether-aal5;
+            type empty;
+            description
+              "ethernet over AAL5 LLC without FCS";
+          }
+        }
+        case ether-aal5-null-fcs {
+          leaf ether-aal5-null-fcs {
+            when "(../../card-family=2) or (../../card-"
+            + "family=3)" {
+              description
+                "";
+            }
+            if-feature qos-overhead-encaps-ether-aal5;
+            type empty;
+            description
+              "ethernet over AAL5 null with FCS";
+          }
+        }
+        case ether-aal5-null {
+          leaf ether-aal5-null {
+            when "(../../card-family=2) or (../../card-"
+            + "family=3)" {
+              description
+                "";
+            }
+            if-feature qos-overhead-encaps-ether-aal5;
+            type empty;
+            description
+              "ethernet over AAL5 null without FCS";
+          }
+        }
+        case ethernet {
+          leaf ethernet {
+            if-feature qos-overhead-encaps-ethernet;
+            type empty;
+            description
+              "ethernet only";
+          }
+        }
+        case value {
+          container value {
+            presence "";
+            description
+              "customized encapsulation overhead value in bytes";
+            leaf default-val {
+              type uint8 {
+                range "0..127";
+              }
+              mandatory true;
+              description
+                "number of bytes";
+            }
+            leaf data-link {
+              when "(../../../card-family=2) or (../../../card-"
+              + "family=3)" {
+                description
+                  "";
+              }
+              if-feature qos-overhead-data-link;
+              type enumeration {
+                enum atm {
+                  value 0;
+                  description
+                    "atm";
+                }
+                enum ethernet {
+                  value 1;
+                  description
+                    "ethernet";
+                }
+              }
+              description
+                "data link type";
+            }
+          }
+        }
+      }
+    }
+    /*
+    reserved (bytes-val)
+    */
+    leaf reserved {
+      type uint8 {
+        range "0..127";
+      }
+      description
+        "reserved bytes per packet";
+    }
+  }
+
+  grouping profile-resource-grp {
+    description
+      "Qos resource profile configuration mode";
+    /*
+    tm-resource (resource-num)
+    */
+    leaf tm-resource {
+      if-feature qos-profile-resource-tm;
+      type uint8 {
+        range "1..4";
+      }
+      description
+        "tm resource domain";
+    }
+    /*
+    port (port-id) tm-resource (resource-num)
+    */
+    list port {
+      if-feature qos-profile-resource-port;
+      key "port";
+      description
+        "configure port";
+      leaf port {
+        type string;
+        description
+          "enter slot/port";
+      }
+      container tm-resource {
+        description
+          "tm resource domain";
+        leaf tm-resource {
+          type uint8 {
+            range "1..4";
+          }
+          mandatory true;
+          description
+            "tm resource domain";
+        }
+      }
+    }
+  }
+
+  grouping overhead-type-grp {
+    description
+      "QoS overhead type configuration mode";
+    /*
+    rate-factor (factor-percent)
+    */
+    leaf rate-factor {
+      if-feature qos-overhead-type;
+      type uint8 {
+        range "1..100";
+      }
+      description
+        "rate factor";
+    }
+    /*
+    encaps-access-line { pppoa-llc | pppoa-null | ipoa-llc |
+     ipoa-null | ether-aal5-llc-fcs | ether-aal5-llc | ether-aal5
+     -null-fcs | ether-aal5-null | ethernet | value (val-bytes)
+     data-link { atm | ethernet } }
+    */
+    container encaps-access-line {
+      if-feature qos-overhead-type;
+      description
+        "encapsulation overhead on the access line";
+      choice encaps-access-line {
+        case pppoa-llc {
+          leaf pppoa-llc {
+            type empty;
+            description
+              "ppp over atm llc";
+          }
+        }
+        case pppoa-null {
+          leaf pppoa-null {
+            type empty;
+            description
+              "ppp over atm null";
+          }
+        }
+        case ipoa-llc {
+          leaf ipoa-llc {
+            type empty;
+            description
+              "ip over atm llc";
+          }
+        }
+        case ipoa-null {
+          leaf ipoa-null {
+            type empty;
+            description
+              "ip over atm null";
+          }
+        }
+        case ether-aal5-llc-fcs {
+          leaf ether-aal5-llc-fcs {
+            type empty;
+            description
+              "ethernet over AAL5 LLC with FCS";
+          }
+        }
+        case ether-aal5-llc {
+          leaf ether-aal5-llc {
+            type empty;
+            description
+              "ethernet over AAL5 LLC without FCS";
+          }
+        }
+        case ether-aal5-null-fcs {
+          leaf ether-aal5-null-fcs {
+            type empty;
+            description
+              "ethernet over AAL5 null with FCS";
+          }
+        }
+        case ether-aal5-null {
+          leaf ether-aal5-null {
+            type empty;
+            description
+              "ethernet over AAL5 null without FCS";
+          }
+        }
+        case ethernet {
+          leaf ethernet {
+            type empty;
+            description
+              "ethernet only";
+          }
+        }
+        case value {
+          container value {
+            presence "";
+            description
+              "container value.";
+            leaf value {
+              type uint8 {
+                range "0..255";
+              }
+              mandatory true;
+              description
+                "customized encapsulation overhead value in
+                 bytes";
+            }
+            leaf data-link {
+              type enumeration {
+                enum atm {
+                  value 0;
+                  description
+                    "atm";
+                }
+                enum ethernet {
+                  value 1;
+                  description
+                    "ethernet";
+                }
+              }
+              mandatory true;
+              description
+                "data link type";
+            }
+          }
+        }
+      }
+    }
+    /*
+    reserved (bytes-val)
+    */
+    leaf reserved {
+      if-feature qos-overhead-type;
+      type uint8 {
+        range "0..127";
+      }
+      description
+        "reserved bytes per packet";
+    }
+  }
+
+  grouping policy-protocol-rate-limit-grp {
+    description
+      "QoS protocol rate limit policy configuration mode";
+  }
+
+  grouping class-map-ip-grp {
+    description
+      "";
+    /*
+    ip-map (dscp-value) to qos (pd-value)
+    */
+    list ip-map {
+      when "../in" {
+        description
+          "";
+      }
+      key "dscp-value";
+      description
+        "packet IP DSCP value to map";
+      leaf dscp-value {
+        type uint8 {
+          range "0..63";
+        }
+        description
+          "Differentiated services codepoint value";
+      }
+      leaf to {
+        type empty;
+        mandatory true;
+        description
+          "internal packet classification value to map to";
+      }
+      leaf qos {
+        type empty;
+        mandatory true;
+        description
+          "internal packet-descriptor priority and precedence";
+      }
+      leaf pd-value {
+        type uint8 {
+          range "0..63";
+        }
+        mandatory true;
+        description
+          "Differentiated services codepoint value";
+      }
+    }
+    /*
+    qos (pd-value) to {qos-choice  ip (dscp-value) }
+    */
+    list qos {
+      when "(../out)" {
+        description
+          "";
+      }
+      key "pd-value";
+      description
+        "internal packet-descriptor priority and precedence";
+      leaf pd-value {
+        type uint8 {
+          range "0..63";
+        }
+        description
+          "Differentiated services codepoint value";
+      }
+      leaf to {
+        type empty;
+        mandatory true;
+        description
+          "internal packet classification value to map to";
+      }
+      container qos-choice {
+        description
+          "internal packet classification value to map to";
+        leaf ip {
+          type uint8 {
+            range "0..63";
+          }
+          mandatory true;
+          description
+            "packet IP DSCP value to map";
+        }
+      }
+    }
+  }
+
+  grouping class-map-ethernet-grp {
+    description
+      "";
+    /*
+    mapping-schema { mapping-8P0D | mapping-7P1D | mapping-6P2D
+     | mapping-5P3D }
+    */
+    container mapping-schema {
+      description
+        "specify a default base mapping of priority values";
+      choice mapping-schema {
+        case mapping-8P0D {
+          leaf mapping-8P0D {
+            type empty;
+            description
+              "use the 8P0D mapping as the default";
+          }
+        }
+        case mapping-7P1D {
+          leaf mapping-7P1D {
+            type empty;
+            description
+              "use the 7P1D mapping as the default";
+          }
+        }
+        case mapping-6P2D {
+          leaf mapping-6P2D {
+            type empty;
+            description
+              "use the 6P2D mapping as the default";
+          }
+        }
+        case mapping-5P3D {
+          leaf mapping-5P3D {
+            type empty;
+            description
+              "use the 5P3D mapping as the default";
+          }
+        }
+      }
+    }
+    /*
+    ethernet-map (enet-8021p-value) { to qos (pd-value) | use-ip
+     [ (use-ip) ] }
+    */
+    list ethernet-map {
+      when "../in" {
+        description
+          "";
+      }
+      key "enet-8021p-value";
+      description
+        "packet ethernet 802.1P value to map";
+      leaf enet-8021p-value {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "packet ethernet 802.1P User Priority value";
+      }
+      choice ethernet-map-choice {
+        mandatory true;
+        case to {
+          container to {
+            description
+              "internal packet classification value to map to";
+            leaf qos {
+              type uint8 {
+                range "0..63";
+              }
+              description
+                "internal packet-descriptor priority and
+                 precedence";
+            }
+          }
+        }
+        case use-ip {
+          container use-ip {
+            if-feature qos-class-map-use-ip;
+            presence "";
+            description
+              "look up the final result via packet IP DSCP
+               settings";
+            leaf use-ip {
+              type leafref {
+                path "/qosrouter6000:qos/qosrouter6000:class-"
+                + "map/qosrouter6000:map-name";
+              }
+              description
+                "QoS classification map name";
+            }
+          }
+        }
+      }
+    }
+    /*
+    qos (pd-value) { to | use-ip } { ethernet (enet-8021p-value)
+     | (use-ip) }
+    */
+    list qos {
+      when "(../out)" {
+        description
+          "";
+      }
+      key "pd-value";
+      description
+        "internal packet-descriptor priority and precedence";
+      leaf pd-value {
+        type uint8 {
+          range "0..63";
+        }
+        description
+          "Differentiated services codepoint value";
+      }
+      choice qos-choice1 {
+        mandatory true;
+        case to {
+          leaf to {
+            type empty;
+            must "(../qos-choice/ethernet)" {
+              error-message "must configure ethernet under qos- "
+              + "choice";
+              description
+                "must configure ethernet under qos-choice";
+            }
+            mandatory true;
+            description
+              "internal packet classification value to map to";
+          }
+        }
+        case use-ip {
+          leaf use-ip {
+            if-feature qos-class-map-use-ip;
+            type empty;
+            description
+              "look up the final result via packet IP DSCP
+               settings";
+          }
+        }
+      }
+      container qos-choice {
+        description
+          "container qos-choice.";
+        leaf ethernet {
+          type uint8 {
+            range "0..7";
+          }
+          must "(../../to)" {
+            error-message "must configure with choice to";
+            description
+              "must configure with choice to";
+          }
+          description
+            "packet ethernet 802.1P value to map";
+        }
+        leaf use-ip {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:class-"
+            + "map/qosrouter6000:map-name";
+          }
+          must "(../../use-ip)" {
+            error-message "must configure with choice use-ip";
+            description
+              "must configure with choice use-ip";
+          }
+          description
+            "QoS classification map name";
+        }
+      }
+    }
+    /*
+    use-ip { <class-map-name (class-map-name) >}
+    */
+    container use-ip {
+      presence "";
+      description
+        "look up the final result via packet IP DSCP settings";
+      leaf class-map-name {
+        type leafref {
+          path "/qosrouter6000:qos/qosrouter6000:class-"
+          + "map/qosrouter6000:map-name";
+        }
+        must "/qosrouter6000:qos/qosrouter6000:class-"
+        + "map/qosrouter6000:ip/qosrouter6000:in" {
+          error-message "must configure ip class-map first";
+          description
+            "must configure ip class-map first";
+        }
+        mandatory true;
+        description
+          "look up the final result via packet IP DSCP settings";
+      }
+    }
+  }
+
+  grouping class-map-mpls-grp {
+    description
+      "";
+    /*
+    mapping-schema { mapping-8P0D | mapping-7P1D | mapping-6P2D
+     | mapping-5P3D }
+    */
+    container mapping-schema {
+      description
+        "specify a default base mapping of priority values";
+      choice mapping-schema {
+        case mapping-8P0D {
+          leaf mapping-8P0D {
+            type empty;
+            description
+              "use the 8P0D mapping as the default";
+          }
+        }
+        case mapping-7P1D {
+          leaf mapping-7P1D {
+            type empty;
+            description
+              "use the 7P1D mapping as the default";
+          }
+        }
+        case mapping-6P2D {
+          leaf mapping-6P2D {
+            type empty;
+            description
+              "use the 6P2D mapping as the default";
+          }
+        }
+        case mapping-5P3D {
+          leaf mapping-5P3D {
+            type empty;
+            description
+              "use the 5P3D mapping as the default";
+          }
+        }
+      }
+    }
+    /*
+    mpls-map (mpls-value) { to qos (pd-value) | use-ip [(use-
+     ip)] |  use-ethernet [(use-ethernet)] }
+    */
+    list mpls-map {
+      when "../in" {
+        description
+          "";
+      }
+      key "mpls-value";
+      description
+        "packet MPLS EXP value to map";
+      leaf mpls-value {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "packet ethernet 802.1P User Priority value";
+      }
+      choice mpls-map-choice {
+        mandatory true;
+        case to {
+          container to {
+            description
+              "internal packet classification value to map to";
+            leaf qos {
+              type uint8 {
+                range "0..63";
+              }
+              description
+                "internal packet-descriptor priority and
+                 precedence";
+            }
+          }
+        }
+        case use-ip {
+          container use-ip {
+            if-feature qos-class-map-use-ip;
+            presence "";
+            description
+              "look up the final result via packet IP DSCP
+               settings";
+            leaf use-ip {
+              type leafref {
+                path "/qosrouter6000:qos/qosrouter6000:class-"
+                + "map/qosrouter6000:map-name";
+              }
+              description
+                "QoS classification map name";
+            }
+          }
+        }
+        case use-ethernet {
+          container use-ethernet {
+            if-feature qos-class-map-use-ethernet;
+            presence "";
+            description
+              "look up the final result via packet Ethernet
+               802.1p settings";
+            leaf use-ethernet {
+              type leafref {
+                path "/qosrouter6000:qos/qosrouter6000:class-"
+                + "map/qosrouter6000:map-name";
+              }
+              description
+                "QoS ingress ethernet classification map name";
+            }
+          }
+        }
+      }
+    }
+    /*
+    qos (pd-value) { to | use-ip } {  mpls (mpls-value) | (use-
+     ip) }
+    */
+    list qos {
+      when "(../out)" {
+        description
+          "";
+      }
+      key "pd-value";
+      description
+        "internal packet-descriptor priority and precedence";
+      leaf pd-value {
+        type uint8 {
+          range "0..63";
+        }
+        description
+          "Differentiated services codepoint value";
+      }
+      choice qos-choice1 {
+        mandatory true;
+        case to {
+          leaf to {
+            type empty;
+            must "(../qos-choice/mpls)" {
+              error-message "must configure mpls under qos- "
+              + "choice";
+              description
+                "must configure mpls under qos-choice";
+            }
+            mandatory true;
+            description
+              "internal packet classification value to map to";
+          }
+        }
+        case use-ip {
+          leaf use-ip {
+            if-feature qos-class-map-use-ip;
+            type empty;
+            description
+              "look up the final result via packet IP DSCP
+               settings";
+          }
+        }
+      }
+      container qos-choice {
+        description
+          "container qos-choice.";
+        leaf mpls {
+          type uint8 {
+            range "0..7";
+          }
+          must "(../../to)" {
+            error-message "must configure with choice to";
+            description
+              "must configure with choice to";
+          }
+          description
+            "packet MPLS EXP value to map";
+        }
+        leaf use-ip {
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:class-"
+            + "map/qosrouter6000:map-name";
+          }
+          must "(../../use-ip)" {
+            error-message "must configure with choice use-ip";
+            description
+              "must configure with choice use-ip";
+          }
+          description
+            "QoS classification map name";
+        }
+      }
+    }
+  }
+
+  grouping class-map-mpls-ip-grp {
+    description
+      "";
+    /*
+    mapping-schema { mapping-8P0D | mapping-7P1D | mapping-6P2D
+     | mapping-5P3D }
+    */
+    container mapping-schema {
+      description
+        "specify a default base mapping of priority values";
+      choice mapping-schema {
+        case mapping-8P0D {
+          leaf mapping-8P0D {
+            type empty;
+            description
+              "use the 8P0D mapping as the default";
+          }
+        }
+        case mapping-7P1D {
+          leaf mapping-7P1D {
+            type empty;
+            description
+              "use the 7P1D mapping as the default";
+          }
+        }
+        case mapping-6P2D {
+          leaf mapping-6P2D {
+            type empty;
+            description
+              "use the 6P2D mapping as the default";
+          }
+        }
+        case mapping-5P3D {
+          leaf mapping-5P3D {
+            type empty;
+            description
+              "use the 5P3D mapping as the default";
+          }
+        }
+      }
+    }
+    /*
+    mpls-map (mpls-value) to qos (pd-value)
+    */
+    list mpls-map {
+      when "../in" {
+        description
+          "";
+      }
+      key "mpls-value";
+      description
+        "packet MPLS EXP value to map";
+      leaf mpls-value {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "packet ethernet 802.1P User Priority value";
+      }
+      choice mpls-map-choice {
+        mandatory true;
+        case to {
+          container to {
+            description
+              "internal packet classification value to map to";
+            leaf qos {
+              type uint8 {
+                range "0..63";
+              }
+              description
+                "internal packet-descriptor priority and
+                 precedence";
+            }
+          }
+        }
+      }
+    }
+    /*
+    ip-map (dscp-value) to qos (pd-value)
+    */
+    list ip-map {
+      when "../in" {
+        description
+          "";
+      }
+      key "dscp-value";
+      description
+        "packet IP DSCP value to map";
+      leaf dscp-value {
+        type uint8 {
+          range "0..63";
+        }
+        description
+          "Differentiated services codepoint value";
+      }
+      leaf to {
+        type empty;
+        mandatory true;
+        description
+          "internal packet classification value to map to";
+      }
+      leaf qos {
+        type empty;
+        mandatory true;
+        description
+          "internal packet-descriptor priority and precedence";
+      }
+      leaf pd-value {
+        type uint8 {
+          range "0..63";
+        }
+        mandatory true;
+        description
+          "Differentiated services codepoint value";
+      }
+    }
+  }
+
+  grouping class-map-grp {
+    description
+      "QoS classification map configuration mode";
+    /*
+    mapping-schema { mapping-8P0D | mapping-7P1D | mapping-6P2D
+     | mapping-5P3D }
+    */
+    container mapping-schema {
+      when "(../../ethernet/in) or (../../ethernet/out) or "
+      + "(../../mpls/in) or (../../mpls/out)" {
+        description
+          "";
+      }
+      description
+        "specify a default base mapping of priority values";
+      choice mapping-schema {
+        case mapping-8P0D {
+          leaf mapping-8P0D {
+            type empty;
+            description
+              "use the 8P0D mapping as the default";
+          }
+        }
+        case mapping-7P1D {
+          leaf mapping-7P1D {
+            type empty;
+            description
+              "use the 7P1D mapping as the default";
+          }
+        }
+        case mapping-6P2D {
+          leaf mapping-6P2D {
+            type empty;
+            description
+              "use the 6P2D mapping as the default";
+          }
+        }
+        case mapping-5P3D {
+          leaf mapping-5P3D {
+            type empty;
+            description
+              "use the 5P3D mapping as the default";
+          }
+        }
+      }
+    }
+    /*
+    mpls-map (mpls-value) { to qos (pd-value) | use-ip (class-
+     map-name) |  use-ethernet (enet-map) }
+    */
+    list mpls-map {
+      when "../../mpls/in" {
+        description
+          "";
+      }
+      key "mpls-value";
+      description
+        "packet MPLS EXP value to map";
+      leaf mpls-value {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "packet ethernet 802.1P User Priority value";
+      }
+      choice mpls-map-choice {
+        mandatory true;
+        case to {
+          container to {
+            description
+              "internal packet classification value to map to";
+            leaf qos {
+              type uint8 {
+                range "0..63";
+              }
+              description
+                "internal packet-descriptor priority and
+                 precedence";
+            }
+          }
+        }
+        case use-ip {
+          leaf use-ip {
+            if-feature qos-class-map-use-ip;
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:class-"
+              + "map/qosrouter6000:map-name";
+            }
+            description
+              "look up the final result via packet IP DSCP
+               settings";
+          }
+        }
+        case use-ethernet {
+          leaf use-ethernet {
+            if-feature qos-class-map-use-ethernet;
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:class-"
+              + "map/qosrouter6000:map-name";
+            }
+            description
+              "look up the final result via packet Ethernet
+               802.1p settings";
+          }
+        }
+      }
+    }
+    /*
+    ethernet-map (enet-8021p-value) { to qos (pd-value) | use-ip
+     (class-map-name) }
+    */
+    list ethernet-map {
+      when "../../ethernet/in" {
+        description
+          "";
+      }
+      key "enet-8021p-value";
+      description
+        "packet ethernet 802.1P value to map";
+      leaf enet-8021p-value {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "packet ethernet 802.1P User Priority value";
+      }
+      choice ethernet-map-choice {
+        mandatory true;
+        case to {
+          container to {
+            description
+              "internal packet classification value to map to";
+            leaf qos {
+              type uint8 {
+                range "0..63";
+              }
+              description
+                "internal packet-descriptor priority and
+                 precedence";
+            }
+          }
+        }
+        case use-ip {
+          leaf use-ip {
+            if-feature qos-class-map-use-ip;
+            type leafref {
+              path "/qosrouter6000:qos/qosrouter6000:class-"
+              + "map/qosrouter6000:map-name";
+            }
+            description
+              "look up the final result via packet IP DSCP
+               settings";
+          }
+        }
+      }
+    }
+    /*
+    ip-map (dscp-value) to qos (pd-value)
+    */
+    list ip-map {
+      when "../../ip/in" {
+        description
+          "";
+      }
+      key "dscp-value";
+      description
+        "packet IP DSCP value to map";
+      leaf dscp-value {
+        type uint8 {
+          range "0..63";
+        }
+        description
+          "Differentiated services codepoint value";
+      }
+      leaf to {
+        type empty;
+        mandatory true;
+        description
+          "internal packet classification value to map to";
+      }
+      leaf qos {
+        type empty;
+        mandatory true;
+        description
+          "internal packet-descriptor priority and precedence";
+      }
+      leaf pd-value {
+        type uint8 {
+          range "0..63";
+        }
+        mandatory true;
+        description
+          "Differentiated services codepoint value";
+      }
+    }
+    /*
+    qos (pd-value) to { ip (dscp-value) | ethernet (enet-8021p-
+     value) | mpls (mpls-value) | use-ip (class-map-name) }
+    */
+    list qos {
+      when "(../../ip/out) or (../../ethernet/out) or "
+      + "(../../mpls/out)" {
+        description
+          "";
+      }
+      key "pd-value";
+      description
+        "internal packet-descriptor priority and precedence";
+      leaf pd-value {
+        type uint8 {
+          range "0..63";
+        }
+        description
+          "Differentiated services codepoint value";
+      }
+      leaf to {
+        type empty;
+        mandatory true;
+        description
+          "internal packet classification value to map to";
+      }
+      container qos-choice {
+        description
+          "container qos-choice.";
+        leaf ip {
+          when "../../../../ip/out" {
+            description
+              "";
+          }
+          type uint8 {
+            range "0..63";
+          }
+          description
+            "packet IP DSCP value to map";
+        }
+        leaf ethernet {
+          when "../../../../ethernet/out" {
+            description
+              "";
+          }
+          type uint8 {
+            range "0..7";
+          }
+          description
+            "packet ethernet 802.1P value to map";
+        }
+        leaf mpls {
+          when "../../../../mpls/out" {
+            description
+              "";
+          }
+          type uint8 {
+            range "0..7";
+          }
+          description
+            "packet MPLS EXP value to map";
+        }
+        leaf use-ip {
+          if-feature qos-class-map-use-ip;
+          type leafref {
+            path "/qosrouter6000:qos/qosrouter6000:class-"
+            + "map/qosrouter6000:map-name";
+          }
+          description
+            "look up the final result via packet IP DSCP
+             settings";
+        }
+      }
+    }
+    /*
+    use-ip { <class-map-name (class-map-name) >}
+    */
+    container use-ip {
+      when "../../ethernet" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "look up the final result via packet IP DSCP settings";
+      leaf class-map-name {
+        type leafref {
+          path "/qosrouter6000:qos/qosrouter6000:class-"
+          + "map/qosrouter6000:map-name";
+        }
+        must "/qosrouter6000:qos/qosrouter6000:class-"
+        + "map/qosrouter6000:ip/qosrouter6000:in" {
+          error-message "must configure ip class-map first";
+          description
+            "must configure ip class-map first";
+        }
+        mandatory true;
+        description
+          "look up the final result via packet IP DSCP settings";
+      }
+    }
+  }
+
+  /*
+  qos
+  */
+  container qos {
+    description
+      "Configure global QoS parameters";
+    list queue-map {
+      if-feature qos-ssr;
+      key "queue-map";
+      description
+        "Configure Global queue mapping";
+      leaf queue-map {
+        type string {
+          length "1..39";
+        }
+        description
+          "QoS queue map name";
+      }
+      uses queue-map-grp;
+    }
+    list dscp {
+      key "qos-dscp-protocol";
+      description
+        " Configure qos dscp ";
+      leaf qos-dscp-protocol {
+        type dscp-protocol-type;
+        description
+          "Qos Dscp Protocol Identifier";
+      }
+      leaf dscp-value {
+        type typesrouter6000:dscp-value;
+        mandatory true;
+        description
+          "Configure qos dscp value";
+      }
+      container port-tcp {
+        when "../qos-dscp-protocol='ldap' or ../qos-dscp-"
+        + "protocol='telnet'" {
+          description
+            "";
+        }
+        description
+          "Qos Dscp Port Identifier";
+        leaf-list port-number {
+          type uint16 {
+            range "1..65535";
+          }
+          max-elements 10;
+          description
+            "Configure qos dscp port number";
+        }
+      }
+    }
+    list class-definition {
+      key "class-definition";
+      description
+        "Configure packet class definitions";
+      leaf class-definition {
+        type string {
+          length "1..39";
+        }
+        description
+          "QoS class definition name";
+      }
+      uses class-definition-grp;
+    }
+    list congestion-avoidance-map {
+      key "map-name";
+      description
+        "Configure Global congestion-avoidance mapping";
+      leaf map-name {
+        type string {
+          length "1..39";
+        }
+        description
+          "QoS congestion-avoidance map name";
+      }
+      choice congestion-avoidance-map-choice {
+        mandatory true;
+        case pwfq {
+          leaf pwfq {
+            type empty;
+            mandatory true;
+            description
+              "Configure map for use with PWFQ policies";
+          }
+        }
+        case mdrr {
+          leaf mdrr {
+            if-feature qos-ssr;
+            type empty;
+            mandatory true;
+            description
+              "Configure map for use with MDRR policies";
+          }
+        }
+      }
+      leaf card-family {
+        when "not(../mdrr)" {
+          description
+            "";
+        }
+        if-feature qos-card-family;
+        type uint8 {
+          range "1..3";
+        }
+        description
+          "Configure card-family. Once configured, it can't be
+           removed or changed.";
+      }
+      uses congestion-avoidance-map-grp;
+    }
+    list policy {
+      key "gpol-polname";
+      description
+        "Configure Global QoS policy";
+      leaf gpol-polname {
+        type string {
+          length "1..39";
+        }
+        description
+          "QoS policy name";
+      }
+      choice policy-choice {
+        mandatory true;
+        case policing {
+          container policing {
+            presence "";
+            description
+              "Configure QoS inbound policing parameters";
+            leaf radius-guided {
+              if-feature qos-radius-guided;
+              type empty;
+              description
+                "Designate as Radius guided policy";
+            }
+            leaf card-family {
+              if-feature qos-card-family;
+              type uint8 {
+                range "1..3";
+              }
+              description
+                "Configure card-family. Once configured, it
+                 can't be removed or changed.";
+            }
+            uses policy-policing-metering-grp;
+          }
+        }
+        case metering {
+          container metering {
+            if-feature qos-ssr;
+            presence "";
+            description
+              "Configure QoS inbound metering parameters";
+            leaf radius-guided {
+              if-feature qos-radius-guided;
+              type empty;
+              description
+                "Designate as Radius guided policy";
+            }
+            leaf card-family {
+              if-feature qos-card-family;
+              type uint8 {
+                range "1..3";
+              }
+              description
+                "Configure card-family. Once configured, it
+                 can't be removed or changed.";
+            }
+            uses policy-policing-metering-grp;
+          }
+        }
+        case pwfq {
+          container pwfq {
+            presence "";
+            description
+              "Configure QoS priority weighted fair queuing";
+            leaf dual-rate-queue {
+              type empty;
+              description
+                "dual rate queue";
+            }
+            leaf card-family {
+              if-feature qos-card-family;
+              type uint8 {
+                range "1..3";
+              }
+              description
+                "Configure card-family";
+            }
+            uses policy-pwfq-grp;
+          }
+        }
+        case mdrr {
+          container mdrr {
+            if-feature qos-ssr;
+            presence "";
+            description
+              "Configure QoS modified deficit round robin
+               policy";
+            leaf radius-guided {
+              type empty;
+              description
+                "Designate as Radius guided policy";
+            }
+            uses policy-mdrr-grp;
+          }
+        }
+        case protocol-rate-limit {
+          container protocol-rate-limit {
+            if-feature qos-protocol-rate-limit;
+            presence "";
+            description
+              "Configure QoS protocol rate limit policy";
+            uses policy-protocol-rate-limit-grp;
+          }
+        }
+      }
+    }
+    list profile {
+      key "profile-name";
+      description
+        "Configure Global QoS profile";
+      leaf profile-name {
+        type string {
+          length "1..39";
+        }
+        description
+          "QoS profile name";
+      }
+      choice profile-choice {
+        mandatory true;
+        case overhead {
+          container overhead {
+            presence "";
+            description
+              "Configure QoS overhead policy";
+            leaf card-family {
+              if-feature qos-card-family;
+              type uint8 {
+                range "1..3";
+              }
+              description
+                "Configure card-family";
+            }
+            uses profile-overhead-grp;
+          }
+        }
+        case resource {
+          container resource {
+            if-feature qos-resource;
+            presence "";
+            description
+              "Configure Qos resource profile";
+            uses profile-resource-grp;
+          }
+        }
+      }
+    }
+    list class-map {
+      key "map-name";
+      description
+        "Configure packet classification mapping";
+      leaf map-name {
+        type string {
+          length "1..39";
+        }
+        description
+          "QoS classification map name";
+      }
+      choice class-map-choice {
+        mandatory true;
+        case mpls-ip {
+          container mpls-ip {
+            presence "";
+            description
+              "Configure IP DSCP and MPLS EXP mapping";
+            choice mpls-ip {
+              mandatory true;
+              case in {
+                leaf in {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Configure external to internal packet
+                     priority mapping";
+                }
+              }
+            }
+            uses class-map-mpls-ip-grp;
+          }
+        }
+        case ip {
+          container ip {
+            presence "";
+            description
+              "Configure IP DSCP mapping";
+            choice ip {
+              mandatory true;
+              case in {
+                leaf in {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Configure external to internal packet
+                     priority mapping";
+                }
+              }
+              case out {
+                leaf out {
+                  type empty;
+                  description
+                    "Configure internal to external packet
+                     priority mapping";
+                }
+              }
+            }
+            uses class-map-ip-grp;
+          }
+        }
+        case ethernet {
+          container ethernet {
+            presence "";
+            description
+              "Configure Ethernet 802.1p mapping";
+            choice ethernet {
+              mandatory true;
+              case in {
+                leaf in {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Configure external to internal packet
+                     priority mapping";
+                }
+              }
+              case out {
+                leaf out {
+                  type empty;
+                  description
+                    "Configure internal to external packet
+                     priority mapping";
+                }
+              }
+            }
+            uses class-map-ethernet-grp;
+          }
+        }
+        case mpls {
+          container mpls {
+            presence "";
+            description
+              "Configure MPLS EXP mapping";
+            choice mpls {
+              mandatory true;
+              case in {
+                leaf in {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Configure external to internal packet
+                     priority mapping";
+                }
+              }
+              case out {
+                leaf out {
+                  type empty;
+                  description
+                    "Configure internal to external packet
+                     priority mapping";
+                }
+              }
+            }
+            uses class-map-mpls-grp;
+          }
+        }
+        case ethernet-dei {
+          container ethernet-dei {
+            description
+              "Configure Ethernet 802.1Q Priority and DEI
+               mapping";
+            choice ethernet-dei {
+              mandatory true;
+              case in {
+                leaf in {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Configure external to internal packet
+                     priority mapping";
+                }
+              }
+              case out {
+                leaf out {
+                  type empty;
+                  description
+                    "Configure internal to external packet
+                     priority mapping";
+                }
+              }
+            }
+            uses class-map-grp;
+          }
+        }
+      }
+    }
+  }
+
+}

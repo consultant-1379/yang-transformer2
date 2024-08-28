@@ -1,0 +1,726 @@
+module ericsson-ipfix-ext-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ipfix-ext-router6000";
+  prefix "ipfixextr6k";
+
+  import ietf-ipfix-psamp { prefix ipfix; }
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-ipfix-ext-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-20" {
+    description
+      "fix udpExporter DSCP/maxMessageSize ext path";
+    reference
+      "rfc6728";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2021-01-11" {
+    description
+      "initial version augment for ipfix template";
+    reference
+      "rfc6728";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  identity interface {
+    base "ipfix:optionsType";
+    description "Interface options type.";
+  }
+
+  identity selector {
+    base "ipfix:optionsType";
+    description "Selector options type.";
+  }
+
+  identity vrf {
+    base "ipfix:optionsType";
+    description "Virtual routing forwarding options type.";
+  }
+
+  augment "/ipfix:ipfix" {
+    description
+      "IPFIX aggregation preTemplate";
+    /*
+    preTemplateName@context_name
+    */
+    list aggregation {
+      key "predefinedTemplateName";
+      max-elements 80;
+      description
+        "The predefined template name. It should include the context name where the flow aggregation is taken place.
+          The example is predefinedTemplateName@contextName.
+          The predefinedTemplateName should be one of the following:
+          destination-prefix,
+          destination-prefix-tos,
+          prefix,
+          prefix-tos,
+          protocol-port,
+          protocol-port-tos,
+          source-prefix,
+          source-prefix-tos";
+
+      leaf predefinedTemplateName {
+        type string;
+        description
+          "The predefined template used for flow aggregation.";
+      }
+      container cache {
+        description "IPFIX aggregation cache.";
+          leaf entries {
+            type uint32 {
+              range "1..65535";
+            }
+            default 2048;
+
+            description
+              "Specify the aggregation cache entry";
+          }
+          container timeout {
+              description "IPFIX aggregation cache timeout.";
+              leaf active   {
+                type uint32 {
+                  range "1..65535";
+                }
+                default 900;
+                description
+                  "This parameter configures the interval in seconds which the records in the cache are exported by exporting process.";
+              }
+              leaf inactive   {
+                type uint32 {
+                  range "1..65535";
+                }
+                default 300;
+                description
+                  "This parameter configures the time in seconds after which the Flow record in aggregation cache is regarded as inactive.";
+              }
+          }
+          leaf permanent {
+            type empty;
+            description
+              "Set ipfix aggregation cache to permanent";
+          }
+      }
+
+      leaf-list exportingProcess  {
+        type string;
+        max-elements 2;
+        description
+          "Records are exported by all Exporting Processes in the list.";
+      }
+    }
+
+    list template {
+      key "templateName";
+      description
+        "Configure a user defined template";
+      leaf templateName {
+        type string;
+        description
+          "Specify a template name";
+      }
+
+      container collect {
+        description
+          "Define one or more Information Elements (IEs) that are not keys in an IPFIX user defined template.";
+        container ipv4 {
+          description
+            "IEs involving Internet Protocol version 4";
+          leaf sourceIPv4Address {
+            type empty;
+            description
+              "IPv4 source address";
+          }
+          leaf destinationIPv4Address {
+            type empty;
+            description
+              "IPv4 destination address";
+          }
+          leaf icmpTypeCodeIPv4 {
+            type empty;
+            description
+              "Type and Code of the IPv4 ICMP message";
+          }
+          leaf icmpTypeIPv4 {
+            type empty;
+            description
+              "Type of IPv4 ICMP message";
+          }
+          leaf icmpCodeIPv4 {
+            type empty;
+            description
+              "Code of IPv4 ICMP message";
+          }
+        }
+        container ipv6 {
+          description
+            "IEs involving Internet Protocol version 6.";
+          leaf sourceIPv6Address {
+            type empty;
+            description
+              "IPv6 source address";
+          }
+          leaf destinationIPv6Address {
+            type empty;
+            description
+              "IPv6 destination address";
+          }
+          leaf icmpTypeCodeIPv6 {
+            type empty;
+            description
+              "Type and Code of the IPv6 ICMP message";
+          }
+          leaf icmpTypeIPv6 {
+            type empty;
+            description
+              "Type of IPv6 ICMP message";
+          }
+          leaf icmpCodeIPv6 {
+            type empty;
+            description
+              "Code of IPv6 ICMP message";
+          }
+          leaf nextHeaderIPv6 {
+            type empty;
+            description
+              "Next header field value in IPv6 header";
+          }
+        }
+        container ip {
+          description
+            "IEs involving Internet Protocol, including IPv4 and IPv6 traffic types.";
+          leaf ipClassOfService {
+            type empty;
+            description
+              "TOS field for IPv4 packets and
+               traffic class field for IPv6 packets";
+          }
+          leaf ipVersion {
+            type empty;
+            description
+              "Version of IP in packet header";
+          }
+          leaf ipTTL {
+            type empty;
+            description
+              "TTL in IPv4 packets and
+               Hop limit in IPv6 packets";
+          }
+          leaf ipDiffServCodePoint {
+            type empty;
+            description
+              "Value of DSCP in differentiated services
+               field";
+          }
+          leaf ipPrecedence {
+            type empty;
+            description
+              "First 3 bits of TOS field in IPv4 packets
+               and first 3 bits of traffic class field in IPv6 packets";
+          }
+          leaf ipTotalLength {
+            type empty;
+            description
+              "The total length of the IP packet.";
+          }
+        }
+        container interface {
+          description
+            "Interface on which the traffic is received";
+          leaf ingressInterface {
+            type empty;
+            description
+              "Ingress interface";
+          }
+          leaf egressInterface {
+            type empty;
+            description
+              "Egress Interface";
+          }
+        }
+        container transportUDP {
+          description
+            "User Datagram Protocol IEs.";
+          leaf udpSourcePort {
+            type empty;
+            description
+              "Source port identifier in the UDP header";
+          }
+          leaf udpDestinationPort {
+            type empty;
+            description
+              "Destination port identifier in the UDP
+               header";
+          }
+          leaf udpMessageLength {
+            type empty;
+            description
+              "Length field in the UDP header";
+          }
+        }
+        container transportTCP {
+          description
+            "Transmission Control Protocol IEs.";
+          leaf tcpSourcePort {
+            type empty;
+            description
+              "Source port identifier in the TCP header";
+          }
+          leaf tcpDestinationPort {
+            type empty;
+            description
+              "Destination port identifier in the TCP
+               header";
+          }
+        }
+        container counter {
+          description
+            "Flow counter IEs.";
+          leaf octetDeltaCount {
+            type empty;
+            description
+              "The number of octets for this Flow at the
+               Observation Point";
+          }
+          leaf packetDeltaCount {
+            type empty;
+            description
+              "The number of incoming packets for this
+               Flow at the Observation Point";
+          }
+        }
+        container time {
+          description
+            "IEs reporting the system uptime, or milliseconds
+             since this IP device was first booted, when a
+             packet was forwarded as part of the flow.";
+          leaf flowStartSysUpTime {
+            type empty;
+            description
+              "System uptime when the first packet was
+               forwarded";
+          }
+          leaf flowEndSysUpTime {
+            type empty;
+            description
+              "System uptime when the last packet was
+               forwarded";
+          }
+        }
+        container ttl {
+          description
+            "Flow Time to Live IEs.";
+          leaf maximumTTL {
+            type empty;
+            description
+              "Maximum TTL value observed for any packet
+               in this Flow";
+          }
+          leaf minimumTTL {
+            type empty;
+            description
+              "Minimum TTL value observed for any packet
+               in this Flow";
+          }
+        }
+        leaf protocolIdentifier {
+          type empty;
+          description
+            "Protocol number in the IP packet header";
+        }
+        leaf flowDirection {
+          type empty;
+          description
+            "IE involving flow direction.";
+        }
+        container vrfid {
+          description
+            "IEs involving virtual routing forwarding(VRF), include ingressVRFID and egressVRFID.";
+          leaf ingressVRFID {
+            type empty;
+            description
+              "Ingress vrfid";
+          }
+          leaf egressVRFID {
+            type empty;
+            description
+              "Egress vrfid";
+          }
+        }
+      }
+
+      container match {
+        description
+          "Define one or more Information Elements (IEs) that are keys in an IPFIX user defined template.";
+        container ipv4 {
+          description
+            "IEs involving Internet Protocol version 4";
+          leaf sourceIPv4Address {
+            type empty;
+            description
+              "IPv4 source address";
+          }
+          leaf destinationIPv4Address {
+            type empty;
+            description
+              "IPv4 destination address";
+          }
+          leaf icmpTypeCodeIPv4 {
+            type empty;
+            description
+              "Type and Code of the IPv4 ICMP message";
+          }
+          leaf icmpTypeIPv4 {
+            type empty;
+            description
+              "Type of IPv4 ICMP message";
+          }
+          leaf icmpCodeIPv4 {
+            type empty;
+            description
+              "Code of IPv4 ICMP message";
+          }
+        }
+        leaf flowDirection {
+          type empty;
+          description
+            "IE involving flow direction.";
+        }
+        container ip {
+          description
+            "IEs involving Internet Protocol, including IPv4 and IPv6 traffic types.";
+          leaf ipClassOfService {
+            type empty;
+            description
+              "TOS field for IPv4 packets and traffic
+               class field for IPv6 packets";
+          }
+          leaf ipVersion {
+            type empty;
+            description
+              "Version of IP in packet header";
+          }
+          leaf ipTTL {
+            type empty;
+            description
+              "TTL in IPv4 packets and Hop limit in IPv6
+               packets";
+          }
+          leaf ipDiffServCodePoint {
+            type empty;
+            description
+              "Value of DSCP in differentiated services
+               field";
+          }
+          leaf ipPrecedence {
+            type empty;
+            description
+              "First 3 bits of TOS field in IPv4 packets
+               and first 3 bits of traffic class field in IPv6 packets";
+          }
+        }
+        container ipv6 {
+          description
+            "IEs involving Internet Protocol version 6.";
+          leaf sourceIPv6Address {
+            type empty;
+            description
+              "IPv6 source address";
+          }
+          leaf destinationIPv6Address {
+            type empty;
+            description
+              "IPv6 destination address";
+          }
+          leaf icmpTypeCodeIPv6 {
+            type empty;
+            description
+              "Type and code of the IPv6 ICMP message";
+          }
+          leaf icmpTypeIPv6 {
+            type empty;
+            description
+              "Type of IPv6 ICMP message";
+          }
+          leaf icmpCodeIPv6 {
+            type empty;
+            description
+              "Code of IPv6 ICMP message";
+          }
+        }
+        container transportUDP {
+          description
+            "User Datagram Protocol IEs.";
+          leaf udpSourcePort {
+            type empty;
+            description
+              "Source port identifier in the UDP header";
+          }
+          leaf udpDestinationPort {
+            type empty;
+            description
+              "Destination port identifier in the UDP
+               header";
+          }
+          leaf udpMessageLength {
+            type empty;
+            description
+              "Length field in the UDP header";
+          }
+        }
+        container transportTCP {
+          description
+            "Transmission Control Protocol IEs.";
+          leaf tcpSourcePort {
+            type empty;
+            description
+              "Source port identifier in the TCP header";
+          }
+          leaf tcpDestinationPort {
+            type empty;
+            description
+              "Destination port identifier in the TCP
+               header";
+          }
+        }
+        leaf protocolIdentifier {
+          type empty;
+          description
+            "Protocol number in the IP packet header";
+        }
+        container interface {
+          description
+            "Interface on which the traffic is received";
+          leaf ingressInterface {
+            type empty;
+            description
+              "Ingress interface";
+          }
+          leaf egressInterface {
+            type empty;
+            description
+              "Egress interface";
+          }
+        }
+        container vrfid {
+          description
+            "IEs involving virtual routing forwarding(VRF), include ingressVRFID and egressVRFID.";
+          leaf ingressVRFID {
+            type empty;
+            description
+              "Ingress vrfid";
+          }
+          leaf egressVRFID {
+            type empty;
+            description
+              "Egress vrfid";
+          }
+        }
+      }
+    }
+  }
+
+  /* immediateCache template */
+  augment "/ipfix:ipfix/ipfix:cache/ipfix:CacheType" {
+    description
+      "IPFIX cache types";
+    case immediateCache {
+      container immediateCache {
+        description
+          "container for immediate cache type";
+        choice cacheChoice1 {
+          description
+            "cache choice parameters.";
+          case predefinedTemplate {
+            container predefinedTemplate {
+              description
+                "container predefinedTemplate.";
+              choice predefinedTemplate {
+                description
+                  "predefinedTemplate parameters.";
+                case predefinedIPv4 {
+                  leaf predefinedIPv4 {
+                    type empty;
+                      description
+                        "Select predefined IPv4 template";
+                    }
+                }
+                case predefinedIPv6 {
+                  leaf predefinedIPv6 {
+                    type empty;
+                    description
+                      "Select predefined IPv6 template";
+                    }
+                }
+              }
+              leaf flowKeyDirection {
+                type empty;
+                description
+                  "The IE flowDirection";
+              }
+            }
+          }
+          case template {
+            leaf templateName {
+              type leafref { path "/ipfix:ipfix/ipfixextr6k:template/ipfixextr6k:templateName"; }
+              description
+                "Specify a user defined template name";
+            }
+          }
+        }
+      }
+    }
+    case naturalCache {
+      container naturalCache {
+        description
+          "container for natural cache";
+        leaf maxFlows {
+          type uint32 {
+            range "1..2048";
+          }
+          units flows;
+          description "This parameter configures the maximum number of
+            Flows in the Cache, which is the maximum number of Flows
+            that can be measured simultaneously.
+            The Monitoring Device MUST ensure that sufficient resources
+            are available to store the configured maximum number of
+            Flows.
+            If the maximum number of Flows is measured, an additional
+            Flow can be measured only if an existing entry is removed.
+            However, traffic that pertains to existing Flows can
+            continue to be measured.";
+        }
+        leaf activeTimeout {
+          type uint32 {
+            range "60..65535";
+          }
+          units seconds;
+          description "This parameter configures the time in
+            seconds after which a Flow is expired even though packets
+            matching this Flow are still received by the Cache.
+            The parameter value zero indicates infinity, meaning that
+            there is no active timeout.
+            If not configured by the user, the Monitoring Device sets
+            this parameter.
+            Note that this parameter corresponds to
+            ipfixMeteringProcessCacheActiveTimeout in the IPFIX
+            MIB module.";
+          reference "RFC 6615, Section 8
+            (ipfixMeteringProcessCacheActiveTimeout).";
+        }
+        leaf idleTimeout {
+          type uint32 {
+            range "60..65535";
+          }
+          units seconds;
+          description "This parameter configures the time in
+            seconds after which a Flow is expired if no more packets
+            matching this Flow are received by the Cache.
+            The parameter value zero indicates infinity, meaning that
+            there is no idle timeout.
+            If not configured by the user, the Monitoring Device sets
+            this parameter.
+            Note that this parameter corresponds to
+            ipfixMeteringProcessCacheIdleTimeout in the IPFIX
+            MIB module.";
+          reference "RFC 6615, Section 8
+            (ipfixMeteringProcessCacheIdleTimeout).";
+        }
+        choice cacheChoice1 {
+          description
+            "cache choice parameters.";
+          case predefinedTemplate {
+            container predefinedTemplate {
+              description
+                "container predefinedTemplate.";
+              choice predefinedTemplate {
+                description
+                  "predefinedTemplate parameters.";
+                case predefinedIPv4 {
+                  leaf predefinedIPv4 {
+                    type empty;
+                      description
+                        "Select predefined IPv4 template";
+                    }
+                }
+                case predefinedIPv6 {
+                  leaf predefinedIPv6 {
+                    type empty;
+                    description
+                      "Select predefined IPv6 template";
+                    }
+                }
+              }
+              leaf flowKeyDirection {
+                type empty;
+                description
+                  "The IE flowDirection";
+              }
+            }
+          }
+          case template {
+            leaf templateName {
+              type leafref { path "/ipfix:ipfix/ipfixextr6k:template/ipfixextr6k:templateName"; }
+              description
+                "Specify a user defined template name";
+            }
+          }
+        }
+      }
+    }
+  }
+  augment "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter" {
+    description
+      "DSCP value";
+
+    leaf dscp {
+      type uint32;
+      default 8;
+      description
+        "Specify the DSCP value of the IPFIX packet";
+    }
+    leaf maxMessageSize {
+      type uint16{
+          range "256..9200";
+        }
+      default 1400;
+      description
+        "Maximum message size of the IPFIX packet.";
+    }
+  }
+
+  augment  "/ipfix:ipfix/ipfix:observationPoint" {
+    description
+      "Traffic type";
+    leaf trafficType {
+       type enumeration {
+         enum ipv4 {
+           description "This value is used for IPv4.";
+         }
+         enum ipv6 {
+           description "This value is used for IPv6.";
+         }
+       }
+       default ipv4;
+       description
+        "Specify the traffic type value";
+    }
+  }
+}

@@ -1,0 +1,126 @@
+module non-generated-simple {
+
+	namespace "urn:test:non-generated-simple";
+	prefix this;
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision "2022-06-29";
+
+	feature feature1;
+
+	container cont1 {
+		config true;
+		if-feature feature1;
+
+		leaf leaf11 {
+			config false;
+			type string;
+		}
+
+		container cont2 {
+			config false;
+
+			leaf leaf21 {
+				type string;
+			}
+
+			container cont3 {
+				leaf leaf31 {
+					type string;
+				}
+			}
+		}
+
+		list list4 {
+			config true;
+			key leaf41;
+
+			leaf leaf41 {
+				type string;
+			}
+		}
+
+		list list5 {
+			config false;
+			key leaf51;
+
+			leaf leaf51 {
+				type string;
+			}
+		}
+	}
+
+	container cont6 {
+		config false;
+		notife:notifiable-state-data true;
+
+		leaf leaf61 {
+			type string;
+		}
+
+		leaf leaf62 {
+			notife:notifiable-state-data false;
+			type string;
+		}
+
+		container cont7 {
+			notife:notifiable-state-data false;
+
+			leaf leaf71 {
+				type string;
+			}
+		}
+	}
+
+	list list8 {
+		config false;
+		key leaf81;
+
+		leaf leaf81 {
+			type string;
+		}
+	}
+
+	container cont9 {
+		config false;
+		yexte:static-data true;
+
+		leaf leaf91 {
+			type string;
+		}
+
+		container cont10 {
+			if-feature feature1;
+			presence "";
+		}
+
+		container cont11 {
+			presence "";
+			yexte:static-data false;
+		}
+	}
+
+	rpc rpc1 {
+
+		input {
+
+			container cont12 {
+				leaf leaf121 {
+					type string;
+				}
+			}
+			container cont13 {
+				leaf leaf131 {
+					type string;
+				}
+			}
+
+		}
+	}
+}

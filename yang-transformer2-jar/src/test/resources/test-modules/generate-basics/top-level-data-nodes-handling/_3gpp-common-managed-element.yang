@@ -1,0 +1,24 @@
+module _3gpp-common-managed-element {
+
+    namespace "urn:3gpp:sa5:_3gpp-common-managed-element";
+    prefix this;
+
+    revision "2018-07-06";
+
+	list ManagedElement {
+		key id;
+	
+		leaf id {
+			type string;
+		}
+	}
+
+	list SubNetwork {
+		key id;
+	
+		leaf id {
+			type string;
+		}
+	}
+
+}

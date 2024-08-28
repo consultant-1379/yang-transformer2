@@ -1,0 +1,72 @@
+module choice-handling {
+
+	namespace "urn~test~choice-handling";
+	prefix this;
+
+	revision "2021-11-07";
+
+	container cont1 {
+
+		choice choice11 {
+			mandatory false;
+
+			case case12 {
+				leaf leaf13 {
+					type string;
+				}
+				leaf leaf14 {
+					type string;
+					mandatory false;
+				}
+			}
+			case case15 {
+				leaf leaf16 {
+					type string;
+					mandatory true;
+				}
+			}
+			case case17 {
+				description "some description";
+				container cont2 {
+					leaf leaf21 {
+						type string;
+						mandatory true;
+					}
+				}
+			}
+			case case18;		// not generated
+		}
+
+		choice choice19;		// not generated
+	}
+
+	list List3 {
+		key id;
+		leaf id { type string; }
+
+		container attributes {
+
+			choice choice31 {
+				mandatory true;
+
+				case case32 {
+					leaf leaf33 {
+						type string;
+					}
+					list leaf34Wrap {
+						key idx;
+						leaf idx { type uint32; }
+						leaf leaf34 {
+							type string;
+						}
+					}
+				}
+				case case35 {
+					leaf leaf36 {
+						type string;
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,94 @@
+module persistence-complex-two {
+
+    namespace "urn:test:persistence-complex-two";
+    prefix this;
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	
+	import persistence-complex-one {
+		prefix one;
+	}
+	
+    revision "2021-11-28";
+
+	container cont5 {
+
+		leaf leaf51 {
+			yexte:static-data true;
+			type string;
+		}
+	}
+
+	augment "/one:cont1" {
+	
+		leaf leaf13 {
+			status deprecated;
+			type string;
+		}
+
+		leaf leaf14 {
+			config false;
+			type string;
+		}
+
+		leaf leaf15 {
+			config false;
+			notife:notifiable-state-data true;
+			type string;
+		}
+
+		leaf leaf16 {
+			config false;
+			notife:notifiable-state-data true;
+			type string;
+		}
+	}
+
+	augment "/one:cont2" {
+
+		container cont7 {
+			status current {
+				yexte:preliminary;
+			}
+
+			leaf leaf73 {
+				status deprecated;
+				yexte:static-data true;
+				type string;
+			}
+	
+			leaf leaf74 {
+				config false;
+				type string;
+			}
+		}
+	}
+
+	augment "/one:cont3" {
+
+		container cont8 {
+
+			leaf leaf85 {
+				type string;
+			}
+	
+			leaf leaf86 {
+				notife:notifiable-state-data false;
+				type string;
+			}
+		}
+	}
+
+	container cont9 {
+	
+		leaf leaf91 {
+			type string;
+		}
+	}
+
+}

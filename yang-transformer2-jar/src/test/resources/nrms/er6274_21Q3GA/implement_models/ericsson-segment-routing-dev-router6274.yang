@@ -1,0 +1,72 @@
+module ericsson-segment-routing-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-segment-routing-dev-router6274";
+
+  prefix "sgrtr6274";
+
+  import ericsson-segment-routing-router6000 {
+    prefix "sgrtrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+   prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-segment-routing-ipos
+     Copyright (c) 2015-2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-16" {
+    description
+      "deviation for ericsson-segment-routing-ipos.yang file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/sgrtrouter6000:segment-routing/sgrtrouter6000:address-family-ipv4/sgrtrouter6000:prefix-sid-map-group" {
+    deviate not-supported;
+  }
+
+      /*
+    MSD on 6274 is deviated to 3.
+    */
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/sgrtrouter6000:segment-routing/sgrtrouter6000:msd/sgrtrouter6000:node" {
+    deviate replace {
+       type uint8 {
+          range "3";
+       }
+    }
+  }
+
+}

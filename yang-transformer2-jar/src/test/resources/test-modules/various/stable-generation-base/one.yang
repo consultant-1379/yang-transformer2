@@ -1,0 +1,48 @@
+module one {
+
+	namespace "urn:test:one";
+	prefix this;
+
+	include submodule-two;
+
+	revision "2021-12-21";
+
+	identity one-1;
+
+	identity one-2 {
+		base one-1;
+	}
+
+	grouping grouping1 {
+		leaf leafXxx {
+			type string;
+		}
+	}
+
+	list list1 {
+		key key;
+
+		leaf key {
+			type string;
+		}
+
+		leaf leaf11 {
+			type string {
+				length 10..20;
+			}
+		}
+		leaf leaf12 {
+			type identityref {
+				base this:one-1;
+			}
+		}
+		leaf leaf13 {
+			type identityref {
+				base this:two-1;
+			}
+		}
+
+		uses this:grouping1;
+		uses this:grouping4;		// sits in submodule
+	}
+}

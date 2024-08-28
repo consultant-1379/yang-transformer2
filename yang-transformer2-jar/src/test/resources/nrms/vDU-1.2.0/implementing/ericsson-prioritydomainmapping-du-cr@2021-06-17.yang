@@ -1,0 +1,94 @@
+module ericsson-prioritydomainmapping-du-cr {
+    yang-version 1.1;
+    namespace "urn:rdns:com:ericsson:oammodel:ericsson-prioritydomainmapping-du-cr";
+    prefix "prioritydomainmapping";
+
+    import _3gpp-common-managed-element {
+        prefix me3gpp;
+    }
+    import _3gpp-common-top {
+        prefix top3gpp;
+    }
+    import _3gpp-common-yang-types {
+        prefix types3gpp;
+    }
+    import _3gpp-nr-nrm-gnbdufunction {
+        prefix gnbdu3gpp;
+    }
+    import ericsson-qosprioritymapping-du-cr {
+        prefix qosprioritymapping;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ietf-inet-types {
+        prefix "inet";
+    }
+
+    organization
+      "Ericsson AB";
+    contact
+      "Ericsson first line support via email";
+    description
+      "Defines the YANG mapping of the PriorityDomainMapping.
+       
+       Copyright (c) 2021 Ericsson AB. All rights reserved.";
+    revision 2021-06-17 {
+        description
+          "First version.";
+        yexte:version 0;
+        yexte:release 1;
+        yexte:correction 0;
+    }
+    yexte:module-status preliminary;
+
+    grouping PriorityDomainMappingGrp {
+        leaf priorityDomain {
+            description
+              "Internal representation of absolute priority differentiation.
+               
+               A connection using Priority Domain A always has a higher priority than a connection using Priority Domain B if A < B.";
+            type int32 {
+                range "1..64";
+            }
+            default 48;
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+        leaf-list priorityLevelsList {
+            max-elements 127;
+            description
+              "List of priority levels to realize using the specified Priority Domain.
+               
+               The same priority level value cannot be configured in multiple priorityLevelsLists.";
+            type uint32 {
+                range "1..127";
+            }
+            reference
+              "3GPP TS 23.501";
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+    }
+
+    augment "/me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/qosprioritymapping:QosPriorityMapping" {
+        list PriorityDomainMapping {
+            description
+              "Mapping from 5G QoS priority level to internal parameters that have absolute priority realization.";
+            key id;
+            uses top3gpp:Top_Grp;
+            max-elements 64;
+            container attributes {
+                uses PriorityDomainMappingGrp;
+            }
+            must 'count(../PriorityDomainMapping[attributes/priorityLevelsList = current()/attributes/priorityLevelsList]) <= 1' {
+                error-message
+                  "Values in priorityLevelsList must be unique among PriorityDomainMappings under the same QosPriorityMapping.";
+            }
+        }
+    }
+}

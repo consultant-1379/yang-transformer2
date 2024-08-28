@@ -1,0 +1,12 @@
+module module1 {
+
+	namespace "urn:test:module1";
+	prefix this;
+
+	revision "2022-09-23";
+
+	include submodule2;
+
+	feature feature11;
+	feature feature12;
+}

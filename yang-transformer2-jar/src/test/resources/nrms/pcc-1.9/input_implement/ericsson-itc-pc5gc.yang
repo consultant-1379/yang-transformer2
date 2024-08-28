@@ -1,0 +1,132 @@
+module ericsson-itc-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-itc-pc5gc";
+  prefix itcpc5gc;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-tracing-pc5gc {
+    prefix trcpc5gc;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "ericsson-itc-pc5gc
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-06-15 {
+    description
+      "Initial revision.";
+    reference "EN/LZN 704 0249";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/trcpc5gc:tracing" {
+    description
+      "Tracing tools";
+    container itc {
+      description
+        "ITC settings";
+      action "start" {
+        description
+          "Start ITC";
+        input {
+          leaf filter {
+            description
+              "ITC filter in pcap-filter syntax, quoted if space is included";
+            type string;
+          }
+          leaf snaplen {
+            description
+              "Snaplen value in bytes, 0 (default) means entire packets";
+            type uint16 {
+              range "0..65535";
+            }
+            default 0;
+          }
+          leaf buffer {
+            description
+              "Buffer value in MB, the default is 100";
+            type uint16 {
+              range "0..65535";
+            }
+            default 100;
+          }
+        }
+        output {
+          list results {
+            key "instance-id";
+            description
+              "The result of ITC starting action for each instance.";
+            leaf instance-id {
+              type string;
+            }
+            leaf result {
+              type string;
+              mandatory true;
+            }
+          }
+        }
+      }
+      action "stop" {
+        description
+          "Stop ITC";
+        output {
+          list results {
+            key "instance-id";
+            description
+              "The result of ITC stopping action for each instance.";
+            leaf instance-id {
+              type string;
+            }
+            leaf result {
+              type string;
+              mandatory true;
+            }
+          }
+        }
+      }
+      action "show" {
+        description
+          "Show ITC";
+        output {
+          list results {
+            key "instance-id";
+            description
+              "The result of ITC showing action for each instance.";
+            leaf instance-id {
+              type string;
+            }
+            leaf status {
+              type string;
+              mandatory true;
+            }
+            leaf captured-packets {
+              type uint32;
+              mandatory true;
+            }
+            leaf filter {
+              type string;
+            }
+            leaf snaplen {
+              type uint16;
+            }
+            leaf buffer {
+              type uint16;
+            }
+            leaf capture-file {
+              type string;
+            }
+          }
+        }
+      }
+    }
+  }
+}

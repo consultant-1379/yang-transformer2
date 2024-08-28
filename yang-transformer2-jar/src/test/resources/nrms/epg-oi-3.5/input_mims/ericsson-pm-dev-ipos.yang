@@ -1,0 +1,102 @@
+module ericsson-pm-dev-ipos {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-pm-dev-ipos";
+  prefix ipospm;
+
+  import ericsson-pm {
+    prefix pme;
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "Copyright (c) 2017 Ericsson AB. All rights reserved.
+     extend ericsson-pm";
+
+  revision 2018-07-17 {
+    description
+      "leaf threshold-direction and threshold-valid-range are not-supported";
+    reference "ericsson-pm.yang";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision 2017-12-16 {
+    description
+      "based on eyang pm JIRA:IPOS-18653";
+    reference "ericsson-pm.yang";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2017-06-23 {
+    description
+      "based on eyang pm";
+    reference "ericsson-pm.yang";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/pme:pm/pme:job/pme:granularity-period" {
+    deviate delete {
+				must "(../type = 'measurement-job' and 
+						../../measurement-capabilities/measurement-jobs/supported-meas-job-gps/.) or 
+					(../type = 'threshold-job' and 
+						../../measurement-capabilities/threshold-jobs/supported-thresh-job-gps/.) or
+					(../type = 'realtime-job' and 
+						../../measurement-capabilities/realtime-jobs/supported-rt-job-gps/.) ";
+    }
+  }
+
+  deviation "/pme:pm/pme:group/pme:measurement-type/pme:threshold-direction" {
+    deviate not-supported;
+  }
+
+  deviation "/pme:pm/pme:group/pme:measurement-type/pme:threshold-valid-range" {
+    deviate not-supported;
+  }
+
+    deviation "/pme:pm/pme:job/pme:granularity-period" {
+      deviate replace {
+      type enumeration {
+        enum one-min {
+          value 3;
+          description "Represents a one-minute time period.";
+        }
+        enum five-min {
+          value 4;
+          description "Represents a five-minute time period.";
+        }
+        enum fifteen-min {
+          value 5;
+          description "Represents a 15-minute time period.";
+        }
+        enum thirty-min {
+          value 6;
+          description "Represents a 30-minute time period.";
+        }
+        enum one-hour {
+          value 7;
+          description "This represents a one-hour time period.";
+        }
+        enum twelve-hour {
+          value 8;
+          description "This represents a 12-hour (720-minute) time period.";
+        }
+        enum one-day {
+          value 9;
+          description "This represents a 24-hour (1440-minute) time period.";
+        }
+      }
+    }
+  }
+}

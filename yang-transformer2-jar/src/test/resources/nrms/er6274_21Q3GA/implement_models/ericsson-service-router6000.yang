@@ -1,0 +1,398 @@
+module ericsson-service-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-service-router6000";
+
+  prefix "servicer6k";
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-acl-router6000 {
+    prefix "aclr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-service-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-01" {
+    description
+      "add power-module-miss cli";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "3";
+    yexte:correction "1";
+  }
+
+  revision "2020-06-22" {
+    description
+      "add service netconf cli";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2020-02-19" {
+    description
+      "modify cmd netconf-internal-models  to
+       system-function-yang-models";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2019-10-07" {
+    description
+      "Add NETCONF interanl models control";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-12-26" {
+    description
+      "Modify alarm-suppression for the new changes to NBC";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-07" {
+    description
+      "Router6000 initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsr6k:contexts/ctxsr6k:service" {
+    description
+      "ericsson-service";
+    /*
+    domain-wildcard
+    */
+    leaf domain-wildcard {
+      type empty;
+      description
+        "Allow the usage of a wildcard character (*) in domain
+         names";
+    }
+    /*
+    console-break
+    */
+    leaf console-break {
+      type empty;
+      description
+        "Enable console break by sending break sequence";
+    }
+    /*
+    exit-prompt
+    */
+    leaf exit-prompt {
+      type empty;
+      description
+        "Enable prompt when execute exit/end command";
+    }
+    /*
+    netconf-internal-models
+    */
+    leaf netconf-internal-models {
+      type empty;
+      status obsolete;
+      description
+        "Enable internal NETCONF models";
+    }
+    /*
+    system-function-yang-models
+    */
+    leaf system-function-yang-models {
+      type empty;
+      description
+        "Enable system function yang models";
+    }
+    /*
+    alarm-suppression { transceiver-not-supported | single-
+     power-feed | power-module-missing}
+    */
+    container alarm-suppression {
+      description
+        "Suppress an alarm";
+      leaf transceiver-not-supported {
+        type empty;
+        description
+          "Suppress transceiver-not-supported alarm";
+      }
+      leaf single-power-feed {
+        type empty;
+        description
+          "Suppress single-power-feed alarm";
+      }
+      leaf power-module-missing {
+        type empty;
+        description
+          "Suppress power-module-missing alarm";
+      }
+    }
+    /*
+    alarm-suppression transceiver-not-supported
+    */
+    leaf alarm-suppression-transceiver-not-supported {
+      type empty;
+      status obsolete;
+      description
+        "Suppress transceiver-not-supported alarm";
+    }
+    /*
+    history-username-display
+    */
+    leaf history-username-display {
+      type empty;
+      description
+        "Enable saving the name of the command executing user in
+         command history";
+    }
+    /*
+    counters { arp | nd }
+    */
+    container counters {
+      description
+        "Enable ARP/ND counters at VLAN level";
+      leaf arp {
+        type empty;
+        description
+          "Enable ARP counters at Parent Circuit level";
+      }
+      leaf nd {
+        type empty;
+        description
+          "Enable ND counters at Parent Circuit level";
+      }
+    }
+    /*
+    process { ppp | pppoe | l2tp }
+    */
+    container process {
+      status obsolete;
+      description
+        "Enable process services";
+      leaf ppp {
+        type boolean;
+        default "false";
+        status obsolete;
+        description
+          "Enable/Disable ppp";
+      }
+      leaf pppoe {
+        type boolean;
+        default "false";
+        status obsolete;
+        description
+          "Enable/Disable pppoe";
+      }
+      leaf l2tp {
+        type boolean;
+        default "false";
+        status obsolete;
+        description
+          "Enable/Disable l2tp";
+      }
+    }
+    /*
+    upload-coredump <url (ftp-url)> [ context (ctx-str) ]
+    */
+    container upload-coredump {
+      presence "";
+      description
+        "Upload coredump files to remote server";
+      leaf url {
+        type string {
+          pattern 'ftp://[^: ]+(:\S+)?@(((([0-9]|[1-9][0-9]|1[0-'
+          + '9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1['
+          + '0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?)|\[((('
+          + '(:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0'
+          + '-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-'
+          + '4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[0'
+          + '1]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?)|((([^:]+:){6}(([^:'
+          + ']+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:'
+          + ']+)?)(%.+)?))\])(:([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}'
+          + '|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0'
+          + '-5]))?(/\S+)?';
+        }
+        mandatory true;
+        description
+          "File Transfer Protocol";
+      }
+      leaf context {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        description
+          "Specify context for server reachability";
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context" {
+    description
+      "ericsson-service";
+    /*
+    service { ftp client | tftp client | { sftp [ server  |
+     client ] } | { scp [  server |  client ] } | snmp server |
+     ssh { server [ access-group (access-group-name) ] | client }
+     | telnet { server [ access-group (access-group-name) ] |
+     client } | netconf server}
+    */
+    container service {
+      description
+        "Service commands";
+      leaf ftp-client {
+        type empty;
+        description
+          "client";
+      }
+      leaf tftp-client {
+        type empty;
+        description
+          "client";
+      }
+      container sftp {
+        must "(not(./server) and not(./client)) or "
+        + "(../ssh/server)" {
+          error-message "SSH must be enabled for sftp service";
+          description
+            "";
+        }
+        presence "";
+        description
+          "sftp service";
+        leaf server {
+          type empty;
+          description
+            "server";
+        }
+        leaf client {
+          type empty;
+          description
+            "client";
+        }
+      }
+      container scp {
+        must "(not(./server) and not(./client)) or "
+        + "(../ssh/server)" {
+          error-message "SSH must be enabled for scp service";
+          description
+            "";
+        }
+        presence "";
+        description
+          "scp service";
+        leaf server {
+          type empty;
+          description
+            "server";
+        }
+        leaf client {
+          type empty;
+          description
+            "client";
+        }
+      }
+      leaf snmp-server {
+        type empty;
+        description
+          "server";
+      }
+      container ssh {
+        description
+          "ssh service";
+        container server {
+          presence "";
+          description
+            "server";
+          leaf access-group {
+            type leafref {
+              path
+              "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip/aclr6k"
+              + ":access-list/aclr6k:access-list";
+            }
+            description
+              "access-group service";
+          }
+        }
+        leaf client {
+          type empty;
+          description
+            "client";
+        }
+      }
+      container telnet {
+        description
+          "telnet service";
+        container server {
+          presence "";
+          description
+            "server";
+          leaf access-group {
+            type leafref {
+              path
+              "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip/aclr6k"
+              + ":access-list/aclr6k:access-list";
+            }
+            description
+              "access-group service";
+          }
+        }
+        leaf client {
+          type empty;
+          description
+            "client";
+        }
+      }
+      leaf netconf-server {
+        type empty;
+        description
+          "server";
+      }
+    }
+  }
+
+}

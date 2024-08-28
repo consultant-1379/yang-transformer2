@@ -1,0 +1,662 @@
+module ericsson-ldp-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ldp-ipos";
+
+  prefix "ldpipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-ldp-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-21" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-09-29" {
+    description
+      "update revision for change password to choice";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-20" {
+    description
+      "modifying the mldp frr command";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-05-09" {
+    description
+      "adding mldp commands under router ldp";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-02-15" {
+    description
+      "remove if-feature advertise-ipv4";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-18" {
+    description
+      "recover ipfrr and dynamic-session";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-09-18" {
+    description
+      "remove redistribute bgp using if-feature";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-08" {
+    description
+      "remove ipfrr command";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature nonstop-routing {
+    description
+      "This feature indicates that the device supports the
+       nonstop-routing in LDP.";
+  }
+
+  feature neighbor-tunnel-shortcut {
+    description
+      "This feature indicates that the device supports the
+       neighbor-tunnel-shortcut in LDP.";
+  }
+
+  feature tunnel-shortcut {
+    description
+      "This feature indicates that the device supports the
+       tunnel-shortcut in LDP.";
+  }
+
+  grouping ldp-grp {
+    description
+      "LDP configuration mode";
+    /*
+    targeted { dynamic-session (prefix-list) [ password {(clear-
+     text) | encrypted (encrypted-set)} ] | advertise ipv4 |
+     hello { holdtime (holdtime-set) | interval (interval-set) }
+     }
+    */
+    container targeted {
+      description
+        "Configure extended LDP discovery parameters";
+      container dynamic-session {
+        presence "";
+        description
+          "Configure dynamic session prefix list for a targeted
+           session";
+        leaf prefix-list {
+          type string;
+          mandatory true;
+          description
+            "Prefix-list name";
+        }
+        container password {
+          description
+            "Set password";
+          choice password {
+            description
+              "";
+            case clear-text {
+              leaf clear-text {
+                type string {
+                  length "1..39";
+                }
+                description
+                  "Password string(up to 39 characters)";
+              }
+            }
+            case encrypted {
+              leaf encrypted {
+                type string {
+                  length "1..80";
+                }
+                description
+                  "Set encrypted password";
+              }
+            }
+          }
+        }
+      }
+      leaf advertise-ipv4 {
+        type empty;
+        description
+          "Configure IPv4 advertisement for targeted session";
+      }
+      container hello {
+        description
+          "Configure hello parameter for targeted session";
+        leaf holdtime {
+          type uint16 {
+            range "15..3600";
+          }
+          default "45";
+          description
+            "Configure targeted hello hold time";
+        }
+        leaf interval {
+          type uint16 {
+            range "5..1200";
+          }
+          default "15";
+          description
+            "Configure targeted hello transmit interval";
+        }
+      }
+    }
+    /*
+    ipfrr
+    */
+    leaf ipfrr {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable ipfrr";
+    }
+    /*
+    ignore config-seq-num
+    */
+    leaf ignore-config-seq-num {
+      type empty;
+      description
+        "Ignore configuration sequence number";
+    }
+    /*
+    ecmp-transit
+    */
+    leaf ecmp-transit {
+      type empty;
+      description
+        "Enable ECMP at LSP transit nodes";
+    }
+    /*
+    tunnel-shortcut
+    */
+    leaf tunnel-shortcut {
+      if-feature tunnel-shortcut;
+      type empty;
+      description
+        "Enable tunnel shortcut for all targeted neighbors";
+    }
+    /*
+    nonstop-routing
+    */
+    leaf nonstop-routing {
+      if-feature nonstop-routing;
+      type empty;
+      description
+        "Enables LDP non stop routing";
+    }
+    /*
+    max-session (session-value)
+    */
+    leaf max-session {
+      type uint16 {
+        range "1..2010";
+      }
+      default "2010";
+      description
+        "Configure maximum sessions for LDP";
+    }
+    /*
+    create-lsp-circuit
+    */
+    leaf create-lsp-circuit {
+      type empty;
+      description
+        "Create circuit for LDP LSPs";
+    }
+    /*
+    track-igp-metric
+    */
+    leaf track-igp-metric {
+      type empty;
+      description
+        "Enable IGP metric tracking for LDP LSPs";
+    }
+    /*
+    graceful-restart <graceful-restart-option [ reconnect-time
+     (timer-value) ] [ recovery-time (timer-value) ] [
+     forwarding-hold-time (timer-value) ]>
+    */
+    container graceful-restart {
+      description
+        "Enable graceful restart of LDP";
+      leaf graceful-restart-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable graceful-restart-enable";
+      }
+      container graceful-restart-option {
+        when "../graceful-restart-enable='true'" {
+          description
+            "";
+        }
+        description
+          "Specify the graceful restart options";
+        leaf reconnect-time {
+          type uint16 {
+            range "10..1800";
+          }
+          default "120";
+          description
+            "Specify the peer reconnect time after restart";
+        }
+        leaf recovery-time {
+          type uint16 {
+            range "30..3600";
+          }
+          default "120";
+          description
+            "Specify the peer recovery time after restart";
+        }
+        leaf forwarding-hold-time {
+          type uint16 {
+            range "30..3600";
+          }
+          default "130";
+          description
+            "Specify time for which router preserves forwarding
+             state";
+        }
+      }
+    }
+    /*
+    redistribute-bgp [ route-map (routemap-name) ]
+    */
+    container redistribute-bgp {
+      presence "";
+      description
+        "Redistribute BGP external routes into LDP";
+      leaf route-map {
+        type string {
+          length "1..127";
+        }
+        description
+          "Route map reference";
+      }
+    }
+    /*
+    igp-synchronization timeout (holdtime-set)
+    */
+    container igp-synchronization {
+      description
+        "Configure IGP sync timer";
+      leaf timeout {
+        type uint8 {
+          range "3..60";
+        }
+        description
+          "Configure IGP sync timeout";
+      }
+    }
+    /*
+    interfaces interface (intf-name)
+    */
+    container interfaces {
+      description
+        "Interface list enabled LDP";
+      leaf-list interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Enable LDP on an interface";
+      }
+    }
+    /*
+    hello { holdtime (holdtime-set) | interval (interval-set) }
+    */
+    container hello {
+      description
+        "Configure link hello/basic LDP discovery parameters";
+      leaf holdtime {
+        type uint16 {
+          range "15..3600";
+        }
+        default "15";
+        description
+          "Configure hello holdtime";
+      }
+      leaf interval {
+        type uint16 {
+          range "5..1200";
+        }
+        default "5";
+        description
+          "Configure hello transmit interval";
+      }
+    }
+    /*
+    keepalive { holdtime (holdtime-set) | interval (interval-
+     set) }
+    */
+    container keepalive {
+      description
+        "Configure LDP session keepalive hold time";
+      leaf holdtime {
+        type uint16 {
+          range "45..3600";
+        }
+        default "90";
+        description
+          "Configure keepalive hold time";
+      }
+      leaf interval {
+        type uint16 {
+          range "15..1200";
+        }
+        default "30";
+        description
+          "Configure keepalive transmit interval";
+      }
+    }
+    /*
+    transport-address (transaddr-set)
+    */
+    leaf transport-address {
+      type inet:ipv4-address-no-zone;
+      description
+        "Configure LDP transport address";
+    }
+    /*
+    router-id (routerid-set)
+    */
+    leaf router-id {
+      type inet:ipv4-address-no-zone;
+      description
+        "Configure a router ID";
+    }
+    /*
+    neighbor (neighbor-addr) { targeted [ tunnel-shortcut [
+     disable ] ] | password {(clear-text) | encrypted (encrypted-
+     set)} | explicit-null [ prefix-list (prefix-list) ] |
+     <label-binding-prefix-list { (prefix-list) <direction { in |
+     out }>}> }
+    */
+    list neighbor {
+      key "neighbor-addr";
+      description
+        "Configure LDP neighbor attributes";
+      leaf neighbor-addr {
+        type inet:ipv4-address-no-zone;
+        description
+          "Neighbor address";
+      }
+      container neighbor-choice {
+        description
+          "Configure targeted neighbor";
+        container targeted {
+          presence "";
+          description
+            "Initiate extended discovery with a targeted
+             neighbor";
+          container tunnel-shortcut {
+            if-feature neighbor-tunnel-shortcut;
+            presence "";
+            description
+              "Enable tunnel shortcut for targeted neighbor";
+            leaf disable {
+              type empty;
+              description
+                "Disable tunnel shortcut for targeted neighbor";
+            }
+          }
+        }
+        container password {
+          description
+            "Set password";
+          choice password {
+            description
+              "";
+            case clear-text {
+              leaf clear-text {
+                type string {
+                  length "1..39";
+                }
+                description
+                  "Password string(up to 39 characters)";
+              }
+            }
+            case encrypted {
+              leaf encrypted {
+                type string {
+                  length "1..80";
+                }
+                description
+                  "Set encrypted password";
+              }
+            }
+          }
+        }
+        container explicit-null {
+          presence "";
+          description
+            "Enable explicit null label";
+          leaf prefix-list {
+            type string {
+              length "1..127";
+            }
+            description
+              "Apply prefix list to enable explicit-null on
+               certain prefixes";
+          }
+        }
+        list label-binding-prefix-list {
+          key "direction";
+          max-elements 2;
+          description
+            "Configure a filter on label distribution";
+          leaf direction {
+            type enumeration {
+              enum in {
+                value 0;
+                description
+                  "Apply prefix list when receiving label
+                   bindings";
+              }
+              enum out {
+                value 1;
+                description
+                  "Apply prefix list when transmitting label
+                   bindings";
+              }
+            }
+            description
+              "Specify the direction, in or out";
+          }
+          leaf prefix-list {
+            type string {
+              length "1..127";
+            }
+            mandatory true;
+            description
+              "Prefix list name";
+          }
+        }
+      }
+    }
+    /*
+    explicit-null [ prefix-list (prefix-list) ]
+    */
+    container explicit-null {
+      presence "";
+      description
+        "Enable explicit null label";
+      leaf prefix-list {
+        type string;
+        description
+          "Apply prefix list to enable explicit null on certain
+           prefixes";
+      }
+    }
+    /*
+    label-binding-prefix-list { (prefix-list) <direction { in |
+     out }>}
+    */
+    list label-binding-prefix-list {
+      key "direction";
+      max-elements 2;
+      description
+        "Configure a filter on label distribution";
+      leaf direction {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Apply prefix list when receiving label bindings";
+          }
+          enum out {
+            value 1;
+            description
+              "Apply prefix list when transmitting label
+               bindings";
+          }
+        }
+        description
+          "Specify the direction, in or out";
+      }
+      leaf prefix-list {
+        type string {
+          length "1..127";
+        }
+        mandatory true;
+        description
+          "Prefix list name";
+      }
+    }
+    /*
+    mldp [ link-protection | mbb-switchover-delay (mbb-
+     switchover-seconds) | mbb-timeout (mbb-timeout-seconds) |
+     mldp-enable ]
+    */
+    container mldp {
+      presence "";
+      description
+        "Enables MLDP";
+      leaf link-protection {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable link-protection";
+      }
+      leaf mbb-switchover-delay {
+        type uint16 {
+          range "1..300";
+        }
+        default "10";
+        description
+          "Make before break switchover delay";
+      }
+      leaf mbb-timeout {
+        type uint16 {
+          range "1..300";
+        }
+        default "10";
+        description
+          "Make before break timeout";
+      }
+      leaf mldp-enable {
+        type empty;
+        mandatory true;
+        description
+          "Enable MLDP";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:router" {
+    description
+      "ericsson-ldp";
+    /*
+    ldp
+    */
+    container ldp {
+      when "../../ctxipos:context-name='local'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Label Distribution Protocol (LDP)";
+      uses ldp-grp;
+    }
+  }
+
+}

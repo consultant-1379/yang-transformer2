@@ -1,0 +1,55 @@
+module simple-3gpp-dev {
+
+	namespace "urn:test:simple-3gpp-dev";
+	prefix this;
+
+	revision "2021-11-29";
+
+	import simple-3gpp {
+		prefix simple;
+	}
+
+	augment "/simple:Cont1/attributes/structsequence13" {
+
+		leaf member18 {
+			type int32;
+		}
+	}
+
+	deviation "/simple:Cont1/attributes/structsequence13/member17" {
+		deviate not-supported;
+	}
+
+	// augments a complete struct into the MOC
+
+	augment "/simple:List2/attributes" {
+
+		container struct31 {
+
+			leaf member32 {
+				type boolean;
+			}
+			leaf member33 {
+				type int16;
+			}
+		}
+	}
+
+	grouping grouping4 {
+		leaf leaf41 {
+			type string;
+		}
+		leaf leaf42 {
+			type boolean;
+		}
+	}
+
+	grouping grouping5 {
+		leaf member51 {
+			type string;
+		}
+		leaf member52 {
+			type boolean;
+		}
+	}
+}

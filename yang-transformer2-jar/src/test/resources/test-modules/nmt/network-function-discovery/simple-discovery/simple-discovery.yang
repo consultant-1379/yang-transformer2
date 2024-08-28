@@ -1,0 +1,39 @@
+module simple-discovery {
+
+	namespace "urn:test:simple-discovery";
+	prefix this;
+
+	revision "2022-07-01";
+
+	container ManagedElement {
+
+		container GNodeBDUFunction {
+			presence "";
+		}
+		container GNodeBCUUPFunction {
+			presence "";
+		}
+	}
+
+	list sbg-function-2-0-1-257 {
+		key id;
+		leaf id { type string; }
+	}
+
+	container pgw {
+		leaf sgw { type string; }
+	}
+
+	container cont1 {
+		choice choice1 {
+			case case1 {
+				container cont2 {
+					presence "";
+				}
+			}
+			case case2 {
+				leaf leaf3 { type string; }
+			}
+		}
+	}
+}

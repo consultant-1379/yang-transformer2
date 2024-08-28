@@ -1,0 +1,45 @@
+module persistence-complex-three {
+
+    namespace "urn:test:persistence-complex-three";
+    prefix this;
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	
+	import persistence-complex-one {
+		prefix one;
+	}
+	import persistence-complex-two {
+		prefix two;
+	}
+		
+    revision "2021-12-24";
+
+	deviation "/one:cont1/two:leaf16" {
+		deviate replace {
+			notife:notifiable-state-data false;
+		}
+	}
+
+	deviation "/one:cont2/two:cont7/two:leaf73" {
+		deviate replace {
+			yexte:static-data false;
+		}
+	}
+
+	deviation "/one:cont4" {
+		deviate replace {
+			config false;
+		}
+	}
+	
+	deviation "/two:cont9/two:leaf91" {
+		deviate replace {
+			config false;
+		}
+	}
+}

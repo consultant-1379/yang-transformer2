@@ -1,0 +1,124 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-context-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:yang:ericsson-context-dev-router6000";
+
+  prefix "ctxvrouter6000";
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-context-dev-router6000
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-05-03" {
+    description
+      "Removed deviation for ISIS SR MPLS IPv6 CLI";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2021-02-03" {
+    description
+      "Added deviation router-id ipv6 command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2020-09-23" {
+    description
+      "removed deviation for ospf3 maximum-paths command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-03-10" {
+    description
+      "deviation for ospf3 max paths.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+    revision "2018-03-08" {
+    description
+      "remove icr dev.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-18" {
+    description
+      "add icr under context and contexts.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-07" {
+    description
+      "deviation for ericsson-context-ipos.yang.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /*hide context->dvsr*/
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:dvsr" {
+    deviate not-supported;
+  }
+
+
+}
+
+
+

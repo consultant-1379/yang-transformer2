@@ -1,0 +1,15 @@
+module ietf-module {
+
+	namespace "urn:ietf:ietf-module";
+	prefix this;
+
+	revision "2019-03-08";
+
+	container IetfCont {					// not 3GPP due to namespace
+		presence "";
+
+		container attributes {
+			leaf leafXx { type string; }
+		}
+	}
+}

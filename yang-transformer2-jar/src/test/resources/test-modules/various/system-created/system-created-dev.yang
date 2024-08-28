@@ -1,0 +1,39 @@
+module system-created-dev {
+
+	namespace "urn!test!system-created-dev";
+	prefix this;
+
+	import system-created {
+		prefix sc;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision "2021-12-01";
+
+	augment /sc:cont1 {
+		leaf leaf11 {
+			type string;
+		}
+	}
+
+	deviation /sc:cont2 {
+		deviate add {
+			yexte:is-system-created;
+		}
+	}
+
+	augment /sc:cont3 {
+		leaf leaf31 {
+			type string;
+		}
+	}
+
+	deviation /sc:cont4 {
+		deviate delete {
+			yexte:is-system-created;
+		}
+	}
+}

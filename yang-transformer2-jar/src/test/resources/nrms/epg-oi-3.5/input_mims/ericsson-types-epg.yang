@@ -1,0 +1,267 @@
+submodule ericsson-types-epg {
+  yang-version 1.1;
+  belongs-to "ericsson-epg" {
+    prefix "epg";
+  }
+
+  organization
+   "Ericsson Epg Oam Framework";
+
+  contact
+   "Editor   Nigel Han
+             <mailto:nigel.han@ericsson.com>";
+
+  description
+   "This submodule defines some ip types which are used by ericsson only";
+
+  revision 2019-02-01 {
+    description
+     "fourth revision.";
+  }
+
+  revision 2018-11-12 {
+    description
+     "third revision.";
+  }
+
+  revision 2018-09-27 {
+    description
+     "second revision.";
+  }
+  revision 2017-04-07 {
+    description
+     "Initial revision.";
+  }
+
+  typedef eipv4-prefix{
+    type string{
+      pattern
+         '(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}'
+       +  '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+       + '(/(([0-9])|([1-2][0-9])|(3[0-2])))';
+    }
+  }
+
+  typedef eipv6-prefix{
+    type string{
+      pattern '((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}'
+            + '((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|'
+            + '(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}'
+            + '(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))'
+            + '(/(([0-9])|([0-9]{2})|(1[0-1][0-9])|(12[0-8])))';
+      pattern '(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|'
+            + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'
+            + '(/.+)';
+    }
+  }
+
+  typedef eip-prefix{
+    type union{
+      type eipv4-prefix;
+      type eipv6-prefix;
+    }
+  }
+
+  typedef eipv4-prefix-optional{
+    type string{
+      pattern
+         '(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}'
+       +  '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+       + '(/(([0-9])|([1-2][0-9])|(3[0-2])))?';
+    }
+  }
+
+  typedef eipv6-prefix-optional{
+    type string{
+      pattern '((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}'
+            + '((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|'
+            + '(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}'
+            + '(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))'
+            + '(/(([0-9])|([0-9]{2})|(1[0-1][0-9])|(12[0-8])))?';
+      pattern '(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|'
+            + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'
+            + '(/.+)?';
+    }
+  }
+
+  typedef eip-prefix-optional{
+    type union{
+      type eipv4-prefix-optional;
+      type eipv6-prefix-optional;
+    }
+  }
+
+
+  typedef eipv4-address{
+    type string{
+      pattern
+      '(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}'
+      +  '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+      + '(%[\p{N}\p{L}]+)?';
+    }
+  }
+
+  typedef eipv6-address{
+    type string{
+      pattern '((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}'
+            + '((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|'
+            + '(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}'
+            + '(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))'
+            + '(%[\p{N}\p{L}]+)?';
+      pattern '(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|'
+            + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'
+            + '(%.+)?';
+    }
+  }
+
+  typedef eip-address{
+    type union{
+      type eipv4-address;
+      type eipv6-address;
+    }
+  }
+
+  typedef common-string-id {
+    type string {
+      pattern '[0-9A-Za-z._-]+' {
+        error-message "Must be a string consisting of letters, numbers, dots, dashes, and underscores.";
+      }
+      length "1..255";
+    }
+    description
+      "A common type for name or string type id";
+  }
+
+  typedef common-domain-string-id {
+    type string {
+      pattern '[.0-9A-Za-z_-]*[*]?[.0-9A-Za-z_-]*[*]?[.0-9A-Za-z_-]*' {
+        error-message "ip-server-domain-name string must contain only letters, numbers, dots, asterisks, underscores or dashes.";
+      }
+    length "1..255";
+    }
+    description
+      "A common type for name or string domain type id";
+  }
+
+  typedef common-rat-type {
+    type enumeration {
+      enum "ehrpd" {
+        value 1;
+        description
+          "Evolved high rate packet data radio access network";
+      }
+      enum "hrpd" {
+        value 2;
+        description
+          "High rate packet data radio access network";
+      }
+      enum "geran" {
+        value 3;
+        description
+          "GSM/EDGE radio access network";
+      }
+      enum "utran" {
+        value 4;
+        description
+          "WCDMA/UMTS terrestrial radio access network";
+      }
+      enum "eutran" {
+        value 5;
+        description
+          "LTE/Evolved UMTS terrestrial radio access network";
+      }
+      enum "wlan" {
+        value 6;
+        description
+          "Wireless local area network";
+      }
+      enum "gan" {
+        value 7;
+        description
+          "Generic access network";
+      }
+      enum "hspa" {
+        value 8;
+        description
+          "High speed packet access evolution network";
+      }
+      enum "nb-iot" {
+        value 9;
+        description
+          "Narrowband internet of things radio access network";
+      }
+    }
+    description
+      "Radio access technology (RAT)";
+  }
+
+  typedef common-rat-type-extend {
+    type union{
+      type enumeration {
+        enum "unknown" {
+          value 0;
+          description
+            "Unknown or missing";
+        }
+      }
+      type common-rat-type;
+    }
+    description
+      "Radio access technology (RAT)";
+  }
+  typedef common-node-type {
+    type enumeration {
+      enum sgw-c {
+        description
+          "standalone sgw-c";
+      }
+      enum pgw-c {
+        description
+          "standalone pgw-c";
+      }
+      enum gw-c {
+        description
+          "combined node of sgw-c and pgw-c";
+      }
+      enum gw-u {
+        description
+          "standalone user plane";
+      }
+      enum sgw-c-gw-u {
+        description
+          "combined node of sgw-c and user plane";
+      }
+      enum pgw-c-gw-u {
+        description
+          "combined node of pgw-c and user plane";
+      }
+      enum gw-c-gw-u {
+        description
+          "combined node of sgw-c, pgw-c and user plane";
+      }
+    }
+  }
+  typedef network-port-or-range {
+    type string {
+      pattern '((([1-9](([0-9]){0,3}))|([1-5](([0-9]){0,4}))'
+            + '|(6[0-4]([0-9]{3}))|(65[0-4]([0-9]{2}))|(655[0-2][0-9])'
+            + '|6553[0-5])(-((([1-9](([0-9]){0,3}))|([1-5](([0-9]){0,4}))'
+            + '|(6[0-4]([0-9]{3}))|(65[0-4]([0-9]{2}))|(655[0-2][0-9])|6553[0-5])))?)' {
+               error-message "Value must be a number from 1 to 65535 or a range";
+      }
+    }
+  }
+  typedef common-service-control-odb {
+    type enumeration {
+      enum "active" {
+        description
+          "Active state of GTPv1(ODB) or GTPv2(WI_Denied) private extension";
+      }
+      enum "inactive" {
+        description
+          "Inactive state of GTPv1(ODB) or GTPv2(WI_Denied) private extension";
+      }
+    }
+  }
+}
+

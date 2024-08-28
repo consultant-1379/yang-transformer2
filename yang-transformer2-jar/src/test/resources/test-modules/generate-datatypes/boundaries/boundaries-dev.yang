@@ -1,0 +1,166 @@
+module boundaries-dev {
+
+    namespace "urn::test::boundaries-dev";
+
+    prefix this;
+	
+    revision "2021-09-24";
+
+	import boundaries {
+		prefix bou;
+	}
+
+	deviation /bou:cont1/bou:leaf11 {
+		deviate replace {
+			type string {
+				length "min .. 25";
+			}
+		}
+	}
+
+	deviation /bou:cont1/bou:leaf12 {
+		deviate replace {
+			type string {
+				length "5 .. max";
+			}
+		}
+	}
+
+	deviation /bou:cont1/bou:leaf13 {
+		deviate replace {
+			type string {
+				length "8 .. 22";
+			}
+		}
+	}
+
+	deviation /bou:cont1/bou:leaf14 {
+		deviate replace {
+			type string {
+				pattern "def*";
+			}
+		}
+	}
+
+// ----------------------------------------------------------
+
+	deviation /bou:cont2/bou:leaf21 {
+		deviate replace {
+			type int32 {
+				range "min .. 25";		// range deviated
+			}
+		}
+	}
+
+	deviation /bou:cont2/bou:leaf22 {
+		deviate replace {
+			type int32 {
+				range "12 .. max";		// range deviated
+			}
+		}
+	}
+
+	deviation /bou:cont2/bou:leaf23 {
+		deviate replace {
+			type int32 {
+				range "8 .. 22";		// range deviated
+			}
+		}
+	}
+	
+	deviation /bou:cont2/bou:leaf24 {
+		deviate replace {
+			type int64;
+		}
+	}
+	
+	deviation /bou:cont2/bou:leaf27 {
+		deviate replace {
+			type uint64 {
+				range "500000 .. 700000";
+			}
+		}
+	}
+	
+// ----------------------------------------------------------
+
+	deviation /bou:cont3/bou:leaflist31 {
+		deviate replace {
+			config false;		// becomes non-unique
+		}
+	}
+
+	deviation /bou:cont3/bou:leaflist32 {
+		deviate replace {
+			type boolean;		// incompatible member
+		}
+	}
+
+	deviation /bou:cont3/bou:leaflist33 {
+		deviate replace {
+			type string;		// compatible member
+		}
+	}
+
+// ----------------------------------------------------------
+
+	deviation /bou:cont4/bou:leaf41 {
+		deviate replace {
+			type decimal64 {
+				fraction-digits 3;
+				range "min .. 22.4";
+			}
+		}
+	}
+
+	deviation /bou:cont4/bou:leaf42 {
+		deviate replace {
+			type decimal64 {
+				fraction-digits 3;
+				range "13.3 .. max";
+			}
+		}
+	}
+
+	deviation /bou:cont4/bou:leaf43 {
+		deviate replace {
+			type decimal64 {
+				fraction-digits 3;
+				range "13.3 .. 22.4";
+			}
+		}
+	}
+
+// ----------------------------------------------------------
+
+	deviation /bou:cont5/bou:leaflist51 {
+		deviate replace {
+			max-elements 7;
+		}
+	}
+
+	deviation /bou:cont5/bou:leaflist52 {
+		deviate replace {
+			min-elements 3;
+		}
+	}
+
+	deviation /bou:cont5/bou:leaflist53 {
+		deviate replace {
+			min-elements 3;
+			max-elements 7;
+		}
+	}
+
+	deviation /bou:cont5/bou:leaflist56 {
+		deviate replace {
+			min-elements 3;
+		}
+	}
+	
+	deviation /bou:cont5/bou:leaflist57 {
+		deviate replace {
+			max-elements unbounded;
+		}
+	}
+}

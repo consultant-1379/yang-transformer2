@@ -1,0 +1,115 @@
+module ericsson-license-monitor-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel"
+      +":ericsson-license-monitor-dev-router6274";
+
+  prefix "licensemonitor6274";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-license-monitor-router6000 {
+    prefix "licensermonitor6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-license-monitor-dev-router6274
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-08-19" {
+    description
+      "deviation for ericsson-license-monitor yang file";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "1";
+  }
+
+  revision "2019-05-12" {
+    description
+      "deviation for ericsson-license-monitor yang file";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "0";
+  }
+
+  deviation "/ctxsr6k:contexts/licensermonitor6k:license-monitoring"
+  +"/licensermonitor6k:license-monitoring/licensermonitor6k:manual-unlock"
+  +"/licensermonitor6k:manual-unlock/licensermonitor6k:modify/licensermonitor6k:FAT1023250_1" {
+         deviate replace {
+         type uint64 {
+            range "0";
+          }
+         }
+       }
+
+  deviation "/ctxsr6k:contexts/licensermonitor6k:license-monitoring/licensermonitor6k:license-monitoring/licensermonitor6k:manual-unlock/"
+            + "licensermonitor6k:manual-unlock/licensermonitor6k:modify/licensermonitor6k:FAT1023458_1"  {
+         deviate replace {
+         type uint64 {
+            range "0..180";
+          }
+         }
+       }
+
+  deviation "/ctxsr6k:contexts/licensermonitor6k:license-monitoring/licensermonitor6k:license-monitoring/licensermonitor6k:manual-unlock/"
+            + "licensermonitor6k:manual-unlock/licensermonitor6k:modify/licensermonitor6k:FAT1024053_25"  {
+         deviate replace {
+         type uint64 {
+            range "0..48";
+          }
+         }
+       }
+
+  deviation "/ctxsr6k:contexts/licensermonitor6k:license-monitoring/licensermonitor6k:license-monitoring/licensermonitor6k:manual-unlock/"
+            + "licensermonitor6k:manual-unlock/licensermonitor6k:modify/licensermonitor6k:FAT1023483_100"  {
+         deviate replace {
+         type uint64 {
+            range "0..24";
+          }
+         }
+       }
+
+  deviation "/ctxsr6k:contexts/licensermonitor6k:license-monitoring/licensermonitor6k:license-monitoring/licensermonitor6k:manual-unlock/"
+            + "licensermonitor6k:manual-unlock/licensermonitor6k:modify/licensermonitor6k:FAT1023953_1"  {
+         deviate replace {
+         type uint64 {
+            range "0";
+          }
+         }
+       }
+
+  deviation "/ctxsr6k:contexts/licensermonitor6k:license-monitoring/licensermonitor6k:license-monitoring/licensermonitor6k:manual-unlock/"
+            + "licensermonitor6k:manual-unlock/licensermonitor6k:modify/licensermonitor6k:FAT1023955_1"  {
+         deviate replace {
+         type uint64 {
+            range "0";
+          }
+         }
+       }
+
+  deviation "/ctxsr6k:contexts/licensermonitor6k:license-monitoring/licensermonitor6k:license-monitoring/licensermonitor6k:manual-unlock/"
+            + "licensermonitor6k:manual-unlock/licensermonitor6k:modify/licensermonitor6k:FAT1024215_1"  {
+         deviate replace {
+         type uint64 {
+            range "0";
+          }
+         }
+       }
+}

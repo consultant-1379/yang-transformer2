@@ -1,0 +1,127 @@
+module ericsson-bgp-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bgp-dev-router6000";
+
+  prefix "bgprouter6000";
+
+  import ericsson-bgp-router6000 {
+   prefix "bgpr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+   prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+   prefix "ctxr6k";
+  }
+  
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bgp-dev-router6000
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+ revision "2020-09-23" {
+    description
+      "removed deviation for multi-paths internal/external command";
+    reference
+      "rfc6020";
+      yexte:version "2";
+      yexte:release "2";
+      yexte:correction "0";
+  }
+
+  revision "2019-04-19" {
+    description
+      "delete deviation for aigp";
+    reference
+      "rfc6020";
+      yexte:version "2";
+      yexte:release "1";
+      yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+ revision "2018-03-06" {
+    description
+      "deviation for multi-paths";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "1";
+      yexte:correction "0";
+  } 
+
+  revision "2017-11-02" {
+    description
+      "deviation for aigp";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "2";
+  }
+
+  revision "2017-06-19" {
+    description
+      "deviation for next-hop-unchanged";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "1";
+  }
+
+revision "2016-12-19" {
+    description
+      "deviation for ericsson-bgp-ipos.yang file";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "0";
+  }
+  
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/bgpr6k:bgp/bgpr6k:neighbor/bgpr6k:address-family/bgpr6k:ipv4/bgpr6k:multicast/bgpr6k:next-hop-unchanged" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/bgpr6k:bgp/bgpr6k:neighbor/bgpr6k:address-family/bgpr6k:ipv6/bgpr6k:unicast/bgpr6k:next-hop-unchanged" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/bgpr6k:bgp/bgpr6k:peer-group/bgpr6k:address-family/bgpr6k:ipv6/bgpr6k:unicast/bgpr6k:next-hop-unchanged" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/bgpr6k:bgp/bgpr6k:address-family/bgpr6k:ipv4/bgpr6k:vpn/bgpr6k:ipfrr/bgpr6k:route-map" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/bgpr6k:bgp/bgpr6k:address-family/bgpr6k:ipv6/bgpr6k:vpn/bgpr6k:ipfrr/bgpr6k:route-map" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/bgpr6k:bgp/bgpr6k:address-family/bgpr6k:ipv6/bgpr6k:unicast/bgpr6k:ipfrr/bgpr6k:route-map" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/bgpr6k:bgp/bgpr6k:address-family/bgpr6k:ipv4/bgpr6k:unicast/bgpr6k:ipfrr/bgpr6k:route-map" {
+    deviate not-supported;
+  }
+
+ }

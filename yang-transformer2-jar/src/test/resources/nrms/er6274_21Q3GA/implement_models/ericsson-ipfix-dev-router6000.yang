@@ -1,0 +1,285 @@
+module ericsson-ipfix-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ipfix-dev-router6000";
+  prefix "ipfixdevr6k";
+
+  import ietf-ipfix-psamp { prefix "ipfix"; }
+  import ericsson-yang-extensions { prefix "yexte"; }
+  import ietf-interfaces { prefix "if"; }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ietf-ipfix-psamp-dev-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-01-11" {
+    description
+      "initial version
+       disable the unsupported leaves on ericsson-ipfix";
+    reference
+      "rfc6728";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/ipfix:ipfix/ipfix:observationPoint" {
+      deviate add {
+          max-elements 256;
+      }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:observationPoint/ipfix:observationPointId" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:observationPoint/ipfix:observationDomainId" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:observationPoint/ipfix:ifName" {
+    deviate replace {
+      type leafref {
+        path "/if:interfaces/if:interface/if:name";
+      }
+    }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:observationPoint/ipfix:ifIndex" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:observationPoint/ipfix:entPhysicalName" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:observationPoint/ipfix:entPhysicalIndex" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:observationPoint/ipfix:direction" {
+    deviate replace {
+       type enumeration {
+         enum ingress {
+           description "This value is used for monitoring incoming
+             packets.";
+         }
+         enum egress {
+           description "This value is used for monitoring outgoing
+             packets.";
+         }
+       }
+       default "ingress";
+    }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:observationPoint/ipfix:selectionProcess" {
+      deviate add {
+          max-elements 1;
+      }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:selectionProcess" {
+      deviate add {
+          max-elements 256;
+      }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:selectionProcess/ipfix:selector" {
+      deviate add {
+          max-elements 1;
+      }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:selectionProcess/ipfix:selector/ipfix:Method/ipfix:selectAll" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:selectionProcess/ipfix:selector/ipfix:Method/ipfix:sampRandOutOfN/ipfix:sampRandOutOfN/ipfix:size" {
+    deviate add {
+          must "/ipfix:ipfix/ipfix:selectionProcess/ipfix:selector/ipfix:sampRandOutOfN/ipfix:size=1" {
+              error-message "Only value 1 is supported.";
+              description "Only value 1 is supported.";
+          }
+      }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:selectionProcess/ipfix:selector/ipfix:Method/ipfix:sampRandOutOfN/ipfix:sampRandOutOfN/ipfix:population" {
+    deviate replace {
+      type uint32 {
+        range "1..65535";
+      }
+    }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:selectionProcess/ipfix:selector/ipfix:packetsObserved" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:selectionProcess/ipfix:selector/ipfix:packetsDropped" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:selectionProcess/ipfix:selector/ipfix:selectorDiscontinuityTime" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:selectionProcess/ipfix:selectionSequence" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:cache" {
+      deviate add {
+          max-elements 256;
+      }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:cache/ipfix:exportingProcess" {
+    deviate replace {
+      type string;
+    }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:cache/ipfix:meteringProcessId" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:cache/ipfix:dataRecords" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:cache/ipfix:cacheDiscontinuityTime" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:cache/ipfix:CacheType/ipfix:immediateCache" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:cache/ipfix:CacheType/ipfix:naturalCache" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess" {
+      deviate add {
+          max-elements 16;
+      }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:name" {
+    deviate add {
+      must "/ipfix:ipfix/ipfix:exportingProcess/ipfix:name=concat(text(),'@', text())" {
+          error-message "The name must be configured in the format of name@context_name.";
+          description
+             "The exporting process name must contain the context name with the character '@' as the delimiter.";
+      }
+    }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:exportingProcessId" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:exportMode" {
+    deviate add {
+        must "/ipfix:ipfix/ipfix:exportingProcess/ipfix:exportMode='parallel'" {
+          error-message "Support 'parallel' mode only.";
+          description
+             "Limit the export mode to 'parallel'.";
+        }
+    }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:sctpExporter" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:ipfixVersion" {
+    deviate replace {
+      type uint16 {
+        range "9..10";
+      }
+    }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:indexOrName" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:sendBufferSize" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:rateLimit" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:transportLayerSecurity" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:transportSession" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:maxPacketSize" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:templateRefreshTimeout" {
+    deviate replace {
+      type uint32 {
+        range "60..65535";
+      }
+    }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:optionsTemplateRefreshTimeout" {
+    deviate replace {
+      type uint32 {
+        range "60..65535";
+      }
+    }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:templateRefreshPacket" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:destination/ipfix:DestinationParameters/ipfix:udpExporter/ipfix:udpExporter/ipfix:optionsTemplateRefreshPacket" {
+    deviate not-supported;
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:options/ipfix:optionsType" {
+    deviate add {
+      must "(/ipfix:ipfix/ipfix:exportingProcess/ipfix:options/ipfix:optionsType='interface'"
+        + " or "
+        + "/ipfix:ipfix/ipfix:exportingProcess/ipfix:options/ipfix:optionsType='selector'"
+        + " or "
+        + "/ipfix:ipfix/ipfix:exportingProcess/ipfix:options/ipfix:optionsType='vrf'"
+        + " or "
+        + "/ipfix:ipfix/ipfix:exportingProcess/ipfix:options/ipfix:optionsType='meteringStatistics')" {
+          error-message "Interface options, selector options, vrf options, "
+          + "and metering statistics options are supported.";
+          description "Interface options, selector options, vrf options, "
+          + "and metering statistics options are supported.";
+      }
+    }
+  }
+
+  deviation "/ipfix:ipfix/ipfix:exportingProcess/ipfix:options/ipfix:optionsTimeout" {
+    deviate replace {
+      type uint32 {
+        range "60..65535";
+      }
+      units seconds;
+    }
+  }
+}

@@ -1,0 +1,92 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-vrrp-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-vrrp-dev-router6000";
+
+  prefix "vrrpvrouter6000";
+
+  import ericsson-vrrp-router6000 {
+    prefix "vrrprouter6000";
+  }
+
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-vrrp-dev-router6000
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-22" {
+    description
+      "deviation for IPOS yang model 18.1.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-07" {
+    description
+      "deviation for ericsson-vrrp-ipos.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /*hide context->interface->vrrp->backup->icr-monitored*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface/vrrprouter6000:vrrp/vrrprouter6000:vrrp-choice/vrrprouter6000:backup/vrrprouter6000:backup/vrrprouter6000:icr-monitored" {
+    deviate not-supported;
+  }
+
+  /*hide context->interface->vrrp->backup->accept-mode*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface/vrrprouter6000:vrrp/vrrprouter6000:vrrp-choice/vrrprouter6000:backup/vrrprouter6000:backup/vrrprouter6000:accept-mode" {
+    deviate not-supported;
+  }
+
+  /*hide context->interface->vrrp->backup->bfd-monitoring*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface/vrrprouter6000:vrrp/vrrprouter6000:vrrp-choice/vrrprouter6000:backup/vrrprouter6000:backup/vrrprouter6000:bfd-monitoring" {
+    deviate not-supported;
+  }
+
+  /*hide context->interface->l3-interface/ip/vrrp3->backup->icr-monitored*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface/ifxrouter6000:ip/vrrprouter6000:vrrp3/vrrprouter6000:vrrp3-choice/vrrprouter6000:backup/vrrprouter6000:backup/vrrprouter6000:icr-monitored" {
+    deviate not-supported;
+  }
+
+}
+
+
+

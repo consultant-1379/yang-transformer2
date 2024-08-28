@@ -1,0 +1,480 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-qos-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-qos-dev-router6274";
+
+  prefix "qosvirouter6274";
+
+  import ericsson-qos-router6000 {
+    prefix "qosrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-qos-dev-router6274
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-30" {
+    description
+      "threshold and probability duplicate";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "5";
+  }
+
+  revision "2020-12-05" {
+    description
+      "remove queue depth in congestion-map";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "4";
+  }
+
+  revision "2020-07-07" {
+    description
+      "modify queue rate max and min";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "4";
+  }
+
+  revision "2020-07-01" {
+    description
+      "add queue rate pir and cir";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision "2020-03-12" {
+    description
+      "queue rate default burst change to 32768 in s9m";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+ revision "2020-02-12" {
+    description
+      "Modify queue rate minmum and maximum value";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-04-06" {
+    description
+      "remove weight replacement";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+
+  revision "2018-01-22" {
+    description
+      "deviation for ericsson-qos-ipos.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-07" {
+    description
+      "deviation for ericsson-qos-ipos.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+  /*global->QoS->policy->policy-choice->policing->rate->mef->sharing*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:rate/qosrouter6000:mef/qosrouter6000:sharing" {
+    deviate not-supported;
+  }
+  /*global->QoS->policy->policy-choice->metering*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:metering/qosrouter6000:metering" {
+    deviate not-supported;
+  }
+
+
+  /*global->QoS->queue-map->num-queues->queue->queue-num*/
+  /*change range for "2..8" to "8" */
+  deviation "/qosrouter6000:qos/qosrouter6000:queue-map/qosrouter6000:num-queues/qosrouter6000:queue/qosrouter6000:queue-num" {
+    deviate replace {
+      type uint8 {
+        range "8";
+      }
+    }
+  }
+
+   /*deviation file merge*/
+   /*change range from "0..31" to "0..31"*/
+   deviation "/qosrouter6000:qos/qosrouter6000:class-definition/qosrouter6000:qos/qosrouter6000:internal-qos-value" {
+    deviate replace {
+      type uint8 {
+        range "0..31";
+      }
+    }
+  }
+
+  /*R6274:change range from "20..300000000" to "22:300000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/"
+  + "qosrouter6000:rate/qosrouter6000:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "22..300000000";
+      }
+    }
+  }
+
+  /*change range from "1000..523264" to "125..4000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/"
+  + "qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:burst/qosrouter6000:burst" {
+    deviate replace {
+      type uint32 {
+        range "125..4000000";
+      }
+    }
+  }
+
+  /*R6274: change range from "20..300000000" to "22..300000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/"
+  + "qosrouter6000:rate/qosrouter6000:excess-rate" {
+     deviate replace {
+      type uint32 {
+        range "22..300000000";
+      }
+    }
+  }
+
+  /*change range from "0..33292" to 125..4000000*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/"
+  +  "qosrouter6000:rate/qosrouter6000:rate-opt1/qosrouter6000:excess-burst/qosrouter6000:excess-burst" {
+    deviate replace {
+      type int32 {
+        range "125..4000000";
+      }
+    }
+  }
+
+  /*change range from "1..256" to "1..253"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:pwfq/qosrouter6000:pwfq/"
+  + "qosrouter6000:queue/qosrouter6000:queue-choice/qosrouter6000:priority/qosrouter6000:priority-choice/qosrouter6000:weight/qosrouter6000:weight" {
+    deviate replace {
+      type uint16 {
+        range "1..253";
+      }
+    }
+  }
+
+  /*R6274:change default from "16384" to "32768"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:pwfq/qosrouter6000:pwfq/qosrouter6000:queue/qosrouter6000:queue-choice/"
+  + "qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:minimum-guarantee/qosrouter6000:minimum-guarantee-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:burst" {
+    deviate replace {
+      type uint32 {
+        range "2048..129024";
+      }
+    }
+    deviate replace {
+      default "32768";
+    }
+  }
+
+   /*R6274:change queue min rate from "0..10000000" to "0..100000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:pwfq/qosrouter6000:pwfq/qosrouter6000:queue/qosrouter6000:queue-choice/"
+  + "qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:minimum-guarantee/qosrouter6000:minimum-guarantee-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "0..100000000";
+      }
+    }
+  }
+
+  /*change default from "16384" to "32768"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:pwfq/qosrouter6000:pwfq/qosrouter6000:queue/qosrouter6000:queue-choice/"
+  + "qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:maximum/qosrouter6000:maximum-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:burst" {
+    deviate replace {
+      type uint32 {
+        range "2048..129024";
+      }
+    }
+    deviate replace {
+      default "32768";
+    }
+  }
+
+  /*R6274:change queue max rate from "0..10000000" to "0..100000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:pwfq/qosrouter6000:pwfq/qosrouter6000:queue/qosrouter6000:queue-choice/"
+  + "qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:maximum/qosrouter6000:maximum-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "0..100000000";
+      }
+    }
+  }
+
+  /*R6274:change range from "325..10000000" to "937..10000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:pwfq/qosrouter6000:pwfq/qosrouter6000:rate/qosrouter6000:pir/qosrouter6000:rate-num" {
+     deviate replace {
+      type uint32 {
+        range "937..100000000";
+      }
+    }
+  }
+
+  /*change range from "1000..524288" to "2048..129024"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:pwfq/qosrouter6000:pwfq/qosrouter6000:rate/qosrouter6000:pir/qosrouter6000:burst" {
+     deviate replace {
+      type uint32 {
+        range "2048..129024";
+      }
+    }
+  }
+
+  /*R6274:change range from "325..10000000" to "937..10000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:pwfq/qosrouter6000:pwfq/qosrouter6000:rate/qosrouter6000:cir/qosrouter6000:rate-num" {
+     deviate replace {
+      type uint32 {
+        range "937..100000000";
+      }
+    }
+  }
+
+  /*change range from "1000..524288" to "2048..129024"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:pwfq/qosrouter6000:pwfq/qosrouter6000:rate/qosrouter6000:cir/qosrouter6000:burst" {
+     deviate replace {
+      type uint32 {
+        range "2048..129024";
+      }
+    }
+  }
+
+  /*change range from "0..127" to "0..127"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:profile/qosrouter6000:profile-choice/qosrouter6000:overhead/qosrouter6000:overhead/qosrouter6000:reserved" {
+    deviate replace {
+      type uint8 {
+        range "0..127";
+      }
+    }
+  }
+
+  /*global->Qos->congestion-avoidance-map*->queue->queue-choice->queue-choice->exponential-weight*/
+  /*change range from "1..15" to "1..31" */
+  deviation "/qosrouter6000:qos/qosrouter6000:congestion-avoidance-map/qosrouter6000:queue/qosrouter6000:queue-choice/qosrouter6000:exponential-weight" {
+    deviate replace {
+      type uint8 {
+        range "1..31";
+      }
+    }
+  }
+
+  /*global->Qos->congestion-avoidance-map*->queue->queue-choice->queue-choice->red->min-threshold*/
+  /*change range from "1..9999" to "1..10240" */
+  deviation "/qosrouter6000:qos/qosrouter6000:congestion-avoidance-map/qosrouter6000:queue/qosrouter6000:queue-choice/qosrouter6000:red/qosrouter6000:min-threshold" {
+    deviate replace {
+      type uint16 {
+        range "1..10240";
+      }
+    }
+  }
+
+  /*global->Qos->congestion-avoidance-map*->queue->queue-choice->queue-choice->red->max-threshold*/
+  /*change range from "2..10000" to "2..10240" */
+  deviation "/qosrouter6000:qos/qosrouter6000:congestion-avoidance-map/qosrouter6000:queue/qosrouter6000:queue-choice/qosrouter6000:red/qosrouter6000:max-threshold" {
+    deviate replace {
+      type uint16 {
+        range "2..10240";
+      }
+    }
+  }
+
+  /*global->Qos->congestion-avoidance-map*->queue->queue-choice->queue-choice->red->probability*/
+  /*change range from "1..1023" to "1..100" */
+  deviation "/qosrouter6000:qos/qosrouter6000:congestion-avoidance-map/qosrouter6000:queue/qosrouter6000:queue-choice/qosrouter6000:red/qosrouter6000:probability" {
+    deviate replace {
+      type uint16 {
+        range "1..100";
+      }
+    }
+  }
+
+  /*ip-access-group*/
+  /*global->QoS->policy->policing->ip-access-group->acl-class*->rate->rate-num*/
+  /*R6274:change range from "5..10000000" to "22..300000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:ip-access-group"
+  + "/qosrouter6000:acl-class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "22..300000000";
+      }
+    }
+  }
+
+  /*global->QoS->policy->policing->ip-access-group->acl-class*->rate->burst*/
+  /*change range from "0..33292" to "125..4000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:ip-access-group"
+  + "/qosrouter6000:acl-class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:burst" {
+    deviate replace {
+      type int32 {
+        range "125..4000000";
+      }
+    }
+  }
+
+  /*global->QoS->policy->policing->ip-access-group->acl-class*->rate->excess-burst*/
+  /*change range from "0..33292" to "125..4000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:ip-access-group"
+  + "/qosrouter6000:acl-class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:excess-burst" {
+    deviate replace {
+      type int32 {
+        range "125..4000000";
+      }
+    }
+  }
+
+  /*ipv6-access-group*/
+  /*global->QoS->policy->policing->ipv6-access-group->acl-class*->rate->rate-num*/
+  /*R6672:change range from "5..10000000" to "20..300000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:ipv6-access-group"
+  + "/qosrouter6000:acl-class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "22..300000000";
+      }
+    }
+  }
+
+  /*global->QoS->policy->policing->ipv6-access-group->acl-class*->rate->burst*/
+  /*change range from "0..33292" to "125..4000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:ipv6-access-group"
+  + "/qosrouter6000:acl-class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:burst" {
+    deviate replace {
+      type int32 {
+        range "125..4000000";
+      }
+    }
+  }
+
+  /*global->QoS->policy->policing->ipv6-access-group->acl-class*->rate->excess-burst*/
+  /*change range from "0..33292" to "125..4000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:ipv6-access-group"
+  + "/qosrouter6000:acl-class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:excess-burst" {
+    deviate replace {
+      type int32 {
+        range "125..4000000";
+      }
+    }
+  }
+
+  /*L2-access-group*/
+  /*global->QoS->policy->policing->l2-access-group->acl-class*->rate->rate-num*/
+  /*R6274:change range from "5..10000000" to "22..300000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:l2-access-group"
+  + "/qosrouter6000:acl-class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "22..300000000";
+      }
+    }
+  }
+
+  /*global->QoS->policy->policing->l2-access-group->acl-class*->rate->burst*/
+  /*change range from "0..33292" to "125..4000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:l2-access-group"
+  + "/qosrouter6000:acl-class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:burst" {
+    deviate replace {
+      type int32 {
+        range "125..4000000";
+      }
+    }
+  }
+
+  /*global->QoS->policy->policing->l2-access-group->acl-class*->rate->excess-burst*/
+  /*change range from "0..33292" to "125..4000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:l2-access-group"
+  + "/qosrouter6000:acl-class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:excess-burst" {
+    deviate replace {
+      type int32 {
+        range "125..4000000";
+      }
+    }
+  }
+
+  /*class-group*/
+  /*global->QoS->policy->policing->class-group->acl-class*->rate->rate-num*/
+  /*R6274:change range from "5..10000000" to "22..300000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:class-group"
+  + "/qosrouter6000:class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "22..300000000";
+      }
+    }
+  }
+
+  /*global->QoS->policy->policing->class-group->acl-class*->rate->burst*/
+  /*change range from "0..33292" to "125..4000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:class-group"
+  + "/qosrouter6000:class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:burst" {
+    deviate replace {
+      type int32 {
+        range "125..4000000";
+      }
+    }
+  }
+
+  /*global->QoS->policy->policing->class-group->acl-class*->rate->excess-burst*/
+  /*change range from "0..33292" to "125..4000000"*/
+  deviation "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000:policy-choice/qosrouter6000:policing/qosrouter6000:policing/qosrouter6000:class-group"
+  + "/qosrouter6000:class/qosrouter6000:rate/qosrouter6000:rate-choice/qosrouter6000:rate-num/qosrouter6000:rate-num/qosrouter6000:excess-burst" {
+    deviate replace {
+      type int32 {
+        range "125..4000000";
+      }
+    }
+  }
+
+}

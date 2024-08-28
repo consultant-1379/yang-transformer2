@@ -1,0 +1,22 @@
+module ericsson-using-xyz {
+
+	namespace "urn:test:ericsson-using-xyz";
+	prefix this;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision 2021-11-31 {
+		yexte:version 5;
+		yexte:release 6;
+		yexte:correction 7;
+	}
+	
+	container cont8 {
+
+		leaf leaf81 {
+			type string;
+		}
+	}
+}

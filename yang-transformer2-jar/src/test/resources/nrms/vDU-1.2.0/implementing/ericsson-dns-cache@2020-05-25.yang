@@ -1,0 +1,82 @@
+module ericsson-dns-cache {
+	yang-version 1.1;
+	namespace urn:rdns:com:ericsson:oammodel:ericsson-dns-cache;
+	prefix dnscache;
+        
+        import ericsson-transport {
+               prefix tn;
+        }        
+        import ericsson-network-domain {
+               prefix netdom;
+        }
+	import ericsson-yang-extensions { prefix yexte; }	
+
+	import ietf-inet-types {
+	prefix inet;
+	reference
+		"RFC 6991: Common YANG Data Types";
+	}
+  	organization "Ericsson AB";
+	contact "Ericsson first line support via email.";
+	description 
+		"The module implements transport network.
+		
+		It is recommended to review design-time defaults including used groupings
+		and deviate them based on implementation needs.
+
+		Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+	revision "2020-05-25" {
+        //preliminary
+	    description "
+	    	- model using ietf-system";
+		yexte:version 1;
+		yexte:release 0;
+		yexte:correction 0;
+	}
+        grouping dns-address-record-grouping {
+
+                leaf serviceName {
+                        type string;
+                        description
+                                "The service name";
+                }
+                leaf serviceAddress {
+                        type inet:ipv6-address;
+                        description
+                                "The service IPV6 address.";
+                }
+                leaf serviceAddressPort {
+                        type inet:port-number;
+                        description
+                                "The service IPV6 port";
+                }
+
+        }
+
+        grouping dns-cache-grouping {
+                list dns-address-record {
+                        key addressRecordId;
+                        description
+                                "This is a container for dns address record";
+                        leaf addressRecordId {
+                             type string;
+                             description
+                                   "Holds the unique id used when identifying the dns address record.";
+                        }
+                        uses dns-address-record-grouping;
+                }
+        }
+
+        augment /tn:transport/netdom:NetworkDomain {
+          container DnsCache {
+              description 
+                      "This is a container for dns cache functions used";
+              leaf dnsCacheId {
+                 type string;
+                 description "Holds the name used when identifying the MO";
+              }
+              uses dns-cache-grouping;
+            }
+        }
+}

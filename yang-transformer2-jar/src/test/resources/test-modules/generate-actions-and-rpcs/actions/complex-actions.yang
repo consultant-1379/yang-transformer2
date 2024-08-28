@@ -1,0 +1,20 @@
+module complex-actions {
+
+	namespace "urn+test+complex-actions";
+	prefix this;
+
+	revision "2021-11-11";
+
+	container cont1 {
+
+		action action11;
+
+		action action12 {
+			input {
+				leaf param121 {
+					type string;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,77 @@
+module enumeration-complex-dev {
+
+    namespace "urn|test|enumeration-complex-dev";
+    prefix this;
+
+    revision "2021-12-27";
+
+	import enumeration-complex {
+		prefix ec;
+	}
+	
+	deviation /ec:cont1/ec:leaf11 {				// only swapping order of definition,
+		deviate replace {						// should not be generated.
+			type enumeration {
+				enum GREEN { value 789; }
+				enum YELLOW { value 678; }
+				enum RED { value 567; }
+			}
+		}
+	}
+	
+	deviation /ec:cont1/ec:leaf12 {				// missing a member,
+		deviate replace {						// should be generated.
+			type enumeration {
+				enum RED { value 567; }
+				enum YELLOW { value 678; }
+			}
+		}
+	}
+
+	deviation /ec:cont1/ec:leaf13 {				// extra member,
+		deviate replace {						// should be generated.
+			type enumeration {
+				enum RED { value 567; }
+				enum YELLOW { value 678; }
+				enum GREEN { value 789; }
+				enum BLUE { value 890; }
+			}
+		}
+	}
+
+	deviation /ec:cont1/ec:leaf14 {				// value for GREEN is different,
+		deviate replace {						// should be generated.
+			type enumeration {
+				enum RED { value 567; }
+				enum YELLOW { value 678; }
+				enum GREEN { value 0; }
+			}
+		}
+	}
+
+	deviation /ec:cont1/ec:leaf15 {				// typo in member 'YELOW',
+		deviate replace {						// should be generated.
+			type enumeration {
+				enum RED { value 567; }
+				enum YELOW { value 678; }
+				enum GREEN { value 789; }
+			}
+		}
+	}
+
+	deviation /ec:cont6/ec:leaf61 {				// 'string' in base,
+		deviate replace {						// should be generated.
+			type enumeration {
+				enum RED { value 567; }
+				enum YELLOW { value 678; }
+				enum GREEN { value 789; }
+			}
+		}
+	}
+
+	deviation /ec:cont7/ec:leaf71 {				// 'enumeration' in base,
+		deviate replace {						// edt should not be generated.
+			type string;
+		}
+	}
+}

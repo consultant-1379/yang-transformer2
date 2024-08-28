@@ -1,0 +1,992 @@
+module ericsson-vrrp-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-vrrp-router6000";
+
+  prefix "vrrprouter6000";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-vrrp-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-05-24" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-02-02" {
+    description
+      "Remove icr-monitored Must limit for brothers nodes";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-12-20" {
+    description
+      "Add bfd-monitoring for VRRP";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-23" {
+    description
+      "Add icr-monitored for VRRPv3";
+    reference
+      "IPOS VRRP exec_cli command line";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-20" {
+    description
+      "JIRA: IPOS-11954 for vrrp model comments modifing only";
+    reference
+      "IPOS VRRP exec_cli command line";
+  }
+
+  revision "2017-06-19" {
+    description
+      "Modify vrrp3-interval-millisecond and
+       vrrp-interval-millisecond, add 3ms 10ms interval to them.";
+    reference
+      "IPOS VRRP exec_cli command line";
+  }
+
+  revision "2017-06-15" {
+    description
+      "Modify the description for 'network-prefix' in command
+       'vrrp3 backup track network (network-prefix)'";
+    reference
+      "IPOS VRRP exec_cli command line";
+  }
+
+  revision "2017-06-07" {
+    description
+      "Add when condition under vrrp";
+    reference
+      "IPOS VRRP exec_cli command line";
+  }
+
+  revision "2016-12-30" {
+    description
+      "Fix side-effect";
+    reference
+      "IPOS VRRP exec_cli command line";
+  }
+
+  revision "2016-03-15" {
+    description
+      "initial revision";
+    reference
+      "IPOS VRRP exec_cli command line";
+  }
+
+
+  typedef vrrp3-interval-millisecond {
+    type enumeration {
+      enum 3 {
+        description
+          "3 milliseconds interval";
+      }
+      enum 10 {
+        description
+          "10 milliseconds interval";
+      }
+      enum 50 {
+        description
+          "50 milliseconds interval";
+      }
+      enum 100 {
+        description
+          "100 milliseconds interval";
+      }
+      enum 200 {
+        description
+          "200 milliseconds interval";
+       }
+       enum 300 {
+         description
+           "300 milliseconds interval";
+       }
+       enum 400 {
+         description
+           "400 milliseconds interval";
+       }
+       enum 500 {
+         description
+          "500 milliseconds interval";
+       }
+       enum 1000 {
+         description
+          "1000 milliseconds interval";
+       }
+       enum 2000 {
+         description
+           "2000 milliseconds interval";
+       }
+       enum 3000 {
+         description
+           "3000 milliseconds interval";
+       }
+       enum 4000 {
+         description
+           "4000 milliseconds interval";
+       }
+       enum 5000 {
+         description
+           "5000 milliseconds interval";
+       }
+       enum 6000 {
+         description
+           "6000 milliseconds interval";
+       }
+       enum 7000 {
+         description
+           "7000 milliseconds interval";
+       }
+       enum 8000 {
+         description
+           "8000 milliseconds interval";
+       }
+       enum 9000 {
+         description
+           "9000 milliseconds interval";
+       }
+       enum 10000 {
+         description
+           "10000 milliseconds interval";
+       }
+       enum 11000 {
+         description
+           "11000 milliseconds interval";
+       }
+       enum 12000 {
+         description
+           "12000 milliseconds interval";
+       }
+       enum 13000 {
+         description
+           "13000 milliseconds interval";
+       }
+       enum 14000 {
+         description
+           "14000 milliseconds interval";
+       }
+       enum 15000 {
+         description
+           "15000 milliseconds interval";
+       }
+       enum 16000 {
+         description
+           "16000 milliseconds interval";
+       }
+       enum 17000 {
+         description
+           "17000 milliseconds interval";
+       }
+       enum 18000 {
+         description
+           "18000 milliseconds interval";
+       }
+       enum 19000 {
+         description
+           "19000 milliseconds interval";
+       }
+       enum 20000 {
+         description
+           "20000 milliseconds interval";
+       }
+       enum 21000 {
+         description
+           "21000 milliseconds interval";
+       }
+       enum 22000 {
+         description
+           "22000 milliseconds interval";
+       }
+       enum 23000 {
+         description
+           "23000 milliseconds interval";
+       }
+       enum 24000 {
+         description
+           "24000 milliseconds interval";
+       }
+       enum 25000 {
+         description
+           "25000 milliseconds interval";
+       }
+       enum 26000 {
+         description
+           "26000 milliseconds interval";
+       }
+       enum 27000 {
+         description
+           "27000 milliseconds interval";
+       }
+       enum 28000 {
+         description
+           "28000 milliseconds interval";
+       }
+       enum 29000 {
+         description
+           "29000 milliseconds interval";
+       }
+       enum 30000 {
+         description
+           "30000 milliseconds interval";
+       }
+       enum 31000 {
+         description
+           "31000 milliseconds interval";
+       }
+       enum 32000 {
+         description
+           "32000 milliseconds interval";
+       }
+       enum 33000 {
+         description
+           "33000 milliseconds interval";
+       }
+       enum 34000 {
+         description
+           "34000 milliseconds interval";
+       }
+       enum 35000 {
+         description
+           "35000 milliseconds interval";
+       }
+       enum 36000 {
+         description
+           "36000 milliseconds interval";
+       }
+       enum 37000 {
+         description
+           "37000 milliseconds interval";
+       }
+       enum 38000 {
+         description
+           "38000 milliseconds interval";
+       }
+       enum 39000 {
+         description
+           "39000 milliseconds interval";
+       }
+       enum 40000 {
+         description
+           "40000 milliseconds interval";
+       }
+    }
+    description
+      "vrrp3-interval-millisecond";
+  }
+  typedef vrrp-interval-millisecond {
+     type enumeration {
+         enum 3 {
+           description
+             "3 milliseconds interval";
+         }
+         enum 10 {
+           description
+             "10 milliseconds interval";
+         }
+         enum 50 {
+           description
+             "50 milliseconds interval";
+         }
+         enum 100 {
+           description
+            "100 milliseconds interval";
+         }
+         enum 200 {
+           description
+             "200 milliseconds interval";
+         }
+         enum 300 {
+           description
+             "300 milliseconds interval";
+         }
+         enum 400 {
+           description
+             "400 milliseconds interval";
+         }
+         enum 500 {
+           description
+              "500 milliseconds interval";
+         }
+         enum 600 {
+           description
+              "600 milliseconds interval";
+         }
+         enum 700 {
+           description
+              "700 milliseconds interval";
+         }
+         enum 800 {
+           description
+              "800 milliseconds interval";
+         }
+         enum 900 {
+           description
+             "900 milliseconds interval";
+         }
+     }
+     description
+       "vrrp-interval-millisecond";
+  }
+
+  grouping vrrp3-backup-grp {
+    description
+      "VRRP3 configuration mode";
+    /*
+    accept-mode
+    */
+    leaf accept-mode {
+      type empty;
+      description
+        "Accept packets addressed to the address owner's address
+         as its own";
+    }
+    /*
+    icr-monitored
+    */
+    leaf icr-monitored {
+      type empty;
+      description
+        "Enable icr to monitor this session";
+    }
+    /*
+    advertise-interval millisecond (value)
+    */
+    container advertise-interval {
+      description
+        "container advertise-interval.";
+      leaf millisecond {
+        type vrrp3-interval-millisecond;
+        description
+          "Configure advertisement interval in milliseconds";
+      }
+    }
+    /*
+    dot1q-priority (test-value)
+    */
+    leaf dot1q-priority {
+      type uint8 {
+        range "0..7";
+      }
+      description
+        "Configure Layer 2 Priority";
+    }
+    /*
+    dscp value
+    */
+    leaf dscp-value {
+      type typesrouter6000:dscp-value;
+      description
+        "Configure Differentiated Services Code Point (DSCP) for
+         VRRPv3 packets";
+    }
+    /*
+    init-wait (wait-interval)
+    */
+    leaf init-wait {
+      type uint16 {
+        range "1..3600";
+      }
+      description
+        "Configure VRID wait interval (sec) prior to advancing
+         from the initial state";
+    }
+    /*
+    log-state-change
+    */
+    leaf log-state-change {
+      type empty;
+      description
+        "Configure VRID instance state change logging";
+    }
+    /*
+    preempt [ hold-time (time-value) ]
+    */
+    container preempt {
+      description
+        "Configure master preemption";
+      leaf preempt-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable preempt-enable";
+      }
+      leaf hold-time {
+        when "../preempt-enable='true'" {
+          description
+            "";
+        }
+        type uint16 {
+          range "0..3600";
+        }
+        description
+          "Configure master preemption hold time (sec)";
+      }
+    }
+    /*
+    priority (priority-value)
+    */
+    leaf priority {
+      type uint8 {
+        range "1..254";
+      }
+      description
+        "Configure master election priority";
+    }
+    /*
+    track {  < interface (interface-name) (context-name) [
+     decrement (decrement-num) ]  > | < network (network-prefix)
+     [ decrement (decr-num) ]  > }
+    */
+    container track {
+      description
+        "Configure interface tracking";
+      list interface {
+        key "interface-name context-name";
+        max-elements 10;
+        description
+          "Configure interface tracking";
+        leaf interface-name {
+          type string;
+          description
+            "Interface name";
+        }
+        leaf context-name {
+          type string;
+          description
+            "Interface context name";
+        }
+        leaf decrement {
+          type uint8 {
+            range "1..254";
+          }
+          description
+            "VRID priority decrement";
+        }
+      }
+      list network {
+        key "network-prefix";
+        max-elements 10;
+        description
+          "Configure network tracking";
+        leaf network-prefix {
+          type inet:ip-prefix;
+          description
+            "IPv4 or IPv6  address prefix";
+        }
+        leaf decrement {
+          type uint8 {
+            range "1..254";
+          }
+          description
+            "VRID priority decrement";
+        }
+      }
+    }
+    /*
+    virtual-address (address-value)
+    */
+    list virtual-address {
+      key "virtual-address";
+      description
+        "Configure virtual IP address";
+      leaf virtual-address {
+        type inet:ip-address;
+        description
+          "leaf virtual-address.";
+      }
+    }
+  }
+
+  grouping vrrp-backup-grp {
+    description
+      "VRRP configuration mode";
+    /*
+    accept-mode
+    */
+    leaf accept-mode {
+      type empty;
+      description
+        "Configure installation of virtual IP address connected
+         route(s)";
+    }
+    /*
+    advertise-interval { millisecond (value) | (interval-value)
+     }
+    */
+    container advertise-interval {
+      description
+        "Configure advertisement interval";
+      choice advertise-interval {
+        case millisecond {
+          leaf millisecond {
+            type vrrp-interval-millisecond;
+            description
+              "Configure fast advertisement interval";
+          }
+        }
+        case interval-value {
+          leaf interval-value {
+            type uint8 {
+              range "1..255";
+            }
+            description
+              "Advertisement interval";
+          }
+        }
+      }
+    }
+    /*
+    icr-monitored
+    */
+    leaf icr-monitored {
+      type empty;
+      description
+        "Enable icr to monitor this session";
+    }
+    /*
+    init-wait (wait-interval)
+    */
+    leaf init-wait {
+      type uint16 {
+        range "1..3600";
+      }
+      description
+        "Configure VRID wait interval (sec) prior to advancing
+         from the initial state ";
+    }
+    /*
+    log-state-change
+    */
+    leaf log-state-change {
+      type empty;
+      description
+        "Configure VRID instance state change logging";
+    }
+    /*
+    preempt [ hold-time (time-value) ]
+    */
+    container preempt {
+      description
+        "Configure master preemption";
+      leaf preempt-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable preempt-enable";
+      }
+      leaf hold-time {
+        when "../preempt-enable='true'" {
+          description
+            "";
+        }
+        type uint16 {
+          range "0..3600";
+        }
+        description
+          "Configure master preemption hold time (sec). It is
+           meaningful only when preempt-enable is true";
+      }
+    }
+    /*
+    priority (priority-value)
+    */
+    leaf priority {
+      type uint8 {
+        range "1..254";
+      }
+      description
+        "Configure master election priority";
+    }
+    /*
+    track {  < interface (interface-name) (context-name) [
+     decrement (decrement-num) ]  >| network (network-prefix) [
+     decrement (decr-num) ]}
+    */
+    container track {
+      when "not(../icr-monitored)" {
+        description
+          "";
+      }
+      description
+        "Configure interface tracking";
+      list interface {
+        key "interface-name context-name";
+        max-elements 10;
+        description
+          "Configure interface tracking";
+        leaf interface-name {
+          type string;
+          description
+            "Interface name";
+        }
+        leaf context-name {
+          type string;
+          description
+            "Interface context name";
+        }
+        leaf decrement {
+          type uint8 {
+            range "1..254";
+          }
+          description
+            "VRID priority decrement";
+        }
+      }
+      list network {
+        key "network-prefix";
+        max-elements 10;
+        description
+          "Configure network tracking";
+        leaf network-prefix {
+          type inet:ipv4-prefix;
+          description
+            "IPv4 address prefix";
+        }
+        leaf decrement {
+          type uint8 {
+            range "1..254";
+          }
+          description
+            "VRID priority decrement";
+        }
+      }
+    }
+    /*
+    virtual-address (address-value)
+    */
+    list virtual-address {
+      key "virtual-address";
+      description
+        "Configure virtual IP address";
+      leaf virtual-address {
+        type inet:ipv4-address;
+        description
+          "leaf virtual-address.";
+      }
+    }
+    /*
+    bfd-monitoring [ neighbor (nbr-addr) ]
+    */
+    container bfd-monitoring {
+      description
+        "Configure BFD liveliness detection";
+      list neighbor {
+        key "neighbor";
+        description
+          "Configure BFD neighbor";
+        leaf neighbor {
+          type inet:ipv4-address;
+          description
+            "BFD neighbor IP address";
+        }
+      }
+    }
+  }
+
+  grouping vrrp3-owner-grp {
+    description
+      "VRRP3 configuration mode";
+    /*
+    advertise-interval millisecond (value)
+    */
+    container advertise-interval {
+      description
+        "container advertise-interval.";
+      leaf millisecond {
+        type vrrp3-interval-millisecond;
+        description
+          "Configure advertisement interval in milliseconds";
+      }
+    }
+    /*
+    dot1q-priority (test-value)
+    */
+    leaf dot1q-priority {
+      type uint8 {
+        range "0..7";
+      }
+      description
+        "Configure Layer 2 Priority";
+    }
+    /*
+    dscp value
+    */
+    leaf dscp-value {
+      type typesrouter6000:dscp-value;
+      description
+        "Configure Differentiated Services Code Point (DSCP) for
+         VRRPv3 packets";
+    }
+    /*
+    log-state-change
+    */
+    leaf log-state-change {
+      type empty;
+      description
+        "Configure VRID instance state change logging";
+    }
+    /*
+    virtual-address (address-value)
+    */
+    list virtual-address {
+      key "virtual-address";
+      description
+        "Configure virtual IP address";
+      leaf virtual-address {
+        type inet:ip-address;
+        description
+          "leaf virtual-address.";
+      }
+    }
+  }
+
+  grouping vrrp-owner-grp {
+    description
+      "VRRP configuration mode";
+    /*
+    advertise-interval { millisecond (value) | (interval-value)
+     }
+    */
+    container advertise-interval {
+      description
+        "Configure advertisement interval";
+      choice advertise-interval {
+        case millisecond {
+          leaf millisecond {
+            type vrrp-interval-millisecond;
+            description
+              "Configure fast advertisement interval";
+          }
+        }
+        case interval-value {
+          leaf interval-value {
+            type uint8 {
+              range "1..255";
+            }
+            description
+              "Advertisement interval";
+          }
+        }
+      }
+    }
+    /*
+    log-state-change
+    */
+    leaf log-state-change {
+      type empty;
+      description
+        "Configure VRID instance state change logging";
+    }
+    /*
+    virtual-address (address-value)
+    */
+    list virtual-address {
+      key "virtual-address";
+      description
+        "Configure virtual IP address";
+      leaf virtual-address {
+        type inet:ipv4-address;
+        description
+          "leaf virtual-address.";
+      }
+    }
+  }
+
+  augment
+  "/if:interfaces/if:interface/ifxrouter6000:l3-interface" {
+    description
+      "ericsson-vrrp";
+    /*
+    vrrp (vrrp-vrid) { owner | backup }
+    */
+    list vrrp {
+      when "../../if:type != 'ifxrouter6000:p2pOverLan'" {
+        description
+          "";
+      }
+      key "vrrp-vrid";
+      description
+        "Configure Virtual Router interface instance";
+      leaf vrrp-vrid {
+        type uint8 {
+          range "1..255";
+        }
+        must "number(.) != "
+        + "number(../../ifxrouter6000:ip/vrrp3/vrrp3-vrid)" {
+          error-message "vrrp-vrid must not be same as "
+          + "vrrp3-vrid for ip!";
+          description
+            "";
+        }
+        description
+          "Virtual Router identifier";
+      }
+      choice vrrp-choice {
+        mandatory true;
+        case owner {
+          container owner {
+            presence "";
+            description
+              "Configure owner Virtual Router";
+            uses vrrp-owner-grp;
+          }
+        }
+        case backup {
+          container backup {
+            presence "";
+            description
+              "Configure backup Virtual Router";
+            uses vrrp-backup-grp;
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ifxrouter6000:l3-interfac"
+  + "e/ifxrouter6000:ipv6" {
+    description
+      "ericsson-vrrp";
+    /*
+    vrrp3 (vrrp3-vrid) { owner | backup }
+    */
+    list vrrp3 {
+      key "vrrp3-vrid";
+      description
+        "Configure Virtual Router interface instance version 3
+         (RFC5798)";
+      leaf vrrp3-vrid {
+        type uint8 {
+          range "1..255";
+        }
+        description
+          "Virtual Router identifier";
+      }
+      choice vrrp3-choice {
+        mandatory true;
+        case owner {
+          container owner {
+            presence "";
+            description
+              "Configure owner Virtual Router";
+            uses vrrp3-owner-grp;
+          }
+        }
+        case backup {
+          container backup {
+            presence "";
+            description
+              "Configure backup Virtual Router";
+            uses vrrp3-backup-grp;
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ifxrouter6000:l3-interfac"
+  + "e/ifxrouter6000:ip" {
+    description
+      "ericsson-vrrp";
+    /*
+    vrrp3 (vrrp3-vrid) { owner | backup }
+    */
+    list vrrp3 {
+      key "vrrp3-vrid";
+      description
+        "Configure Virtual Router interface instance version 3
+         (RFC5798)";
+      leaf vrrp3-vrid {
+        type uint8 {
+          range "1..255";
+        }
+        must "number(.) != "
+        + "number(../../../vrrprouter6000:vrrp/vrrprouter6000:vrrp-"
+        + "vrid)" {
+          error-message "vrrp3-vrid for ip must not be same as "
+          + "vrrp-vrid!";
+          description
+            "";
+        }
+        description
+          "Virtual Router identifier";
+      }
+      choice vrrp3-choice {
+        mandatory true;
+        case owner {
+          container owner {
+            presence "";
+            description
+              "Configure owner Virtual Router";
+            uses vrrp3-owner-grp;
+          }
+        }
+        case backup {
+          container backup {
+            presence "";
+            description
+              "Configure backup Virtual Router";
+            uses vrrp3-backup-grp;
+          }
+        }
+      }
+    }
+  }
+
+}

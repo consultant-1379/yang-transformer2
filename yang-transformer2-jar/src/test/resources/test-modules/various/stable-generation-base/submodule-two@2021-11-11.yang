@@ -1,0 +1,29 @@
+submodule submodule-two {
+
+	belongs-to one {
+		prefix this;
+	}
+
+	revision "2021-11-11";
+
+	identity two-1;
+
+	grouping grouping4 {
+
+		leaf leaf15 {
+			type string;
+		}
+	}
+
+	list list2 {
+		key key;
+
+		leaf key {
+			type string;
+		}
+
+		leaf leaf21 {
+			type string;
+		}
+	}
+}

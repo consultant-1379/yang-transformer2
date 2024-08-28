@@ -1,0 +1,13 @@
+submodule grouping-usage-one-submodule {
+
+	belongs-to grouping-usage-one {
+		prefix this;
+	}
+	
+    revision "2021-12-12";
+
+	grouping grouping41 {
+		leaf leaf41 { type string; }
+		leaf leaf42 { type string; }
+	}
+}

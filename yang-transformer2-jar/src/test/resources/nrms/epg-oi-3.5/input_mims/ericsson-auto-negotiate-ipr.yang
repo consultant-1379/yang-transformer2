@@ -1,0 +1,292 @@
+module ericsson-auto-negotiate-ipr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-auto-negotiate-ipr";
+
+  prefix "autonegotiateipr";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-ipos {
+    prefix "ethxipos";
+  }
+
+  import ericsson-card-ipr {
+    prefix "cardipr";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-auto-negotiate-ipr
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-05" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-07-12" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-21" {
+    description
+      "Modify prefix error";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+  revision "2018-02-02" {
+    description
+      "modify 10-or-100 description";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-01-10" {
+    description
+      "move the if-feature auto-negotiate-duplex to
+       auto-negotiate model from ethernet model.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-10-31" {
+    description
+      "move auto-negatiate to pd";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  feature auto-negotiate-duplex {
+    description
+      "This feature indicates that the device supports
+       auto-negotiate-duplex in auto-negotiate.";
+  }
+
+  augment "/if:interfaces/if:interface/ethxipos:ethernet" {
+    description
+      "ericsson-auto-negotiate";
+    /*
+    auto-negotiate [ flc  {off | tx-only  | tx&rx | tx&rx-or-rx-
+     only } | speed { 1000 | 100 | 10 | 10-or-100} | duplex {
+     full | half  | full-or-half } | force { enable | disable} ]
+    */
+    container auto-negotiate {
+      when "((/cardipr:card[cardipr:mode='mode-1-10ge']/cardipr:"
+      + "card-slot=number(substring-before(../../if:name,'/'))) "
+      + "or (/cardipr:card[cardipr:type='ge-40-port']/cardipr:"
+      + "card-slot=number (substring-before(../../if:name,'/'))) "
+      + "or ('management'=../../if:name) or ('1ge'=../ethxipos:"
+      + "port-type))" {
+        description
+          "Auto-negotiation is enabled on GE ports.";
+      }
+      description
+        "Set auto negotiation parameters";
+      leaf auto-negotiate-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable auto-negotiate-enable";
+      }
+      leaf flc {
+        when "../auto-negotiate-enable='true'" {
+          description
+            "";
+        }
+        type enumeration {
+          enum off {
+            value 0;
+            description
+              "Set flow control to 'off'";
+          }
+          enum tx-only {
+            value 1;
+            description
+              "Negotiates flow control in the send (Tx)
+               direction only";
+          }
+          enum tx&rx {
+            value 2;
+            description
+              "Negotiates flow control in both the send (Tx) and
+               receive (Rx) directions";
+          }
+          enum tx&rx-or-rx-only {
+            value 3;
+            description
+              "Negotiates flow control either in both the send
+               (Tx) and receive (Rx) directions or in only the
+               receive direction. This is the default setting";
+          }
+        }
+        default "tx&rx-or-rx-only";
+        description
+          "Set flow-control negotiated set";
+      }
+      leaf speed {
+        when "../auto-negotiate-enable='true'" {
+          description
+            "";
+        }
+        type enumeration {
+          enum 1000 {
+            value 0;
+            description
+              "Set port speed negotiated to 1000 Mbps";
+          }
+          enum 100 {
+            value 1;
+            description
+              "Set port speed negotiated to 100 Mbps";
+          }
+          enum 10 {
+            value 2;
+            description
+              "Set port speed negotiated to 10 Mbps";
+          }
+          enum 10-or-100 {
+            value 3;
+            description
+              "Set port speed negotiated to 10 Mpbs, 100 Mbps or
+               1000Mbps";
+          }
+        }
+        description
+          "Set port speed negotiated set";
+      }
+      leaf duplex {
+        when "../auto-negotiate-enable='true'" {
+          description
+            "";
+        }
+        if-feature auto-negotiate-duplex;
+        type enumeration {
+          enum full {
+            value 0;
+            description
+              "Set port duplex mode negotiated to full duplex";
+          }
+          enum half {
+            value 1;
+            description
+              "Set port duplex mode negotiated to half duplex";
+          }
+          enum full-or-half {
+            value 2;
+            description
+              "Set port duplex mode negotiated to full duplex or
+               half duplex";
+          }
+        }
+        description
+          "Set port duplex mode negotiated set";
+      }
+      leaf force {
+        when "../auto-negotiate-enable='true'" {
+          description
+            "";
+        }
+        type enumeration {
+          enum enable {
+            value 0;
+            description
+              "Force port UP if auto negotiation fails";
+          }
+          enum disable {
+            value 1;
+            description
+              "Set port to remain DOWN if auto negotiation
+               fails";
+          }
+        }
+        default "disable";
+        description
+          " Set port state if auto negotiation fails ";
+      }
+    }
+    /*
+    flow-control [rx|tx|tx&rx]
+    */
+    container flow-control {
+      when "((/cardipr:card[cardipr:mode='mode-1-10ge']/cardipr:"
+      + "card-slot=number(substring-before(../../if:name,'/'))) "
+      + "or (/cardipr:card[cardipr:type='ge-40-port']/cardipr:"
+      + "card-slot=number (substring-before(../../if:name,'/'))) "
+      + "or ('management'=../../if:name) or ('1ge'=../ethxipos:"
+      + "port-type))" {
+        description
+          "Use the flow-control command to set flow-control on a
+           GE or 10GE port.";
+      }
+      description
+        "Enable/Disable flow control";
+      leaf flow-control-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable flow-control-enable";
+      }
+      leaf flow-control-opt {
+        type enumeration {
+          enum rx {
+            value 0;
+            description
+              "Set flow-control to receive only";
+          }
+          enum tx {
+            value 1;
+            description
+              "Set flow-control to send only";
+          }
+          enum tx&rx {
+            value 2;
+            description
+              "Set flow-control to send and receive";
+          }
+        }
+        default "rx";
+        description
+          "Set flow-control option";
+      }
+    }
+  }
+
+}

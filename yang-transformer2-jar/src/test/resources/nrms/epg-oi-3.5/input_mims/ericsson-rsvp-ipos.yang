@@ -1,0 +1,1032 @@
+module ericsson-rsvp-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-rsvp-ipos";
+
+  prefix "rsvpipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-rsvp-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-06-17" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-04-20" {
+    description
+      "Change in re-optimation min interval from 60 to 5";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-11-15" {
+    description
+      "JIRA:IPOS-16499 in command'rsvp explict-route xx nexthop
+       ipaddr' ipaddr must odered-by user";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-08-10" {
+    description
+      "JIRA:IPOS-14430 delete must condition";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-01-03" {
+    description
+      "modify all failed cases";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-05-31" {
+    description
+      "change the type of bandwidth";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  grouping rsvp-grp {
+    description
+      "RSVP configuration mode";
+    /*
+    interface (intf-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "Configure RSVP interface";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface name";
+      }
+      uses rsvp-if-grp;
+    }
+    /*
+    link-attributes
+    */
+    container link-attributes {
+      must "./attribute/attr-name and ./attribute/attr-value" {
+        error-message "Must configure an attribute or delete "
+        + "link attributes";
+        description
+          "Must configure an attribute or delete link
+           attributes";
+      }
+      presence "";
+      description
+        "Configure RSVP-TE link attributes";
+      uses rsvp-link-attr-grp;
+    }
+    /*
+    log-lsp-up-down
+    */
+    leaf log-lsp-up-down {
+      type empty;
+      description
+        "Log RSVP LSP state transitions";
+    }
+    /*
+    log-nbr-up-down
+    */
+    leaf log-nbr-up-down {
+      type empty;
+      description
+        "Log RSVP neighbor up or down events";
+    }
+    /*
+    log-errors
+    */
+    leaf log-errors {
+      type empty;
+      description
+        "Log RSVP error events";
+    }
+    /*
+    frr-auto-revert-delay (delay-value)
+    */
+    leaf frr-auto-revert-delay {
+      type uint16 {
+        range "0..65535";
+      }
+      description
+        "Configure delay before switching back from a FRR path
+         (in seconds)";
+    }
+    /*
+    explicit-null
+    */
+    leaf explicit-null {
+      type empty;
+      description
+        "Enable explicit null label";
+    }
+    /*
+    explicit-route (route-string)
+    */
+    list explicit-route {
+      key "explicit-route";
+      description
+        "Configure explicit route";
+      leaf explicit-route {
+        type string;
+        description
+          "Explicit route name";
+      }
+      uses rsvp-explicit-route-grp;
+    }
+    /*
+    lsp (lsp-string) [ backup-for (prim-string) | bypass
+     (bypass-addr) [ node-protect-lsp-egress (node-egress) ] ]
+    */
+    list lsp {
+      key "lsp-string";
+      description
+        "Configure label switched path";
+      leaf lsp-string {
+        type string;
+        description
+          "LSP name";
+      }
+      choice lsp-opt {
+        description
+          "";
+        case backup-for {
+          leaf backup-for {
+            type leafref {
+	      path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+	      + "router/rsvpipos:rsvp/rsvpipos:lsp/rsvpipos:"
+	      + "lsp-string";
+            }
+            description
+              "Configure a backup label switched path";
+          }
+        }
+        case bypass {
+          container bypass {
+            must "../local-protection" {
+              error-message "please configuration local- "
+              + "protection";
+              description
+                "Must configuration local protection";
+            }
+            presence "";
+            description
+              "Fast ReRoute bypass LSP";
+            leaf bypass-addr {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "Fast reroute bypass IP address";
+            }
+            leaf node-protect-lsp-egress {
+              type inet:ipv4-address;
+              description
+                "Fast reroute node protection egress address";
+            }
+          }
+        }
+      }
+      uses rsvp-lsp-grp;
+    }
+    /*
+    igp-shortcut
+    */
+    leaf igp-shortcut {
+      type empty;
+      description
+        "Enable IGP shortcut for all RSVP LSPs";
+    }
+    /*
+    tunnel-shortcut
+    */
+    leaf tunnel-shortcut {
+      type empty;
+      description
+        "Enable tunnel shortcut for all RSVP LSPs";
+    }
+    /*
+    rro-prefix-type { router-id | interface }
+    */
+    leaf rro-prefix-type {
+      type enumeration {
+        enum router-id {
+          value 0;
+          description
+            "RRO IP prefix using router ID";
+        }
+        enum interface {
+          value 1;
+          description
+            "RRO IP prefix using outbound interface address";
+        }
+      }
+      description
+        "RSVP RRO IP prefix type";
+    }
+    /*
+    retry-timer (timer-value)
+    */
+    leaf retry-timer {
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "RSVP-TE retry timer";
+    }
+    /*
+    retry-limit (limit-value)
+    */
+    leaf retry-limit {
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "RSVP-TE retry limit";
+    }
+    /*
+    over-subscription-factor (factor-value)
+    */
+    leaf over-subscription-factor {
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "Reservable subscription factor";
+    }
+    /*
+    constraint (constraint-name)
+    */
+    list constraint {
+      key "constraint";
+      description
+        "Configure RSVP TE constraint";
+      leaf constraint {
+        type string;
+        description
+          "Constraint name";
+      }
+      uses rsvp-constr-grp;
+    }
+    /*
+    track (name-string)
+    */
+    list track {
+      key "track";
+      description
+        "Configure a RSVP track object";
+      leaf track {
+        type string;
+        description
+          "Track object name";
+      }
+      uses rsvp-track-obj-grp;
+    }
+    /*
+    graceful-restart [ restart-time (restart-val) | recovery-
+     time (recovery-val) | helper | maximum_helper_restart-time
+     (restart-val) | maximum_helper_recovery-time (recovery-val)
+     ]
+    */
+    container graceful-restart {
+      presence "";
+      description
+        "Enable RSVP graceful restart";
+      leaf restart-time {
+        type uint16 {
+          range "10..1800";
+        }
+        description
+          "Configure graceful restart restart time";
+      }
+      leaf recovery-time {
+        type uint16 {
+          range "20..3600";
+        }
+        description
+          "Configure graceful restart recovery time";
+      }
+      leaf helper {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable helper";
+      }
+      leaf maximum_helper_restart-time {
+        type uint16 {
+          range "10..1800";
+        }
+        description
+          "Configure RSVP GR maximum helper restart time";
+      }
+      leaf maximum_helper_recovery-time {
+        type uint16 {
+          range "20..3600";
+        }
+        description
+          "Configure RSVP GR maximum helper recovery time";
+      }
+    }
+    /*
+    te-update { delay (interval-val) | threshold (thres-val) }
+    */
+    container te-update {
+      description
+        "Configure TE IGP advertisement parameters";
+      leaf delay {
+        type uint16 {
+          range "0..3600";
+        }
+        description
+          "Configure TE IGP advertisement delay";
+      }
+      leaf threshold {
+        type uint8 {
+          range "0..100";
+        }
+        description
+          "Configure TE bandwidth reservation threshold required
+           for IGP advertisement";
+      }
+    }
+    /*
+    bfd
+    */
+    leaf bfd {
+      type empty;
+      description
+        "Enable bidirectional forwarding detection";
+    }
+    /*
+    auto-frr
+    */
+    leaf auto-frr {
+      type empty;
+      description
+        "Enables auto FRR";
+    }
+    /*
+    reoptimization [ interval (interval-val) ]
+    */
+    container reoptimization {
+      presence "";
+      description
+        "Enables periodic reoptimization";
+      leaf interval {
+        type uint32 {
+          range "5..527040";
+        }
+        default "1440";
+        description
+          "Configures reoptimization time";
+      }
+    }
+  }
+
+  grouping rsvp-constr-grp {
+    description
+      "RSVP-TE constraint mode";
+    /*
+    admin-group { exclude | include-any | include-all }
+     (attributes)
+    */
+    container admin-group {
+      description
+        "Configure administrative group";
+      container exclude {
+        description
+          "Configure excluded administrative groups";
+        leaf-list attributes {
+          type leafref {
+	    path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+	    + "router/rsvpipos:rsvp/rsvpipos:link-attributes/"
+	    + "rsvpipos:attribute/rsvpipos:attr-name";
+          }
+          description
+            "Administrative group, typically defined by a color";
+        }
+      }
+      container include-any {
+        description
+          "Configure include any administrative groups";
+        leaf-list attributes {
+          type leafref {
+	    path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+	    + "router/rsvpipos:rsvp/rsvpipos:link-attributes/"
+	    + "rsvpipos:attribute/rsvpipos:attr-name";
+          }
+          description
+            "Administrative group, typically defined by a color";
+        }
+      }
+      container include-all {
+        description
+          "Configure include all administrative groups";
+        leaf-list attributes {
+          type leafref {
+	    path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+	    + "router/rsvpipos:rsvp/rsvpipos:link-attributes/"
+	    + "rsvpipos:attribute/rsvpipos:attr-name";
+          }
+          description
+            "Administrative group, typically defined by a color";
+        }
+      }
+    }
+    /*
+    exclude { node (node-value) | link (link-value) }
+    */
+    container exclude {
+      description
+        "Configure nodes to exclude";
+      list node {
+        key "node";
+        description
+          "Node type";
+        leaf node {
+          type inet:ipv4-address;
+          description
+            "IP address of the node to exclude";
+        }
+      }
+      list link {
+        key "link";
+        description
+          "Link type";
+        leaf link {
+          type inet:ipv4-address;
+          description
+            "IP address of the link to exclude";
+        }
+      }
+    }
+    /*
+    minimum-bandwidth (bandwidth-value) [bandwidth-value-type]
+    */
+    container minimum-bandwidth {
+      presence "";
+      description
+        "Configure minimum bandwidth required";
+      leaf bandwidth-value {
+        type uint32 {
+          range "1..4294967295";
+        }
+        mandatory true;
+        description
+          "Reservable bandwidth";
+      }
+      leaf bandwidth-value-type {
+        type typesipos:bandwidth_value_type;
+        description
+          "Bandwidth value type";
+      }
+    }
+    /*
+    priority (priority-setup) [ (priority-hold) ]
+    */
+    container priority {
+      presence "";
+      description
+        "Configure LSP priority";
+      leaf priority-setup {
+        type uint8 {
+          range "0..7";
+        }
+        mandatory true;
+        description
+          "Setup priority";
+      }
+      leaf priority-hold {
+        type uint8 {
+          range "0..7";
+        }
+        default "0";
+        description
+          "Hold priority";
+      }
+    }
+    /*
+    hop-limit (limit-value)
+    */
+    leaf hop-limit {
+      type uint8 {
+        range "2..255";
+      }
+      description
+        "Configure hop limit";
+    }
+  }
+
+  grouping rsvp-if-grp {
+    description
+      "RSVP interface configuration mode";
+    /*
+    refresh-interval (interval-val)
+    */
+    leaf refresh-interval {
+      type uint16 {
+        range "5..65535";
+      }
+      description
+        "Configure interface refresh interval";
+    }
+    /*
+    authentication (key-chain)
+    */
+    leaf authentication {
+      type string;
+      description
+        "Configure MD5 authentication for interface";
+    }
+    /*
+    te-metric (metric-val)
+    */
+    leaf te-metric {
+      type uint8 {
+        range "1..128";
+      }
+      description
+        "Configure interface TE metric";
+    }
+    /*
+    keep-multiplier (multiplier-val)
+    */
+    leaf keep-multiplier {
+      type uint8 {
+        range "1..255";
+      }
+      description
+        "Configure interface keep multiplier";
+    }
+    /*
+    hello { interval (interval-val) | keep-multiplier
+     (multiplier-val) }
+    */
+    container hello {
+      description
+        "Configure interface hello parameters";
+      leaf interval {
+        type uint8 {
+          range "1..60";
+        }
+        description
+          "Configure interface hello interval";
+      }
+      leaf keep-multiplier {
+        type uint8 {
+          range "1..255";
+        }
+        description
+          "Configure interface hello keep multiplier";
+      }
+    }
+    /*
+    bandwidth (bandwidth-value) [bandwidth-value-type]
+    */
+    container bandwidth {
+      presence "";
+      description
+        "Configure interface bandwidth";
+      leaf bandwidth-value {
+        type uint32 {
+          range "1..4294967295";
+        }
+        mandatory true;
+        description
+          "Reservable bandwidth";
+      }
+      leaf bandwidth-value-type {
+        type typesipos:bandwidth_value_type;
+        description
+          "Bandwidth value type";
+      }
+    }
+    /*
+    admin-group < group-value (group-value-fake)>
+    */
+    container admin-group {
+      description
+        "Associate the interface with administrative groups";
+      leaf-list group-value {
+        type leafref {
+          path "/ctxsipos:contexts/ctxipos:context/ctxipos:router/"
+	  + "rsvpipos:rsvp/rsvpipos:link-attributes/rsvpipos:"
+	  + "attribute/rsvpipos:attr-name";
+        }
+        description
+          "Associate the interface with administrative groups";
+      }
+    }
+    /*
+    graceful-restart { restart-time (restart-val) | recovery-
+     time (recovery-val) }
+    */
+    container graceful-restart {
+      description
+        "Enable graceful restart";
+      leaf restart-time {
+        type uint16 {
+          range "10..1800";
+        }
+        description
+          "Configure graceful restart restart time";
+      }
+      leaf recovery-time {
+        type uint16 {
+          range "20..3600";
+        }
+        description
+          "Configure graceful restart recovery time";
+      }
+    }
+    /*
+    bfd
+    */
+    leaf bfd {
+      type empty;
+      description
+        "Enable bidirectional forwarding detection";
+    }
+  }
+
+  grouping rsvp-link-attr-grp {
+    description
+      "RSVP link attribute mode";
+    /*
+    attribute (attr-name) (attr-value)
+    */
+    list attribute {
+      key "attr-name";
+      description
+        "Configure administrative group";
+      leaf attr-name {
+        type string;
+        description
+          "Attribute name";
+      }
+      leaf attr-value {
+        type uint8 {
+          range "0..31";
+        }
+        mandatory true;
+        description
+          "Attribute value";
+      }
+    }
+  }
+
+  grouping rsvp-explicit-route-grp {
+    description
+      "RSVP explicit route configuration mode";
+    /*
+    next-hop (next-hop) [ loose | strict ]
+    */
+    list next-hop {
+      key "next-hop";
+      ordered-by user;
+      description
+        "Next hop on the explicit path";
+      leaf next-hop {
+        type inet:ipv4-address;
+        description
+          "Next hop IP address";
+      }
+      leaf next-hop-opt {
+        type enumeration {
+          enum loose {
+            value 0;
+            description
+              "Next hop can be more than one hop away";
+          }
+          enum strict {
+            value 1;
+            description
+              "Next hop must be one hop away (default)";
+          }
+        }
+        description
+          "Configure next-hop";
+      }
+    }
+  }
+
+  grouping rsvp-lsp-grp {
+    description
+      "RSVP LSP configuration mode";
+    /*
+    record-route
+    */
+    leaf record-route {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable record-route";
+    }
+    /*
+    ingress (ingress-addr)
+    */
+    leaf ingress {
+      type inet:ipv4-address;
+      description
+        "LSP ingress node";
+    }
+    /*
+    egress (egress-addr)
+    */
+    leaf egress {
+      when "not (../bypass/node-protect-lsp-egress)" {
+        description
+          "";
+      }
+      type inet:ipv4-address;
+      description
+        "LSP egress node";
+    }
+    /*
+    fast-reroute nnhop-intf-address (nnhop-addr)
+    */
+    container fast-reroute {
+      when "../bypass/node-protect-lsp-egress" {
+        description
+          "";
+      }
+      description
+        "Fast Reroute for node-protection";
+      leaf nnhop-intf-address {
+        type inet:ipv4-address;
+        description
+          "Next next hop interface address for node protection";
+      }
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Shutdown the LSP";
+    }
+    /*
+    source-path (path-name)
+    */
+    leaf source-path {
+      type leafref {
+        path "/ctxsipos:contexts/ctxipos:context/ctxipos:router/"
+	+ "rsvpipos:rsvp/rsvpipos:explicit-route/rsvpipos:"
+	+ "explicit-route";
+      }
+      must "not (../dynamic-path) and not (../constraint) and "
+      + "not(../cspf)" {
+        error-message "please remove dynamic-path settings "
+        + "first";
+        description
+          "Source path can be configured once without dynamic
+           path configuration";
+      }
+      description
+        "Specify an explicit source path to use";
+    }
+    /*
+    dynamic-path (path-name)
+    */
+    leaf dynamic-path {
+      type leafref {
+        path "/ctxsipos:contexts/ctxipos:context/ctxipos:router/"
+	+ "rsvpipos:rsvp/rsvpipos:explicit-route/rsvpipos:"
+	+ "explicit-route";
+      }
+      must "not(../source-path)" {
+        error-message "please remove source-path settings first";
+        description
+          "Dynamic path can be configured once without source
+           path configuration";
+      }
+      description
+        "Specify an dynamic (CSPF) path to use";
+    }
+    /*
+    description (description-str)
+    */
+    leaf description {
+      type string;
+      description
+        "Set description string";
+    }
+    /*
+    igp-shortcut
+    */
+    leaf igp-shortcut {
+      type empty;
+      description
+        "Enable IGP shortcut";
+    }
+    /*
+    tunnel-shortcut
+    */
+    leaf tunnel-shortcut {
+      when "not (../bypass) and not (../backup-for)" {
+        description
+          "";
+      }
+      type empty;
+      must "not (../rsvpipos:exclusive)" {
+        error-message "please don't configure tunnel-shortcut "
+        + "when exclusive is set";
+        description
+          "tunnel-shortcut can be configured in lsp";
+      }
+      description
+        "Enable tunnel shortcut";
+    }
+    /*
+    local-protection
+    */
+    leaf local-protection {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable local-protection";
+    }
+    /*
+    constraint (constraint-name)
+    */
+    leaf constraint {
+      type leafref {
+        path "/ctxsipos:contexts/ctxipos:context/ctxipos:router/"
+        + "rsvpipos:rsvp/rsvpipos:constraint/rsvpipos:constraint";
+      }
+      must "not(../source-path)" {
+        error-message "please remove source-path settings first";
+        description
+          "Constraint can be configured once without source path
+           configuration";
+      }
+      description
+        "Set LSP constraint";
+    }
+    /*
+    cspf
+    */
+    leaf cspf {
+      type empty;
+      must "not(../source-path)" {
+        error-message "please remove source-path settings first";
+        description
+          "CSPF can be configured once without source path
+           configuration";
+      }
+      description
+        "Enable CSPF path calculations";
+    }
+    /*
+    track (track-name)
+    */
+    leaf track {
+      type string;
+      description
+        "Specify the object LSP needs to track";
+    }
+    /*
+    exclusive
+    */
+    leaf exclusive {
+      when "not (../bypass) and not (../backup-for)" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "LSP is exclusive to mapped VLLs only";
+    }
+  }
+
+  grouping rsvp-track-obj-grp {
+    description
+      "RSVP track object configuration mode";
+    /*
+    interface (intf-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "RSVP interface to track";
+      leaf interface {
+        type leafref {
+          path "/ctxsipos:contexts/ctxipos:context/ctxipos:router/"
+          + "rsvpipos:rsvp/rsvpipos:interface/rsvpipos:interface";
+        }
+        description
+          "RSVP Interface name";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:router" {
+    description
+      "ericsson-rsvp";
+    /*
+    rsvp
+    */
+    container rsvp {
+      when "../../ctxipos:context-name='local'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Resource Reservation Protocol (RSVP)";
+      uses rsvp-grp;
+    }
+  }
+
+}

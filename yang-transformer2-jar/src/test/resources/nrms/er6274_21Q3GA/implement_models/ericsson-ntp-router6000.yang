@@ -1,0 +1,236 @@
+module ericsson-ntp-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ntp-router6000";
+
+  prefix "ntpr6k";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-ntp-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-09-02" {
+    description
+      "ntp";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-05-16" {
+    description
+      "ntp";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  grouping ntp2-grp {
+    description
+      "NTP server configuration mode";
+    /*
+    server { (server-addr) | (server-addr6) } [ version (ver-
+     num) ] [ prefer ] [ source (src-str) ] [ key (key-id) ]
+    */
+    list server {
+      key "server-choice";
+      description
+        "Configure NTP server";
+      leaf server-choice {
+        type union {
+          type inet:ipv4-address;
+          type inet:ipv6-address;
+        }
+        description
+          "leaf server-choice.";
+      }
+      leaf version {
+        type uint8 {
+          range "1..4";
+        }
+        description
+          "Configure NTP version";
+      }
+      leaf prefer {
+        type empty;
+        description
+          "Prefer this server when possible";
+      }
+      leaf source {
+        type string;
+        description
+          "Interface for source address";
+      }
+      leaf key {
+        type uint16 {
+          range "1..65533";
+        }
+        description
+          "Configure NTP authentication key";
+      }
+    }
+    /*
+    peer { (peer-addr) | (peer-addr6) } [ version (ver-num) ] [
+     prefer ] [ source (src-addr) ] [ serve ] [ key (key-id) ]
+    */
+    list peer {
+      key "peer-choice";
+      description
+        "Configure NTP peer";
+      leaf peer-choice {
+        type union {
+          type inet:ipv4-address;
+          type inet:ipv6-address;
+        }
+        description
+          "leaf peer-choice.";
+      }
+      leaf version {
+        type uint8 {
+          range "1..4";
+        }
+        description
+          "Configure NTP version";
+      }
+      leaf prefer {
+        type empty;
+        description
+          "Prefer this server when possible";
+      }
+      leaf source {
+        type string;
+        description
+          "Interface for source address";
+      }
+      leaf serve {
+        type empty;
+        description
+          "configured peer as a server";
+      }
+      leaf key {
+        type uint16 {
+          range "1..65533";
+        }
+        description
+          "Configure NTP authentication key";
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-ntp";
+    /*
+    ntp
+    */
+    container ntp {
+      description
+        "Configure NTP";
+      list authentication-key {
+        key "key-id";
+        description
+          "Configure NTP authentication key";
+        leaf key-id {
+          type uint16 {
+            range "1..65533";
+          }
+          description
+            "ID number";
+        }
+        choice authentication-key-choice {
+          case MD5 {
+            leaf MD5 {
+              type empty;
+              description
+                "Use MD5 key";
+            }
+          }
+          case SHA1 {
+            leaf SHA1 {
+              type empty;
+              description
+                "Use SHA1 key";
+            }
+          }
+          case SHA256 {
+            leaf SHA256 {
+              type empty;
+              description
+                "Use SHA256 key";
+            }
+          }
+        }
+        choice authentication-key-choice1 {
+          case key-string {
+            leaf key-string {
+              type string;
+              description
+                "Key string value (max 20 characters)";
+            }
+          }
+          case encrypted {
+            leaf encrypted {
+              type string;
+              description
+                "Use encrypted key string";
+            }
+          }
+        }
+      }
+      list trusted-key {
+        key "trusted-key";
+        description
+          "Configure NTP trusted key";
+        leaf trusted-key {
+          type uint16 {
+            range "1..65533";
+          }
+          description
+            "ID number";
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context" {
+    description
+      "ericsson-ntp";
+    /*
+    ntp-mode
+    */
+    container ntp-mode {
+      presence "";
+      description
+        "NTP configuration mode";
+      uses ntp2-grp;
+    }
+  }
+
+}

@@ -1,0 +1,118 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-system-ext-dev-ipos {
+  yang-version 1.1;
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-system-ext-dev-ipos";
+
+  prefix "sysxexvipos";
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  import ietf-system { prefix sys; }
+  import ietf-netconf-acm { prefix nacm; }
+
+  import ericsson-system-ext {
+    prefix "sysxe";
+  }
+
+  organization "Ericsson AB";
+  contact "iposcli@ericsson.com";
+
+  description
+    "ericsson-system-ext-dev-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-01-30" {
+    description   "initial revision";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/sys:system/sysxe:user-label" {
+         deviate not-supported;
+     }
+  deviation "/sys:system-state/sysxe:managed-element-type" {
+         deviate not-supported;
+     }
+  deviation "/sys:system-state/sysxe:release" {
+         deviate not-supported;
+     }
+  deviation "/sys:system-state/sys:clock/sysxe:timezone-revision" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sysxe:ldap" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sysxe:ldap-checks" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:authentication-failure-delay" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:target-types" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:legal-notice" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:change-password" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:default-password-quality" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:password-quality" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:default-password-policy" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:password-policy" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:default-account-policy" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:account-policy" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sysxe:admin-user" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sys:user/sysxe:password-policy" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sys:user/sysxe:account-policy" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sys:user/sysxe:administrative-state" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sys:user/sysxe:unlock-operational-lock" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sys:user/sysxe:full-name" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sys:user/sysxe:user-label" {
+         deviate not-supported;
+     }
+  deviation "/sys:system-state/sysxe:authentication" {
+         deviate not-supported;
+     }
+  deviation "/sys:system/sys:authentication/sys:user/sysxe:groups" {
+    deviate replace {
+      type leafref {
+        path "/nacm:nacm/nacm:groups/nacm:group/nacm:name";
+      }
+    }
+  }
+}

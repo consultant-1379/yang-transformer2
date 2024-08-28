@@ -1,0 +1,54 @@
+module ericsson-mhbfd-mpls-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-mhbfd-mpls-router6000";
+
+  prefix "mhbfdmplsr6k";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-mhbfd-mpls-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-05-30" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-mhbfd-mpls";
+    /*
+    traffic-engineering
+    */
+    container traffic-engineering {
+      description
+        "Configure Traffic Engineering";
+      leaf mpls-forwarding {
+        type empty;
+        description
+          "Include LSP for best path calculation";
+      }
+    }
+  }
+
+}

@@ -1,0 +1,598 @@
+module ericsson-interface-pbr-ext-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-pbr-ext-router6000";
+
+  prefix "ifpbrxrouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-lag-ext-router6000 {
+    prefix "lagxrouter6000";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-l2vlan-ext-router6000 {
+    prefix "l2vlanxrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-pbr-router6000 {
+    prefix "pbrrouter6000";
+  }
+
+  import ericsson-bvi-ext-router6000 {
+    prefix "bvixrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-pbr-ext-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-05-24" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-04-09" {
+    description
+      "modify error message and description of fwd-name";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-22" {
+    description
+      "Fix jira IPOS-12068";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-07-08" {
+    description
+      "remove forward under the port ethernet and dot1q pvc";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-04-14" {
+    description
+      "add forward under the port BVI";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  augment "/if:interfaces/if:interface/lagxrouter6000:link-"
+  + "group" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name)  in [ ip [ ipv6 ] acl-counters |
+     ipv6 acl-counters ]
+    */
+    list forward-policy {
+      must "(../lagxrouter6000:bind-interface)" {
+        error-message "bind this circuit to an interface first "
+        + "before configuring this type of binding.";
+        description
+          "bind this circuit to an interface first before
+           configuring this type of binding.";
+      }
+      key "fwd-name";
+      max-elements 1;
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type leafref {
+          path
+          "/ctxsr6k:contexts/pbrrouter6000:forward/pbrrouter6000"
+          + ":fwd-polname";
+        }
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name)  in [ ip [ ipv6 ] acl-counters |
+     ipv6 acl-counters ]
+    */
+    container forward-policy {
+      presence "";
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type leafref {
+          path
+          "/ctxsr6k:contexts/pbrrouter6000:forward/pbrrouter6000"
+          + ":fwd-polname";
+        }
+        must "(../../ethxrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/bvixrouter6000:bvi" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name) in [ ip acl-counters | ipv6 acl-
+     counters | ip ipv6 acl-counters ]
+    */
+    container forward-policy {
+      presence "";
+      description
+        "container forward-policy.";
+      leaf fwd-name {
+        type leafref {
+          path
+          "/ctxsr6k:contexts/pbrrouter6000:forward/pbrrouter6000"
+          + ":fwd-polname";
+        }
+        must "(../../bvixrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        case ip-acl-counters {
+          leaf ip-acl-counters {
+            type empty;
+            description
+              "leaf ip-acl-counters.";
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "leaf ipv6-acl-counters.";
+          }
+        }
+        case ip-ipv6-acl-counters {
+          leaf ip-ipv6-acl-counters {
+            type empty;
+            description
+              "leaf ip-ipv6-acl-counters.";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet/l"
+  + "2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name)  in [ ip [ ipv6 ] acl-counters |
+     ipv6 acl-counters ]
+    */
+    container forward-policy {
+      presence "";
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type leafref {
+          path
+          "/ctxsr6k:contexts/pbrrouter6000:forward/pbrrouter6000"
+          + ":fwd-polname";
+        }
+        must "(../../l2vlanxrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l"
+  + "2vlanxrouter6000:pvc-list" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name)  in [ ip [ ipv6 ] acl-counters |
+     ipv6 acl-counters ]
+    */
+    container forward-policy {
+      presence "";
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type leafref {
+          path
+          "/ctxsr6k:contexts/pbrrouter6000:forward/pbrrouter6000"
+          + ":fwd-polname";
+        }
+        must "(../../l2vlanxrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/lagxrouter6000:link-"
+  + "group/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name)  in [ ip [ ipv6 ] acl-counters |
+     ipv6 acl-counters ]
+    */
+    container forward-policy {
+      presence "";
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type leafref {
+          path
+          "/ctxsr6k:contexts/pbrrouter6000:forward/pbrrouter6000"
+          + ":fwd-polname";
+        }
+        must "(../../l2vlanxrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l"
+  + "2vlanxrouter6000:pvc" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name)  in [ ip [ ipv6 ] acl-counters |
+     ipv6 acl-counters ]
+    */
+    container forward-policy {
+      presence "";
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type leafref {
+          path
+          "/ctxsr6k:contexts/pbrrouter6000:forward/pbrrouter6000"
+          + ":fwd-polname";
+        }
+        must "(../../l2vlanxrouter6000:bind-interface)" {
+          error-message "bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        case ip {
+          container ip {
+            description
+              "container ip.";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPV6 attributes";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+}

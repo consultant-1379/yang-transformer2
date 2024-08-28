@@ -1,0 +1,68 @@
+module ericsson-bfd-dev-router6000{
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bfd-dev-router6000";
+
+  prefix "bfdrouter6000";
+
+  import ericsson-bfd-router6000 {
+    prefix "bfdr6k";
+  }
+  
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions { 
+    prefix yexte;
+  }    
+  
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bfd-dev-spitfire
+     Copyright (c) 2015-2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-08-02" {
+    description
+      "remove Micro BFD deviation";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-05-31" {
+    description
+      "deviation for ericsson-bfd-dev-router6000@2017-5-31.yang file";
+      yexte:version 1;
+      yexte:release 0;
+      yexte:correction 0;
+    reference
+      "rfc6020";
+  }
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/bfdr6k:bfd/bfdr6k:neighbor/bfdr6k:ttl/bfdr6k:minimum-accepted" {
+    deviate not-supported;
+  }
+}

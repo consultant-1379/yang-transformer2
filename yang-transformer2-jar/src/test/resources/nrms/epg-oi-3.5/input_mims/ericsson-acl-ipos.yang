@@ -1,0 +1,1859 @@
+module ericsson-acl-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-acl-ipos";
+
+  prefix "aclipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-acl-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2019-07-03" {
+    description
+      "Correct the seq-num's leaf to meet IMF check";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2019-03-11" {
+    description
+      "Correct the seq-num's leaf description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-11-12" {
+    description
+      "Add pattern limits for leaf access-list";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-10-10" {
+    description
+      "Add string length limits for leaf access-list and leaf
+       cls-name";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-07-12" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-26" {
+    description
+      "replace type definition icmp-subtype-ipv6 with
+       icmp-subtype-ipv6-value";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-12" {
+    description
+      "Modify when condition for session-parm";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-05-22" {
+    description
+      "Fix must condition issue for seq";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-05-10" {
+    description
+      "remove some subnode when acl-protocol is 1,2,6 and 17";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-12-16" {
+    description
+      "add missing parameter log under admin-access-group";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-08-02" {
+    description
+      "Modify must condition for performance";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-05-22" {
+    description
+      "Modify when condition.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-05-17" {
+    description
+      "Modify review comments on description statement.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-28" {
+    description
+      "Modify pattern.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-02-09" {
+    description
+      "For Side Effect difference modification.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-16" {
+    description
+      "changed the condition from 'when' to 'must' for
+       cfg_ipv6_access_list_submode_seq.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-10-19" {
+    description
+      "add 'presence' statement in dot1q-outer and dot1q-inner
+       container.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-09-28" {
+    description
+      "resolve confd compile issues";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-08" {
+    description
+      "add a feature name for l2 acl";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-25" {
+    description
+      "add l2 acl";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-02-29" {
+    description
+      "fix when/must condition issues";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature length {
+    description
+      "This feature indicates that the device supports IP packet
+       length for ACL.";
+  }
+
+  feature ipv6-traffic-class {
+    description
+      "This feature indicates that the device supports IPv6
+       Traffic Class codepoint for ACL.";
+  }
+
+  feature tcp-status {
+    description
+      "This feature indicates that the device supports packet
+       filtering by tcp connection status or flag for ACL.";
+  }
+
+  grouping access-list-grp {
+    description
+      "Access list configuration mode";
+    /*
+    description (submode-description)
+    */
+    leaf description {
+      type string {
+        length "0..79";
+      }
+      description
+        "Configure an access list description";
+    }
+    /*
+    condition (seq-num) time-range
+    */
+    list condition {
+      key "seq-num";
+      description
+        "Configure ACL condition";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Condition number";
+      }
+      leaf time-range {
+        type empty;
+        mandatory true;
+        description
+          "Configure a time-range type of condition";
+      }
+      uses acl-condition-grp;
+    }
+    /*
+    seq { seq-num (seq-value) } { deny | permit } [ acl-protocol
+     (proto-value) ] { (src-addr) (src-wildcard) | src-any | src-
+     host (host-addr) } [ src-port { eq (eq-port) | gt (gt-port)
+     | lt (lt-port) | neq (neq-port)  | range (start-port) (end-
+     port) } ] [ (dst-addr) (dst-wildcard) | dst-any | dst-host
+     (dst-host-addr) ] [ dst-port { eq (eq-port) | gt (gt-port) |
+     lt (lt-port) | neq (neq-port)  | range (start-port) (end-
+     port) } ] [ < tcp-status { established | invalid-tcp-flags |
+     setup } > ] [ icmp-parm (icmp-type) [ icmp-code (code-value)
+     ] ] [ igmp-type ( igmp-value) ] [ < dscp eq (dscp-value) > |
+     precedence (prec-value) ] [ tos (tos-value) ] [ length { eq
+     (eq_length) | gt (gt_length) | lt (lt_length) | neq
+     (neq_length) | range (min-length) (max-length) } ] [
+     fragments ] [ ip-options ] [ class (class-name) ] [
+     condition { (condition-num) | (condition-addr) } ] [
+     <session-parm { {max-sessions (limit-num) } [ min-sessions
+     (limit-num) ] }> ]
+    */
+    list seq {
+      must "(name(../..) = 'aclipos:policy' and ./class) or "
+      + "(name(../..) = 'ctxipos:ip' and not(./class))" {
+        error-message "Policy access-list sequence entry has "
+        + "mandatory parameter 'class'";
+        description
+          "Policy access-list sequence entry has mandatory
+           parameter 'class'";
+      }
+      key "seq-num";
+      description
+        "Access list sequence number";
+      leaf seq-num {
+        type typesipos:pol-acl-seq-number;
+        description
+          "Sequence number";
+      }
+      choice seq-choice {
+        mandatory true;
+        description
+          "";
+        case deny {
+          leaf deny {
+            when "name(../../..)='ctxipos:ip'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set access list deny operation";
+          }
+        }
+        case permit {
+          leaf permit {
+            type empty;
+            description
+              "Set access list permit operation";
+          }
+        }
+      }
+      leaf acl-protocol {
+        type typesipos:acl-ipv4-protocol;
+        default "ip";
+        description
+          "Supported protocol";
+      }
+      choice seq-choice1 {
+        mandatory true;
+        description
+          "";
+        case src-addr {
+          container src-addr {
+            description
+              "Configure source address";
+            leaf src-addr {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP source address";
+            }
+            leaf src-wildcard {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP source wildcard";
+            }
+          }
+        }
+        case src-any {
+          leaf src-any {
+            type empty;
+            description
+              "Any source address";
+          }
+        }
+        case src-host {
+          leaf src-host {
+            type inet:ipv4-address;
+            description
+              "Host source address";
+          }
+        }
+      }
+      container src-port {
+        when "(not(../../ssh-and-telnet-acl)) and (../"
+        + "acl-protocol='tcp' or ../acl-protocol='udp')" {
+          description
+            "";
+        }
+        description
+          "tcp/udp source port";
+        choice src-port {
+          description
+            "";
+          case eq {
+            leaf eq {
+              type typesipos:acl-port-value;
+              description
+                "Equal to";
+            }
+          }
+          case gt {
+            leaf gt {
+              type typesipos:acl-port-value-gt;
+              description
+                "Greater than";
+            }
+          }
+          case lt {
+            leaf lt {
+              type typesipos:acl-port-value-lt;
+              description
+                "Less than";
+            }
+          }
+          case neq {
+            leaf neq {
+              type typesipos:acl-port-value;
+              description
+                "Not equal to";
+            }
+          }
+          case range {
+            container range {
+              description
+                "Range of ports";
+              leaf start-port {
+                type typesipos:acl-port-value;
+                mandatory true;
+                description
+                  "Port number (range start)";
+              }
+              leaf end-port {
+                type typesipos:acl-port-value;
+                mandatory true;
+                description
+                  "Port number (range end)";
+              }
+            }
+          }
+        }
+      }
+      choice seq-opt2 {
+        description
+          "";
+        case dst-addr {
+          container dst-addr {
+            when "not(../../ssh-and-telnet-acl)" {
+              description
+                "";
+            }
+            description
+              "container dst-addr.";
+            leaf dst-addr {
+              type inet:ipv4-address;
+              description
+                "IP destination address";
+            }
+            leaf dst-wildcard {
+              type inet:ipv4-address;
+              description
+                "IP destination wildcard";
+            }
+          }
+        }
+        case dst-any {
+          leaf dst-any {
+            type empty;
+            description
+              "Any destination address";
+          }
+        }
+        case dst-host {
+          leaf dst-host {
+            type inet:ipv4-address;
+            description
+              "Host destination address";
+          }
+        }
+      }
+      container dst-port {
+        when "../acl-protocol='tcp' or ../acl-protocol='udp'" {
+          description
+            "";
+        }
+        description
+          "tcp/udp destination port";
+        choice dst-port {
+          description
+            "";
+          case eq {
+            leaf eq {
+              when "not(../../../ssh-and-telnet-acl) or .='ssh' "
+              + "or .='22' or .='telnet' or .='23'" {
+                description
+                  "";
+              }
+              type typesipos:acl-port-value;
+              description
+                "Equal to";
+            }
+          }
+          case gt {
+            leaf gt {
+              when "not(../../../ssh-and-telnet-acl)" {
+                description
+                  "";
+              }
+              type typesipos:acl-port-value-gt;
+              description
+                "Greater than";
+            }
+          }
+          case lt {
+            leaf lt {
+              when "not(../../../ssh-and-telnet-acl)" {
+                description
+                  "";
+              }
+              type typesipos:acl-port-value-lt;
+              description
+                "Less than";
+            }
+          }
+          case neq {
+            leaf neq {
+              when "not(../../../ssh-and-telnet-acl)" {
+                description
+                  "";
+              }
+              type typesipos:acl-port-value;
+              description
+                "Not equal to";
+            }
+          }
+          case range {
+            container range {
+              when "not(../../../ssh-and-telnet-acl)" {
+                description
+                  "";
+              }
+              description
+                "Range of ports";
+              leaf start-port {
+                type typesipos:acl-port-value;
+                mandatory true;
+                description
+                  "Port number (range start)";
+              }
+              leaf end-port {
+                type typesipos:acl-port-value;
+                mandatory true;
+                description
+                  "Port number (range end)";
+              }
+            }
+          }
+        }
+      }
+      leaf tcp-status {
+        when "( not(../../ssh-and-telnet-acl) ) and (../src-addr "
+        + "or ../src-any or ../src-host) and (../dst-addr or ../"
+        + "dst-any or ../dst-host)" {
+          description
+            "";
+        }
+        if-feature tcp-status;
+        type enumeration {
+          enum established {
+            value 0;
+            description
+              "TCP session established";
+          }
+          enum invalid-tcp-flags {
+            value 1;
+            description
+              "Invalid TCP flag combinations";
+          }
+          enum setup {
+            value 2;
+            description
+              "TCP session setup";
+          }
+        }
+        description
+          "tcp status";
+      }
+      container icmp-parm {
+        when "(not(../../ssh-and-telnet-acl)) and (../"
+        + "acl-protocol='icmp' or ../acl-protocol=1)" {
+          description
+            "";
+        }
+        presence "";
+        description
+          "ICMP protocol parameters";
+        leaf icmp-type {
+          type typesipos:icmp-type-value;
+          mandatory true;
+          description
+            "ICMP type value";
+        }
+        leaf icmp-code {
+          type uint8 {
+            range "0..255";
+          }
+          must "number(../../icmp-parm/icmp-type) = ../../"
+          + "icmp-parm/icmp-type" {
+            error-message "ICMP type value must be a number when "
+            + "configure icmp code";
+            description
+              "ICMP code could be configured only when icmp type
+               value is a number";
+          }
+          description
+            "ICMP message code";
+        }
+      }
+      leaf igmp-type {
+        when "(not(../../ssh-and-telnet-acl)) and (../"
+        + "acl-protocol='igmp')" {
+          description
+            "";
+        }
+        type typesipos:igmp-type-value;
+        description
+          "IGMP message type";
+      }
+      choice seq-opt3 {
+        description
+          "";
+        case dscp {
+          container dscp {
+            when "(not(../../ssh-and-telnet-acl)) and (not(../tos)"
+            + ")" {
+              description
+                "";
+            }
+            description
+              "IP DSCP (Differentiated Services Code Point)";
+            leaf eq {
+              type typesipos:dscp-value;
+              description
+                "Equal to";
+            }
+          }
+        }
+        case precedence {
+          leaf precedence {
+            when "not(../../ssh-and-telnet-acl)" {
+              description
+                "";
+            }
+            type typesipos:precedence-value;
+            description
+              "IP Precedence";
+          }
+        }
+      }
+      leaf tos {
+        type typesipos:tos-value;
+        must "(not(../../ssh-and-telnet-acl)) and (not(../dscp))" {
+          error-message "must not dscp";
+          description
+            "";
+        }
+        description
+          "IP TOS (Type of Service)";
+      }
+      container length {
+        when "not(../../ssh-and-telnet-acl)" {
+          description
+            "";
+        }
+        if-feature length;
+        description
+          "IP packet length";
+        choice length {
+          description
+            "";
+          case eq {
+            leaf eq {
+              type uint16 {
+                range "20..65535";
+              }
+              description
+                "Equal to";
+            }
+          }
+          case gt {
+            leaf gt {
+              type uint16 {
+                range "20..65535";
+              }
+              description
+                "Greater than";
+            }
+          }
+          case lt {
+            leaf lt {
+              type uint16 {
+                range "20..65535";
+              }
+              description
+                "Less than";
+            }
+          }
+          case neq {
+            leaf neq {
+              type uint16 {
+                range "20..65535";
+              }
+              description
+                "Not equal to";
+            }
+          }
+          case range {
+            container range {
+              description
+                "Range of ports";
+              leaf min-length {
+                type uint16 {
+                  range "20..65535";
+                }
+                mandatory true;
+                description
+                  "Packet Length range start";
+              }
+              leaf max-length {
+                type uint16 {
+                  range "20..65535";
+                }
+                mandatory true;
+                description
+                  "Packet Length range end";
+              }
+            }
+          }
+        }
+      }
+      leaf fragments {
+        when "not(../../ssh-and-telnet-acl)" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "IP packet fragment";
+      }
+      leaf ip-options {
+        when "not(../../ssh-and-telnet-acl)" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "IP Options present";
+      }
+      leaf class {
+        when "name(../../..)='aclipos:policy'" {
+          description
+            "";
+        }
+        type string;
+        description
+          "Policy class";
+      }
+      leaf condition {
+        when "not(../../ssh-and-telnet-acl)" {
+          description
+            "";
+        }
+        type union {
+          type uint32 {
+            range "1..4294967295";
+          }
+          type inet:ipv4-address;
+        }
+        description
+          "Define ACL condition in the rule";
+      }
+      container session-parm {
+        when "(../../ssh-and-telnet-acl) and (../acl-protocol="
+        + "'tcp')" {
+          description
+            "";
+        }
+        presence "";
+        description
+          "set maximum and minimum sessions";
+        leaf max-sessions {
+          type uint8 {
+            range "1..32";
+          }
+          mandatory true;
+          description
+            "Set maximum TCP sessions limit";
+        }
+        leaf min-sessions {
+          when "not(../../src-any)" {
+            description
+              "";
+          }
+          type uint8 {
+            range "0..32";
+          }
+          description
+            "Set minimum TCP sessions limit";
+        }
+      }
+    }
+  }
+
+  grouping acl-condition-grp {
+    description
+      "Access list condition configuration mode";
+    /*
+    periodic (date-range) { class (class-name) | deny | permit }
+    */
+    list periodic {
+      key "date-range";
+      description
+        "Configure periodic time-range type";
+      leaf date-range {
+        type typesipos:acl-date-range;
+        description
+          "String of Time range:start-day(days) hh:mm to end-day
+           hh:mm. start-day(days) states one or more days of the
+           week, it could be weekend, weekdays, monday, tuesday,
+           wednesday, thursday, friday, saturday, sunday and any
+           combination of them but without overlap day. E.g, the
+           combination could be 'monday tuesday', 'weekdays
+           saturday', 'weekend monday thursday', could not be
+           'weekdays monday', 'weekend sunday'. The end-day is
+           optional, only when start-day is a single day(just one
+           monday, tuesday, ..., sunday), it may exist and it's
+           also a single day. Here are some examples:  monday
+           00:00 to 00:10;  tuesday 00:00 to friday 00:10;
+           monday tuesday wednesday thursday friday saturday
+           sunday 00:00 to 00:10;  weekend monday 00:00 to 00:10;
+           weekend weekday 00:00 to 00:10";
+      }
+      choice periodic-choice {
+        mandatory true;
+        description
+          "";
+        case class {
+          leaf class {
+            when "name(../../../..)= 'aclipos:policy'" {
+              description
+                "";
+            }
+            type string;
+            mandatory true;
+            description
+              "Configure action for time-range";
+          }
+        }
+        case deny {
+          leaf deny {
+            when "name(../../../..)!= 'aclipos:policy'" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set access list deny operation";
+          }
+        }
+        case permit {
+          leaf permit {
+            when "name(../../../..)!= 'aclipos:policy'" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set access list permit operation";
+          }
+        }
+      }
+    }
+    /*
+    absolute <start (start-date)> <end (end-date)> { class
+     (class-name) | deny | permit }
+    */
+    list absolute {
+      key "start end";
+      description
+        "Configure absolute time-range type";
+      leaf start {
+        type typesipos:acl-date;
+        description
+          "Configure start date of time-range";
+      }
+      leaf end {
+        type typesipos:acl-date;
+        description
+          "Configure end date of time-range";
+      }
+      choice absolute-choice {
+        mandatory true;
+        description
+          "";
+        case class {
+          leaf class {
+            when "name(../../../..)='aclipos:policy'" {
+              description
+                "";
+            }
+            type string;
+            mandatory true;
+            description
+              "Configure action for time-range";
+          }
+        }
+        case deny {
+          leaf deny {
+            when "name(../../../..)!='aclipos:policy'" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set access list deny operation";
+          }
+        }
+        case permit {
+          leaf permit {
+            when "name(../../../..)!='aclipos:policy'" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set access list permit operation";
+          }
+        }
+      }
+    }
+  }
+
+  grouping ipv6-access-list-grp {
+    description
+      "IPv6 access list configuration mode";
+    /*
+    description (submode-description)
+    */
+    leaf description {
+      type string {
+        length "0..79";
+      }
+      description
+        "Configure an IPv6 access list description";
+    }
+    /*
+    condition (seq-num) time-range
+    */
+    list condition {
+      key "seq-num";
+      description
+        "Configure IPv6 access list condition";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Condition number";
+      }
+      leaf time-range {
+        type empty;
+        mandatory true;
+        description
+          "Configure type time-range condition";
+      }
+      uses acl-condition-grp;
+    }
+    /*
+    seq { seq-num (seq-value) } { deny | permit } [ acl-protocol
+     (proto-value) ] { (src-addr-ipv6) | src-any } [ src-port {
+     eq (eq-port) | gt (gt-port) | lt (lt-port) | neq (neq-port)
+     | range (start-port) (end-port) } ] [ (dst-addr-ipv6)| dst-
+     any ] [ dst-port { eq (eq-port) | gt (gt-port) | lt (lt-
+     port) | neq (neq-port)  | range (start-port) (end-port) } ]
+     [ <tcp-status { established | invalid-tcp-flags | setup }> ]
+     [ <icmp-parm (icmp-type) [ (icmp-subtype) ] [ icmp-code
+     (code-value) ]> ] [ traffic-class eq (class-value) ] [
+     fragments ] [ class (class-name) ] [ condition (condition-
+     num) ]
+    */
+    list seq {
+      must "(name(../..) = 'aclipos:policy' and ./class) or "
+      + "(name(../..) = 'ctxipos:ipv6' and not(./class))" {
+        error-message "IPv6 policy access-list sequence entry "
+        + "has mandatory parameter 'class'";
+        description
+          "IPv6 policy access-list sequence entry has mandatory
+           parameter 'class'";
+      }
+      key "seq-num";
+      description
+        "IPv6 access list sequence number";
+      leaf seq-num {
+        type typesipos:pol-acl-seq-number;
+        description
+          "Sequence number";
+      }
+      choice seq-choice {
+        mandatory true;
+        description
+          "";
+        case deny {
+          leaf deny {
+            when "name(../../..)!='aclipos:policy'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set IPv6 access list deny operation";
+          }
+        }
+        case permit {
+          leaf permit {
+            type empty;
+            description
+              "Set IPv6 access list permit operation";
+          }
+        }
+      }
+      leaf acl-protocol {
+        type typesipos:acl-ipv6-protocol;
+        default "ipv6";
+        description
+          "supported IPv6 protocol";
+      }
+      choice seq-choice1 {
+        mandatory true;
+        description
+          "";
+        case src-addr-ipv6 {
+          leaf src-addr-ipv6 {
+            type inet:ipv6-prefix;
+            mandatory true;
+            description
+              "IPv6 source prefix";
+          }
+        }
+        case src-any {
+          leaf src-any {
+            type empty;
+            description
+              "Any source address";
+          }
+        }
+      }
+      container src-port {
+        when "../acl-protocol='tcp' or ../acl-protocol='udp'" {
+          description
+            "";
+        }
+        description
+          "tcp/udp source port";
+        choice src-port {
+          description
+            "";
+          case eq {
+            leaf eq {
+              type typesipos:acl-port-value;
+              description
+                "Equal to";
+            }
+          }
+          case gt {
+            leaf gt {
+              type typesipos:acl-port-value-gt;
+              description
+                "Greater than";
+            }
+          }
+          case lt {
+            leaf lt {
+              type typesipos:acl-port-value-lt;
+              description
+                "Less than";
+            }
+          }
+          case neq {
+            leaf neq {
+              type typesipos:acl-port-value;
+              description
+                "Not equal to";
+            }
+          }
+          case range {
+            container range {
+              description
+                "Range of ports";
+              leaf start-port {
+                type typesipos:acl-port-value;
+                mandatory true;
+                description
+                  "Port number (range start)";
+              }
+              leaf end-port {
+                type typesipos:acl-port-value;
+                mandatory true;
+                description
+                  "Port number (range end)";
+              }
+            }
+          }
+        }
+      }
+      choice seq-opt2 {
+        description
+          "";
+        case dst-addr-ipv6 {
+          leaf dst-addr-ipv6 {
+            type inet:ipv6-prefix;
+            description
+              "IPv6 prefix";
+          }
+        }
+        case dst-any {
+          leaf dst-any {
+            type empty;
+            description
+              "Any destination address";
+          }
+        }
+      }
+      container dst-port {
+        when "../acl-protocol='tcp' or ../acl-protocol='udp'" {
+          description
+            "";
+        }
+        description
+          "tcp/udp destination port";
+        choice dst-port {
+          description
+            "";
+          case eq {
+            leaf eq {
+              type typesipos:acl-port-value;
+              description
+                "Equal to";
+            }
+          }
+          case gt {
+            leaf gt {
+              type typesipos:acl-port-value-gt;
+              description
+                "Greater than";
+            }
+          }
+          case lt {
+            leaf lt {
+              type typesipos:acl-port-value-lt;
+              description
+                "Less than";
+            }
+          }
+          case neq {
+            leaf neq {
+              type typesipos:acl-port-value;
+              description
+                "Not equal to";
+            }
+          }
+          case range {
+            container range {
+              description
+                "Range of ports";
+              leaf start-port {
+                type typesipos:acl-port-value;
+                mandatory true;
+                description
+                  "Port number (range start)";
+              }
+              leaf end-port {
+                type typesipos:acl-port-value;
+                mandatory true;
+                description
+                  "Port number (range end)";
+              }
+            }
+          }
+        }
+      }
+      leaf tcp-status {
+        when "(../acl-protocol='tcp') and (../src-addr-ipv6 or ../"
+        + "src-any) and (../dst-addr-ipv6 or ../dst-any)" {
+          description
+            "";
+        }
+        if-feature tcp-status;
+        type enumeration {
+          enum established {
+            value 0;
+            description
+              "TCP session established";
+          }
+          enum invalid-tcp-flags {
+            value 1;
+            description
+              "Invalid TCP flag combinations";
+          }
+          enum setup {
+            value 2;
+            description
+              "TCP session setup";
+          }
+        }
+        description
+          "tcp status";
+      }
+      container icmp-parm {
+        when "../acl-protocol='icmp'" {
+          description
+            "";
+        }
+        presence "";
+        description
+          "ICMP IPv6 protocol parameters";
+        leaf icmp-type {
+          type typesipos:icmp-type-ipv6-value;
+          mandatory true;
+          description
+            "ICMP type value";
+        }
+        leaf icmp-subtype {
+          when "../icmp-type='mipv6' or ../icmp-type='mld' or ../"
+          + "icmp-type='nd' or ../icmp-type='send'" {
+            description
+              "";
+          }
+          type typesipos:icmp-subtype-ipv6-value;
+          description
+            "ICMP type value";
+        }
+        leaf icmp-code {
+          type uint8 {
+            range "0..255";
+          }
+          description
+            "ICMP message code";
+        }
+      }
+      container traffic-class {
+        if-feature ipv6-traffic-class;
+        description
+          "IPv6 Traffic Class codepoint";
+        leaf eq {
+          type typesipos:dscp-value;
+          description
+            "Equal to";
+        }
+      }
+      leaf fragments {
+        type empty;
+        description
+          "IP packet fragment";
+      }
+      leaf class {
+        when "name(../../..)='aclipos:policy'" {
+          description
+            "";
+        }
+        type string;
+        description
+          "Policy class";
+      }
+      leaf condition {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Define ACL condition in the rule";
+      }
+    }
+  }
+
+  grouping l2-access-list-grp {
+    description
+      "L2 access list configuration mode";
+    /*
+    description (submode-description)
+    */
+    leaf description {
+      type string {
+        length "0..79";
+      }
+      description
+        "Configure an L2 access list description";
+    }
+    /*
+    seq {seq-num (seq-value)} {deny | permit} {src-mac-any |
+     (src-mac-addr) [mask (src-mac-mask)]} {dst-mac-any | (dst-
+     mac-addr) [mask (dst-mac-mask)]} [ethertype (ether-type-
+     value)] [dot1q outer {vlan-any | (outer-vlan-start) [vlan-
+     end (outer-vlan-end)]} [priority {(priority-start)
+     (priority-end) | <(priority-value)>}] [outer-dei (dei-
+     value)]][dot1q inner {vlan-any | (inner-vlan-start) [<vlan-
+     end (inner-vlan-end)>]} [priority {(priority-start)
+     (priority-end) | <(priority-value)>}] [inner-dei (dei-
+     value)]] [class (class-name)]
+    */
+    list seq {
+      must "(/ctxsipos:contexts/ctxsipos:l2/aclipos:policy/"
+      + "access-list/seq and ../seq/class) or (/ctxsipos:contexts/"
+      + "ctxsipos:l2/access-list/seq and not(../seq/class)) " {
+        error-message "Policy access-list sequence entry has "
+        + "mandatory parameter 'class'";
+        description
+          "Policy access-list sequence entry has mandatory
+           parameter 'class'";
+      }
+      key "seq-num";
+      description
+        "L2 access list sequence number";
+      leaf seq-num {
+        type typesipos:acl-seq-number;
+        description
+          "Sequence number";
+      }
+      choice seq-choice {
+        mandatory true;
+        description
+          "";
+        case deny {
+          leaf deny {
+            when "name(../../..)!='aclipos:policy'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set L2 access list deny operation";
+          }
+        }
+        case permit {
+          leaf permit {
+            type empty;
+            description
+              "Set L2 access list permit operation";
+          }
+        }
+      }
+      choice seq-choice1 {
+        mandatory true;
+        description
+          "";
+        case src-mac-any {
+          leaf src-mac-any {
+            type empty;
+            mandatory true;
+            description
+              "Any source address";
+          }
+        }
+        case src-mac-addr {
+          container src-mac-addr {
+            description
+              "Configure source MAC";
+            leaf src-mac-addr {
+              type yang:mac-address;
+              mandatory true;
+              description
+                "Source MAC address";
+            }
+            leaf mask {
+              type yang:mac-address;
+              description
+                "Source MAC address mask";
+            }
+          }
+        }
+      }
+      choice seq-choice2 {
+        mandatory true;
+        description
+          "";
+        case dst-mac-any {
+          leaf dst-mac-any {
+            type empty;
+            mandatory true;
+            description
+              "Any destination address";
+          }
+        }
+        case dst-mac-addr {
+          container dst-mac-addr {
+            description
+              "Configure destination MAC";
+            leaf dst-mac-addr {
+              type yang:mac-address;
+              mandatory true;
+              description
+                "Destination MAC address";
+            }
+            leaf mask {
+              type yang:mac-address;
+              description
+                "Destination MAC address mask";
+            }
+          }
+        }
+      }
+      leaf ethertype {
+        type typesipos:l2-acl-ethertype;
+        description
+          "Well known protocol name or value";
+      }
+      container dot1q-outer {
+        presence "";
+        description
+          "Outer VLAN";
+        choice dot1q-outer-choice {
+          mandatory true;
+          description
+            "";
+          case vlan-any {
+            leaf vlan-any {
+              type empty;
+              mandatory true;
+              description
+                "Match any VLAN from 0 to 4095";
+            }
+          }
+          case outer-vlan-start {
+            container outer-vlan-start {
+              description
+                "Configure outer vlan";
+              leaf outer-vlan-start {
+                type uint16 {
+                  range "0..4095";
+                }
+                mandatory true;
+                description
+                  "VLAN ID start";
+              }
+              leaf vlan-end {
+                type uint16 {
+                  range "1..4095";
+                }
+                description
+                  "Specify the VLAN range";
+              }
+            }
+          }
+        }
+        container priority {
+          description
+            "Outer VLAN priority (Specify priority first and
+             then dei)";
+          choice priority {
+            description
+              "";
+            case priority-start {
+              container priority-start {
+                description
+                  "Configure outer priority";
+                leaf priority-start {
+                  type uint8 {
+                    range "0..7";
+                  }
+                  mandatory true;
+                  description
+                    "Priority start";
+                }
+                leaf priority-end {
+                  type uint8 {
+                    range "0..7";
+                  }
+                  mandatory true;
+                  description
+                    "Priority end";
+                }
+              }
+            }
+            case priority-value {
+              leaf-list priority-value {
+                type uint8 {
+                  range "0..7";
+                }
+                min-elements 1;
+                max-elements 8;
+                description
+                  "Priority value";
+              }
+            }
+          }
+        }
+        leaf outer-dei {
+          type uint8 {
+            range "0..1";
+          }
+          description
+            "Specify the outer VLAN drop eligibility";
+        }
+      }
+      container dot1q-inner {
+        presence "";
+        description
+          "Inner VLAN";
+        choice dot1q-inner-choice {
+          mandatory true;
+          description
+            "";
+          case vlan-any {
+            leaf vlan-any {
+              type empty;
+              mandatory true;
+              description
+                "Match any VLAN from 0 to 4095";
+            }
+          }
+          case inner-vlan-start {
+            container inner-vlan-start {
+              description
+                "Specify the VLAN range";
+              leaf inner-vlan-start {
+                type uint16 {
+                  range "0..4095";
+                }
+                mandatory true;
+                description
+                  "VLAN ID start";
+              }
+              leaf vlan-end {
+                type uint16 {
+                  range "1..4095";
+                }
+                description
+                  "VLAN ID end";
+              }
+            }
+          }
+        }
+        container priority {
+          description
+            "Inner VLAN priority (Specify priority first and
+             then dei)";
+          choice priority {
+            description
+              "";
+            case priority-start {
+              container priority-start {
+                description
+                  "Configure inner VLAN priority";
+                leaf priority-start {
+                  type uint8 {
+                    range "0..7";
+                  }
+                  mandatory true;
+                  description
+                    "Priority start";
+                }
+                leaf priority-end {
+                  type uint8 {
+                    range "0..7";
+                  }
+                  mandatory true;
+                  description
+                    "Priority end";
+                }
+              }
+            }
+            case priority-value {
+              leaf-list priority-value {
+                type uint8 {
+                  range "0..7";
+                }
+                min-elements 1;
+                max-elements 8;
+                description
+                  "Priority value";
+              }
+            }
+          }
+        }
+        leaf inner-dei {
+          type uint8 {
+            range "0..1";
+          }
+          description
+            "Specify the inner VLAN drop eligibility";
+        }
+      }
+      leaf class {
+        when "name(../../..)='aclipos:policy'" {
+          description
+            "";
+        }
+        type string {
+          length "0..40";
+        }
+        description
+          "L2 QoS access list";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:ip" {
+    description
+      "ericsson-acl";
+    /*
+    access-list (access-list) [ssh-and-telnet-acl]
+    */
+    list access-list {
+      key "access-list";
+      description
+        "Configure an IPv4 access list";
+      leaf access-list {
+        type string {
+          length "1..39";
+          pattern '(\S+)';
+        }
+        description
+          "IPv4 access list name";
+      }
+      leaf ssh-and-telnet-acl {
+        type empty;
+        description
+          "Set SSH and Telnet ACL";
+      }
+      uses access-list-grp;
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:ipv6" {
+    description
+      "ericsson-acl";
+    /*
+    access-list (acl-name)
+    */
+    list access-list {
+      key "access-list";
+      description
+        "Configure an IPv6 access list";
+      leaf access-list {
+        type string {
+          length "1..39";
+          pattern '(\S+)';
+        }
+        description
+          "IPv6 access list name";
+      }
+      uses ipv6-access-list-grp;
+    }
+    /*
+    policy access-list (acl-name)
+    */
+    container policy {
+      description
+        "Configure IPv6 policy access-list";
+      list access-list {
+        key "access-list";
+        description
+          "Configure a IPv6 policy access list";
+        leaf access-list {
+          type string;
+          description
+            "Access list name";
+        }
+        uses ipv6-access-list-grp;
+      }
+    }
+    /*
+    admin-access-group (cls-name) (direction) [ count ] [ log ]
+    */
+    list admin-access-group {
+      key "direction";
+      description
+        "Administrative IPv6 packet access control";
+      leaf direction {
+        type typesipos:access_group_dir;
+        must "(../direction = 'in')" {
+          error-message "The direction of admin-access-group "
+          + "can't be configured in the outbound.";
+          description
+            "The direction of admin-access-group can only be
+             configured inbound";
+        }
+        description
+          "The direction which ACL to be applied on";
+      }
+      leaf cls-name {
+        type string {
+          length "1..399";
+          pattern '(\S+)|(\S+(\s\S+)*)';
+        }
+        mandatory true;
+        description
+          "IPv6 access list name (up to 10 names); more than one
+           ACL enter with \"\" and space separator";
+      }
+      leaf count {
+        type empty;
+        description
+          "Configure access list packet counting";
+      }
+      leaf log {
+        type empty;
+        description
+          "Configure access list packet logging";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context" {
+    description
+      "ericsson-acl";
+    /*
+    admin-access-group (cls-name) (direction) [ count ] [ log ]
+    */
+    list admin-access-group {
+      key "direction";
+      description
+        "Administrative packet access control";
+      leaf direction {
+        type typesipos:access_group_dir;
+        must "(../direction = 'in')" {
+          error-message "The direction of admin-access-group "
+          + "can't be configured in the outbound.";
+          description
+            "The direction of admin-access-group can only
+             configured in the inbound";
+        }
+        description
+          "The direction ACL to be appiled on";
+      }
+      leaf cls-name {
+        type string {
+          length "1..399";
+          pattern '(\S+)|(\S+(\s\S+)*)';
+        }
+        mandatory true;
+        description
+          "Access list name (up to 10 names); more than one ACL
+           enter with \"\" and space separator";
+      }
+      leaf count {
+        type empty;
+        description
+          "Configure access list packet counting";
+      }
+      leaf log {
+        type empty;
+        description
+          "Configure access list packet logging";
+      }
+    }
+    /*
+    policy { access-list (access-list) [ ssh-and-telnet-acl ] }
+    */
+    container policy {
+      description
+        "Configure policy access-list";
+      list access-list {
+        key "access-list";
+        description
+          "Configure a policy access list";
+        leaf access-list {
+          type string;
+          description
+            "Access list name";
+        }
+        leaf ssh-and-telnet-acl {
+          type empty;
+          description
+            "Set SSH and Telnet ACL";
+        }
+        uses access-list-grp;
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxsipos:l2" {
+    description
+      "ericsson-acl";
+    /*
+    policy access-list (list-name)
+    */
+    container policy {
+      description
+        "Configure L2 policy access list";
+      list access-list {
+        key "access-list";
+        description
+          "Configure L2 policy access list";
+        leaf access-list {
+          type string {
+            length "0..39";
+          }
+          description
+            "L2 access list name";
+        }
+        uses l2-access-list-grp;
+      }
+    }
+    /*
+    access-list (list-name)
+    */
+    list access-list {
+      key "access-list";
+      description
+        "Configure L2 access list";
+      leaf access-list {
+        type string;
+        description
+          "L2 access list name";
+      }
+      uses l2-access-list-grp;
+    }
+  }
+
+}

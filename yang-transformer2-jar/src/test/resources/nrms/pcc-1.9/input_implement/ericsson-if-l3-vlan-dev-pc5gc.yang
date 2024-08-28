@@ -1,0 +1,88 @@
+module ericsson-if-l3-vlan-dev-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-if-l3-vlan-dev-pc5gc";
+  prefix ifl3vlandpc5gc;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-interfaces-common {
+    prefix if-cmn;
+  }
+  import ietf-if-l3-vlan {
+    prefix if-l3-vlan;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-if-types-pc5gc {
+    prefix pcift;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model deviate IETF ietf-if-l3-vlan.
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-08-09 {
+    description
+      "Change interface type";
+    reference
+      "EN/LZN 704 0249";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2019-09-05 {
+    description
+      "Deviation on IETF L3 VLAN sub-interfaces YANG";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/if:interfaces/if:interface/if-cmn:encapsulation/" +
+            "if-cmn:encaps-type/if-l3-vlan:dot1q-vlan/" +
+            "if-l3-vlan:dot1q-vlan/if-l3-vlan:second-tag" {
+     deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/if-cmn:encapsulation/" +
+            "if-cmn:encaps-type/if-l3-vlan:dot1q-vlan/if-l3-vlan:dot1q-vlan" {
+    deviate delete {
+        must
+          'count(../../if-cmn:forwarding-mode) = 0 or ' +
+          'derived-from-or-self(../../if-cmn:forwarding-mode,' +
+                                '"if-cmn:layer-3-forwarding")' {
+            error-message
+              "If the interface forwarding-mode leaf is set then it
+               must be set to an identity that derives from
+               layer-3-forwarding";
+            description
+              "The forwarding-mode leaf on an interface can
+               optionally be used to enforce consistency of
+               configuration";
+          }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/if-cmn:encapsulation/" +
+            "if-cmn:encaps-type/if-l3-vlan:dot1q-vlan/if-l3-vlan:dot1q-vlan" {
+    deviate add {
+      must "(../../if:type != 'pcift:ethernetCsmacd')
+            and (../../if:type != 'pcift:activeBackupBonding')" {
+          error-message
+            "dot1q-vlan is not supported for ethernetCsmacd or activeBackupBonding type interface";
+          description
+            "dot1q-vlan is not supported for ethernetCsmacd or activeBackupBonding type interface";
+      }
+    }
+  }
+}

@@ -1,0 +1,163 @@
+module oran-smo-teiv-simple {
+
+	namespace "urn~test~oran-smo-teiv-simple";
+	prefix this;
+
+	revision "2023-08-22";
+
+	import o-ran-smo-teiv-common-yang-extensions {
+		prefix or-teiv-ext;
+	}
+
+	list MocA {
+		key id;
+		leaf id { type string; }
+	}
+
+	list MocB {
+		key id;
+		leaf id { type string; }
+	}
+
+	list MocC {
+		key id;
+		leaf id { type string; }
+	}
+
+	list MocD {
+		key id;
+		leaf id { type string; }
+	}
+
+	or-teiv-ext:biDirectionalTopologyRelationship rel-1 {
+
+		description "desc1";
+
+		leaf role_AB_A {
+			or-teiv-ext:aSide MocA;
+			description "role_AB_A desc";
+			type instance-identifier;
+		}
+		leaf-list role_AB_B {
+			or-teiv-ext:bSide this:MocB;
+			description "role_AB_B desc";
+			type instance-identifier;
+		}
+	}
+
+	or-teiv-ext:biDirectionalTopologyRelationship rel-2 {
+
+		leaf role_BC_B {
+			or-teiv-ext:aSide this:MocB;
+			type instance-identifier;
+			mandatory true;
+		}
+		leaf-list role_BC_C {
+			or-teiv-ext:bSide MocC;
+			type instance-identifier;
+			min-elements 2;
+			max-elements 10;
+		}
+	}
+
+	or-teiv-ext:biDirectionalTopologyRelationship rel-3 {
+
+		leaf role_CD_C {
+			or-teiv-ext:aSide this:MocC;
+			type instance-identifier;
+			mandatory false;
+		}
+		leaf-list role_CD_D {
+			or-teiv-ext:bSide MocD;
+			type instance-identifier;
+			min-elements 0;
+			max-elements unbounded;
+		}
+	}
+
+	or-teiv-ext:biDirectionalTopologyRelationship rel-4 {
+
+		key id;
+		leaf id { type string; }
+
+		container attributes {
+			leaf attr02 { type int32; }
+			leaf attr03 { type boolean; }
+		}
+
+		leaf-list role_AC_A {
+			or-teiv-ext:aSide MocA;
+			type instance-identifier;
+		}
+		leaf-list role_AC_C {
+			or-teiv-ext:bSide MocC;
+			type instance-identifier;
+		}
+
+		leaf should-be-ignored { type string; }
+	}
+
+	// - - - - - - Will not be generated due to modeling issues - - - - - - - - -
+
+	or-teiv-ext:biDirectionalTopologyRelationship rel-X1 {
+		leaf role_1 {
+			type instance-identifier;
+		}
+		leaf role_2 {
+			or-teiv-ext:bSide MocC;
+			type instance-identifier;
+		}
+	}
+
+	or-teiv-ext:biDirectionalTopologyRelationship rel-X2 {
+		leaf role_1 {
+			or-teiv-ext:aSide MocA;
+			type instance-identifier;
+		}
+		leaf role_2 {
+			type instance-identifier;
+		}
+	}
+
+	or-teiv-ext:biDirectionalTopologyRelationship rel-X3 {
+		leaf role_1 {
+			type instance-identifier;
+		}
+		leaf role_2 {
+			type instance-identifier;
+		}
+	}
+
+	or-teiv-ext:biDirectionalTopologyRelationship rel-X4 {
+		leaf-list role_1 {
+			or-teiv-ext:aSide this:UnknownMoc;
+			type instance-identifier;
+		}
+		leaf role_2 {
+			or-teiv-ext:bSide MocB;
+			type instance-identifier;
+		}
+	}
+
+	or-teiv-ext:biDirectionalTopologyRelationship rel-X5 {
+		leaf-list role_1 {
+			or-teiv-ext:aSide this:MocA;
+			type instance-identifier;
+		}
+		leaf role_2 {
+			or-teiv-ext:bSide UnknownMoc;
+			type instance-identifier;
+		}
+	}
+
+	or-teiv-ext:biDirectionalTopologyRelationship rel-X6 {
+		leaf-list role_1 {
+			or-teiv-ext:aSide UnknownMoc;
+			type instance-identifier;
+		}
+		leaf role_2 {
+			or-teiv-ext:bSide UnknownMoc;
+			type instance-identifier;
+		}
+	}
+}

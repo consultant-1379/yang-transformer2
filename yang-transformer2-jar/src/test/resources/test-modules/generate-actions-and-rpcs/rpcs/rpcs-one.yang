@@ -1,0 +1,29 @@
+module rpcs-one {
+
+    namespace "urn=test=rpcs-one";
+    prefix this;
+
+    revision "2021-11-04";
+
+	rpc rpc1;
+	
+	rpc rpc2 {
+		input {
+			leaf leaf21 {
+				type string;
+			}
+		}
+	}
+
+	rpc rpc3 {
+		output {				// both leafs should be generated into a CDT
+			leaf leaf31 {
+				type string;
+			}
+			leaf leaf32 {
+				type int32;
+			}
+		}
+	}
+	
+}

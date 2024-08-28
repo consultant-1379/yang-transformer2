@@ -1,0 +1,115 @@
+module module-a {
+
+    namespace "urn:test:module-a";
+    prefix this;
+
+	include submodule-b;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	import ericsson-notifications {
+		prefix notife;
+	}
+	
+    revision "2021-12-02";
+
+	identity id-11;
+	identity id-12;
+
+	identity id-13 {
+		base id-11;
+		base id-12;
+	}
+
+	rpc rpc11 {
+		input {
+			leaf leaf11 {
+				type identityref {
+					base id-11;
+					base id-12;
+				}
+			}
+			container cont12 {
+				leaf leaf12 {
+					type empty;
+				}
+			}		
+		}
+		output {
+		
+			leaf leaf15 {
+				type uint32 {
+					range 12..5684;
+				}
+				mandatory true;
+			}
+			leaf-list leaflist16 {
+				type string;
+				max-elements 20;
+			}		
+		}
+	}
+
+	container cont1 {
+		presence "";
+		yexte:is-system-created;
+
+		leaf leaf11 {
+			type string {
+				length 10..20;
+			}
+		}
+		
+		leaf leaf12 {
+			type boolean;
+		}
+
+		typedef typedef1 {
+			type uint64;
+		}
+
+		choice choice14 {
+			case case15 {
+				leaf-list leaflist15 {
+					type typedef1;
+					ordered-by user;
+				}
+			}
+			case case16 {
+				list list16 {
+					key leaf17;
+					min-elements 20;
+				
+					leaf leaf17 {
+						type int8;
+					}
+					leaf-list list18 {
+						type int32 {
+							range "0..10 | 20..30";
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	container cont2 {
+		
+		leaf leaf21 {
+			type string;
+			yexte:side-effects "some side-effects";
+			mandatory true;
+		}
+		
+		leaf leaf22 {
+			type leafref {
+				path "../leaf21";
+			}
+			yexte:disturbances "some disturbances";
+		}
+		
+		action action23;
+	}
+
+}

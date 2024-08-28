@@ -1,0 +1,68 @@
+module ericsson-mirror-policy-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-mirror-policy-dev-router6000";
+
+  prefix "mirrorpolicyr6000";
+
+  import ericsson-mirror-policy-router6000 {
+    prefix "mirrorpolrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+  
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-mirror-policy-router6000
+     Copyright (c) 2015-2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-07-10" {
+    description
+      "deviation for ericsson-mirror-policy-router6000.yang file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/ctxsr6k:contexts/mirrorpolrouter6000:mirror-policy/mirrorpolrouter6000:rate" {
+    deviate not-supported;
+  }
+
+  deviation "/ctxsr6k:contexts/mirrorpolrouter6000:mirror-policy/mirrorpolrouter6000:maximum-length" {
+    deviate not-supported;
+  }
+  
+  deviation "/ctxsr6k:contexts/mirrorpolrouter6000:mirror-policy/mirrorpolrouter6000:ip-access-group" {
+    deviate not-supported;
+  }
+  
+  deviation "/ctxsr6k:contexts/mirrorpolrouter6000:mirror-policy/mirrorpolrouter6000:ipv6-access-group" {
+    deviate not-supported;
+  }
+
+}

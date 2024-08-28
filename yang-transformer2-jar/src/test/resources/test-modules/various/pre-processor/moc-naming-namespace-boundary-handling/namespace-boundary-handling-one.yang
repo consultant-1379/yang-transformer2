@@ -1,0 +1,28 @@
+module namespace-boundary-handling-one {
+
+    namespace "urn.test.namespace-boundary-handling-one";
+    prefix this;
+
+    revision "2021-03-07";
+
+	container cont1 {
+		leaf leafXX { type string; }
+	}
+
+	container cont2 {
+		leaf leafXX { type string; }
+	}
+
+	container cont3 {
+		leaf leafXX { type string; }
+	}
+	
+	container cont4 {
+		leaf leafXX { type string; }
+		
+		container cont3 {
+			leaf leafXX { type string; }
+		}
+	}
+	
+}

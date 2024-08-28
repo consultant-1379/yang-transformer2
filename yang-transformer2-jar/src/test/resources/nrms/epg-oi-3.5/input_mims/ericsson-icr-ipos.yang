@@ -1,0 +1,969 @@
+module ericsson-icr-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-icr-ipos";
+
+  prefix "icripos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-icr-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-07-13" {
+    description
+      "YANG model description correction";
+    reference
+      "RFC6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-07-04" {
+    description
+      "Add manual switch interval range";
+    reference
+      "RFC6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-05-14" {
+    description
+      "Change interval range";
+    reference
+      "RFC6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-03-02" {
+    description
+      "Key-word 'action','reevaluate-icr-state','log' added
+       string '";
+    reference
+      "RFC6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-12-06" {
+    description
+      "Add track command for icr bgp-based";
+    reference
+      "IPOS ICR exec_cli command line";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-02-24" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping icr-grp {
+    description
+      "General configuration mode";
+    /*
+    interface (name-val) [ <context (context-name)> ] <port
+     (port-number)>
+    */
+    container interface {
+      presence "";
+      description
+        "Configure ICR interface";
+      leaf name-val {
+        type string {
+          length "1..127";
+        }
+        mandatory true;
+        description
+          "Interface name";
+      }
+      leaf context {
+        type string {
+          length "1..127";
+        }
+        description
+          "Configure context name";
+      }
+      leaf port {
+        type uint16 {
+          range "61001..65535";
+        }
+        mandatory true;
+        description
+          "Configure port number";
+      }
+    }
+    /*
+    peer <ipaddr { (remote-ipv6) | (remote-ipv4) }> <port (port-
+     number)>
+    */
+    container peer {
+      presence "";
+      description
+        "Configure peer remote address";
+      leaf ipaddr {
+        type inet:ip-address;
+        mandatory true;
+        description
+          "Specify IPv4(A.B.C.D) or IPv6(X:X:X:X::X) address";
+      }
+      leaf port {
+        type uint16 {
+          range "61001..65535";
+        }
+        mandatory true;
+        description
+          "Configure peer port number";
+      }
+    }
+    /*
+    keepalive [ interval (interval-val) ] <holdtime (holdtime-
+     val)>
+    */
+    container keepalive {
+      presence "";
+      description
+        "Configure keepalive";
+      leaf interval {
+        type uint16 {
+          range "1..21845";
+        }
+        default "1";
+        description
+          "Configure keepalive interval in secs(in seconds)";
+      }
+      leaf holdtime {
+        type uint16 {
+          range "5..65535";
+        }
+        must "not (../interval) or number(.) >= (number(../"
+        + "interval) * 3)" {
+          error-message "Holdtime should be at least 3 times the "
+          + "interval";
+          description
+            "";
+        }
+        mandatory true;
+        description
+          "Configure keepalive holdtime in secs.";
+      }
+    }
+  }
+
+  grouping general-active-standby-grp {
+    description
+      "General active-standby configuration mode";
+    /*
+    interface (name-val) [ <context (context-name)> ] <port
+     (port-number)>
+    */
+    container interface {
+      presence "";
+      description
+        "Configure ICR interface";
+      leaf name-val {
+        type string {
+          length "1..127";
+        }
+        mandatory true;
+        description
+          "Interface name";
+      }
+      leaf context {
+        type string {
+          length "1..127";
+        }
+        description
+          "Configure context name";
+      }
+      leaf port {
+        type uint16 {
+          range "61001..65535";
+        }
+        mandatory true;
+        description
+          "Configure port number";
+      }
+    }
+    /*
+    peer <ipaddr { (remote-ipv6) | (remote-ipv4) }> <port (port-
+     number)>
+    */
+    container peer {
+      presence "";
+      description
+        "Configure peer remote address";
+      leaf ipaddr {
+        type inet:ip-address;
+        mandatory true;
+        description
+          "Specify IPv4(A.B.C.D) or IPv6(X:X:X:X::X) address";
+      }
+      leaf port {
+        type uint16 {
+          range "61001..65535";
+        }
+        mandatory true;
+        description
+          "Configure peer port number";
+      }
+    }
+    /*
+    keepalive [ interval (interval-val) ] <holdtime (holdtime-
+     val)>
+    */
+    container keepalive {
+      presence "";
+      description
+        "Configure keepalive";
+      leaf interval {
+        type uint16 {
+          range "1..21845";
+        }
+        default "1";
+        description
+          "Configure keepalive interval in secs(in seconds)";
+      }
+      leaf holdtime {
+        type uint16 {
+          range "5..65535";
+        }
+        must "not (../interval) or number(.) >= (number(../"
+        + "interval) * 3)" {
+          error-message "Holdtime should be at least 3 times the "
+          + "interval";
+          description
+            "";
+        }
+        mandatory true;
+        description
+          "Configure keepalive holdtime in secs.";
+      }
+    }
+    /*
+    priority { high | low }
+    */
+    container priority {
+      description
+        "Configure priority (high or low). Dynamic update is not
+         allowed";
+      choice priority {
+        description
+          "";
+        case high {
+          leaf high {
+            type empty;
+            description
+              "Configure priority high";
+          }
+        }
+        case low {
+          leaf low {
+            type empty;
+            description
+              "Configure priority low";
+          }
+        }
+      }
+    }
+    /*
+    track (obj-name) action <link-option { trunk-link | icr-link
+     } [ log ] [ trap ]>
+    */
+    list track {
+      key "obj-name";
+      description
+        "Configure track object";
+      leaf obj-name {
+        type string {
+          length "1..129";
+        }
+        description
+          "Object name";
+      }
+      leaf action {
+        type empty;
+        mandatory true;
+        description
+          "Configure action";
+      }
+      container link-option {
+        description
+          "Configure general link option object";
+        choice link-option-choice {
+          mandatory true;
+          description
+            "";
+          case trunk-link {
+            leaf trunk-link {
+              type empty;
+              mandatory true;
+              description
+                "Monitor trunk link";
+            }
+          }
+          case icr-link {
+            leaf icr-link {
+              type empty;
+              mandatory true;
+              description
+                "Monitor ICR link";
+            }
+          }
+        }
+        leaf log {
+          type empty;
+          description
+            "Log the event";
+        }
+        leaf trap {
+          type empty;
+          description
+            "Generate SNMP trap";
+        }
+      }
+    }
+  }
+
+  grouping bgp-based-grp {
+    description
+      "BGP based configuration mode";
+    /*
+    interface (name-val) [ <context (context-name)> ] <port
+     (port-number)>
+    */
+    container interface {
+      presence "";
+      description
+        "Configure ICR interface";
+      leaf name-val {
+        type string {
+          length "1..127";
+        }
+        mandatory true;
+        description
+          "Interface name";
+      }
+      leaf context {
+        type string {
+          length "1..127";
+        }
+        description
+          "Configure context name";
+      }
+      leaf port {
+        type uint16 {
+          range "61001..65535";
+        }
+        mandatory true;
+        description
+          "Configure port number";
+      }
+    }
+    /*
+    peer <ipaddr { (remote-ipv6) | (remote-ipv4) }> <port (port-
+     number)>
+    */
+    container peer {
+      presence "";
+      description
+        "Configure peer remote address";
+      leaf ipaddr {
+        type inet:ip-address;
+        mandatory true;
+        description
+          "Specify IPv4(A.B.C.D) or IPv6(X:X:X:X::X) address";
+      }
+      leaf port {
+        type uint16 {
+          range "61001..65535";
+        }
+        mandatory true;
+        description
+          "Configure peer port number";
+      }
+    }
+    /*
+    keepalive [ interval (interval-val) ] <holdtime (holdtime-
+     val)>
+    */
+    container keepalive {
+      presence "";
+      description
+        "Configure keepalive";
+      leaf interval {
+        type uint16 {
+          range "1..21845";
+        }
+        default "1";
+        description
+          "Configure keepalive interval in secs(in seconds)";
+      }
+      leaf holdtime {
+        type uint16 {
+          range "5..65535";
+        }
+        must "not (../interval) or number(.) >= (number(../"
+        + "interval) * 3)" {
+          error-message "Holdtime should be at least 3 times the "
+          + "interval";
+          description
+            "";
+        }
+        mandatory true;
+        description
+          "Configure keepalive holdtime in secs.";
+      }
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Configure shutdown";
+    }
+    /*
+    peer-detection (detection-val)
+    */
+    leaf peer-detection {
+      type uint16 {
+        range "10..300";
+      }
+      description
+        "Configure peer detection time";
+    }
+    /*
+    preempt
+    */
+    leaf preempt {
+      type empty;
+      description
+        "Configure preempt switchover to ACTIVE";
+    }
+    /*
+    prefix modification <route_map (map-name)> <context
+     (context-name)> <low (low-val)> <high (high-val)> <active
+     (active-val)> <standby (standby-val)>
+    */
+    list prefix-modification {
+      key "route_map";
+      description
+        "Configure prefix modification";
+      leaf route_map {
+        type string {
+          length "1..127";
+        }
+        description
+          "Configure route map name";
+      }
+      leaf context {
+        type string {
+          length "1..127";
+        }
+        mandatory true;
+        description
+          "Configure context name";
+      }
+      leaf low {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure low tag value";
+      }
+      leaf high {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure high tag value";
+      }
+      leaf active {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure active tag value";
+      }
+      leaf standby {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure standby tag value";
+      }
+    }
+    /*
+    priority { high | low }
+    */
+    container priority {
+      description
+        "Configure priority (high or low)";
+      choice priority {
+        description
+          "";
+        case high {
+          leaf high {
+            type empty;
+            description
+              "Configure priority high";
+          }
+        }
+        case low {
+          leaf low {
+            type empty;
+            description
+              "Configure priority low";
+          }
+        }
+      }
+    }
+    /*
+    track (obj-name) action < reevaluate-icr-state  [log] >
+    */
+    list track {
+      key "obj-name";
+      description
+        "Configure track object";
+      leaf obj-name {
+        type string {
+          length "1..129";
+        }
+        description
+          "Object name";
+      }
+      leaf action {
+        type empty;
+        mandatory true;
+        description
+          "Configure action";
+      }
+      container reevaluate-icr-state {
+        presence "";
+        description
+          "Reevaluate ICR state due to interface change";
+        leaf log {
+          type empty;
+          description
+            "Log the event";
+        }
+      }
+    }
+    /*
+    manual-switch-interval (interval)
+    */
+    leaf manual-switch-interval {
+      type uint8 {
+        range "10..45";
+      }
+      description
+        "Set switchover icr interval time";
+    }
+  }
+
+  grouping bgp-based-multi-protocol-grp {
+    description
+      "BGP based multi-protocol configuration mode";
+    /*
+    interface (name-val) [ <context (context-name)> ] <port
+     (port-number)>
+    */
+    container interface {
+      presence "";
+      description
+        "Configure ICR interface";
+      leaf name-val {
+        type string {
+          length "1..127";
+        }
+        mandatory true;
+        description
+          "Interface name";
+      }
+      leaf context {
+        type string {
+          length "1..127";
+        }
+        description
+          "Configure context name";
+      }
+      leaf port {
+        type uint16 {
+          range "61001..65535";
+        }
+        mandatory true;
+        description
+          "Configure port number";
+      }
+    }
+    /*
+    peer <ipaddr { (remote-ipv6) | (remote-ipv4) }> <port (port-
+     number)>
+    */
+    container peer {
+      presence "";
+      description
+        "Configure peer remote address";
+      leaf ipaddr {
+        type inet:ip-address;
+        mandatory true;
+        description
+          "Specify IPv4(A.B.C.D) or IPv6(X:X:X:X::X) address";
+      }
+      leaf port {
+        type uint16 {
+          range "61001..65535";
+        }
+        mandatory true;
+        description
+          "Configure peer port number";
+      }
+    }
+    /*
+    keepalive [ interval (interval-val) ] <holdtime (holdtime-
+     val)>
+    */
+    container keepalive {
+      presence "";
+      description
+        "Configure keepalive";
+      leaf interval {
+        type uint16 {
+          range "1..21845";
+        }
+        default "1";
+        description
+          "Configure keepalive interval in secs(in seconds)";
+      }
+      leaf holdtime {
+        type uint16 {
+          range "5..65535";
+        }
+        must "not (../interval) or number(.) >= (number(../"
+        + "interval) * 3)" {
+          error-message "Holdtime should be at least 3 times the "
+          + "interval";
+          description
+            "";
+        }
+        mandatory true;
+        description
+          "Configure keepalive holdtime in secs.";
+      }
+    }
+    /*
+    track (obj-name) action <state-option { reevaluate-icr-state
+     [traffic-reroute] [log] | traffic-reroute [ log ] }>
+    */
+    list track {
+      key "obj-name";
+      description
+        "Configure track object";
+      leaf obj-name {
+        type string {
+          length "1..129";
+        }
+        description
+          "Object name";
+      }
+      leaf action {
+        type empty;
+        mandatory true;
+        description
+          "Configure action";
+      }
+      container state-option {
+        description
+          "Configure BGP based state option object";
+        choice state-option {
+          mandatory true;
+          description
+            "";
+          case reevaluate-icr-state {
+            container reevaluate-icr-state {
+              presence "";
+              description
+                "Reevaluate ICR state due to interface change";
+              leaf traffic-reroute {
+                type empty;
+                description
+                  "Traffic reroute";
+              }
+              leaf log {
+                type empty;
+                description
+                  "Log the event";
+              }
+            }
+          }
+          case traffic-reroute {
+            container traffic-reroute {
+              presence "";
+              description
+                "Traffic reroute";
+              leaf log {
+                type empty;
+                description
+                  "Log the event";
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    enable vrrp
+    */
+    leaf enable-vrrp {
+      type empty;
+      description
+        "VRRP";
+    }
+    /*
+    priority { high | low }
+    */
+    container priority {
+      description
+        "Configure priority (high or low). Dynamic update is not
+         allowed";
+      choice priority {
+        description
+          "";
+        case high {
+          leaf high {
+            type empty;
+            description
+              "Configure priority high";
+          }
+        }
+        case low {
+          leaf low {
+            type empty;
+            description
+              "Configure priority low";
+          }
+        }
+      }
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Configure shutdown";
+    }
+    /*
+    peer-detection (detection-val)
+    */
+    leaf peer-detection {
+      type uint16 {
+        range "10..300";
+      }
+      description
+        "Configure peer detection time";
+    }
+    /*
+    preempt
+    */
+    leaf preempt {
+      type empty;
+      description
+        "Configure preempt switchover to ACTIVE";
+    }
+    /*
+    prefix modification <route_map (map-name)> <context
+     (context-name)> <low (low-val)> <high (high-val)> <active
+     (active-val)> <standby (standby-val)>
+    */
+    list prefix-modification {
+      key "route_map";
+      description
+        "Configure prefix modification";
+      leaf route_map {
+        type string {
+          length "1..127";
+        }
+        description
+          "Configure route map name";
+      }
+      leaf context {
+        type string {
+          length "1..127";
+        }
+        mandatory true;
+        description
+          "Configure context name";
+      }
+      leaf low {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure low tag value";
+      }
+      leaf high {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure high tag value";
+      }
+      leaf active {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure active tag value";
+      }
+      leaf standby {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure standby tag value";
+      }
+    }
+    /*
+    manual-switch-interval (interval)
+    */
+    leaf manual-switch-interval {
+      type uint8 {
+        range "10..45";
+      }
+      description
+        "Set switchover icr interval time";
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-icr";
+    /*
+    icr { general {active-standby | non-active-standby} | bgp-
+     based {multi-protocol | non-multi-protocol} }
+    */
+    container icr {
+      description
+        "Configure ICR,Default is BGP based ICR";
+      choice icr {
+        description
+          "";
+        case general {
+          container general {
+            description
+              "Configure general active / active ICR";
+            choice general {
+              description
+                "";
+              case active-standby {
+                container active-standby {
+                  presence "";
+                  description
+                    "Configure general active / standby ICR";
+                  uses general-active-standby-grp;
+                }
+              }
+              case non-active-standby {
+                container non-active-standby {
+                  presence "";
+                  description
+                    "Configure general non active / standby ICR";
+                  uses icr-grp;
+                }
+              }
+            }
+          }
+        }
+        case bgp-based {
+          container bgp-based {
+            description
+              "Configure BGP based ICR";
+            choice bgp-based {
+              description
+                "";
+              case multi-protocol {
+                container multi-protocol {
+                  presence "";
+                  description
+                    "Configure multiple protocol ICR";
+                  uses bgp-based-multi-protocol-grp;
+                }
+              }
+              case non-multi-protocol {
+                container non-multi-protocol {
+                  presence "";
+                  description
+                    "Configure non multiple protocol ICR";
+                  uses bgp-based-grp;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

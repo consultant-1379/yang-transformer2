@@ -1,0 +1,137 @@
+module ericsson-arp-qos-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-arp-qos-ipos";
+
+  prefix "arpqosipos";
+
+  import ericsson-qos-ipos {
+    prefix "qosipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-arp-qos-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-14" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2016-07-08" {
+    description
+      "Add a feature name for arp rate";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature arp {
+    description
+      "This feature indicates that the device supports protocol
+       rate limit.";
+  }
+
+  feature qos-protocol-rate-limit {
+    description
+      "This feature indicates that the device supports
+       protocol-rate-limit in QoS.";
+  }
+
+  augment "/qosipos:qos/qosipos:policy/qosipos:policy-choice/"
+  + "qosipos:protocol-rate-limit/qosipos:protocol-rate-limit" {
+    if-feature qos-protocol-rate-limit;
+    description
+      "ericsson-arp-qos";
+    /*
+    arp rate [ (rate-num) burst (burst-num) ]
+    */
+    container arp-rate {
+      if-feature arp;
+      presence "";
+      description
+        "Maximum rate of protocol rate-limit";
+      container arp-rate {
+        description
+          "Rate limit and burst threshold for incoming ARP
+           packets.";
+        leaf rate-num {
+          type uint32 {
+            range "1..2500000";
+          }
+          mandatory true;
+          description
+            "Rate in packets per second";
+        }
+        leaf burst {
+          type empty;
+          mandatory true;
+          description
+            "Burst size in packets";
+        }
+        leaf burst-num {
+          type uint32 {
+            range "1..25000000";
+          }
+          mandatory true;
+          description
+            "Burst size in packets";
+        }
+      }
+    }
+  }
+
+}

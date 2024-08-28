@@ -1,0 +1,204 @@
+module ericsson-statsd-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-statsd-ipos";
+
+  prefix "statsdipos";
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-statsd-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-20" {
+    description
+      "YANG model description correction.";
+    reference
+      "RFC 6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-10-27" {
+    description
+      "Delete malicious-traffic node and logging node.";
+    reference
+      "RFC 6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-09" {
+    description
+      "initial revision";
+    reference
+      "RFC 6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping stats-collection-grp {
+    description
+      "Statistics collection configuration mode";
+    /*
+    pseudowire threshold drop { out-of-sequence (seq-value) |
+     cell-concatenation (concat-value) }
+    */
+    container pseudowire-threshold-drop {
+      description
+        "Configure pseudowire threshold";
+      leaf out-of-sequence {
+        type uint16 {
+          range "1..1000";
+        }
+        description
+          "Pseudowire threshold of out of sequence drops";
+      }
+      leaf cell-concatenation {
+        type uint16 {
+          range "1..1000";
+        }
+        description
+          "Pseudowire threshold of cell-concatenation";
+      }
+    }
+    /*
+    counters dual-stack
+    */
+    leaf counters-dual-stack {
+      type empty;
+      description
+        "Enable dual stack counters";
+    }
+    /*
+    icr sync-interval (interval-value)
+    */
+    container icr {
+      description
+        "Configure statistics ICR";
+      leaf sync-interval {
+        type uint16 {
+          range "300..1800";
+        }
+        default "300";
+        description
+          "Configure ICR sync interval";
+      }
+    }
+    /*
+    poll { ppa-circuit-counters | ppa-pseudo-circuit-counters |
+     ppa-adjacency-counters | additional-counters { qos-drops |
+     ingress-drops | adj-drops } }
+    */
+    container poll {
+      description
+        "Configure what is polled";
+      leaf ppa-circuit-counters {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable ppa-circuit-counters";
+      }
+      leaf ppa-pseudo-circuit-counters {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable ppa-pseudo-circuit-counters";
+      }
+      leaf ppa-adjacency-counters {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable ppa-adjacency-counters";
+      }
+      container additional-counters {
+        description
+          "Configure additional counters for sample push";
+        leaf qos-drops {
+          type empty;
+          description
+            "Poll QoS drops";
+        }
+        leaf ingress-drops {
+          type empty;
+          description
+            "Poll ingress drops counters (exclusion counters)";
+        }
+        leaf adj-drops {
+          type empty;
+          description
+            "Poll adj_drops counters";
+        }
+      }
+    }
+    /*
+    poll-interval (interval-value)
+    */
+    leaf poll-interval {
+      type uint16 {
+        range "5..300";
+      }
+      description
+        "Configure polling interval";
+    }
+    /*
+    counter-offset (offset-value)
+    */
+    leaf counter-offset {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Configure byte counter offset";
+    }
+    /*
+    preserve card counters
+    */
+    leaf preserve-card-counters {
+      type empty;
+      description
+        "Preserve card counters across reloads";
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-statsd";
+    /*
+    stats-collection
+    */
+    container stats-collection {
+      description
+        "Configure statistics collection";
+      uses stats-collection-grp;
+    }
+  }
+
+}

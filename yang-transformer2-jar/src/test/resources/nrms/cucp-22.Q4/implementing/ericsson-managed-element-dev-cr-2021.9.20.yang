@@ -1,0 +1,118 @@
+module ericsson-managed-element-dev-cr {
+  yang-version 1.1;
+  namespace urn:rdns:com:ericsson:oammodel:ericsson-managed-element-dev-cr;
+  prefix me3gppdevcrcucp;
+
+  import _3gpp-common-managed-element { prefix me3gpp; }
+  import ericsson-yang-extensions { prefix yexte; }
+  import ericsson-notifications { prefix notife; }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "The module defines the ManagedElement data model deviations for the Ericsson Cloud RAN.
+
+    Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+  revision 2021-09-20 {
+    description
+      "Bug Fix, new revision needed for registration";
+    yexte:version 2;
+    yexte:release 2;
+    yexte:correction 1;
+    reference
+      "New revision needed for registration.";
+  }
+
+  revision 2021-09-06 {
+    description
+      "Bug Fix, solves prefix name being reused";
+    yexte:version 2;
+    yexte:release 2;
+    yexte:correction 0;
+    reference
+      "Reused prefix name me3gppdev in ericsson-managed-element-dev-cr.yang";
+  }
+
+  revision 2021-07-27 {
+    description
+      "Bug Fix, leaf-list state notifiable compatibility issue. Adds extension notife:notifiable-state-data false to managedElementTypeList.";
+    yexte:version 2;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+  
+  revision 2021-06-03 {
+    description
+      "Set notifiable-state-data true on ManagedElement.";
+    yexte:version 1;
+    yexte:release 0;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+
+  revision 2021-03-25 {
+    description
+      "Deviations on _3gpp-common-managed-element.";
+    yexte:version 0;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+
+  yexte:module-status preliminary;
+
+  deviation /me3gpp:ManagedElement/me3gpp:attributes/me3gpp:SupportedPerfMetricGroup {
+    description
+      "Supported Performance Metrics is not supported for ManagedElement.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/me3gpp:AlarmList {
+    description
+      "Alarm List is not supported for ManagedElement.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/me3gpp:PerfMetricJob {
+    description
+      "Performance Metric Job is not supported for ManagedElement.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/me3gpp:ThresholdMonitor {
+    description
+      "Threshold Monitor is not supported for ManagedElement.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/me3gpp:TraceJob {
+    description
+      "Trace Job is not supported for ManagedElement.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/me3gpp:attributes/me3gpp:managedBy {
+    description
+      "ManagedElement::managedBy is not supported.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/me3gpp:attributes/me3gpp:managedElementTypeList {
+    deviate add {
+      notife:notifiable-state-data false;
+    }
+  }
+  
+  deviation /me3gpp:ManagedElement {
+    deviate add {
+      notife:notifiable-state-data true;
+    }
+  }
+}

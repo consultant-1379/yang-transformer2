@@ -1,0 +1,707 @@
+module ericsson-qos-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-qos-dev-ssr";
+
+  prefix "qosdevssr";
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-qos-ipos {
+    prefix "qosipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-qos-dev-ipos
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-24" {
+    description
+      "Delete the excess-burst and weight type and range change.";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-09-26" {
+    description
+      "Delete the burst-size range change.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-05-24" {
+    description
+      "move must condition of queue-num into PD deviation.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-05-11" {
+    description
+      "fix IPOS-21361 Data type should not be deviated.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-04-16" {
+    description
+      "add must condition of num-no under congestion-avoidance-map.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-01-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+  deviation "/qosipos:qos/qosipos:class-definition/qosipos:qos/qosipos:internal-qos-value" {
+    deviate replace {
+      type uint8 {
+        range "0..63";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:congestion-avoidance-map/qosipos:queue/qosipos:queue-choice/qosipos:guaranteed" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:congestion-avoidance-map/qosipos:queue/qosipos:queue-choice/qosipos:red/qosipos:dp" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:congestion-avoidance-map/qosipos:queue/qosipos:queue-choice/qosipos:red/"
+  + "qosipos:min-threshold" {
+    deviate replace {
+      type uint16 {
+        range "1..10240";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:congestion-avoidance-map/qosipos:queue/qosipos:queue-choice/qosipos:red/"
+  + "qosipos:max-threshold" {
+    deviate replace {
+      type uint16 {
+        range "2..10240";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:congestion-avoidance-map/qosipos:queue/qosipos:queue-choice/qosipos:exponential-weight" {
+    deviate replace {
+      type uint8 {
+        range "1..15";
+      }
+    }
+  }
+  deviation "/qosipos:qos/qosipos:congestion-avoidance-map/qosipos:queue/qosipos:num-no" {
+    deviate add {
+      must "(../queue-choice/average-packet-size) or (../queue-choice/exponential-weight) or (../queue-choice/depth) or (../queue-choice/red)" {
+            error-message "must configure one of the queue-choice";
+            description  "must configure one of the queue-choice";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:rate/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:rate/qosipos:exceed/qosipos:exceed/qosipos:red" {
+    deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:rate/qosipos:mef" {
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:burst" {
+    deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:burst" {
+    deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-rate" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:exceed/qosipos:exceed/qosipos:red" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:mef" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-rate" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-burst" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-burst" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:mef"{
+    deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:exceed/qosipos:exceed/qosipos:red"{
+    deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:mef"{
+    deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:exceed/qosipos:exceed/qosipos:red"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:exceed/qosipos:exceed/qosipos:red"{
+    deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:class-group/qosipos:class/qosipos:parent-class"{
+    deviate replace {
+      type string {
+        length "1..39";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:mef"{
+    deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:burst" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:burst" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-burst" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-burst" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-rate" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-rate" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:rate/qosipos:conform/qosipos:conform/qosipos:drop"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:rate/qosipos:rate-num"{
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:rate/qosipos:rate-choice/qosipos:burst/qosipos:burst" {
+    deviate replace {
+      type uint32 {
+        range "1..4250000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:rate/qosipos:rate-choice/qosipos:time-burst/qosipos:time-burst" {
+    deviate replace {
+      type uint16 {
+        range "1..10000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:rate/qosipos:rate-opt1/qosipos:time-excess-burst/qosipos:time-excess-burst" {
+    deviate replace {
+      type uint16 {
+        range "1..10000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-burst" {
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:rate/qosipos:mef"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:mef"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:exceed/qosipos:exceed/qosipos:red"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:mef"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:exceed/qosipos:exceed/qosipos:red"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:mef"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:exceed/qosipos:exceed/qosipos:red"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:exceed/qosipos:exceed/qosipos:red"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:class-group/qosipos:class/qosipos:parent-class"{
+    deviate replace {
+      type string {
+        length "1..39";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:mef"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:rate/qosipos:excess-rate"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/qosipos:l2-access-group/"
+  + "qosipos:l2-access-group-opt"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/qosipos:l2-access-group/"
+  + "qosipos:l2-access-group-opt"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/qosipos:rate/"
+  + "qosipos:exceed/qosipos:exceed/qosipos:red"{
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:burst" {
+    deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:burst" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-burst" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-burst" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-burst" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:burst" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:burst" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-rate" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-rate" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-rate" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/"
+  + "qosipos:class-group/qosipos:class/qosipos:rate/qosipos:rate-choice/qosipos:rate-num/qosipos:rate-num/qosipos:excess-rate" {
+     deviate not-supported;
+  }
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:rate/qosipos:rate-choice/qosipos:burst/qosipos:burst" {
+    deviate replace {
+      type uint32 {
+        range "1..4250000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:rate/qosipos:rate-choice/qosipos:time-burst/qosipos:time-burst" {
+    deviate replace {
+      type uint16 {
+        range "1..10000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:rate/qosipos:excess-rate" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:rate/qosipos:rate-opt1/qosipos:time-excess-burst/qosipos:time-excess-burst" {
+    deviate replace {
+      type uint16 {
+        range "1..10000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/"
+  + "qosipos:rate/qosipos:conform/qosipos:conform/qosipos:drop/qosipos:drop" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/"
+  + "qosipos:queue/qosipos:queue-choice/qosipos:priority/qosipos:priority-choice/qosipos:weight/qosipos:weight" {
+    deviate replace {
+      type uint16 {
+        range "1..1023";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/qosipos:queue/"
+  + "qosipos:queue-choice/qosipos:priority/qosipos:priority-choice/qosipos:strict-priority/qosipos:strict-priority" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/qosipos:queue/"
+  + "qosipos:queue-choice/qosipos:rate-maximum/qosipos:rate-maximum/qosipos:max-num/qosipos:max-num/qosipos:max-num" {
+    deviate replace {
+      type uint32 {
+        range "4..10000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/qosipos:queue/"
+  + "qosipos:queue-choice/qosipos:rate-maximum/qosipos:rate-maximum/qosipos:max-num/qosipos:max-num/qosipos:burst" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/qosipos:rate/qosipos:pir" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/qosipos:rate/qosipos:cir" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/qosipos:rate/"
+  + "qosipos:maximum/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..100000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/qosipos:rate/"
+  + "qosipos:maximum/qosipos:burst" {
+    deviate replace {
+      type uint32 {
+        range "64..1875000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/qosipos:rate/"
+  + "qosipos:minimum/qosipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "5..40000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/qosipos:rate/"
+  + "qosipos:minimum/qosipos:burst" {
+    deviate replace {
+      type uint32 {
+        range "64..1875000000";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:profile/qosipos:profile-choice/qosipos:overhead/qosipos:overhead/"
+  + "qosipos:encaps-access-line/qosipos:encaps-access-line/qosipos:value/qosipos:value/qosipos:default-val" {
+    deviate replace {
+      type uint8 {
+        range "0..255";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:profile/qosipos:profile-choice/qosipos:overhead/qosipos:overhead/qosipos:reserved" {
+    deviate replace {
+      type uint8 {
+        range "1..255";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:congestion-avoidance-map/qosipos:queue/qosipos:queue-choice/qosipos:exponential-weight" {
+    deviate add {
+      must "(../../../mdrr) or ((../../../pwfq) and ((../../../card-family=2) or ((../../../card-family=3) and (number(.) <= 13)))) " {
+            error-message "only for use with mdrr policies or pwfq policies with card-family 2 or card-family 3 (range 1-13)";
+            description  "only for use with mdrr policies or pwfq policies with card-family 2 or card-family 3 (range 1-13)";
+      }
+    }
+  }
+
+  deviation "/qosipos:qos/qosipos:class-map/qosipos:class-map-choice/qosipos:ethernet-dei" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:class-map/qosipos:class-map-choice/qosipos:ethernet/qosipos:ethernet/qosipos:use-ip" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/qosipos:rate/qosipos:violate/qosipos:violate/qosipos:red" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/qosipos:class-group/qosipos:class/qosipos:rate/qosipos:violate/qosipos:violate/qosipos:red" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:violate/qosipos:violate/qosipos:red" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:violate/qosipos:violate/qosipos:red" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:metering/qosipos:metering/qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:violate/qosipos:violate/qosipos:red" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/qosipos:rate/qosipos:violate/qosipos:violate/qosipos:red" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/qosipos:class-group/qosipos:class/qosipos:rate/qosipos:violate/qosipos:violate/qosipos:red" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/qosipos:ip-access-group/qosipos:acl-class/qosipos:rate/qosipos:violate/qosipos:violate/qosipos:red" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/qosipos:ipv6-access-group/qosipos:acl-class/qosipos:rate/qosipos:violate/qosipos:violate/qosipos:red" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:policing/qosipos:policing/qosipos:l2-access-group/qosipos:acl-class/qosipos:rate/qosipos:violate/qosipos:violate/qosipos:red" {
+     deviate not-supported;
+  }
+
+  deviation "/qosipos:qos/qosipos:policy/qosipos:policy-choice/qosipos:pwfq/qosipos:pwfq/qosipos:queue/qosipos:queue-num" {
+     deviate add {
+        must "((../queue-choice/priority/priority) and "
+        + "(../queue-choice/priority/priority-num) and (../queue-choice"
+        + "/priority/weight)) or (((../queue-choice/rate-maximum"
+        + "/max-num) or (../queue-choice/rate-maximum"
+        + "/Percentage)) and (not(../queue-choice"
+        + "/priority/priority)) and (not(../queue-choice"
+        + "/priority/priority-num)) and (not(../queue-choice"
+        + "/priority/weight)))" {
+          error-message "Must configure priority weight or rate "
+          + "maximum";
+          description
+            "Must configure priority weight or rate maximum";
+        }
+     }
+  }
+
+}

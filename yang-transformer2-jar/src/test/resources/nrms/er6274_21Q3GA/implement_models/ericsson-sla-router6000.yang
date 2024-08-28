@@ -1,0 +1,807 @@
+module ericsson-sla-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-sla-router6000";
+
+  prefix "slarouter6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-twamp-router6000 {
+    prefix "twampr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-sla-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-26" {
+    description
+      "fix sla error";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2019-04-30" {
+    description
+      "Change monitor value type";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2019-03-24" {
+    description
+      "Fix cisco check errors";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-05-24" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-12-07" {
+    description
+      "Add support for profile threshold value in microsecond";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-10-25" {
+    description
+      "Update monitor-element-choice enum literal";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-10-10" {
+    description
+      "Update monitor-element-choice name";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-05-15" {
+    description
+      "SLA Feature";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  feature sla-dummy {
+    description
+      "TWAMP is the only supported type now. For further
+       extension, we create sla-dummy as a dummy case of type
+       which is an sla switch to make it as choice element but
+       not a leaf element, please do not open it.";
+  }
+
+
+  typedef sla-life-cycle {
+  /* Set the type as union to support other
+     parameters for further extension */
+    type union {
+      type enumeration {
+        enum forever {
+          value 0;
+          description
+            "Runs infinitely";
+        }
+      }
+    }
+    description
+      "The SLA schedule life cycle";
+  }
+  typedef sla-start-time {
+  /* Set the type as union to support other
+     parameters for further extension */
+    type union {
+      type enumeration {
+        enum now {
+          value 0;
+          description
+            "Starts immediately";
+        }
+      }
+    }
+    description
+      "The SLA schedule time to start";
+  }
+  typedef sla-monitor-element {
+    type enumeration {
+      enum delay-near-end {
+        value 0;
+        description
+          "The one-way packet delay for near end";
+      }
+      enum delay-far-end {
+        value 1;
+        description
+          "The one-way packet delay for far end";
+      }
+      enum delay-two-way {
+        value 2;
+        description
+          "The two-way packet delay";
+      }
+      enum delay-variation-near-end {
+        value 3;
+        description
+          "The one-way packet delay variation for near end";
+      }
+      enum delay-variation-far-end {
+        value 4;
+        description
+          "The one-way packet delay variation for far end";
+      }
+      enum delay-variation-two-way {
+        value 5;
+        description
+          "The two-way packet delay variation";
+      }
+      enum pktlost-ratio-near-end {
+        value 6;
+        description
+          "The one-way packet loss ratio for near end";
+      }
+      enum pktlost-ratio-far-end {
+        value 7;
+        description
+          "The one-way packet loss ratio for far end";
+      }
+      enum pktlost-ratio-two-way {
+        value 8;
+        description
+          "The two-way packet loss ratio";
+      }
+    }
+    description
+      "The types of monitor element";
+  }
+  typedef sla-summary-interval {
+    type enumeration {
+      enum 15-min {
+        value 0;
+        description
+          "Sets summary-interval to 15 minutes";
+      }
+      enum 1-hour {
+        value 1;
+        description
+          "Sets summary-interval to 1 hour";
+      }
+      enum 24-hour {
+        value 2;
+        description
+          "Sets summary-interval to 24 hours";
+      }
+    }
+    description
+      "Summary report interval";
+  }
+  typedef sla-job-mode {
+    type enumeration {
+      enum continuous {
+        value 0;
+        description
+          "Continuous mode";
+      }
+    }
+    description
+      "Job mode";
+  }
+
+  grouping sla-schedule-grp {
+    description
+      "SLA schedule configuration mode";
+    /*
+    life ( cycle )
+    */
+    leaf life {
+      type sla-life-cycle;
+      description
+        "Life cycle";
+    }
+    /*
+    start-time ( time )
+    */
+    leaf start-time {
+      type sla-start-time;
+      description
+        "The time to start";
+    }
+  }
+
+  grouping sla-profile-grp {
+    description
+      "SLA profile configuration mode";
+    /*
+    mon-element ( monitor-element-choice ) [ threshold-type
+     percentage < lower (lower-number) > < upper (upper-number) >
+     ] < threshold-value { (value-number) | millisec (value-
+     number) | microsec (value-number) | < lower (lower-number) >
+     < upper (upper-number) > } > < action-type { alarm | none }
+     >
+    */
+    list mon-element {
+      key "monitor-element-choice";
+      description
+        "Configures the monitor element";
+      leaf monitor-element-choice {
+        type sla-monitor-element;
+        description
+          "The types of monitor element";
+      }
+      container threshold-type-percentage {
+        when "../monitor-element-choice='delay-near-end' and "
+        + "../monitor-element-choice='delay-far-end' and "
+        + "../monitor-element-choice='delay-two-way' and "
+        + "../monitor-element-choice='delay-variation-near-end' and "
+        + "../monitor-element-choice='delay-variation-far-end' and "
+        + "../monitor-element-choice='delay-variation-two-way'" {
+          description
+            "";
+        }
+        description
+          "Measure value increases or decreases by percentage
+           against the threshold-value";
+        leaf lower {
+          type uint8 {
+            range "0..100";
+          }
+          mandatory true;
+          description
+            "Sets a lower percentage of measured data which is
+             less than the configured threshold-value";
+        }
+        leaf upper {
+          type uint8 {
+            range "0..100";
+          }
+          must "number(.) >= number(../slarouter6000:lower)" {
+            error-message "Percentage upper should be no less "
+            + "than lower";
+            description
+              "";
+          }
+          mandatory true;
+          description
+            "Sets an upper percentage of measured data which is
+             more than the configured threshold-value";
+        }
+      }
+      container threshold-value {
+        description
+          "Threshold value";
+        choice threshold-value {
+          description
+            "Sets the threshold value or threshold lower and
+             upper value of measured data";
+          case value-number {
+            leaf value-number {
+              when "/ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-near-"
+              + "end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-far-"
+              + "end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-two-"
+              + "way' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-"
+              + "variation-near-end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-"
+              + "choice='delay-variation-far-end' and "
+              + "/ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-variation-two-"
+              + "way'" {
+                description
+                  "";
+              }
+              type uint16 {
+                range "1..65535";
+              }
+              description
+                "Threshold value in millisecond";
+            }
+          }
+          case millisec {
+            leaf millisec {
+              when "/ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-near-"
+              + "end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-far-"
+              + "end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-two-"
+              + "way' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-"
+              + "variation-near-end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-"
+              + "choice='delay-variation-far-end' and "
+              + "/ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-variation-two-"
+              + "way'" {
+                description
+                  "";
+              }
+              type uint16 {
+                range "1..65535";
+              }
+              description
+                "Sets the threshold value in millisecond";
+            }
+          }
+          case microsec {
+            leaf microsec {
+              when "/ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-near-"
+              + "end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-far-"
+              + "end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-two-"
+              + "way' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-"
+              + "variation-near-end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-"
+              + "choice='delay-variation-far-end' and "
+              + "/ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='delay-variation-two-"
+              + "way'" {
+                description
+                  "";
+              }
+              type uint16 {
+                range "1..65535";
+              }
+              description
+                "Sets the threshold value in microsecond";
+            }
+          }
+          case lower {
+            container lower-upper {
+              description
+                "Sets the lower and upper percentage of measured
+                 data";
+              leaf lower {
+                when "/ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='pktlost-"
+                + "ratio-near-end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice"
+                + "='pktlost-ratio-far-end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-"
+                + "element-choice='pktlost-ratio-two-way'" {
+                  description
+                    "";
+                }
+                type string;
+                description
+                  "Sets a lower percentage of measured data
+                   which is less than the configured
+                   threshold-value";
+              }
+              leaf upper {
+                when "/ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice='pktlost-"
+                + "ratio-near-end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-element-choice"
+                + "='pktlost-ratio-far-end' and /ctxsr6k:contexts/slarouter6000:sla/slarouter6000:profile/slarouter6000:profile-choice/slarouter6000:twamp/slarouter6000:monitor-element/monitor-"
+                + "element-choice='pktlost-ratio-two-way'" {
+                  description
+                    "";
+                }
+                type string;
+                description
+                  "Sets an upper percentage of measured data
+                   which is more than the configured
+                   threshold-value";
+              }
+            }
+          }
+        }
+      }
+      leaf action-type {
+        type enumeration {
+          enum alarm {
+            value 0;
+            description
+              "Raises an alarm";
+          }
+          enum none {
+            value 1;
+            description
+              "No action";
+          }
+        }
+        description
+          "The action to be taken while threshold is crossed";
+      }
+    }
+    /*
+    monitor-element ( monitor-element-choice ) [ threshold-type
+     percentage < lower (lower-number) > < upper (upper-number) >
+     ] < threshold-value { (value-number) | millisec (value-
+     number) | microsec (value-number) | < lower (lower-number) >
+     < upper (upper-number) > } > < action-type { alarm | none }
+     >
+    */
+    list monitor-element {
+      key "monitor-element-choice";
+      status obsolete;
+      description
+        "Configures the monitor element";
+      leaf monitor-element-choice {
+        type sla-monitor-element;
+        description
+          "The types of monitor element";
+      }
+      container threshold-type-percentage {
+        when "../monitor-element-choice='delay-near-end' and "
+        + "../monitor-element-choice='delay-far-end' and "
+        + "../monitor-element-choice='delay-two-way' and "
+        + "../monitor-element-choice='delay-variation-near-end' and "
+        + "../monitor-element-choice='delay-variation-far-end' and "
+        + "../monitor-element-choice='delay-variation-two-way'" {
+          description
+            "";
+        }
+        description
+          "Measure value increases or decreases by percentage
+           against the threshold-value";
+        leaf lower {
+          type uint8 {
+            range "0..100";
+          }
+          mandatory true;
+          description
+            "Sets a lower percentage of measured data which is
+             less than the configured threshold-value";
+        }
+        leaf upper {
+          type uint8 {
+            range "0..100";
+          }
+          must "number(.) >= number(../slarouter6000:lower)" {
+            error-message "Percentage upper should be no less "
+            + "than lower";
+            description
+              "";
+          }
+          mandatory true;
+          description
+            "Sets an upper percentage of measured data which is
+             more than the configured threshold-value";
+        }
+      }
+      container threshold-value {
+        description
+          "Threshold value";
+        choice threshold-value {
+          mandatory true;
+          description
+            "Sets the threshold value or threshold lower and
+             upper value of measured data";
+          case value-number {
+            leaf value-number {
+              when "../../monitor-element-choice='delay-near-"
+              + "end' and ../../monitor-element-choice='delay-far-"
+              + "end' and ../../monitor-element-choice='delay-two-"
+              + "way' and ../../monitor-element-choice='delay-"
+              + "variation-near-end' and ../../monitor-element-"
+              + "choice='delay-variation-far-end' and "
+              + "../../monitor-element-choice='delay-variation-two-"
+              + "way'" {
+                description
+                  "";
+              }
+              type uint16 {
+                range "1..65535";
+              }
+              mandatory true;
+              description
+                "Threshold value in millisecond";
+            }
+          }
+          case millisec {
+            leaf millisec {
+              when "../../monitor-element-choice='delay-near-"
+              + "end' and ../../monitor-element-choice='delay-far-"
+              + "end' and ../../monitor-element-choice='delay-two-"
+              + "way' and ../../monitor-element-choice='delay-"
+              + "variation-near-end' and ../../monitor-element-"
+              + "choice='delay-variation-far-end' and "
+              + "../../monitor-element-choice='delay-variation-two-"
+              + "way'" {
+                description
+                  "";
+              }
+              type uint16 {
+                range "1..65535";
+              }
+              description
+                "Sets the threshold value in millisecond";
+            }
+          }
+          case microsec {
+            leaf microsec {
+              when "../../monitor-element-choice='delay-near-"
+              + "end' and ../../monitor-element-choice='delay-far-"
+              + "end' and ../../monitor-element-choice='delay-two-"
+              + "way' and ../../monitor-element-choice='delay-"
+              + "variation-near-end' and ../../monitor-element-"
+              + "choice='delay-variation-far-end' and "
+              + "../../monitor-element-choice='delay-variation-two-"
+              + "way'" {
+                description
+                  "";
+              }
+              type uint16 {
+                range "1..65535";
+              }
+              description
+                "Sets the threshold value in microsecond";
+            }
+          }
+          case lower {
+            container lower-upper {
+              description
+                "Sets the lower and upper percentage of measured
+                 data";
+              leaf lower {
+                when "../../../monitor-element-choice='pktlost-"
+                + "ratio-near-end' and ../../../monitor-element-"
+                + "choice='pktlost-ratio-far-end' and "
+                + "../../../monitor-element-choice='pktlost-ratio-"
+                + "two-way'" {
+                  description
+                    "";
+                }
+                type uint8 {
+                  range "0..100";
+                }
+                mandatory true;
+                description
+                  "Sets a lower percentage of measured data
+                   which is less than the configured
+                   threshold-value";
+              }
+              leaf upper {
+                when "../../../monitor-element-choice='pktlost-"
+                + "ratio-near-end' and ../../../monitor-element-"
+                + "choice='pktlost-ratio-far-end' and "
+                + "../../../monitor-element-choice='pktlost-ratio-"
+                + "two-way'" {
+                  description
+                    "";
+                }
+                type uint8 {
+                  range "0..100";
+                }
+                must "number(.) >= "
+                + "number(../slarouter6000:lower)" {
+                  error-message "Percentage upper should be no "
+                  + "less than lower";
+                  description
+                    "";
+                }
+                mandatory true;
+                description
+                  "Sets an upper percentage of measured data
+                   which is more than the configured
+                   threshold-value";
+              }
+            }
+          }
+        }
+      }
+      leaf action-type {
+        type enumeration {
+          enum alarm {
+            value 0;
+            description
+              "Raises an alarm";
+          }
+          enum none {
+            value 1;
+            description
+              "No action";
+          }
+        }
+        mandatory true;
+        description
+          "The action to be taken while threshold is crossed";
+      }
+    }
+  }
+
+  grouping sla-job-twamp-grp {
+    description
+      "SLA job twamp configuration mode";
+    /*
+    session (session-id) context (context-name)
+    */
+    container session {
+      description
+        "Pre-configured twamp session";
+      leaf session {
+        type leafref {
+          path
+          "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ippm/ctxr6k"
+          + ":twamp-light/twampr6k:cont-"
+          + "sender/twampr6k:session/twampr6k:session-id";
+        }
+        description
+          "Twamp session ID";
+      }
+      leaf context {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        description
+          "Context of the twamp session";
+      }
+    }
+    /*
+    summary-interval ( interval )
+    */
+    leaf summary-interval {
+      type sla-summary-interval;
+      description
+        "Summary report interval";
+    }
+  }
+
+  grouping sla-job-grp {
+    description
+      "SLA job configuration mode";
+    /*
+    mode ( mode-type )
+    */
+    leaf mode {
+      type sla-job-mode;
+      description
+        "Job mode";
+    }
+    /*
+    profile (profile-name)
+    */
+    leaf profile {
+      type leafref {
+        path "/ctxsr6k:contexts/slarouter6000:sla/slarouter6000:"
+        + "profile/slarouter6000:profile-name";
+      }
+      description
+        "Bound to the sla profile";
+    }
+    /*
+    type { twamp | dummy }
+    */
+    container type {
+      description
+        "Job type";
+      choice sla-job-type-choice {
+        description
+          "Sets the sla job type";
+        case twamp {
+          container twamp {
+            presence "";
+            description
+              "Two-Way Active Measurement Protocol";
+            uses sla-job-twamp-grp;
+          }
+        }
+        case dummy {
+          leaf dummy {
+            if-feature sla-dummy;
+            type empty;
+            description
+              "Dummy Protocol";
+          }
+        }
+      }
+    }
+    /*
+    schedule-template (template-id)
+    */
+    leaf schedule-template {
+      type leafref {
+        path "/ctxsr6k:contexts/slarouter6000:sla/slarouter6000"
+        + ":schedule-template/slarouter6000:schedule-template";
+      }
+      description
+        "Schedule template ID";
+    }
+    /*
+    enabled
+    */
+    leaf enabled {
+      type empty;
+      description
+        "Job is enabled";
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-sla";
+    /*
+    sla
+    */
+    container sla {
+      description
+        "Service Level Agreement Configuration";
+      list profile {
+        key "profile-name";
+        description
+          "Configures an sla profile";
+        leaf profile-name {
+          type string;
+          description
+            "Specifies a profile name to configure";
+        }
+        container profile-choice {
+          description
+            "Container profile-choice";
+          container twamp {
+            presence "";
+            description
+              "Sla job type is twamp";
+            uses sla-profile-grp;
+          }
+          leaf dummy {
+            if-feature sla-dummy;
+            type empty;
+            description
+              "Dummy sla job type";
+          }
+        }
+      }
+      list job {
+        key "job";
+        description
+          "Configures an sla job";
+        leaf job {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Job number";
+        }
+        uses sla-job-grp;
+      }
+      list schedule-template {
+        key "schedule-template";
+        description
+          "Configures a schedule template";
+        leaf schedule-template {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Schedule template ID";
+        }
+        uses sla-schedule-grp;
+      }
+    }
+  }
+
+}

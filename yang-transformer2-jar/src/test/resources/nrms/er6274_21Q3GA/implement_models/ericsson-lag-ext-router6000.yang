@@ -1,0 +1,779 @@
+module ericsson-lag-ext-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-lag-ext-router6000";
+
+  prefix "lagxrouter6000";
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-mirror-policy-router6000 {
+    prefix "mirrorpolrouter6000";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-lag-ext-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-02-05" {
+    description
+      "add mirror destination for link-group";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "5";
+    yexte:correction "0";
+  }
+
+  revision "2020-12-21" {
+    description
+      "add ipfix-sample command for link-group";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2020-03-18" {
+    description
+      "enable evpn es syncup function";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2019-07-04" {
+    description
+      "enable evpn command for link-group";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2019-06-20" {
+    description
+      "hide evpn command for link-group";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2019-04-20" {
+    description
+      "add new evpn command for link-group";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-04-19" {
+    description
+      "Add default value for period timeout as short,replace
+       immediate with short-immediate,the new leaf
+       short-immediate adds default value.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-03-20" {
+    description
+      "change range for minimum-links/maximum-links";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-03-08" {
+    description
+      "add when sentences for POS type";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-15" {
+    description
+      "IPOS-11938 New command for subscribe micro-bfd";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-07-06" {
+    description
+      "add new container 'multi-chassis'in 'lag-grp'.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-06-27" {
+    description
+      "add new container 'mirror'in 'lag-grp'.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-13" {
+    description
+      "add new command 'track'.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-02-20" {
+    description
+      "Need to support the parameter '9100' in the command
+       'dot1q tunnel ethertype' under lag.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-02-20" {
+    description
+      "add new command protect-group.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-30" {
+    description
+      "For Side Effect difference modification.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature economical {
+    description
+      "This feature indicates that the device supports
+       economical in lag.";
+  }
+
+  feature link-pinning {
+    description
+      "This feature indicates that the device supports
+       link-pinning in lag.";
+  }
+
+  feature load-balance {
+    description
+      "This feature indicates that the device supports
+       load-balance in lag.";
+  }
+
+  grouping lag-grp {
+    description
+      "Unified Link group configuration mode";
+    /*
+    mirror { <policy (mirror-name) { in | out } [ source-tag {
+     dot1q (tag-id) | dot1ad (tag-id)}  ]> | <destination (dest-
+     name)> }
+    */
+    container mirror {
+      description
+        "Configure mirror policy or destination";
+      choice mirror {
+        case policy {
+          list policy {
+            key "policy-choice";
+            max-elements 2;
+            description
+              "Configure mirror policy";
+            leaf policy-choice {
+              type enumeration {
+                enum in {
+                  value 0;
+                  description
+                    "Inbound mirror policy";
+                }
+                enum out {
+                  value 1;
+                  description
+                    "Outbound mirror policy";
+                }
+              }
+              description
+                "Policy choice.";
+            }
+            leaf mirror-name {
+              type leafref {
+                path "/ctxsr6k:contexts/mirrorpolrouter6000"
+                + ":mirror-policy/mirrorpolrouter6000:mirror-"
+                + "polname";
+              }
+              mandatory true;
+              description
+                "Mirror policy name";
+            }
+            container source-tag {
+              description
+                "Configure mirror source tag";
+              choice source-tag {
+                description
+                  "Ethernet type";
+                case dot1q {
+                  leaf dot1q {
+                    type uint16 {
+                      range "1..4094";
+                    }
+                    description
+                      "Configure dot1q vlan id";
+                  }
+                }
+                case dot1ad {
+                  leaf dot1ad {
+                    type uint16 {
+                      range "1..4094";
+                    }
+                    description
+                      "Configure dot1ad vlan id";
+                  }
+                }
+              }
+            }
+          }
+        }
+        case destination {
+          leaf destination {
+            type string {
+              length "1..39";
+            }
+            description
+              "Configure mirror destination";
+          }
+        }
+      }
+    }
+    /*
+    bind interface (intf-name) (intf-ctx)
+    */
+    container bind-interface {
+      presence "";
+      description
+        "Bind an interface to the link-group";
+      leaf intf-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Interface name";
+      }
+      leaf intf-ctx {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        mandatory true;
+        description
+          "Context name";
+      }
+    }
+    /*
+    mac-address { auto | port | mac-addr }
+    */
+    container mac-address {
+      description
+        "Configure MAC address";
+      choice mac-address {
+        default auto;
+        case auto {
+          leaf auto {
+            type empty;
+            description
+              "Specify software generated link-group Source MAC
+               address";
+          }
+        }
+        case port {
+          leaf port {
+            type empty;
+            description
+              "Specify MAC address is to be inherited from a
+               constituent port";
+          }
+        }
+        case mac-addr {
+          leaf mac-addr {
+            type yang:mac-address;
+            description
+              "Source MAC Address";
+          }
+        }
+      }
+    }
+    /*
+    maximum-links (lag-num)
+    */
+    leaf maximum-links {
+      when "not(../lagxrouter6000:pos)" {
+        description
+          "not applicable under POS type";
+      }
+      type uint8 {
+        range "1..16";
+      }
+      default "8";
+      description
+        "Specify the maximum number of active links in the
+         group";
+    }
+    /*
+    load-balance
+    */
+    leaf load-balance {
+      when "not(../lagxrouter6000:pos)" {
+        description
+          "not applicable under POS type";
+      }
+      if-feature load-balance;
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable load-balance";
+    }
+    /*
+    protect-group { incoming-port | round-robin }
+    */
+    container protect-group {
+      description
+        "Specify the protect group type";
+      choice protect-group {
+        default round-robin;
+        case incoming-port {
+          leaf incoming-port {
+            type empty;
+            description
+              "incoming-port";
+          }
+        }
+        case round-robin {
+          leaf round-robin {
+            type empty;
+            description
+              "round-robin";
+          }
+        }
+      }
+    }
+    /*
+    minimum-links (uplinks-num)
+    */
+    leaf minimum-links {
+      type uint8 {
+        range "1..16";
+      }
+      default "1";
+      description
+        "Minimum number of links up required for the group to be
+         up";
+    }
+    /*
+    multi-chassis [ revertive hold-time (time-val) ]
+    */
+    container multi-chassis {
+      presence "";
+      description
+        "Configure multi-chassis mode for this link-group";
+      container revertive {
+        description
+          "Configure multi-chassis revertive mode";
+        leaf hold-time {
+          type uint16 {
+            range "0..1024";
+          }
+          description
+            "configure hold time seconds to wait before trying
+             to revert";
+        }
+      }
+    }
+    /*
+    track { (track-name) <action compute-min-link> [ log ] |
+     system-icr-traffic-reroute <action switch-lacp-selected-
+     state> [ log ] }
+    */
+    container track {
+      description
+        "Configure link-group track object";
+      container track-name {
+        presence "";
+        description
+          "container track-name.";
+        leaf track-name {
+          type string;
+          mandatory true;
+          description
+            "Object name";
+        }
+        leaf action-compute-min-link {
+          type empty;
+          mandatory true;
+          description
+            "Reevaluate minimum link criteria";
+        }
+        leaf log {
+          type empty;
+          description
+            "Log the event";
+        }
+      }
+      container system-icr-traffic-reroute {
+        presence "";
+        description
+          "container system-icr-traffic-reroute.";
+        leaf system-icr-traffic-reroute {
+          type empty;
+          mandatory true;
+          description
+            "System ICR traffic reroute Object";
+        }
+        leaf action-switch-lacp-selected-state {
+          type empty;
+          mandatory true;
+          description
+            "Switch lacp selected state by ICR instruction";
+        }
+        leaf log {
+          type empty;
+          description
+            "Log the event";
+        }
+      }
+    }
+    /*
+    subscribe micro-bfd
+    */
+    leaf subscribe-micro-bfd {
+      type empty;
+      description
+        "Micro-bfd events for the link group";
+    }
+    /*
+    lacp { admin-key (key-val) | damp-timeout (timeout-val) |
+     periodic-timeout { short [immediate] [short-immediate] |
+     long } | revertible | { passive | active } | ignore-system-
+     id | system-id priority (priority-val) [mac-address (mac-
+     addr)]}
+    */
+    container lacp {
+      when "not(../lagxrouter6000:pos)" {
+        description
+          "not applicable under POS type";
+      }
+      description
+        "Configure LACP parameters";
+      leaf admin-key {
+        type uint16 {
+          range "32767..65535";
+        }
+        description
+          "Configure LACP Administrative Key";
+      }
+      leaf damp-timeout {
+        type uint8 {
+          range "0..10";
+        }
+        default "10";
+        description
+          "Timer to damp LAG-state flapping from
+           constituent-state changes";
+      }
+      container periodic-timeout {
+        description
+          "Configure LACP Periodic Timeout";
+        choice periodic-timeout {
+          default short;
+          case short {
+            container short {
+              description
+                "Configure LACP Short Periodic Timeout";
+              leaf immediate {
+                type empty;
+                status obsolete;
+                description
+                  "Skip the Expired State upon LACP Timeout";
+              }
+              leaf short-immediate {
+                type boolean;
+                default "false";
+                description
+                  "Skip the Expired State upon LACP Timeout";
+              }
+            }
+          }
+          case long {
+            leaf long {
+              type empty;
+              description
+                "Configure LACP Long Periodic Timeout";
+            }
+          }
+        }
+      }
+      leaf revertible {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable revertible";
+      }
+      choice lacp-choice {
+        case passive {
+          leaf passive {
+            type empty;
+            description
+              "Configure LACP in Passive Mode";
+          }
+        }
+        case active {
+          leaf active {
+            type empty;
+            description
+              "Configure LACP in Active Mode";
+          }
+        }
+      }
+      leaf ignore-system-id {
+        type empty;
+        description
+          "Configure LACP Ignore System Id";
+      }
+      container system-id-priority {
+        presence "";
+        description
+          "Configure LACP system priority";
+        leaf priority-val {
+          type uint16 {
+            range "0..65534";
+          }
+          mandatory true;
+          description
+            "LACP system priority value";
+        }
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "Configure LACP system MAC";
+        }
+      }
+    }
+    /*
+    encapsulation dot1q
+    */
+    leaf encapsulation-dot1q {
+      type empty;
+      description
+        "encapsulate dot1q";
+    }
+    /*
+    ethernet-segment
+    */
+    container ethernet-segment {
+      description
+        "Configure an ethernet segment group";
+      uses esi-grp;
+    }
+  }
+
+  grouping esi-grp {
+    description
+      "Ethernet Segment configuration mode";
+    /*
+    df-election-wait-time (timer-second)
+    */
+    leaf df-election-wait-time {
+      type uint8 {
+        range "1..240";
+      }
+      default "3";
+      description
+        "df election wait time";
+    }
+    /*
+    syncup (timer-second)
+    */
+    leaf syncup {
+      type uint16 {
+        range "250..900";
+      }
+      description
+        "Configure ethernet segment syncup time(s)";
+    }
+    /*
+    evpn identifier { auto lacp | manual (manual-addr) }
+    */
+    container evpn-identifier {
+      description
+        "Configure EVPN ID";
+      choice evpn-identifier {
+        case auto-lacp {
+          leaf auto-lacp {
+            type empty;
+            description
+              "Auto generate ESI value using LACP protocol";
+          }
+        }
+        case manual {
+          leaf manual {
+            type typesrouter6000:formated_hex_len;
+            description
+              "Configure ESI value manually";
+          }
+        }
+      }
+    }
+    /*
+    evpn mode { all-active | single-active }
+    */
+    container evpn-mode {
+      description
+        "Configure evpn redundancy mode";
+      choice evpn-mode {
+        default all-active;
+        case all-active {
+          leaf all-active {
+            type empty;
+            description
+              "Configure redundancy mode as all-active";
+          }
+        }
+        case single-active {
+          leaf single-active {
+            type empty;
+            description
+              "Configure redundancy mode as single-active";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    description
+      "ericsson-lag";
+    /*
+    link-group [ pos | economical | link-pinning ]
+    */
+    container link-group {
+      when "../if:type = 'ianaift:ieee8023adLag'" {
+        description
+          "";
+      }
+      description
+        "Define a link group";
+      choice link-group-opt {
+        case pos {
+          leaf pos {
+            type empty;
+            description
+              "Define a POS type group";
+          }
+        }
+        case economical {
+          leaf economical {
+            if-feature economical;
+            type empty;
+            description
+              "Set circuit defaults to non-replicated and
+               circuit homing";
+          }
+        }
+        case link-pinning {
+          leaf link-pinning {
+            if-feature link-pinning;
+            type empty;
+            description
+              "Set circuit defaults to replicated and circuit
+               homing";
+          }
+        }
+      }
+      uses lag-grp;
+    }
+  }
+
+}

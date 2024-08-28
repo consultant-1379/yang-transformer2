@@ -1,0 +1,206 @@
+module ericsson-security-ipr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-security-ipr";
+
+  prefix "securityipr";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-system {
+    prefix "sys";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import tailf-common {
+    prefix "tailf";
+  }
+
+  import ietf-netconf-acm {
+    prefix "nacm";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-security-ipr
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-10-10" {
+    description
+      "initial revision";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  identity syslog-facility-type {
+    description
+      "Base identity for syslog facility types.";
+  }
+
+  identity local0 {
+    base syslog-facility-type;
+    description
+      "Use syslog facility local0 (the default)";
+  }
+
+  identity local1 {
+    base syslog-facility-type;
+    description
+      "Use syslog facility local1";
+  }
+
+  identity local2 {
+    base syslog-facility-type;
+    description
+      "Use syslog facility local2";
+  }
+
+  identity local3 {
+    base syslog-facility-type;
+    description
+      "Use syslog facility local3";
+  }
+
+  identity local4 {
+    base syslog-facility-type;
+    description
+      "Use syslog facility local4";
+  }
+
+  identity local5 {
+    base syslog-facility-type;
+    description
+      "Use syslog facility local5";
+  }
+
+  identity local6 {
+    base syslog-facility-type;
+    description
+      "Use syslog facility local6";
+  }
+
+  identity local7 {
+    base syslog-facility-type;
+    description
+      "Use syslog facility local7";
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context" {
+    description
+      "security-logging";
+
+    container security {
+
+      description
+        "Security related context configuration";
+
+      list server {
+        key name;
+        description
+          "List of servers usable for security related activities.";
+
+        leaf name {
+          type string;
+
+          description
+            "An arbitrary name for the security server.";
+        }
+
+        choice transport {
+          mandatory true;
+          description
+            "The transport-protocol-specific parameters for this
+             server.";
+
+          case tcp {
+            container tcp {
+              description
+                "Contains TCP-specific configuration parameters
+                 for the server.
+
+                 WARNING: Using TCP protocol will send the security events
+                 through an unencrypted network tunnel, thus risking leakage of
+                 sensitive information (e.g.: IP addresses, usernames, etc...).
+                 It is recommended to restrict both peers (SSR, EVR and
+                 remote syslog server) to a trusted internal network, and/or use
+                 tunneling protocols with encryption (e.g.; VPN) to ensure
+                 the safety of the log transmission. Ericsson doesn't
+                 take responsibility in case of data breach, when the
+                 TCP option is used.";
+
+              leaf address {
+                type union {
+                  type inet:ipv6-address;
+                  type inet:ipv4-address;
+                }
+
+                mandatory true;
+                description
+                  "The IPv4 or IPv6 address of the security server";
+              }
+
+              leaf port {
+                mandatory true;
+                type inet:port-number;
+                description
+                  "The port number of the security server";
+              }
+            }
+          }
+        }
+      }
+
+      container logging {
+        description
+          "Security logging configuration command";
+
+        list syslog-server {
+          key "name";
+
+          leaf name {
+		    type string;
+           /* type leafref {
+              path "../../../server/name"; 
+            } */
+          }
+
+          leaf facility {
+            type identityref {
+                base syslog-facility-type;
+            }
+          //  default local0;
+            description
+              "Specify the syslog logging facility (local[0-7])";
+          }
+
+          description
+            "Enable security logging to a syslog server reachable
+            within this context.";
+        }
+      }
+    }
+  }
+
+}

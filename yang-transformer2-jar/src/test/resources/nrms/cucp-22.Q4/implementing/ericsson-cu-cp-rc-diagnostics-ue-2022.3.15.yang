@@ -1,0 +1,252 @@
+module ericsson-cu-cp-rc-diagnostics-ue {
+    yang-version 1.1;
+    namespace urn:rdns:com:ericsson:oammodel:ericsson-cu-cp-rc-diagnostics-ue;
+    prefix rcdiague;
+    import tailf-common {
+        prefix tailf;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ericsson-common-types-diagnostics {
+        prefix commontypesdiag;
+    }
+    import ericsson-cu-cp-rc-diagnostics {
+        prefix rcdiag;
+    }
+    organization
+      'Ericsson AB';
+    contact
+      'Ericsson first line support via email';
+    description
+      'Diagnostics action:ue for RC Service
+
+       Copyright (c) 2022 Ericsson AB. All rights reserved';
+
+    revision 2022-03-15 {
+        description
+        'Add mandatory flag to leaf component in input to action pp';
+        yexte:version 1;
+        yexte:release 0;
+        yexte:correction 1;
+    }
+
+    revision 2022-02-21 {
+        description
+        'Initial revision';
+        yexte:version 1;
+        yexte:release 0;
+        yexte:correction 0;
+    }
+
+    yexte:module-status preliminary;
+
+    augment "/rcdiag:rc-diagnostics" {
+        container ue {
+            description "ue related actions";
+            action print {
+                yexte:disturbances "WARNING: May cause traffic impact.";
+                description
+            "print ue handler information"  +
+            " like connected UEs, total allocated bearers.";
+                input {
+                    uses commontypesdiag:output-format;
+                    leaf ueheq {
+                        description "<ueh id> only print the specified UE handler";
+                        type string;
+                    }
+                    leaf bearers {
+                        yexte:disturbances "WARNING: May cause traffic impact.";
+                        description "include number of bearers in output. WARNING: May cause traffic impact.";
+                        type empty;
+                        tailf:info 'Traffic Disturbance: WARNING: May cause traffic impact, include number of bearers in output. WARNING: May cause traffic impact.';
+                    }
+                    leaf time {
+                        description "include time (in seconds) since each UE handler was created";
+                        type empty;
+                    }
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+                tailf:info 'Traffic Disturbance: WARNING: May cause traffic impact, print ue handler information like connected UEs, total allocated bearers.';
+            }
+            action list {
+                yexte:disturbances "WARNING: May cause traffic impact.";
+                description
+            "Lists all UEs. WARNING: May cause traffic impact." +
+            " Each UE is identified by its ueId and ueTraceId.";
+                input {
+                    uses commontypesdiag:output-format;
+                    leaf ueheq {
+                        description "<ueh id> only list UEs in the specified UE handler";
+                        type string;
+                    }
+                    leaf celleq {
+                        description
+                "<cell id> only lists UEs with SpCell cell id." +
+                " Note that <cell id> is the local cell id, not an NCGI.";
+                        type string;
+                    }
+                    leaf bearers {
+                        description "include the bearers for each UE, including 5QI/QCI";
+                        type empty;
+                    }
+                    leaf state {
+                        description
+                "include the current state for each UE." +
+                " Possible states are dependent on UE handler type.";
+                        type empty;
+                    }
+                    leaf time {
+                        description
+                "include time (in seconds) since each UE context was created";
+                        type empty;
+                    }
+                    leaf cell {
+                        description
+                "include the current SpCell (PCell/SPCell) for each UE";
+                        type empty;
+                    }
+                    leaf apids {
+                        description
+                "include the ApIds for each UE";
+                        type empty;
+                    }
+                    leaf scells {
+                        description
+                "include the list of SCells for each UE";
+                        type enumeration {
+                            enum nci {
+                                description "list NCIs";
+                            }
+                            enum pci {
+                                description "list PCIs";
+                            }
+                        }
+                    }
+                    leaf rrcstatus {
+                        description "only lists UEs in specific rrc status.";
+                        type enumeration {
+                            enum all {
+                                description "list all UEs";
+                            }
+                            enum inactive {
+                                description "list inactive UEs";
+                            }
+                            enum active {
+                                description "list active UEs";
+                            }
+                        }
+                    }
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+                tailf:info 'Traffic Disturbance: WARNING: May cause traffic impact, Lists all UEs. WARNING: May cause traffic impact. Each UE is identified by its ueId and ueTraceId.';
+            }
+
+            action show {
+                yexte:disturbances "WARNING: May cause traffic impact.";
+                description
+            "Show the full UE Context. Content will vary depending on RCF/RPF and EN-DC/NR." +
+            " WARNING: May cause traffic impact.";
+                input {
+                    uses commontypesdiag:output-format;
+                    leaf ueid {
+                        description "the ue id";
+                        mandatory true;
+                        type string;
+                    }
+                    leaf history {
+                        description "include the UE's state history (max 32)";
+                        type empty;
+                    }
+                    leaf procedure {
+                        description "include information about ongoing UE procedure";
+                        type empty;
+                    }
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+                tailf:info 'Traffic Disturbance: WARNING: May cause traffic impact, Show the full UE Context. Content will vary depending on RCF/RPF and EN-DC/NR. WARNING: May cause traffic impact.';
+            }
+
+            action find {
+                yexte:disturbances "WARNING: May cause traffic impact.";
+                description
+            "Find UEs based on options" +
+            " WARNING: May cause traffic impact.";
+                input {
+                    uses commontypesdiag:output-format;
+                    leaf ueheq {
+                        description "<ueh id> only search for UEs in the specified UE handler";
+                        type string;
+                    }
+                    leaf celleq {
+                        description
+                "<cell id> only lists UEs with SpCell cell id." +
+                " Note that <cell id> is the local cell id, not an NCGI.";
+                        type string;
+                    }
+
+                    leaf longest_connected_ue {
+                        description "find UE with the longest connected time";
+                        type empty;
+                    }
+
+                    leaf ue_trace_id {
+                        description
+                "<trace id> find UE with the given trace id" +
+                " (Option ignored if combined with --longest_connected_ue)";
+                        type string;
+                    }
+
+                    leaf irnti {
+                        description
+                "find UE with the given irnti" +
+                " (Option ignored if combined with --longest_connected_ue or --ue_trace_id)";
+                        type string;
+                    }
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+                tailf:info 'Traffic Disturbance: WARNING: May cause traffic impact, Find UEs based on options WARNING: May cause traffic impact.';
+            }
+
+            action ps {
+                description "list available components (processes)";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+
+            action pp {
+                description "print component information";
+                input {
+                    uses commontypesdiag:output-format;
+                    leaf component {
+                        description "component to print information for";
+                        mandatory true;
+                        type string;
+                    }
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+        }
+    }
+}
+

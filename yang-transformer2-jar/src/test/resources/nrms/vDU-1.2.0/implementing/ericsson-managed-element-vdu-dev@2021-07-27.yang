@@ -1,0 +1,63 @@
+module ericsson-managed-element-vdu-dev {
+  yang-version 1.1;
+  namespace urn:rdns:com:ericsson:oammodel:ericsson-managed-element-vdu-dev;
+  prefix me3gppdev;
+
+  import _3gpp-common-managed-element { prefix me3gpp; }
+  import ericsson-yang-extensions { prefix yexte; }
+  import ericsson-notifications { prefix notife; }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "The module defines the ManagedElement data model deviations for 
+    the Ericsson vDU.
+
+    Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+  revision 2021-07-27 {
+    description
+      "Bug Fix, leaf-list state notifiable compatibility issue. Adds extension notife:notifiable-state-data false to managedBy, managedElementTypeList, supportedGPs.";
+    yexte:version 1;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+  
+  revision 2021-05-19 {
+    description
+      "Adds extension notife:notifiable-state-data true to ManagedElement.";
+    yexte:version 0;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+  
+  deviation /me3gpp:ManagedElement/me3gpp:attributes/me3gpp:managedBy {
+    deviate add {
+      notife:notifiable-state-data false;
+    }
+  }
+  
+  deviation /me3gpp:ManagedElement/me3gpp:attributes/me3gpp:managedElementTypeList {
+    deviate add {
+      notife:notifiable-state-data false;
+    }
+  }
+  
+  deviation /me3gpp:ManagedElement/me3gpp:attributes/me3gpp:supportedMeasurementsGPs/me3gpp:supportedGPs {
+    deviate add {
+      notife:notifiable-state-data false;
+    }
+  }
+
+  deviation /me3gpp:ManagedElement {
+    deviate add {
+      notife:notifiable-state-data true;
+    }
+  }
+}

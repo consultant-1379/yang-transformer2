@@ -1,0 +1,65 @@
+module  ericsson-if-types-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-if-types-pc5gc";
+
+  prefix pcift;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-base-if-type-pc5gc {
+    prefix pcbift;
+  }
+  import iana-if-type {
+    prefix ianaift;
+  }
+  import ietf-interfaces-common {
+    prefix if-cmn;
+  }
+
+  organization "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "This YANG module defines Ericsson Packet Core
+     interface types.
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-08-09 {
+    description
+      "Initial version";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  identity ethernetCsmacd {
+    base pcbift:pc-interface-type;
+    base ianaift:ethernetCsmacd;
+    description
+      "For all Ericsson Packet Core Ethernet-like interfaces";
+    reference
+      "RFC 3635 - Definitions of Managed Objects for the
+                  Ethernet-like Interface Types";
+  }
+
+  identity softwareLoopback {
+    base pcbift:pc-interface-type;
+    base ianaift:softwareLoopback;
+  }
+
+  identity ipForward {
+    base pcbift:pc-interface-type;
+    base if-cmn:ethSubInterface;
+  }
+
+  identity activeBackupBonding {
+    base pcbift:pc-interface-type;
+    description
+      "active-backup interface.";
+  }
+}

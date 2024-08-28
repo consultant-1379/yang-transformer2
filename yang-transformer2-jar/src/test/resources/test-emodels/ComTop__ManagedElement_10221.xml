@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ns2:PrimaryTypeDefinition
+	xmlns:ns1="urn:com:ericsson:schema:xml:oss:oss_common"
+	xmlns:ns2="urn:com:ericsson:schema:xml:oss:dps_primarytype"
+	xmlns:ns3="urn:com:ericsson:schema:xml:oss:dps_common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	hierarchyType="HIERARCHICAL"
+	ns1:definedBy="NE"
+	ns1:lifeCycle="CURRENT"
+	ns1:name="ManagedElement"
+	ns1:ns="ComTop"
+	ns1:version="10.22.1">
+  
+	<ns1:modelCreationInfo>
+		<ns1:designedModel className="xxx" componentId="xxx" />
+	</ns1:modelCreationInfo>
+  
+  <ns1:inheritsFrom urn="//OSS_TOP/ManagedElement/3.0.0"/>
+  
+  <ns1:desc>The top-level class in the Common Information Model is Managed Element root Managed Object Class.</ns1:desc>
+  
+  <ns2:systemCreated/>
+  
+  <ns2:primaryTypeAttribute immutable="true" key="true" mandatory="true" ns1:definedBy="NE" ns1:lifeCycle="CURRENT" ns1:name="managedElementId" readBehavior="FROM_PERSISTENCE" sensitive="false" writeBehavior="PERSIST_AND_DELEGATE">
+    <ns1:desc>Holds the name used when identifying the MO.</ns1:desc>
+    <ns1:type xsi:type="ns1:stringType">
+      <ns1:notNullConstraint/>
+    </ns1:type>
+  </ns2:primaryTypeAttribute>
+  
+  <ns2:primaryTypeAttribute immutable="false" mandatory="false" ns1:definedBy="NE" ns1:lifeCycle="CURRENT" ns1:name="siteLocation" readBehavior="FROM_PERSISTENCE" sensitive="false" writeBehavior="PERSIST_AND_DELEGATE">
+    <ns1:desc>A freetext attribute describing the geographic location of a Managed Element.&#13;
+</ns1:desc>
+    <ns1:type xsi:type="ns1:stringType"/>
+  </ns2:primaryTypeAttribute>
+  
+  <ns2:primaryTypeAttribute immutable="false" mandatory="false" ns1:definedBy="NE" ns1:lifeCycle="CURRENT" ns1:name="userLabel" readBehavior="FROM_PERSISTENCE" sensitive="false" writeBehavior="PERSIST_AND_DELEGATE">
+    <ns1:desc>A freetext string for additional information to assist Managed Element identification.</ns1:desc>
+    <ns1:type xsi:type="ns1:stringType"/>
+  </ns2:primaryTypeAttribute>
+  
+</ns2:PrimaryTypeDefinition>

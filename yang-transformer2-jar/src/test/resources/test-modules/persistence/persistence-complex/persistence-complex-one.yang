@@ -1,0 +1,48 @@
+module persistence-complex-one {
+
+    namespace "urn~test~persistence-complex-one";
+    prefix this;
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	
+    revision "2021-10-18";
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string;
+			mandatory true;
+		}
+	}
+
+	container cont2 {
+
+		leaf leaf21 {
+			type string;
+		}
+	}
+
+	container cont3 {
+		config false;
+		notife:notifiable-state-data true;
+
+		leaf leaf31 {
+			type string;
+			mandatory true;
+		}
+	}
+
+	container cont4 {
+		config true;
+
+		leaf leaf41 {
+			type string;
+		}
+	}
+
+}

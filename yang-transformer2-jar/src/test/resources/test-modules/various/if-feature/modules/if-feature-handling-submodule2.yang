@@ -1,0 +1,23 @@
+submodule if-feature-handling-submodule2 {
+
+	belongs-to if-feature-handling-module1 {
+		prefix mod1;
+	}
+
+	revision "2022-09-25";
+
+	feature feature18;
+	feature feature19;
+
+	container cont18 {
+		presence "";
+		if-feature "mod1:feature11 and feature18";
+	}
+
+	container cont19 {
+		presence "";
+		if-feature feature12;
+	}
+
+
+}

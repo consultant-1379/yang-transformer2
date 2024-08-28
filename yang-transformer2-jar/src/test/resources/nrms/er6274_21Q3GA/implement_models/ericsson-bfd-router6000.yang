@@ -1,0 +1,819 @@
+module ericsson-bfd-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bfd-router6000";
+
+  prefix "bfdr6k";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bfd-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-04-30" {
+    description
+      "Change remote discriminator and tx interval range";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-02-01" {
+    description
+      "IPOS-20437 add omissive command (nbr-intf), which is
+       mandatory when configure link local address";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-16" {
+    description
+      " SBFD Yang Model";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-10-16" {
+    description
+      "SSR-7495 Yound Model has warnings";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-07-27" {
+    description
+      "IPOS-13231 change the value type of micro-neighbor remote
+       ip address";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-11" {
+    description
+      "IPOS-11510 Libnetconf BFD Please print the correct error
+       message, and add the when/must in the bfd model";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-05-21" {
+    description
+      "IPOS-10745 New command for model BFD";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-21" {
+    description
+      "IPOS-9165";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-13" {
+    description
+      "IPOS-7421 [BFD] neighbor data is inconsistent between
+       exec cli and confd when deleting multihop";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-18" {
+    description
+      "recover multihop and TTL";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature passive {
+    description
+      "This feature indicates that the device supports passive
+       mode in BFD.";
+  }
+
+  grouping bfd-grp {
+    description
+      "BFD configuration mode";
+    /*
+    neighbor { (nbr-addr) } [nbr-intf] [ multihop interface
+     (intf) ]
+    */
+    list neighbor {
+      key "nbr-addr";
+      description
+        "BFD Neighbor";
+      leaf nbr-addr {
+        type inet:ip-address;
+        description
+          "IP address of neighbor";
+      }
+      leaf nbr-intf {
+        when "contains(../nbr-addr, 'fe80')" {
+          description
+            "";
+        }
+        type string;
+        must "/if:interfaces/if:interface/if:name=concat(.,'@', "
+        + "../../../../ctxr6k:context-name)" {
+          error-message "Interface does not exist!";
+          description
+            "interface should be created already";
+        }
+        mandatory true;
+        description
+          "Interface for link-local address";
+      }
+      container multihop {
+        when "not (contains(../nbr-addr, 'fe80'))" {
+          description
+            "";
+        }
+        description
+          "Multihop session";
+        leaf interface {
+          type leafref {
+            path "/if:interfaces/if:interface/if:name";
+          }
+          description
+            "source Interface";
+        }
+      }
+      uses bfd-nbr-grp;
+    }
+    /*
+    interface (intf-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "BFD interface";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface to enable BFD on";
+      }
+      uses bfd-if-grp;
+    }
+    /*
+    micro-neighbor (nbr-addr) (lag-name) (local-addr)
+    */
+    list micro-neighbor {
+      when "../../../ctxr6k:context-name='local'" {
+        description
+          "";
+      }
+      key "lag-name";
+      description
+        "Micro-BFD Neighbor";
+      leaf lag-name {
+        type string;
+        description
+          "Lag name";
+      }
+      leaf nbr-addr {
+        type inet:ip-address;
+        mandatory true;
+        description
+          "Remote IP address";
+      }
+      leaf local-addr {
+        type inet:ip-address;
+        mandatory true;
+        description
+          "Local IP address";
+      }
+      uses micro-bfd-nbr-grp;
+    }
+    /*
+    snmp trap all
+    */
+    leaf snmp-trap-all {
+      type empty;
+      description
+        "Enable sending BFD session traps";
+    }
+    /*
+    log-neighbor-changes
+    */
+    leaf log-neighbor-changes {
+      type empty;
+      description
+        "Enable BFD Syslog";
+    }
+    /*
+    seamless-neighbor (nbr-addr) <interface (intf)>
+    */
+    list seamless-neighbor {
+      key "nbr-addr";
+      description
+        "SBFD Neighbor";
+      leaf nbr-addr {
+        type inet:ipv4-address;
+        description
+          "IP address of neighbor";
+      }
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "source Interface";
+      }
+      uses sbfd-nbr-grp;
+    }
+  }
+
+  grouping bfd-if-grp {
+    description
+      "BFD interface configuration mode";
+    /*
+    minimum { transmit-interval { 3dot3 | 10 | 20 | 50 | 100 |
+     1000 } | receive-interval { 3dot3 | 10 | 20 | 50 | 100 |
+     1000 } }
+    */
+    container minimum {
+      description
+        "BFD minimum intervals";
+      leaf transmit-interval {
+        type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 50 {
+            value 3;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 4;
+            description
+              "100 ms interval";
+          }
+          enum 1000 {
+            value 5;
+            description
+              "1000 ms interval";
+          }
+        }
+        default "1000";
+        description
+          "Minimum desired transmit interval";
+      }
+      leaf receive-interval {
+        type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 50 {
+            value 3;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 4;
+            description
+              "100 ms interval";
+          }
+          enum 1000 {
+            value 5;
+            description
+              "1000 ms interval";
+          }
+        }
+        default "1000";
+        description
+          "Minimum required receive interval";
+      }
+    }
+    /*
+    detection-multiplier (mult-value)
+    */
+    leaf detection-multiplier {
+      type uint8 {
+        range "1..255";
+      }
+      default "3";
+      description
+        "Detect time multiplier";
+    }
+  }
+
+  grouping bfd-nbr-grp {
+    description
+      "BFD neighbor configuration mode";
+    /*
+    minimum { transmit-interval { 3dot3 | 10 | 20 | 50 | 100 |
+     1000 } | receive-interval { 3dot3 | 10 | 20 | 50 | 100 |
+     1000 } }
+    */
+    container minimum {
+      description
+        "BFD minimum intervals";
+      leaf transmit-interval {
+        type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 50 {
+            value 3;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 4;
+            description
+              "100 ms interval";
+          }
+          enum 1000 {
+            value 5;
+            description
+              "1000 ms interval";
+          }
+        }
+        default "1000";
+        description
+          "Minimum desired transmit interval";
+      }
+      leaf receive-interval {
+        type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 50 {
+            value 3;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 4;
+            description
+              "100 ms interval";
+          }
+          enum 1000 {
+            value 5;
+            description
+              "1000 ms interval";
+          }
+        }
+        default "1000";
+        description
+          "Minimum required receive interval";
+      }
+    }
+    /*
+    detection-multiplier (mult-value)
+    */
+    leaf detection-multiplier {
+      type uint8 {
+        range "1..255";
+      }
+      default "3";
+      description
+        "Detect time multiplier";
+    }
+    /*
+    passive
+    */
+    leaf passive {
+      when "../bfdr6k:multihop/bfdr6k:interface" {
+        description
+          "";
+      }
+      if-feature passive;
+      type empty;
+      description
+        "Accept session initiation by neighbor";
+    }
+    /*
+    ttl { (ttl-value) | minimum-accepted (ttl-value) }
+    */
+    container ttl {
+      when "../bfdr6k:multihop/bfdr6k:interface" {
+        description
+          "";
+      }
+      description
+        "Time-to-live";
+      leaf ttl-value {
+        type uint8 {
+          range "1..255";
+        }
+        default "255";
+        description
+          "Specify ttl for transmitted BFD packets";
+      }
+      leaf minimum-accepted {
+        type uint8 {
+          range "1..255";
+        }
+        default "1";
+        description
+          "Minimum ttl accepted in received BFD packets";
+      }
+    }
+  }
+
+  grouping sbfd-nbr-grp {
+    description
+      "SBFD neighbor configuration";
+    /*
+    detection-multiplier (mult-value)
+    */
+    leaf detection-multiplier {
+      type uint8 {
+        range "1..255";
+      }
+      default "5";
+      description
+        "Detect time multiplier";
+    }
+    /*
+    remote-discriminator (discr-value)
+    */
+    leaf remote-discriminator {
+      type string {
+        pattern '0(x|X)([0-9a-fA-F]{1,8})';
+      }
+      description
+        "Remote discriminator(0x0...0xffffffff)";
+    }
+    /*
+    transmit-interval { 10 | 20 | 30 | 50 | 100 | 200 | 300 |
+     500 | (intvl-value) }
+    */
+    leaf transmit-interval {
+      type union {
+        type enumeration {
+          enum 10 {
+            value 7;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 0;
+            description
+              "20 ms interval";
+          }
+          enum 30 {
+            value 1;
+            description
+              "30 ms interval";
+          }
+          enum 50 {
+            value 2;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 3;
+            description
+              "100 ms interval";
+          }
+          enum 200 {
+            value 4;
+            description
+              "200 ms interval";
+          }
+          enum 300 {
+            value 5;
+            description
+              "300 ms interval";
+          }
+          enum 500 {
+            value 6;
+            description
+              "500 ms interval";
+          }
+        }
+        type uint16 {
+          range "1000..60000";
+        }
+      }
+      default "10";
+      description
+        "SBFD desired transmit interval";
+    }
+  }
+
+  grouping micro-bfd-nbr-grp {
+    description
+      "micro BFD neighbor configuration mode";
+    /*
+    minimum { transmit-interval { 3dot3 | 10 | 20 | 50 | 100 |
+     1000 } | receive-interval { 3dot3 | 10 | 20 | 50 | 100 |
+     1000 } }
+    */
+    container minimum {
+      description
+        "BFD minimum intervals";
+      leaf transmit-interval {
+        type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 50 {
+            value 3;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 4;
+            description
+              "100 ms interval";
+          }
+          enum 1000 {
+            value 5;
+            description
+              "1000 ms interval";
+          }
+        }
+        default "1000";
+        description
+          "Minimum desired transmit interval";
+      }
+      leaf receive-interval {
+        type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 50 {
+            value 3;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 4;
+            description
+              "100 ms interval";
+          }
+          enum 1000 {
+            value 5;
+            description
+              "1000 ms interval";
+          }
+        }
+        default "1000";
+        description
+          "Minimum required receive interval";
+      }
+    }
+    /*
+    detection-multiplier (mult-value)
+    */
+    leaf detection-multiplier {
+      type uint8 {
+        range "1..255";
+      }
+      default "3";
+      description
+        "Detect time multiplier";
+    }
+  }
+
+  grouping sbfd-reflector-grp {
+    description
+      "S-BFD Reflector";
+    /*
+    local-discriminator (discr-val)
+    */
+    leaf local-discriminator {
+      type string {
+        pattern '0(x|X)([fF]{3})([eE]{1})([0-9a-fA-F]{4})';
+      }
+      description
+        "Configure Local Discriminator for the
+         Reflector(0xfffe0000...0xfffeffff)";
+    }
+    /*
+    rx-interval { 20 | 30 | 50 | 100 | 200 | 300 | 500 |
+     (interval-val) }
+    */
+    leaf rx-interval {
+      type union {
+        type enumeration {
+          enum 20 {
+            value 0;
+            description
+              "20 ms interval";
+          }
+          enum 30 {
+            value 1;
+            description
+              "30 ms interval";
+          }
+          enum 50 {
+            value 2;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 3;
+            description
+              "100 ms interval";
+          }
+          enum 200 {
+            value 4;
+            description
+              "200 ms interval";
+          }
+          enum 300 {
+            value 5;
+            description
+              "300 ms interval";
+          }
+          enum 500 {
+            value 6;
+            description
+              "500 ms interval";
+          }
+        }
+        type uint16 {
+          range "1000..6000";
+        }
+      }
+      default "20";
+      description
+        "Configure Receive interval for the Reflector";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxsr6k:router" {
+    description
+      "ericsson-bfd";
+    /*
+    s-bfd
+    */
+    container s-bfd {
+      presence "";
+      description
+        "Configure S-BFD Reflector";
+      uses sbfd-reflector-grp;
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router" {
+    description
+      "ericsson-bfd";
+    /*
+    bfd
+    */
+    container bfd {
+      presence "";
+      description
+        "Bidirectional Forwarding Detection (BFD)";
+      uses bfd-grp;
+    }
+  }
+
+}

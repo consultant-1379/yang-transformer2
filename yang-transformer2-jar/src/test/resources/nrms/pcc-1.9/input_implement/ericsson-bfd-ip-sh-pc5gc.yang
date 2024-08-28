@@ -1,0 +1,239 @@
+module ericsson-bfd-ip-sh-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bfd-ip-sh-pc5gc";
+  prefix bfdipshpc5gc;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ericsson-inet-types-pc5gc {
+    prefix inettpc5gc;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-bfd-types-pc5gc {
+    prefix bfdtpc5gc;
+  }
+  import ericsson-bfd-pc5gc {
+    prefix bfdpc5gc;
+  }
+  import ietf-network-instance {
+    prefix ni;
+  }
+  import ericsson-routing-pc5gc {
+    prefix rtpc5gc;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model extends IETF BFD,
+     used to present PC specific requirement.
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-09-22 {
+    description
+      "add new action";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision 2019-09-11 {
+    description
+      "initial revision";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping bfd-session-grp {
+
+    description
+      "bfd session information";
+
+      list sessions {
+
+        config false;
+
+        key "instance-id";
+
+        leaf instance-id {
+          type string;
+          description
+            "specify instance ID";
+        }
+
+        list session {
+          key "dest-addr path-type";
+
+          leaf dest-addr {
+            type inet:ip-address;
+            description
+              "IP address of the peer.";
+          }
+          leaf multiplier {
+            type uint32;
+            description
+              "session multiplier";
+          }
+          uses bfdtpc5gc:all-session;
+        }
+      }
+  }
+
+  augment "/ni:network-instances/ni:network-instance/rtpc5gc:routing/bfdpc5gc:bfd" {
+    description
+      "bfd locates on routing.";
+    container ip-sh {
+      description
+        "BFD IP single-hop top level container";
+      /* uses bfdtpc5gc:session-statistics-summary; */
+      container sessions {
+        description
+          "BFD IP single-hop sessions.";
+        list session {
+          key "owner dest-addr";
+          description
+            "List of IP single-hop sessions.";
+          leaf owner {
+            type identityref {
+              base inettpc5gc:service-owner;
+            }
+            description
+              "The owner of the service.";
+          }
+          leaf dest-addr {
+            type inet:ip-address;
+            description
+              "IP address of the peer.";
+          }
+          /* uses bfdtpc5gc:common-cfg-parms; */
+          uses bfdtpc5gc:base-cfg-parms;
+        }
+        leaf echo-detection-multiplier {
+          type uint8 {
+            range "1..255";
+          }
+          default "3";
+          description
+            "Multiplier transmitted by local system.";
+        }
+        leaf bfd-mode {
+          type enumeration {
+            enum peerless {
+              value 1;
+              description
+                "bfd echo mode without peer for up.";
+            }
+          }
+          description
+            "bfd mode.";
+        }
+        leaf required-min-echo-tx-interval {
+          type uint32 {
+            range "3000..60000000";
+          }
+          units "microseconds";
+          default "10000";
+          description
+            "This is the Required Min Echo TX Interval as defined in BFD
+             [RFC5880].";
+        }
+      }
+
+      action session-information {
+        description
+          "bfd runstate infomation";
+        /*
+        bfd { (cfw) | (cre) | (up) } { (ipv4) | (ipv6) }
+         */
+        input {
+          /*
+          leaf owner {
+            type identityref {
+              base inettpc5gc:service-owner;
+            }
+            description
+              "The owner of the service.";
+          }
+          */
+
+          choice afi {
+            description
+              "show bfd session information ipv4/ipv6";
+            case ipv4 {
+              leaf ipv4 {
+                type empty;
+                description
+                  "show ipv4 bfd sessions";
+              }
+            }
+            case ipv6 {
+              leaf ipv6 {
+                type empty;
+                description
+                  "show ipv6 bfd sessions";
+              }
+            }
+          }
+        }
+
+        output {
+          uses bfd-session-grp;
+        }
+
+      }
+
+      action session-information-dp {
+        description
+          "bfd session infomation from data plane";
+        /*
+        bfd { owner (cfw | cre | up) } [ipv4 | ipv6]
+         */
+        input {
+          leaf owner {
+            mandatory true;
+            type identityref {
+              base inettpc5gc:service-owner;
+            }
+            description
+              "The owner of the service.";
+          }
+
+          choice afi {
+            description
+              "show ipv4/ipv6 bfd session information from data plane";
+            case ipv4 {
+              leaf ipv4 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "show ipv4 bfd sessions from data plane";
+              }
+            }
+            case ipv6 {
+              leaf ipv6 {
+                type inet:ipv6-address;
+                mandatory true;
+                description
+                  "show ipv6 bfd sessions from data plane";
+              }
+            }
+          }
+        }
+        output {
+          uses bfd-session-grp;
+        }
+      }
+    }
+  }
+}

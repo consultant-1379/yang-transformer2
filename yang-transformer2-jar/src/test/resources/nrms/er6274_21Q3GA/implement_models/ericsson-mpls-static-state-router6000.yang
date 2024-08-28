@@ -1,0 +1,227 @@
+module ericsson-mpls-static-state-router6000 {
+
+  yang-version  1;
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-mpls-static-state-router6000";
+  prefix "mplsstastrouter6000";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-context-state-router6000 {
+    prefix "ctxstrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "IPOS ERICSSON-MPLS-STATIC-STATE model, based on yang file from IPOS DCL
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved.";
+
+  revision "2018-06-05" {
+    description "Change model namespace";
+    reference "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2015-12-07" {
+    description "Initial revision";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+  augment "/ctxsr6k:contexts-state/ctxstrouter6000:context/ctxstrouter6000:router" {
+    description "mpls-static-state";
+
+    container mpls-static {
+      config false;
+      description "mpls-static-state";
+      /* Refer to sub-grouping label-action-grp */
+      uses label-action-grp;
+
+      /* Refer to sub-grouping lsp-grp */
+      uses lsp-grp;
+
+    }
+
+  }
+
+  grouping label-action-grp {
+    description "label-action";
+
+    list label-action {
+      key "in-label";
+      config false;
+      description "label-action";
+
+      leaf in-label {
+        type uint32;
+        description "in-label";
+      }
+
+      leaf action {
+        type enumeration {
+          enum push {
+              value 0;
+              description "push";
+          }
+          enum pop {
+              value 1;
+              description "pop";
+          }
+          enum swap {
+              value 2;
+              description "swap";
+          }
+          enum php {
+              value 3;
+              description "php";
+          }
+          enum unknown {
+              value 4;
+              description "unknown";
+          }
+        }
+        description "action";
+      }
+      leaf out-label {
+        type uint32;
+        description "out-label";
+      }
+
+      leaf next-hop {
+        type inet:ipv4-address;
+        description "next-hop";
+      }
+
+      leaf state {
+        type enumeration {
+          enum Down {
+              value 0;
+              description "Down";
+          }
+          enum Up   {
+              value 1;
+              description "Up";
+          }
+        }
+        description "up/down state of the lsp";
+      }
+
+      leaf out-interface-grid {
+        type uint32;
+        description "Outgoing interface grid";
+      }
+
+      leaf out-circuit-grid {
+        type string;
+        description "Outgoing circuit id";
+      }
+
+    }
+
+  }
+
+  grouping lsp-grp {
+    description "lsp";
+
+    list lsp {
+      key "path-id";
+      config false;
+      description "lsp";
+
+      leaf next-hop {
+        type inet:ipv4-address;
+        description "next-hop";
+      }
+
+      leaf path-id {
+        type uint32;
+        description "path-id";
+      }
+
+      leaf out-label {
+        type uint32;
+        description "out-label";
+      }
+
+      leaf ingress-ip {
+        type inet:ipv4-address;
+        description "ingress-ip";
+      }
+
+      leaf egress-ip {
+        type inet:ipv4-address;
+        description "ingress-ip";
+      }
+
+      leaf ingress-tunnel-num {
+        type uint16;
+        description "ingress-tunnel-num";
+      }
+
+      leaf in-label {
+        type uint32;
+        description "in-label";
+      }
+
+      leaf path-name {
+        type string;
+        description "path-name";
+      }
+
+      leaf state {
+        type enumeration {
+          enum Shut {
+              value 0;
+              description "Shut";
+          }
+          enum Up   {
+              value 1;
+              description "Up";
+          }
+          enum Down {
+              value 2;
+              description "Down";
+          }
+          enum Invalid {
+              value 3;
+              description "Invalid";
+          }
+        }
+        description "up/down state of the lsp";
+      }
+
+      leaf origin {
+        type string;
+        description "origin";
+      }
+
+      leaf bidirectional {
+        type string;
+        description "bidirectional";
+      }
+
+    }
+
+  }
+
+
+}

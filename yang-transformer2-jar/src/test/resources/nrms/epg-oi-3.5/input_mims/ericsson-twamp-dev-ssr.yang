@@ -1,0 +1,96 @@
+module ericsson-twamp-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-twamp-dev-ssr";
+
+  prefix "twampdevssr";
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-twamp-ipos {
+    prefix "twampipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  } 
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-twamp-ipos
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-05-09" {
+    description
+      "Delete imported module not used";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-09-13" {
+    description
+      "IPOS-14765 change module name, namespace and prefix to 
+       align with YMF rule";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  } 
+
+  revision "2017-06-29" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:ippm/"
+    + "ctxipos:twamp-light/twampipos:cont-sender" {
+    deviate not-supported;
+}
+deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:ippm/"
+    + "ctxipos:twamp-light/twampipos:sender/twampipos:session/twampipos:pkt-timeout" {
+    deviate not-supported;
+}
+deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:ippm/"
+    + "ctxipos:twamp-light/twampipos:sender/twampipos:session/"
+    + "twampipos:session-network-parameter/"
+    + "twampipos:session-network-parameter-choice/"
+    + "twampipos:stateful-reflector-ip/twampipos:stateful-reflector-ip" {
+    deviate not-supported;
+}
+deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:ippm/"
+    + "ctxipos:twamp-light/twampipos:sender/twampipos:session" {
+    deviate add {
+        unique "twampipos:session-network-parameter/twampipos:session-network-parameter-choice"
+             + "/twampipos:reflector-ip/twampipos:reflector-ip twampipos:session-network-parameter"
+             + "/twampipos:reflector-port twampipos:session-network-parameter"
+             + "/twampipos:source-ip twampipos:session-network-parameter/twampipos:source-port";
+    }
+}
+}

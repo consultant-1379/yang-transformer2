@@ -1,0 +1,119 @@
+module ericsson-ip-dev-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ip-dev-pc5gc";
+  prefix ipdpc5gc;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-ip {
+    prefix ip;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-if-types-pc5gc {
+    prefix pcift;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model deviate IETF IP Management.
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-08-09 {
+    description
+      "Change interface type";
+    reference
+      "EN/LZN 704 0249";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2019-07-15 {
+    description
+      "Deviation on IETF IP Management YANG";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4" {
+    deviate add {
+      must "(../if:type != 'pcift:ethernetCsmacd') and
+            (../if:type != 'pcift:activeBackupBonding')" {
+        error-message
+          "ipv4 is not supported for ethernetCsmacd or activeBackupBonding type interface";
+        description
+          "ipv4 is not supported for ethernetCsmacd or activeBackupBonding type interface";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv6" {
+    deviate add {
+      must "(../if:type != 'pcift:ethernetCsmacd') and
+            (../if:type != 'pcift:activeBackupBonding')" {
+        error-message
+          "ipv6 is not supported for ethernetCsmacd or activeBackupBonding type interface";
+        description
+          "ipv6 is not supported for ethernetCsmacd or activeBackupBonding type interface";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4/ip:forwarding" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4/ip:address" {
+    deviate add {
+      max-elements 1;
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4/ip:address/ip:origin" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4/ip:neighbor" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv6/ip:forwarding" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv6/ip:address" {
+    deviate add {
+      max-elements 1;
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv6/ip:address/ip:origin" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv6/ip:address/ip:status" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv6/ip:neighbor" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv6/ip:dup-addr-detect-transmits" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv6/ip:autoconf" {
+    deviate not-supported;
+  }
+}

@@ -1,0 +1,96 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-static-route-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-static-route-dev-router6000";
+
+  prefix "starouterouter6000";
+
+  import ericsson-static-route-router6000 {
+    prefix "starouter6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-static-route-dev-router6000
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-23" {
+    description
+      "deviation for both backup-dvsr and track.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-22" {
+    description
+      "deviation for ericsson-static-route-ipos.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  /*ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip->route->dvsr*/
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip/starouter6k:static-route/starouter6k:dvsr" {
+    deviate not-supported;
+  }
+
+  /*ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip->route->ipfrr-addr->backup-dvsr*/
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip/starouter6k:static-route/starouter6k:ipfrr-addr/starouter6k:backup-dvsr" {
+    deviate not-supported;
+  }
+
+  /*ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip->route->ipfrr-addr->track*/
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip/starouter6k:static-route/starouter6k:ipfrr-addr/starouter6k:track" {
+    deviate not-supported;
+  }
+
+  /*ctxsr6k:contexts/ctxr6k:context/ctxr6k:ipv6->route->dvsr*/
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ipv6/starouter6k:static-route/starouter6k:dvsr" {
+    deviate not-supported;
+  }
+
+  /*ctxsr6k:contexts/ctxr6k:context/ctxr6k:ipv6->route->ipfrr-addr->backup-dvsr*/
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ipv6/starouter6k:static-route/starouter6k:ipfrr-addr/starouter6k:backup-dvsr" {
+    deviate not-supported;
+  }
+
+  /*ctxsr6k:contexts/ctxr6k:context/ctxr6k:ipv6->route->ipfrr-addr->track*/
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ipv6/starouter6k:static-route/starouter6k:ipfrr-addr/starouter6k:track" {
+    deviate not-supported;
+  }
+}

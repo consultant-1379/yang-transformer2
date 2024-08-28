@@ -1,0 +1,89 @@
+module ericsson-interfaces-ext-dev-router6000{
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interfaces-ext-dev-router6000";
+
+  prefix "ifxvrouter6000";
+
+  import ericsson-interfaces-ext-router6000 {
+   prefix "ifxrouter6000";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interfaces-ext-dev-router6000
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-10-23" {
+    description
+      "Update XPath for access-group.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-21" {
+    description
+      "deviation for ericsson-interfaces-ext-ipos.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+ /*if:interfaces/if:interface/l3-interface/ip/verify-unicast-source-reachable-via-choice
+ /any/any/access-group*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface/ifxrouter6000:ip"
+  + "/ifxrouter6000:verify-unicast-source-reachable-via/ifxrouter6000:verify-unicast-source-reachable-via-choice/ifxrouter6000:any/ifxrouter6000:any/ifxrouter6000:access-group"
+  {
+   deviate not-supported;
+  }
+ /*if:interfaces/if:interface/l3-interface/ip/verify-unicast-source-reachable-via-choice
+ /receive/receive/access-group*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface/ifxrouter6000:ip"
+  + "/ifxrouter6000:verify-unicast-source-reachable-via/ifxrouter6000:verify-unicast-source-reachable-via-choice/ifxrouter6000:receive/ifxrouter6000:receive/ifxrouter6000:access-group"
+  {
+   deviate not-supported;
+  }
+  /*if:interfaces/if:interface/l3-interface/ip/tcp-mss-replace*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface"
+  + "/ifxrouter6000:ip/ifxrouter6000:tcp-mss-replace" {
+   deviate not-supported;
+  }
+  /*if:interfaces/if:interface/l3-interface/ip/icmp-suppress-packet-too-big*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface/ifxrouter6000:ip"
+  + "/ifxrouter6000:icmp-suppress-packet-too-big" {
+   deviate not-supported;
+  }
+  /*if:interfaces/if:interface/l3-interface/forward-policy*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface"
+  +"/ifxrouter6000:forward-policy" {
+   deviate not-supported;
+  }
+}

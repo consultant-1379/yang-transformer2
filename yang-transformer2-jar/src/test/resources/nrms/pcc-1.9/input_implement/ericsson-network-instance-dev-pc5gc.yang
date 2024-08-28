@@ -1,0 +1,105 @@
+module ericsson-network-instance-dev-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-network-instance-dev-pc5gc";
+  prefix nidpc5gc;
+
+  import ietf-network-instance {
+    prefix ni;
+    reference
+      "RFC 8529: A YANG Data Model for Network Instance";
+  }
+  import ietf-ip {
+    prefix ip;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ericsson-if-types-pc5gc {
+    prefix pcift;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model deviate IETF RFC 8529,
+     used to present PC specific requirement.
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+
+  revision 2020-08-09 {
+    description
+      "Change interface type";
+    reference
+      "EN/LZN 704 0249";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2019-10-12 {
+    description
+      "Initial revision";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/ni:network-instances/ni:network-instance/ni:root-type" {
+    deviate not-supported;
+  }
+
+  deviation "/ni:network-instances/ni:network-instance" {
+    deviate add {
+      max-elements 8192;
+    }
+  }
+
+  deviation "/ni:network-instances/ni:network-instance/ni:name" {
+    deviate replace {
+      type string {
+        length "1..63";
+      }
+    }
+  }
+
+  deviation "/ni:network-instances/ni:network-instance/ni:description" {
+    deviate replace {
+      type string {
+        length "1..80";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv4/ni:bind-ni-name" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ip:ipv6/ni:bind-ni-name" {
+    deviate not-supported;
+  }
+
+  deviation "/ni:bind-ni-name-failed" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ni:bind-ni-name" {
+    deviate add {
+      must "(../if:type != 'pcift:ethernetCsmacd')
+            and (../if:type != 'pcift:activeBackupBonding')" {
+          error-message 
+            "bind-ni-name is not supported for ethernetCsmacd or activeBackupBonding type interface";
+          description
+            "bind-ni-name is not supported for ethernetCsmacd or activeBackupBonding type interface";
+      }
+      yexte:restricted;
+    }
+  }
+}

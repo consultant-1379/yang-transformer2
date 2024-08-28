@@ -1,0 +1,279 @@
+module ericsson-lldp-ext-state-router6000 {
+  yang-version 1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-lldp-ext-state-router6000";
+  prefix lldpxstrouter6000;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-contexts-router6000 {
+    prefix ctxsr6k;
+  }
+  import ericsson-lldp-state-router6000 {
+    prefix lldpstrouter6000;
+  }
+  import ericsson-notifications {
+    prefix notife;
+  }
+
+  organization "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "The LLDP extension yang module for ericsson specific
+     IEEE 802.1AB organizationally defined discovery information.
+
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved.";	 
+
+  revision 2020-09-22 {
+    description
+      "corrected lldp-state prefix";
+    reference "Ericsson IPOS LLDP ext state data model.";
+    yexte:version "4";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2019-03-14 {
+    description
+      "Marking some indexes as notifiable true";
+    reference "Ericsson IPOS LLDP ext state data model.";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2018-08-27 {
+    description
+      "Adding extension statement notifiable-state-data";
+    reference "Ericsson IPOS LLDP ext state data model.";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2018-08-21 {
+    description
+      "corrected portDelay/port-delay to linkDelay/link-delay
+       and corrected tvls-tx-enable to tlvs-tx-enable";
+    reference "Ericsson IPOS LLDP ext state data model.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision 2018-07-01 {
+    description
+      "Initial revision";
+    reference "Ericsson IPOS LLDP ext state data model.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsr6k:contexts-state/lldpstrouter6000:lldp" {
+    description
+      "Augment router to include lldp.";
+    container lldpx {
+      config false;
+      description
+        "lldp-ext-state";
+      container eric-config {
+        config false;
+        list port-config-entry-v2 {
+          key "if-index dest-address-index";
+          config false;
+          description
+            "LLDP configuration information that controls the
+             transmission of Ericsson Specific organizationally defined TLVs on
+             LLDP transmission capable ports.
+
+             This configuration object augments the lldpV2PortConfigEntryV2 of
+             the LLDP-MIB, therefore it is only present along with the port
+             configuration defined by the associated lldpV2PortConfigEntryV2
+             entry.
+
+             Each active lldpV2XericPortConfigTableV2 must be from non-volatile
+             storage (along with the corresponding lldpV2PortConfigEntryV2)
+             after a re-initialization of the management system.";
+          leaf if-index {
+            type lldpstrouter6000:InterfaceIndex;
+            config false;
+            description
+              "The interface index value used to identify the port
+               associated with this entry. Its value is an index into
+               the interfaces MIB.
+               The value of this object is used as an index to the
+               lldp-v2-xeric-port-config-entry-v2.";
+          }
+          leaf dest-address-index {
+            type lldpstrouter6000:LldpV2DestAddressTableIndex;
+            config false;
+            description
+              "The index value used to identify the destination
+               MAC address associated with this entry. Its value identifies
+               the row in the lldpV2DestAddressTable where the MAC address
+               can be found.
+               The value of this object is used as an index to the
+               lldpV2PortConfigTable.";
+          }
+          leaf tlvs-tx-enable {
+            type bits {
+              bit nodeDelay { 
+                position 0;
+                description
+                  "Indicates that LLDP should tarnsmit NodeDelay TLV";
+              }
+              bit portSpeed {
+                position 1;
+                description
+                  "Indicates that LLDP should tarnsmit PortSpeed TLV";
+              }
+              bit linkDelay {
+                position 2;
+                description
+                  "Indicates that LLDP should tarnsmit LinkDelay TLV";
+              }
+            }
+            config false;
+	    notife:notifiable-state-data false;
+            description
+              "The tlvs-tx-enable, defined as a bitmap,
+               includes organizationally defined set of LLDP
+               TLVs whose transmission is allowed on the local LLDP agent by
+               the network management.  Each bit in the bitmap corresponds
+               to an Ericsson specific subtype associated with a Ericsson
+               specifi organizational  optional TLV.  The bit 0 is not used
+               since there is no corresponding subtype.
+
+               bit position 0 'nodeDelay(0)'  indicates that
+               LLDP agent should transmit 'Node Delay TLV'.
+
+               bit position 1 'portSpeed(1)' indicates that
+               LLDP agent should transmit  'Port Speed TLV'.
+
+               bit position 2 'linkDelay(2)' indicates that
+               LLDP agent should transmit 'Link Delay TLV'.
+
+               The default value for lldpV2XericPortConfigTLVsTxEnable object
+               is an empty set, which means no enumerated values are set.
+
+               The value of this object must be restored from non-volatile
+               storage after a re-initialization of the management system.";
+          }
+       }
+    }
+    container eric-local-data {
+      config false;
+      leaf node-delay {
+        type uint64;
+        units "microseconds";
+        config false;
+        description
+          "Node Delay in Micro Seconds.";
+      }
+      list port-attribute-entry {
+        key "if-index";
+        config false;
+        description
+          "Information about Ericsson Specific organizationally defined
+           LLDP extension.";
+        leaf if-index {
+          type lldpstrouter6000:InterfaceIndex;
+          config false;
+          description
+            "The interface index value used to identify the port
+             associated with this entry. Its value is an index
+             into the interfaces MIB.
+             The value of this object is used as an index to the
+             lldpV2XericLocPortAttributeTable.";
+        }
+        leaf port-speed {
+          type uint32;
+          units "Kbps";
+          config false;
+	  notife:notifiable-state-data false;
+          description
+            "Port speed in Kilo bits per second.";
+        }
+        leaf link-delay {
+          type uint64;
+          units "nanoseconds";
+          config false;
+          description
+            "Link delay in Nano Seconds.";
+        }
+      }
+    }
+
+    container eric-remote-data {
+      config false;
+      list port-attribute-entry {
+        key "rem-local-if-index  rem-local-dest-address-index rem-index";
+        config false;
+        description
+          "Information about a particular port component.";
+        leaf rem-local-if-index {
+          type lldpstrouter6000:InterfaceIndex;
+          config false;
+          description
+            "The interface index value used to identify the port
+             associated with this entry. Its value is an index
+             into the interfaces MIB
+             The value of this object is used as an index to the
+             lldpV2XericRemPortAttributeTable.";
+        }
+        leaf rem-local-dest-address-index {
+          type lldpstrouter6000:LldpV2DestAddressTableIndex;
+          config false;
+          description
+            "The index value used to identify the destination
+             MAC address associated with this entry. Its value identifies
+             the row in the lldpV2DestAddressTable where the MAC address
+             can be found. The value of this object is used as an index to the
+             lldpV2XericRemPortAttributeTable.";
+        }
+        leaf rem-index {
+          type uint32 {
+            range "1..2147483647";
+          }
+          config false;
+          description
+            "This object represents an arbitrary local integer value used
+             by this agent to identify a particular connection instance,
+             unique only for the indicated remote system.
+             An agent is encouraged to assign monotonically increasing
+             index values to new entries, starting with one, after each
+             reboot. It is considered unlikely that the lldpRemIndex
+             can wrap between reboots.";
+        }
+        leaf node-delay {
+          type uint64;
+          units "microseconds";
+          config false;
+          description
+            "Node Delay in Micro Seconds.";
+        }
+        leaf port-speed {
+          type uint32;
+          units "Kbps";
+          config false;
+          description
+            "Port speed in Kilo bits per second.";
+        }
+        leaf link-delay {
+          type uint64;
+          units "nanoseconds";
+          config false;
+          description
+            "Link delay in Nano Seconds.";
+        }
+      }
+    }
+   }
+ }
+}

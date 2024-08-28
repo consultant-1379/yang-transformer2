@@ -1,0 +1,44 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-bridge-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bridge-dev-router6274";
+
+  prefix "bridgevrouter6274";
+
+  import ericsson-bridge-router6000{
+    prefix "bridgerouter6000";
+  }
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bridge-dev-router6274
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-11-30" {
+    description
+      "combined proxy-arp-nd cli not supported";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+   /*Combined proxy arp-nd cli is not supported*/
+    deviation "/bridgerouter6000:bridge/bridgerouter6000:bridge-instance/bridgerouter6000:evpn-instance/bridgerouter6000:proxy-arp-nd" {
+      deviate not-supported;
+    }
+}

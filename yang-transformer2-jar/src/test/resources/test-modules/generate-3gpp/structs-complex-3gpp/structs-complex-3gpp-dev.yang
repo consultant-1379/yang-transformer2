@@ -1,0 +1,42 @@
+module structs-complex-3gpp-dev {
+
+	namespace "urn:test:structs-complex-3gpp-dev";
+	prefix this;
+
+	revision "2021-12-01";
+
+	import structs-complex-3gpp {
+		prefix base;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	deviation "/base:Cont1/attributes/struct11/member13" {
+		deviate not-supported;
+	}
+
+	augment "/base:Cont1/attributes/struct11" {
+
+		leaf member13 {
+			type int32;
+		}
+	}
+
+	// - - - - - - - - - - - - 
+
+	deviation "/base:Cont1/attributes/struct21/member22" {
+		deviate add {
+			yexte:updated-description "updated description leaf22";
+		}
+	}
+
+	// - - - - - - - - - - - - 
+
+	deviation "/base:Cont1/attributes/struct31/member33" {
+		deviate replace {
+			mandatory false;
+		}
+	}
+}

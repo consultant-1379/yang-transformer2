@@ -1,0 +1,135 @@
+module ericsson-pbr-ipos-dev-vre {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-pbr-ipos-dev-vre";
+
+  prefix "pbriposdev";
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-pbr-ipos {
+    prefix "pbripos";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-pbr-ipos
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-04-09" {
+    description
+      "remove lsp under ip and ipv6 access group.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-02-16" {
+    description
+      "redirect command additions for L3 FEC mapping FT
+       JIRA19026";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-22" {
+    description
+      "change must condition to mandatory to fix JIRA20396";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2016-12-29" {
+    description
+      "remove presence to fix JIRA-3655.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-12-20" {
+    description
+      "add back presence for container.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-15" {
+    description
+      "remove presence of container to non-presence.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  deviation "/ctxsipos:contexts/pbripos:forward/"
+  + "pbripos:redirect-destination/pbripos:redirect-destination/pbripos:lsp" {
+      deviate not-supported;
+  }
+  deviation "/ctxsipos:contexts/pbripos:forward/pbripos:ip-access-group/pbripos:class/"
+  + "pbripos:redirect-destination/pbripos:redirect-destination/pbripos:lsp" {
+      deviate not-supported;
+  }
+
+  deviation "/ctxsipos:contexts/pbripos:forward/pbripos:ipv6-access-group/pbripos:class/"
+  + "pbripos:redirect-destination/pbripos:redirect-destination/pbripos:lsp" {
+      deviate not-supported;
+  }
+}

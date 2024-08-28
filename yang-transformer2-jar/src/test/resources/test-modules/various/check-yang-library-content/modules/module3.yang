@@ -1,0 +1,14 @@
+module module3 {
+
+	namespace "urn:test:module3";
+	prefix this;
+
+	revision "2022-09-25";
+
+	import module1 {
+		prefix mod1;
+	}
+
+	feature feature35;
+	feature feature36;
+}

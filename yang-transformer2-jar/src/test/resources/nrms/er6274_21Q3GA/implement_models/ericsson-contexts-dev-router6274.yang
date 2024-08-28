@@ -1,0 +1,92 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-contexts-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-contexts-dev-router6274";
+
+  prefix "ctxsvrouter6274";
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-notifications {
+    prefix "notife";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-contexts-dev-router6274
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-01-29" {
+    description
+      "remove deviation for ifindex-persistence";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2020-06-16" {
+    description
+      "deviation for load-balance cli";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /*load-balance layer-3*/
+  /*hide ctxsr6k:contexts/ctxsr6k:service->load-balance->layer-3*/
+  deviation "/ctxsr6k:contexts/ctxsr6k:service/ctxsr6k:load-balance/ctxsr6k:layer-3" {
+    deviate not-supported;
+  }
+
+  /*load-balance layer-4*/
+  /*hide ctxsr6k:contexts/ctxsr6k:service->load-balance->layer-4*/
+  deviation "/ctxsr6k:contexts/ctxsr6k:service/ctxsr6k:load-balance/ctxsr6k:layer-4" {
+    deviate not-supported;
+  }
+
+  /*load-balance prefer-local-egress*/
+  /*hide ctxsr6k:contexts/ctxsr6k:service->load-balance->prefer-local-egress*/
+  deviation "/ctxsr6k:contexts/ctxsr6k:service/ctxsr6k:load-balance/ctxsr6k:prefer-local-egress" {
+    deviate not-supported;
+  }
+
+  /*hide global->service->load-balance->ip->source-only*/
+  deviation "/ctxsr6k:contexts/ctxsr6k:service/ctxsr6k:load-balance/ctxsr6k:ip/ctxsr6k:ip/ctxsr6k:source-only/ctxsr6k:source-only" {
+    deviate not-supported;
+  }
+
+  /*hide global->service->load-balance->link-group->source-only*/
+  deviation "/ctxsr6k:contexts/ctxsr6k:service/ctxsr6k:load-balance/ctxsr6k:link-group/ctxsr6k:link-group/ctxsr6k:source-only/ctxsr6k:source-only" {
+    deviate not-supported;
+  }
+
+  /*hide global->service->load-balance->mpls->payload*/
+  deviation "/ctxsr6k:contexts/ctxsr6k:service/ctxsr6k:load-balance/ctxsr6k:mpls-payload" {
+    deviate not-supported;
+  }
+
+}

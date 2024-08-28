@@ -1,0 +1,123 @@
+module ericsson-twamp-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-twamp-dev-router6274";
+
+  prefix "twamprouter6274";
+
+  import ericsson-twamp-router6000 {
+   prefix "twampr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+   prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+   prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-twamp-dev-router6274
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-28" {
+    description
+      "fix yang error";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+   revision "2018-01-17"{
+    description
+      "deviation for twamp sender and cont-sender";
+      reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "1";
+   }
+
+  revision "2016-07-28" {
+    description
+      "deviation for ericsson-twamp-ipos.yang file";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "0";
+  }
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ippm/ctxr6k:twamp-light/twampr6k:reflector/twampr6k:session/twampr6k:session-network-parameter/twampr6k:sender-port" {
+         deviate replace {
+         type uint16 {
+            range "1..65535";
+          }
+         }
+       }
+ deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ippm/ctxr6k:twamp-light/twampr6k:reflector/twampr6k:session/twampr6k:session-network-parameter/twampr6k:source-port" {
+         deviate replace {
+         type uint16 {
+            range "1..65535";
+          }
+         }
+        }
+ deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ippm/ctxr6k:twamp-light/twampr6k:sender/twampr6k:session/twampr6k:session-network-parameter/twampr6k:source-port" {
+         deviate replace {
+         type uint16 {
+            range "1..65535";
+          }
+         }
+        }
+deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ippm/ctxr6k:twamp-light/twampr6k:sender/twampr6k:session/twampr6k:session-network-parameter/twampr6k:reflector-port" {
+         deviate replace {
+         type uint16 {
+            range "1..65535";
+          }
+         }
+     }
+deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ippm/ctxr6k:twamp-light/twampr6k:cont-sender/twampr6k:session/twampr6k:session-network-parameter/twampr6k:source-port" {
+         deviate replace {
+         type uint16 {
+            range "1..65535";
+          }
+         }
+       }
+deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ippm/ctxr6k:twamp-light/twampr6k:cont-sender/twampr6k:session/twampr6k:session-network-parameter/twampr6k:reflector-port" {
+         deviate replace {
+         type uint16 {
+            range "1..65535";
+          }
+         }
+       }
+deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ippm/ctxr6k:twamp-light/twampr6k:cont-sender/twampr6k:session/twampr6k:count" {
+         deviate not-supported;
+         }
+deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ippm/ctxr6k:twamp-light/twampr6k:cont-sender/twampr6k:session/twampr6k:timeout"{
+         deviate not-supported;
+         }
+}

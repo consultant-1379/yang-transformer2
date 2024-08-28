@@ -1,0 +1,1627 @@
+module ericsson-lldp-state-router6000 {
+  yang-version 1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-lldp-state-router6000";
+  prefix lldpstrouter6000;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ericsson-contexts-router6000 {
+    prefix ctxsr6k;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-notifications {
+    prefix notife;
+  }
+
+
+  organization "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "Router6000 LLDP model, based on yang file from IPOS exec_cli,
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved.";
+
+  revision 2019-10-23 {
+    description
+    "maked lldp-v2-loc-port-id & lldp-v2-loc-port-desc as notifiable params";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision 2019-03-14 {
+    description
+      "removing pattern for chassis-id and port-id and management address";
+    reference "Ericsson Router6000 LLDP state data model.";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision 2018-09-18 {
+    description
+      "Marking some indexes as notifiable true";
+    reference "Ericsson Router6000 LLDP state data model.";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision 2018-08-27 {
+    description
+      "Adding extension statement notifiable-state-data";
+    reference "Ericsson Router6000 LLDP state data model.";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2018-07-18 {
+    description
+      "Removed unused typedefs";
+    reference "Ericsson Router6000 LLDP state data model.";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision 2018-06-05 {
+    description
+      "Change model namespace";
+    reference "Ericsson Router6000 LLDP state data model.";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2018-01-11 {
+    description
+      "Initial revision";
+    reference "Ericsson Router6000 LLDP state data model.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  typedef LldpV2ChassisIdSubtype {
+    type enumeration {
+      enum "chassisComponent" {
+        value 1;
+        description
+          "chassiscomponent(1) represents a chassis identifier";
+      }
+      enum "interfaceAlias" {
+        value 2;
+        description
+          "interfacealias(2) represents a chassis identifier";
+      }
+      enum "portComponent" {
+        value 3;
+        description
+          "portcomponent(3) represents a chassis identifier";
+      }
+      enum "macAddress" {
+        value 4;
+        description
+          "macaddress(4) represents a chassis identifier";
+      }
+      enum "networkAddress" {
+        value 5;
+        description
+          "networkaddress(5) represents a chassis identifier";
+      }
+      enum "interfaceName" {
+        value 6;
+        description
+          "interfacename(6) represents a chassis identifier";
+      }
+      enum "local" {
+        value 7;
+        description
+          "local(7) represents a chassis identifier";
+      }
+    }
+    description
+      "This TC describes the source of a chassis identifier.
+       The enumeration 'chassisComponent(1)' represents a chassis
+       identifier based on the value of entPhysicalAlias object
+       (defined in IETF RFC 6933) for a chassis component (i.e.,
+       an entPhysicalClass value of 'chassis(3)').
+       The enumeration 'interfaceAlias(2)' represents a chassis
+       identifier based on the value of ifAlias object (defined in
+       IETF RFC 2863) for an interface on the containing chassis.
+       The enumeration 'portComponent(3)' represents a chassis
+       identifier based on the value of entPhysicalAlias object
+       (defined in IETF RFC 6933) for a port or backplane
+       component (i.e., entPhysicalClass value of 'port(10)' or
+       'backplane(4)'), within the containing chassis.
+       The enumeration 'macAddress(4)' represents a chassis
+       identifier based on the value of a unicast source address
+       (encoded in network byte order and IEEE 802.3 canonical bit
+       order), of a port on the containing chassis as defined in
+       IEEE Std 802.
+       The enumeration 'networkAddress(5)' represents a chassis
+       identifier based on a network address, associated with
+       a particular chassis. The encoded address is actually
+       composed of two fields. The first field is a single octet,
+       representing the IANA AddressFamilyNumbers value for the
+       specific address type, and the second field is the network
+       address value.
+       The enumeration 'interfaceName(6)' represents a chassis
+       identifier based on the value of ifName object (defined in
+       IETF RFC 2863) for an interface on the containing chassis.
+       The enumeration 'local(7)' represents a chassis identifier
+       based on a locally defined value.";
+  }
+
+  typedef LldpV2ChassisId {
+    type string {
+      length "1..255";
+    }
+    description
+      "This TC describes the format of a chassis identifier string.
+       Objects of this type are always used with an associated
+       LldpChassisIdSubtype object, which identifies the format of
+       the particular LldpChassisId object instance.
+       If the associated LldpChassisIdSubtype object has a value of
+       'chassisComponent(1)', then the octet string identifies
+       a particular instance of the entPhysicalAlias object
+       (defined in IETF RFC 6933) for a chassis component (i.e.,
+       an entPhysicalClass value of 'chassis(3)').
+       If the associated LldpChassisIdSubtype object has a value
+       of 'interfaceAlias(2)', then the octet string identifies
+       a particular instance of the ifAlias object (defined in
+       IETF RFC 2863) for an interface on the containing chassis.
+       If the particular ifAlias object does not contain any values,
+       another chassis identifier type should be used.
+       If the associated LldpChassisIdSubtype object has a value
+       of 'portComponent(3)', then the octet string identifies a
+       particular instance of the entPhysicalAlias object (defined
+       in IETF RFC 6933) for a port or backplane component within
+       the containing chassis.
+       If the associated LldpChassisIdSubtype object has a value of
+       'macAddress(4)', then this string identifies a particular
+       unicast source address (encoded in network byte order and
+       IEEE 802.3 canonical bit order), of a port on the containing
+       chassis as defined in IEEE Std 802.
+       If the associated LldpChassisIdSubtype object has a value of
+       'networkAddress(5)', then this string identifies a particular
+       network address, encoded in network byte order, associated
+       with one or more ports on the containing chassis. The first
+       octet contains the IANA Address Family Numbers enumeration
+       value for the specific address type, and octets 2 through
+       N contain the network address value in network byte order.
+       If the associated LldpChassisIdSubtype object has a value
+       of 'interfaceName(6)', then the octet string identifies
+       a particular instance of the ifName object (defined in
+       IETF RFC 2863) for an interface on the containing chassis.
+       If the particular ifName object does not contain any values,
+       another chassis identifier type should be used.
+       If the associated LldpChassisIdSubtype object has a value of
+       'local(7)', then this string identifies a locally assigned
+       Chassis ID.";
+  }
+
+  typedef LldpV2PortIdSubtype {
+    type enumeration {
+      enum "interfaceAlias" {
+        value 1;
+        description
+          "interfacealias(1) represents a port identifier";
+      }
+      enum "portComponent" {
+        value 2;
+        description
+          "portcomponent(2) represents a port identifier";
+      }
+      enum "macAddress" {
+        value 3;
+        description
+          "macaddress(3) represents a port identifier";
+      }
+      enum "networkAddress" {
+        value 4;
+        description
+          "macaddress(4) represents a port identifier";
+      }
+      enum "interfaceName" {
+        value 5;
+        description
+          "interfaceaname(5) represents a port identifier";
+      }
+      enum "agentCircuitId" {
+        value 6;
+        description
+          "agentcircuitrid(6) represents a port identifier";
+      }
+      enum "local" {
+        value 7;
+        description
+          "local(7) represents a port identifier";
+      }
+    }
+    description
+      "This TC describes the source of a particular type of port
+       identifier used in the LLDP MIB.
+       The enumeration 'interfaceAlias(1)' represents a port
+       identifier based on the ifAlias MIB object, defined in IETF
+       RFC 2863.
+       The enumeration 'portComponent(2)' represents a port
+       identifier based on the value of entPhysicalAlias (defined in
+       IETF RFC 6933) for a port component (i.e., entPhysicalClass
+       value of 'port(10)'), within the containing chassis.
+       The enumeration 'macAddress(3)' represents a port identifier
+       based on a unicast source address (encoded in network
+       byte order and IEEE 802.3 canonical bit order), which has
+       been detected by the agent and associated with a particular
+       port (IEEE Std 802).
+       The enumeration 'networkAddress(4)' represents a port
+       identifier based on a network address, detected by the agent
+       and associated with a particular port.
+       The enumeration 'interfaceName(5)' represents a port
+       identifier based on the ifName MIB object, defined in IETF
+       RFC 2863.
+       The enumeration 'agentCircuitId(6)' represents a port
+       identifier based on the agent-local identifier of the circuit
+       (defined in IETF RFC 3046), detected by the agent and associated
+       with a particular port.
+       The enumeration 'local(7)' represents a port identifier
+       based on a value locally assigned.";
+  }
+
+  typedef LldpV2PortId {
+    type string {
+      length "1..255";
+    }
+    description
+      "This TC describes the format of a port identifier string.
+       Objects of this type are always used with an associated
+       LldpPortIdSubtype object, which identifies the format of the
+       particular LldpPortId object instance.
+       If the associated LldpPortIdSubtype object has a value of
+       'interfaceAlias(1)', then the octet string identifies a
+       particular instance of the ifAlias object (defined in IETF
+       RFC 2863). If the particular ifAlias object does not contain
+       any values, another port identifier type should be used.
+       If the associated LldpPortIdSubtype object has a value of
+       'portComponent(2)', then the octet string identifies a
+       particular instance of the entPhysicalAlias object (defined
+       in IETF RFC 6933) for a port or backplane component.
+       If the associated LldpPortIdSubtype object has a value of
+       'macAddress(3)', then this string identifies a particular
+       unicast source address (encoded in network byte order
+       and IEEE 802.3 canonical bit order) associated with the port
+       (IEEE Std 802).
+       If the associated LldpPortIdSubtype object has a value of
+       'networkAddress(4)', then this string identifies a network
+       address associated with the port. The first octet contains
+       the IANA AddressFamilyNumbers enumeration value for the
+       specific address type, and octets 2 through N contain the
+       networkAddress address value in network byte order.
+       If the associated LldpPortIdSubtype object has a value of
+       'interfaceName(5)', then the octet string identifies a
+       particular instance of the ifName object (defined in IETF
+       RFC 2863). If the particular ifName object does not contain
+       any values, another port identifier type should be used.
+       If the associated LldpPortIdSubtype object has a value of
+       'agentCircuitId(6)', then this string identifies a agent-local
+       identifier of the circuit (defined in IETF RFC 3046).
+       If the associated LldpPortIdSubtype object has a value of
+       'local(7)', then this string identifies a locally
+       assigned port ID.";
+  }
+
+  typedef LldpV2ManAddrIfSubtype {
+    type enumeration {
+      enum "unknown" {
+        value 1;
+        description
+          "unknown";
+      }
+      enum "ifIndex" {
+        value 2;
+        description
+          "ifindex";
+      }
+      enum "systemPortNumber" {
+        value 3;
+        description
+          "systemportnumber";
+      }
+    }
+    description
+      "This TC defines an enumeration value that identifies the interface numbering method used for defining the
+       interface number associated with a management address.  An object with this syntax defines the format of an
+       interface number object.  The enumeration 'unknown(1)' represents the case where the interface is not known. In this case, the corresponding interface number is of zero length.  The enumeration 'ifIndex(2)' represents interface identifier
+       based on the ifIndex MIB object.  The enumeration 'systemPortNumber(3)' represents interface
+       identifier based on the system port numbering convention.";
+  }
+
+  typedef LldpV2ManAddress {
+    type string {
+      length "1..31";
+    }
+    description
+      "The value of a management address associated with the LLDP
+       agent that may be used to reach higher layer entities to
+       assist discovery by network management.
+       It should be noted that appropriate security credentials,
+       such as SNMP engineId, may be required to access the LLDP
+       agent using a management address. These necessary credentials
+       should be known by the network management and the objects
+       associated with the credentials are not included in the
+       LLDP agent.";
+  }
+
+  typedef LldpV2SystemCapabilitiesMap {
+    type uint32 {
+      range "1..2047";
+    }
+    description
+      "This TC describes the system capabilities.
+       The value 1 (bit position 0  'other(0)') indicates that the system has capabilities
+       other than those listed below.
+       The value 2 (bit position 1 'repeater(1)') indicates that the system has repeater
+       capability.
+       The value 4 (bit position 2 'bridge(2)') indicates that the system has bridge
+       capability.
+       The value 8 (bit position 3 'wlanAccessPoint(3)') indicates that the system has
+       WLAN access point capability.
+       The value 16 (bit position 4 'router(4)') indicates that the system has router
+       capability.
+       The value 32 (bit position 5 'telephone(5)') indicates that the system has telephone
+       capability.
+       The value 64 (bit position 6 'docsisCableDevice(6)') indicates that the system has
+       DOCSIS Cable Device capability (IETF RFC 4639 & 2670).
+       The value 128 (bit position 7 'stationOnly(7)') indicates that the system has only
+       station capability and nothing else.
+       The value 256 (bit position 8 'cVLANComponent(8)') indicates that the system has
+       C-VLAN component functionality.
+       The value 512 (bit position 9 'sVLANComponent(9)') indicates that the system has
+       S-VLAN component functionality.
+       The value 1024 (bit position 10 'twoPortMACRelay(10)') indicates that the system has
+       Two-port MAC Relay (TPMR) functionality.";
+  }
+
+  typedef LldpV2DestAddressTableIndex {
+    type uint32 {
+      range "1..4096";
+    }
+    description
+      "An index value, used as the index to the table of destination
+       MAC addresses used both as the destination addresses on
+       transmitted LLDPDUs and on received LLDPDUs. This index value
+       is also used as a secondary index value in tables indexed
+       by fields of type ifIndex, in order to associate
+       a destination address with each row of the table.";
+  }
+
+  typedef LldpV2PowerPortClass {
+    type enumeration {
+      enum "pClassPSE" {
+        value 1;
+        description
+          "pclasspse";
+      }
+      enum "pClassPD" {
+        value 2;
+        description
+          "pclasspd";
+      }
+    }
+    description
+      "This TC describes the Power over Ethernet (PoE) port class.";
+  }
+
+  typedef AddressFamilyNumbers {
+    type enumeration {
+      enum "other" {
+        value 0;
+        description
+          "other";
+      }
+      enum "ipV4" {
+        value 1;
+        description
+          "ipv4";
+      }
+      enum "ipV6" {
+        value 2;
+        description
+          "ipv6";
+      }
+      enum "nsap" {
+        value 3;
+        description
+          "nsap";
+      }
+      enum "hdlc" {
+        value 4;
+        description
+          "hdlc";
+      }
+      enum "bbn1822" {
+        value 5;
+        description
+          "bbn1822";
+      }
+      enum "all802" {
+        value 6;
+        description
+          "all802";
+      }
+      enum "e163" {
+        value 7;
+        description
+          "e163";
+      }
+      enum "e164" {
+        value 8;
+        description
+          "e164";
+      }
+      enum "f69" {
+        value 9;
+        description
+          "f69";
+      }
+      enum "x121" {
+        value 10;
+        description
+          "x121";
+      }
+      enum "ipx" {
+        value 11;
+        description
+          "ipx";
+      }
+      enum "appleTalk" {
+        value 12;
+        description
+          "appletalk";
+      }
+      enum "decnetIV" {
+        value 13;
+        description
+          "decnetiv";
+      }
+      enum "banyanVines" {
+        value 14;
+        description
+          "banyanvines";
+      }
+      enum "e164withNsap" {
+        value 15;
+        description
+          "e164withnsap";
+      }
+      enum "dns" {
+        value 16;
+        description
+          "dns";
+      }
+      enum "distinguishedName" {
+        value 17;
+        description
+          "distinguishedname";
+      }
+      enum "asNumber" {
+        value 18;
+        description
+          "asnumber";
+      }
+      enum "xtpOverIpv4" {
+        value 19;
+        description
+          "xtpoveripv4";
+      }
+      enum "xtpOverIpv6" {
+        value 20;
+        description
+          "xtpoveripv6";
+      }
+      enum "xtpNativeModeXTP" {
+        value 21;
+        description
+          "xtpnativemodextp";
+      }
+      enum "fibreChannelWWPN" {
+        value 22;
+        description
+          "fibrechannelwwpn";
+      }
+      enum "fibreChannelWWNN" {
+        value 23;
+        description
+          "fibrechannelwwnn";
+      }
+      enum "gwid" {
+        value 24;
+        description
+          "gwid";
+      }
+      enum "afi" {
+        value 25;
+        description
+          "afi";
+      }
+      enum "reserved" {
+        value 65535;
+        description
+          "reserved";
+      }
+    }
+    description
+      "The definition of this textual convention with the
+       addition of newly assigned values is published
+       periodically by the IANA, in either the Assigned
+       Numbers RFC, or some derivative of it specific to
+       Internet Network Management number assignments.
+       (The latest arrangements can be obtained by
+       contacting the IANA.)
+       
+       The enumerations are described as:
+       
+       other(0),    -- none of the following
+       ipV4(1),     -- IP Version 4
+       ipV6(2),     -- IP Version 6
+       nsap(3),     -- NSAP
+       hdlc(4),     -- (8-bit multidrop)
+       bbn1822(5),
+       all802(6),   -- (includes all 802 media
+                    --   plus Ethernet 'canonical format')
+       e163(7),
+       e164(8),     -- (SMDS, Frame Relay, ATM)
+       f69(9),      -- (Telex)
+       x121(10),    -- (X.25, Frame Relay)
+       ipx(11),     -- IPX (Internet Protocol Exchange)
+       appleTalk(12),  -- Apple Talk
+       decnetIV(13),   -- DEC Net Phase IV
+       banyanVines(14),  -- Banyan Vines
+       e164withNsap(15),
+                    -- (E.164 with NSAP format subaddress)
+       dns(16),     -- (Domain Name System)
+       distinguishedName(17), -- (Distinguished Name, per X.500)
+       asNumber(18), -- (16-bit quantity, per the AS number space)
+       xtpOverIpv4(19),  -- XTP over IP version 4
+       xtpOverIpv6(20),  -- XTP over IP version 6
+       xtpNativeModeXTP(21),  -- XTP native mode XTP
+       fibreChannelWWPN(22),  -- Fibre Channel World-Wide Port Name 
+       fibreChannelWWNN(23),  -- Fibre Channel World-Wide Node Name
+       gwid(24),    -- Gateway Identifier 
+       afi(25),  -- AFI for L2VPN information
+       reserved(65535)
+       
+       
+       
+       Requests for new values should be made to IANA via
+       email (iana&iana.org).";
+  }
+
+  typedef SnmpAdminString {
+    type string {
+      length "0..255";
+      pattern '.{0,255}';
+    }
+    description
+      "An octet string containing administrative
+       information, preferably in human-readable form.
+       
+       To facilitate internationalization, this
+       information is represented using the ISO/IEC
+       IS 10646-1 character set, encoded as an octet
+       string using the UTF-8 transformation format
+       described in [RFC2279].
+       
+       Since additional code points are added by
+       amendments to the 10646 standard from time
+       to time, implementations must be prepared to
+       encounter any code point from 0x00000000 to
+       0x7fffffff.  Byte sequences that do not
+       correspond to the valid UTF-8 encoding of a
+       code point or are outside this range are
+       prohibited.
+       
+       The use of control codes should be avoided.
+       
+       When it is necessary to represent a newline,
+       the control code sequence CR LF should be used.
+       The use of leading or trailing white space should
+       be avoided.
+       
+       For code points not directly supported by user
+       interface hardware or software, an alternative
+       means of entry and display, such as hexadecimal,
+       may be provided.
+       
+       For information encoded in 7-bit US-ASCII,
+       the UTF-8 encoding is identical to the
+       US-ASCII encoding.
+       
+       UTF-8 may require multiple bytes to represent a
+       single character / code point; thus the length
+       of this object in octets may be different from
+       the number of characters encoded.  Similarly,
+       size constraints refer to the number of encoded
+       octets, not the number of characters represented
+       by an encoding.
+       
+       Note that when this TC is used for an object that
+       is used or envisioned to be used as an index, then
+       a SIZE restriction MUST be specified so that the
+       number of sub-identifiers for any object instance
+       does not exceed the limit of 128, as defined by
+       [RFC3416].
+       
+       Note that the size of an SnmpAdminString object is
+       measured in octets, not characters.";
+  }
+
+  typedef InterfaceIndex {
+    type int32 {
+      range "1..2147483647";
+    }
+    description
+      "A unique value, greater than zero, for each interface or
+       interface sub-layer in the managed system.  It is
+       recommended that values are assigned contiguously starting
+       from 1.  The value for each interface sub-layer must remain
+       constant at least from one re-initialization of the entity's
+       network management system to the next re-initialization.";
+  }
+
+  typedef TruthValue {
+    type enumeration {
+      enum "true" {
+        value 1;
+        description
+          "Boolean value is true.";
+      }
+      enum "false" {
+        value 2;
+        description
+          "Boolean value is fasle.";
+      }
+    }
+    description
+      "Represents a boolean value.";
+  }
+
+  typedef ZeroBasedCounter32 {
+    type yang:gauge32;
+    description
+      "This TC describes an object that counts events with the
+       following semantics: objects of this type will be set to
+       zero(0) on creation and will thereafter count appropriate
+       events, wrapping back to zero(0) when the value 2^32 is
+       reached.
+       
+       Provided that an application discovers the new object within
+       the minimum time to wrap, it can use the initial value as a
+       delta since it last polled the table of which this object is
+       part.  It is important for a management station to be aware of
+       this minimum time and the actual time between polls, and to
+       discard data if the actual time is too long or there is no
+       defined minimum time.
+       
+       Typically, this TC is used in tables where the INDEX space is
+       constantly changing and/or the TimeFilter mechanism is in use.";
+  }
+
+  augment "/ctxsr6k:contexts-state" {
+    description
+      "Augment router to include lldp.";
+    container lldp {
+      description
+        "lldp-state";
+      container lldp-v2-configuration {
+        config false;
+        leaf lldp-v2-message-tx-interval {
+          type uint32 {
+            range "5..32768";
+          }
+          units "seconds";
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The interval at which LLDP frames are transmitted on
+             behalf of this LLDP agent.
+             The default value for lldpV2MessageTxInterval object is
+             30 seconds.
+             The value of this object is used as the initial value of
+             the lldpV2PortMessageTxInterval object on row creation in
+             the lldpV2PortConfigTableV2.
+             The value of this object is restored from non-volatile
+             storage after a re-initialization of the management system.";
+        }
+        leaf lldp-v2-message-tx-hold-multiplier {
+          type uint32 {
+            range "2..10";
+          }
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The time to live value expressed as a multiple of the
+             lldpV2MessageTxInterval object. The actual time to live
+             value used in LLDP frames, transmitted on behalf of this
+             LLDP agent, can be expressed by the following formula:
+             TTL = min(65535,
+             (lldpV2MessageTxInterval*lldpV2MessageTxHoldMultiplier)+1)
+             For example, if the value of lldpV2MessageTxInterval is
+             '30', and the value of lldpV2MessageTxHoldMultiplier
+             is '4', then the value '121' is encoded in the
+             TTL field in the LLDP header.
+             The default value for lldpV2MessageTxHoldMultiplier
+             object is 4.
+             The value of this object is used as the initial value of
+             the lldpV2PortMessageTxHoldMultiplier object on row creation in
+             the lldpV2PortConfigTableV2.
+             The value of this object is restored from non-volatile
+             storage after a re-initialization of the management system.";
+        }
+        leaf lldp-v2-reinit-delay {
+          type uint32 {
+            range "1..10";
+          }
+          units "seconds";
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The lldpV2ReinitDelay indicates the delay (in units of
+             seconds) from when lldpPortConfigAdminStatus object of a
+             particular port becomes 'disabled' until re-initialization
+             is attempted.
+             The default value for lldpV2ReinitDelay is 2 s.
+             The value of this object is used as the initial value of
+             the lldpV2PortReinitDelay object on row creation in
+             the lldpV2PortConfigTableV2.
+             The value of this object is restored from non-volatile
+             storage after a re-initialization of the management system.";
+        }
+        leaf lldp-v2-notification-interval {
+          type uint32 {
+            range "5..3600";
+          }
+          units "seconds";
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "This object controls the interval between transmission of
+             LLDP notifications during normal transmission periods.
+             The value of this object is used as the initial value of
+             the lldpV2PortNotificationInterval object on row creation in
+             the lldpV2PortConfigTableV2.
+             The value of this object is restored from non-volatile
+             storage after a re-initialization of the management system.";
+        }
+        list lldp-v2-dest-address-table-entry {
+          key "lldp-v2-address-table-index";
+          config false;
+          description
+            "Destination MAC address information for LLDP.
+             This configuration parameter identifies a MAC address
+             corresponding to a LldpV2DestAddressTableIndex value.
+             Rows in this table are created as necessary, to support
+             MAC addresses needed by other tables in the MIB that
+             are indexed by MAC address.
+             A given row in this table cannot be deleted if the MAC
+             address table index value is in use in any other table
+             in the MIB.
+             The contents of this table are persistent across
+             re-initializations or re-boots.";
+          leaf lldp-v2-address-table-index {
+            type lldpstrouter6000:LldpV2DestAddressTableIndex;
+            config false;
+            description
+              "The index value used to identify the destination
+               MAC address associated with this entry.
+               The value of this object is used as an index to the
+               lldpV2DestAddressTable.";
+          }
+          leaf lldp-v2-dest-mac-address {
+            type yang:mac-address;
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The MAC address associated with this entry.
+               The octet string identifies an individual or a group
+               MAC address that is in use by LLDP as a destination
+               MAC address.
+               The MAC address is encoded in the octet string in
+               canonical format (see IEEE Std 802).";
+          }
+        }
+        list lldp-v2-port-config-entry-v2 {
+          key "lldp-v2-port-config-if-index-v2 lldp-v2-port-config-dest-address-index-v2";
+          config false;
+          description
+            "LLDP configuration information for a particular port and
+             destination MAC address.
+             This configuration parameter controls the transmission and
+             the reception of LLDP frames on those interface/address
+             combinations whose rows are created in this table.
+             Rows in this table can only be created for MAC addresses
+             that can validly be used in association with the type of
+             interface concerned, as defined by Table 7-2.
+             The contents of this table is persistent across
+             re-initializations or re-boots.";
+          leaf lldp-v2-port-config-if-index-v2 {
+            type lldpstrouter6000:InterfaceIndex;
+            config false;
+            description
+              "The interface index value used to identify the port
+               associated with this entry. Its value is an index into
+               the interfaces MIB.
+               The value of this object is used as an index to the
+               lldpV2PortConfigTable.";
+          }
+          leaf lldp-v2-port-config-dest-address-index-v2 {
+            type lldpstrouter6000:LldpV2DestAddressTableIndex;
+            config false;
+            description
+              "The index value used to identify the destination
+               MAC address associated with this entry. Its value identifies
+               the row in the lldpV2DestAddressTable where the MAC address
+               can be found.
+               The value of this object is used as an index to the
+               lldpV2PortConfigTable.";
+          }
+          leaf lldp-v2-port-config-admin-status-v2 {
+            type enumeration {
+              enum "txOnly" {
+                value 1;
+                description
+                  "txonly";
+              }
+              enum "rxOnly" {
+                value 2;
+                description
+                  "rxonly";
+              }
+              enum "txAndRx" {
+                value 3;
+                description
+                  "txandrx";
+              }
+              enum "disabled" {
+                value 4;
+                description
+                  "disabled";
+              }
+            }
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The administratively desired status of the local LLDP agent.
+               If the associated lldpV2PortConfigAdminStatus object is
+               set to a value of 'txOnly(1)', then LLDP agent transmits
+               LLDPframes on this port and it does not store any
+               information about the remote systems connected.
+               If the associated lldpV2PortConfigAdminStatus object is
+               set to a value of 'rxOnly(2)', then the LLDP agent
+               receives, but it does not transmit, LLDP frames on this port.
+               If the associated lldpV2PortConfigAdminStatus object is set
+               to a value of 'txAndRx(3)', then the LLDP agent transmits
+               and receives LLDP frames on this port.
+               If the associated lldpV2PortConfigAdminStatus object is set
+               to a value of 'disabled(4)', then LLDP agent does not
+               transmit or receive LLDP frames on this port. If there is
+               remote systems information that is received on this port
+               and stored in other tables, before the port's
+               lldpV2PortConfigAdminStatus becomes disabled, then that
+               information is deleted.";
+          }
+          leaf lldp-v2-port-notification-interval {
+            type uint32 {
+              range "5..3600";
+            }
+            units "seconds";
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "This object controls the interval between transmission of
+               LLDP notifications during normal transmission periods.
+               This object takes its initial value from the
+               lldpV2PortNotificationInterval object on table row creation.
+               The value of this object is restored from non-volatile
+               storage after a re-initialization of the management system.";
+          }
+          leaf lldp-v2-port-config-notification-enable-v2 {
+            type lldpstrouter6000:TruthValue;
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The lldpV2PortConfigNotificationEnableV2 controls, on a per
+               agent basis, whether or not notifications from the agent
+               are enabled. The value true(1) means that notifications are
+               enabled; the value false(2) means that they are not.";
+          }
+          leaf lldp-v2-port-config-tlvs-tx-enable-v2 {
+            type uint32 {
+              range "1..15";
+            }
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The lldpV2PortConfigTLVsTxEnableV2, defined as a uint32,
+               with rang 1 to 15, includes the basic set of LLDP TLVs 
+               whose transmission is allowed on the local LLDP agent 
+               by the network management.
+               It should be noted that the organizationally-specific TLVs
+               are excluded from the lldpV2PortConfigTLVsTxEnable bitmap.
+               LLDP Organization Specific Information Extension MIBs should
+               have similar configuration objects to control transmission
+               of their organizationally defined TLVs.
+               The value 1 (bit position 0 'portDesc(0)')  indicates that LLDP agent should
+               transmit 'Port Description TLV'.
+               The value 2 (bit position 1 'sysName(1)') indicates that LLDP agent should transmit
+               'System Name TLV'.
+               The value 4 (bit position 2 'sysDesc(2)') indicates that LLDP agent should transmit
+               'System Description TLV'.
+               The value 8 (bit position 3 'sysCap(3)') indicates that LLDP agent should transmit
+               'System Capabilities TLV'.
+               There is no bit reserved for the management address TLV type
+               since transmission of management address TLVs are controlled
+               by another object, lldpV2ConfigManAddrTable.
+               The default value for lldpV2PortConfigTLVsTxEnable object is
+               empty set, which means no enumerated values are set.
+               The value of this object is restored from non-volatile
+               storage after a re-initialization of the management system.";
+          }
+        }
+      }
+      container lldp-v2-statistics {
+        config false;
+        leaf lldp-v2-stats-rem-tables-last-change-time {
+          type yang:timestamp;
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The value of sysUpTime object (defined in IETF RFC 3418)
+             at the time an entry is created, modified, or deleted in the
+             in tables associated with the lldpV2RemoteSystemsData objects
+             and all LLDP extension objects associated with remote systems.
+             An NMS can use this object to reduce polling of the
+             lldpV2RemoteSystemsData objects.";
+        }
+        leaf lldp-v2-stats-rem-tables-inserts {
+          type lldpstrouter6000:ZeroBasedCounter32;
+          units "table entries";
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The number of times the complete set of information
+             advertised by a particular MSAP has been inserted into tables
+             contained in lldpV2RemoteSystemsData and lldpV2Extensions objects.
+             The complete set of information received from a particular
+             MSAP should be inserted into related tables. If partial
+             information cannot be inserted for a reason such as lack
+             of resources, all of the complete set of information should
+             be removed.
+             This counter should be incremented only once after the
+             complete set of information is successfully recorded
+             in all related tables. Any failures during inserting
+             information set that result in deletion of previously
+             inserted information should not trigger any changes in
+             lldpV2StatsRemTablesInserts since the insert is not completed
+             yet or in lldpStatsRemTablesDeletes since the deletion
+             would only be a partial deletion. If the failure was the
+             result of lack of resources, the lldpStatsRemTablesDrops
+             counter should be incremented once.";
+        }
+        leaf lldp-v2-stats-rem-tables-deletes {
+          type lldpstrouter6000:ZeroBasedCounter32;
+          units "table entries";
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The number of times the complete set of information
+             advertised by a particular MSAP has been deleted from
+             tables contained in lldpV2RemoteSystemsData and lldpV2Extensions
+             objects.
+             This counter should be incremented only once when the
+             complete set of information is completely deleted from all
+             related tables. Partial deletions, such as deletion of
+             rows associated with a particular MSAP from some tables,
+             but not from all tables are not allowed, thus should not
+             change the value of this counter.";
+        }
+        leaf lldp-v2-stats-rem-tables-drops {
+          type lldpstrouter6000:ZeroBasedCounter32;
+          units "table entries";
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The number of times the complete set of information
+             advertised by a particular MSAP could not be entered into
+             tables contained in lldpV2RemoteSystemsData and lldpV2Extensions
+             objects because of insufficient resources.";
+        }
+        leaf lldp-v2-stats-rem-tables-ageouts {
+          type lldpstrouter6000:ZeroBasedCounter32;
+          units "table entries";
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The number of times the complete set of information
+             advertised by a particular MSAP has been deleted from tables
+             contained in lldpV2RemoteSystemsData and lldpV2Extensions objects
+             because the information timeliness interval has expired.
+             This counter should be incremented only once when the complete
+             set of information is completely invalidated (aged out)
+             from all related tables. Partial ageing, similar to deletion
+             case, is not allowed, and thus, should not change the value
+             of this counter.";
+        }
+        list lldp-v2-stats-tx-port-entry {
+          key "lldp-v2-stats-tx-if-index lldp-v2-stats-tx-dest-macaddress";
+          config false;
+          description
+            "LLDP frame transmission statistics for a particular port
+             and destination MAC address.
+             The port is contained in the same chassis as the
+             LLDP agent.
+             All counter values in a particular entry shall be
+             maintained on a continuing basis and shall not be deleted
+             upon expiration of rxInfoTTL timing counters in the LLDP
+             remote systems MIB of the receipt of a shutdown frame from
+             a remote LLDP agent.
+             All statistical counters associated with a particular
+             port on the local LLDP agent become frozen whenever the
+             adminStatus is disabled for the same port.
+             Rows in this table can only be created for MAC addresses
+             that can validly be used in association with the type of
+             interface concerned, as defined by Table 7-2.";
+          leaf lldp-v2-stats-tx-if-index {
+            type lldpstrouter6000:InterfaceIndex;
+            config false;
+            description
+              "The interface index value used to identify the port
+               associated with this entry. Its value is an index
+               into the interfaces MIB.
+               The value of this object is used as an index to the
+               lldpV2StatsTxPortTable.";
+          }
+          leaf lldp-v2-stats-tx-dest-macaddress {
+            type lldpstrouter6000:LldpV2DestAddressTableIndex;
+            config false;
+            description
+              "The index value used to identify the destination
+               MAC address associated with this entry. Its value identifies
+               the row in the lldpV2DestAddressTable where the MAC address
+               can be found.
+               The value of this object is used as an index to the
+               lldpV2StatsTxPortTable.";
+          }
+          leaf lldp-v2-stats-tx-port-frames-total {
+            type yang:counter32;
+            units "LLDP frames";
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The number of LLDP frames transmitted by this LLDP agent
+               on the indicated port to the destination MAC address
+               associated with this row of the table.";
+          }
+          leaf lldp-v2-stats-tx-lldpdulength-errors {
+            type yang:counter32;
+            units "LLDP frames";
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The number of LLDPDU Length Errors recorded for the Port.";
+          }
+        }
+        list lldp-v2-stats-rx-port-entry {
+          key "lldp-v2-stats-rx-dest-if-index lldp-v2-stats-rx-dest-macaddress";
+          config false;
+          description
+            "LLDP frame reception statistics for a particular port.
+             The port is contained in the same chassis as the
+             LLDP agent.
+             All counter values in a particular entry shall be
+             maintained on a continuing basis and shall not be deleted
+             upon expiration of rxInfoTTL timing counters in the LLDP
+             remote systems MIB of the receipt of a shutdown frame from
+             a remote LLDP agent.
+             All statistical counters associated with a particular
+             port on the local LLDP agent become frozen whenever the
+             adminStatus is disabled for the same port.
+             Rows in this table can only be created for MAC addresses
+             that can validly be used in association with the type of
+             interface concerned, as defined by Table 7-2.
+             The contents of this table is persistent across
+             re-initializations or re-boots.";
+          leaf lldp-v2-stats-rx-dest-if-index {
+            type lldpstrouter6000:InterfaceIndex;
+            config false;
+            description
+              "The interface index value used to identify the port
+               associated with this entry. Its value is an index
+               into the interfaces MIB.
+               The value of this object is used as an index to the
+               lldpStatsRxPortV2Table.";
+          }
+          leaf lldp-v2-stats-rx-dest-macaddress {
+            type lldpstrouter6000:LldpV2DestAddressTableIndex;
+            config false;
+            description
+              "The index value used to identify the destination
+               MAC address associated with this entry. Its value identifies
+               the row in the lldpV2DestAddressTable where the MAC address
+               can be found.
+               The value of this object is used as an index to the
+               lldpStatsRxPortV2Table.";
+          }
+          leaf lldp-v2-stats-rx-port-frames-discarded-total {
+            type yang:counter32;
+            units "LLDP frames";
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The number of LLDP frames received by this LLDP agent on
+               the indicated port, and then discarded for any reason.
+               This counter can provide an indication that LLDP header
+               formatting problems may exist with the local LLDP agent in
+               the sending system or that LLDPDU validation problems may
+               exist with the local LLDP agent in the receiving system.";
+          }
+          leaf lldp-v2-stats-rx-port-frames-errors {
+            type yang:counter32;
+            units "LLDP frames";
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The number of invalid LLDP frames received by this LLDP
+               agent on the indicated port, while this LLDP agent is enabled.";
+          }
+          leaf lldp-v2-stats-rx-port-frames-total {
+            type yang:counter32;
+            units "LLDP frames";
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The number of valid LLDP frames received by this LLDP agent
+               on the indicated port, while this LLDP agent is enabled.";
+          }
+          leaf lldp-v2-stats-rx-port-tlvs-discarded-total {
+            type yang:counter32;
+            units "TLVs";
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The number of LLDP TLVs discarded for any reason by this LLDP
+               agent on the indicated port.";
+          }
+          leaf lldp-v2-stats-rx-port-tlvs-unrecognized-total {
+            type yang:counter32;
+            units "TLVs";
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The number of LLDP TLVs received on the given port that
+               are not recognized by this LLDP agent on the indicated port.
+               An unrecognized TLV is referred to as the TLV whose type value
+               is in the range of reserved TLV types (000 1001 - 111 1110)
+               in Table 8-1 of IEEE Std 802.1AB-2015. An unrecognized
+               TLV may be a basic management TLV from a later LLDP version.";
+          }
+          leaf lldp-v2-stats-rx-port-ageouts-total {
+            type lldpstrouter6000:ZeroBasedCounter32;
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The counter that represents the number of age-outs that
+               occurred on a given port. An age-out is the number of
+               times the complete set of information advertised by a
+               particular MSAP has been deleted from tables contained in
+               lldpV2RemoteSystemsData and lldpV2Extensions objects because
+               the information timeliness interval has expired.
+               This counter is similar to lldpV2StatsRemTablesAgeouts, except
+               that the counter is on a per port basis. This enables NMS to
+               poll tables associated with the lldpV2RemoteSystemsData objects
+               and all LLDP extension objects associated with remote systems
+               on the indicated port only.
+               This counter is set to zero during agent initialization
+               and its value should not be saved in non-volatile storage.
+               This counter is incremented only once when the
+               complete set of information is invalidated (aged out) from
+               all related tables on a particular port. Partial ageing
+               is not allowed.";
+          }
+        }
+      }
+      container lldp-v2-local-system-data {
+        config false;
+        leaf lldp-v2-loc-chassis-id-subtype {
+          type lldpstrouter6000:LldpV2ChassisIdSubtype;
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The type of encoding used to identify the chassis
+             associated with the local system.";
+        }
+        leaf lldp-v2-loc-chassis-id {
+          type lldpstrouter6000:LldpV2ChassisId;
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The string value used to identify the chassis component
+             associated with the local system.";
+        }
+        leaf lldp-v2-loc-sys-name {
+          type lldpstrouter6000:SnmpAdminString {
+            length "0..255";
+          }
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The string value used to identify the system name of the
+             local system. If the local agent supports IETF RFC 3418,
+             lldpLocSysName object should have the same value as sysName
+             object.";
+        }
+        leaf lldp-v2-loc-sys-desc {
+          type lldpstrouter6000:SnmpAdminString {
+            length "0..255";
+          }
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The string value used to identify the system description
+             of the local system. If the local agent supports IETF RFC 3418,
+             lldpLocSysDesc object should have the same value as sysDesc
+             object.";
+        }
+        leaf lldp-v2-loc-sys-cap-supported {
+          type lldpstrouter6000:LldpV2SystemCapabilitiesMap;
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The bitmap value used to identify which system capabilities
+             are supported on the local system.";
+        }
+        leaf lldp-v2-loc-sys-cap-enabled {
+          type lldpstrouter6000:LldpV2SystemCapabilitiesMap;
+          config false;
+          notife:notifiable-state-data false;
+          description
+            "The bitmap value used to identify which system capabilities
+             are enabled on the local system.";
+        }
+        list lldp-v2-loc-port-entry {
+          key "lldp-v2-loc-port-if-index";
+          config false;
+          description
+            "Information about a particular port component.
+             Entries may be created and deleted in this table by the
+             agent.
+             Rows in this table can only be created for MAC addresses
+             that can validly be used in association with the type of
+             interface concerned, as defined by Table 7-2.
+             The contents of this table is persistent across
+             re-initializations or re-boots.";
+          leaf lldp-v2-loc-port-if-index {
+            type lldpstrouter6000:InterfaceIndex;
+            config false;
+            description
+              "The interface index value used to identify the port
+               associated with this entry. Its value is an index
+               into the interfaces MIB.
+               The value of this object is used as an index to the
+               lldpV2LocPortTable.";
+          }
+          leaf lldp-v2-loc-port-id-subtype {
+            type lldpstrouter6000:LldpV2PortIdSubtype;
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The type of port identifier encoding used in the associated
+               'lldpLocPortId' object.";
+          }
+          leaf lldp-v2-loc-port-id {
+            type lldpstrouter6000:LldpV2PortId;
+            config false;
+            description
+              "The string value used to identify the port component
+               associated with a given port in the local system.";
+          }
+          leaf lldp-v2-loc-port-desc {
+            type lldpstrouter6000:SnmpAdminString {
+              length "0..255";
+            }
+            config false;
+            description
+              "The string value used to identify the IEEE 802 LAN station's port
+               description associated with the local system. If the local
+               agent supports IETF RFC 2863, lldpLocPortDesc object should
+               have the same value of ifDescr object.";
+          }
+        }
+        list lldp-v2-loc-man-addr-entry {
+          key "lldp-v2-loc-man-addr-subtype lldp-v2-loc-man-addr";
+          config false;
+          description
+            "Management address information about a particular chassis
+             component. There may be multiple management addresses
+             configured on the system identified by a particular
+             lldpLocChassisId. Each management address should have
+             distinct 'management address type' (lldpV2LocManAddrSubtype) and
+             'management address' (lldpLocManAddr.)
+             Entries may be created and deleted in this table by the
+             agent.
+             Since a variable length octetstring is used as an index
+             in a table, the address length is encoded as part of the OID
+             (as per IETF RFC 2578).";
+          leaf lldp-v2-loc-man-addr-subtype {
+            type lldpstrouter6000:AddressFamilyNumbers;
+            config false;
+            description
+              "The type of management address identifier encoding used in
+               the associated 'lldpLocManagmentAddr' object.
+               It should be noted that only a subset of the possible
+               address encodings enumerated in AddressFamilyNumbers
+               are appropriate for use as a LLDP management
+               address, either because some are just not applicable or
+               because the maximum size of a LldpV2ManAddress octet string
+               would prevent the use of some address identifier encodings.";
+          }
+          leaf lldp-v2-loc-man-addr {
+            type lldpstrouter6000:LldpV2ManAddress;
+            config false;
+            description
+              "The string value used to identify the management address
+               component associated with the local system. The purpose of
+               this address is to contact the management entity.";
+          }
+          leaf lldp-v2-loc-man-addr-len {
+            type uint32;
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The total length of the management address subtype and the
+               management address fields in LLDPDUs transmitted by the
+               local LLDP agent.
+               The management address length field is needed so that the
+               receiving systems that do not implement SNMP are not
+               required to implement an Internet Assigned Numbers
+               Authority (IANA) family numbers/address length equivalency
+               table in order to decode the management address.";
+          }
+        }
+      }
+      container lldp-v2-remote-systems-data {
+        config false;
+        list lldp-v2-rem-entry {
+          key "lldp-v2-rem-local-if-index lldp-v2-rem-local-dest-macaddress lldp-v2-rem-index";
+          config false;
+          description
+            "Information about a particular physical network connection.
+             Entries may be created and deleted in this table by the agent,
+             if a physical topology discovery process is active.
+             Rows in this table can only be created for MAC addresses
+             that can validly be used in association with the type of
+             interface concerned, as defined by Table 7-2.
+             The contents of this table is persistent across
+             re-initializations or re-boots.";
+          leaf lldp-v2-rem-local-if-index {
+            type lldpstrouter6000:InterfaceIndex;
+            config false;
+            description
+              "The interface index value used to identify the port
+               associated with this entry. Its value is an index
+               into the interfaces MIB
+               The value of this object is used as an index to the
+               lldpV2RemTable.";
+          }
+          leaf lldp-v2-rem-local-dest-macaddress {
+            type lldpstrouter6000:LldpV2DestAddressTableIndex;
+            config false;
+            description
+              "The index value used to identify the destination
+               MAC address associated with this entry. Its value identifies
+               the row in the lldpV2DestAddressTable where the MAC address
+               can be found.
+               The value of this object is used as an index to the
+               lldpV2RemTable.";
+          }
+          leaf lldp-v2-rem-index {
+            type uint32 {
+              range "1..2147483647";
+            }
+            config false;
+            description
+              "This object represents an arbitrary local integer value used
+               by this agent to identify a particular connection instance,
+               unique only for the indicated remote system.
+               An agent is encouraged to assign monotonically increasing
+               index values to new entries, starting with one, after each
+               reboot. It is considered unlikely that the lldpRemIndex
+               can wrap between reboots.";
+          }
+          leaf lldp-v2-rem-chassis-id-subtype {
+            type lldpstrouter6000:LldpV2ChassisIdSubtype;
+            config false;
+            description
+              "The type of encoding used to identify the chassis associated
+               with the remote system.";
+          }
+          leaf lldp-v2-rem-chassis-id {
+            type lldpstrouter6000:LldpV2ChassisId;
+            config false;
+            description
+              "The string value used to identify the chassis component
+               associated with the remote system.";
+          }
+          leaf lldp-v2-rem-port-id-subtype {
+            type lldpstrouter6000:LldpV2PortIdSubtype;
+            config false;
+            description
+              "The type of port identifier encoding used in the associated
+               'lldpRemPortId' object.";
+          }
+          leaf lldp-v2-rem-port-id {
+            type lldpstrouter6000:LldpV2PortId;
+            config false;
+            description
+              "The string value used to identify the port component
+               associated with the remote system.";
+          }
+          leaf lldp-v2-rem-port-desc {
+            type lldpstrouter6000:SnmpAdminString {
+              length "0..255";
+            }
+            config false;
+            description
+              "The string value used to identify the description of
+               the given port associated with the remote system.";
+          }
+          leaf lldp-v2-rem-sys-name {
+            type lldpstrouter6000:SnmpAdminString {
+              length "0..255";
+            }
+            config false;
+            description
+              "The string value used to identify the system name of the
+               remote system.";
+          }
+          leaf lldp-v2-rem-sys-desc {
+            type lldpstrouter6000:SnmpAdminString {
+              length "0..255";
+            }
+            config false;
+            description
+              "The string value used to identify the system description
+               of the remote system.";
+          }
+          leaf lldp-v2-rem-sys-cap-supported {
+            type lldpstrouter6000:LldpV2SystemCapabilitiesMap;
+            config false;
+            description
+              "The bitmap value used to identify which system capabilities
+               are supported on the remote system.";
+          }
+          leaf lldp-v2-rem-sys-cap-enabled {
+            type lldpstrouter6000:LldpV2SystemCapabilitiesMap;
+            config false;
+            description
+              "The bitmap value used to identify which system capabilities
+               are enabled on the remote system.";
+          }
+          leaf lldp-v2-rem-remote-changes {
+            type lldpstrouter6000:TruthValue;
+            config false;
+            description
+              "Indicates that there are changes in the remote systems
+               MIB, as determined by the variable remoteChanges.";
+          }
+        }
+        list lldp-v2-rem-man-addr-entry {
+          key "lldp-v2-rem-local-if-index lldp-v2-rem-local-dest-macaddress lldp-v2-rem-index lldp-v2-rem-man-addr-subtype lldp-v2-rem-man-addr";
+          config false;
+          description
+            "Management address information about a particular chassis
+             component. There may be multiple management addresses
+             configured on the remote system identified by a particular
+             lldpRemIndex whose information is received on
+             an interface of the local system and a given destination
+             MAC address. Each management
+             address should have distinct 'management address
+             type' (lldpRemManAddrSubtype) and 'management address'
+             (lldpRemManAddr).
+             Entries may be created and deleted in this table by the
+             agent.
+             Since a variable length octetstring is used as an index
+             in a table, theaddress length is encoded as part of the OID
+             (as per IETF RFC 2578).";
+          leaf lldp-v2-rem-local-if-index {
+            type lldpstrouter6000:InterfaceIndex;
+            config false;
+            description
+              "The interface index value used to identify the port
+               associated with this entry. Its value is an index
+               into the interfaces MIB
+               The value of this object is used as an index to the
+               lldpV2RemTable.";
+          }
+          leaf lldp-v2-rem-local-dest-macaddress {
+            type lldpstrouter6000:LldpV2DestAddressTableIndex;
+            config false;
+            description
+              "The index value used to identify the destination
+               MAC address associated with this entry. Its value identifies
+               the row in the lldpV2DestAddressTable where the MAC address
+               can be found.
+               The value of this object is used as an index to the
+               lldpV2RemTable.";
+          }
+          leaf lldp-v2-rem-index {
+            type uint32 {
+              range "1..2147483647";
+            }
+            config false;
+            description
+              "This object represents an arbitrary local integer value used
+               by this agent to identify a particular connection instance,
+               unique only for the indicated remote system.
+               An agent is encouraged to assign monotonically increasing
+               index values to new entries, starting with one, after each
+               reboot. It is considered unlikely that the lldpRemIndex
+               can wrap between reboots.";
+          }
+          leaf lldp-v2-rem-man-addr-subtype {
+            type lldpstrouter6000:AddressFamilyNumbers;
+            config false;
+            description
+              "The type of management address identifier encoding used in
+               the associated 'lldpRemManagmentAddr' object.
+               It should be noted that only a subset of the possible
+               address encodings enumerated in AddressFamilyNumbers
+               are appropriate for use as a LLDP management
+               address, either because some are just not apliccable or
+               because the maximum size of a LldpV2ManAddress octet string
+               would prevent the use of some address identifier encodings.";
+          }
+          leaf lldp-v2-rem-man-addr {
+            type lldpstrouter6000:LldpV2ManAddress;
+            config false;
+            description
+              "The string value used to identify the management address
+               component associated with the remote system. The purpose
+               of this address is to contact the management entity.";
+          }
+          leaf lldp-v2-rem-man-addr-if-subtype {
+            type lldpstrouter6000:LldpV2ManAddrIfSubtype;
+            config false;
+            description
+              "The enumeration value that identifies the interface numbering
+               method used for defining the interface number, associated
+               with the remote system.";
+          }
+          leaf lldp-v2-rem-man-addr-if-id {
+            type uint32;
+            config false;
+            description
+              "The integer value used to identify the interface number
+               regarding the management address component associated with
+               the remote system. The value depends upon the value of the
+               lldpV2RemManAddrIfSubtype for the table row.";
+          }
+          leaf lldp-v2-rem-man-addr-oid {
+            type yang:object-identifier;
+            config false;
+            notife:notifiable-state-data false;
+            description
+              "The OID value used to identify the type of hardware component
+               or protocol entity associated with the management address
+               advertised by the remote system agent.";
+          }
+        }
+      }
+    }
+  }
+}

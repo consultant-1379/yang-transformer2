@@ -1,0 +1,73 @@
+module ericsson-interface-plm-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-plm-router6000";
+
+  prefix "ifplmrouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-plm-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-03-11" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet" {
+    description
+      "ericsson-plm-interface";
+    /*
+    self-loop-detect [< interval (interval-num) >] [<
+     deactivated-period (deactivation-num) >]
+    */
+    container self-loop-detect {
+      presence "";
+      description
+        "Configure physical loop management under port";
+      leaf interval {
+        type uint16 {
+          range "5..600";
+        }
+        default "5";
+        units seconds;
+        description
+          "Set self loop detect interval";
+      }
+      leaf deactivated-period {
+        type uint16 {
+          range "10..3600";
+        }
+        default "60";
+        units seconds;
+        description
+          "Set deactivated period";
+      }
+    }
+  }
+
+}

@@ -1,0 +1,33 @@
+module ericsson-cu-cp-rc-diagnostics {
+    yang-version 1.1;
+    namespace urn:rdns:com:ericsson:oammodel:ericsson-cu-cp-rc-diagnostics;
+    prefix rcdiag;
+    import tailf-common {
+        prefix tailf;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    organization
+      'Ericsson AB';
+    contact
+      'Ericsson first line support via email';
+    description
+      'Top container definition for diagnostics actions for RC Service
+
+       Copyright (c) 2022 Ericsson AB. All rights reserved';
+    revision 2022-02-21 {
+        description
+        'Initial revision';
+        yexte:version 1;
+        yexte:release 0;
+        yexte:correction 0;
+    }
+
+    yexte:module-status preliminary;
+
+    container rc-diagnostics {
+        tailf:callpoint cpa;
+    }
+}
+

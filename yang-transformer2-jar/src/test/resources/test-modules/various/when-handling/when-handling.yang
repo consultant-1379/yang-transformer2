@@ -1,0 +1,47 @@
+module when-handling {
+
+	namespace "urn_test_when-handling";
+	prefix this;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision "2021-12-05";
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string;
+			mandatory true;
+		}
+
+		leaf leaf12 {
+			type string;
+			mandatory true;
+			when "../leaf11 = 'Hello'";
+		}
+
+		leaf leaf13 {
+			type string;
+			mandatory false;
+			when "../leaf11 = 'World'";
+		}
+	}
+
+	container cont2 {
+	}
+
+	container cont3 {
+		uses grouping3 {
+			when "../cont1/leaf11 = 'Hi'";
+		}
+	}
+
+	grouping grouping3 {
+		leaf leaf31 {
+			type string;
+			mandatory true;
+		}
+	}
+}

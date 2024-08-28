@@ -1,0 +1,218 @@
+module ericsson-interface-efm-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-efm-router6000";
+
+  prefix "ifefmrouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-efm-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-05-07" {
+    description
+      "Add link-oam enhancement command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2020-02-20" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping port-link-oam-grp {
+    description
+      "configure 802.3ah under port";
+    /*
+    mode { active | passive }
+    */
+    container mode {
+      description
+        "Set link-oam working mode";
+      choice mode {
+        case active {
+          leaf active {
+            type empty;
+            description
+              "Set link-oam to active mode";
+          }
+        }
+        case passive {
+          leaf passive {
+            type empty;
+            description
+              "Set link-oam to passive mode";
+          }
+        }
+      }
+    }
+    /*
+    remote-loopback
+    */
+    leaf remote-loopback {
+      type empty;
+      description
+        "Enable remote loopback of link-oam";
+    }
+    /*
+    link-event-monitor
+    */
+    leaf link-event-monitor {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable link-event-monitor";
+    }
+    /*
+    link-event-threshold
+    */
+    container link-event-threshold {
+      description
+        "Set link-event threshold of link-oam";
+      leaf errored-symbol-period {
+        type uint16 {
+          range "1..65535";
+        }
+        default "60";
+        description
+          "The fixed window is the number of symbols in one
+           second.";
+      }
+      leaf errored-frame {
+        type uint16 {
+          range "1..65535";
+        }
+        default "60";
+        description
+          "The fixed window is one second.";
+      }
+      leaf errored-frame-period {
+        type uint16 {
+          range "1..65535";
+        }
+        default "60";
+        description
+          "The fixed window is the number of minFrameSize frames
+           received in one second.";
+      }
+      leaf errored-frame-seconds-summary {
+        type uint16 {
+          range "1..65535";
+        }
+        default "36";
+        description
+          "The fixed window is 60 seconds.";
+      }
+    }
+    /*
+    critical-event
+    */
+    leaf critical-event {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable critical-event";
+    }
+    /*
+    holdup-time (holdup-value)
+    */
+    leaf holdup-time {
+      type uint8 {
+        range "0..5";
+      }
+      description
+        "Configure holdup time to avoid flapping when link
+         recover from fault, in seconds";
+    }
+    /*
+    timeout (timeout-value)
+    */
+    leaf timeout {
+      type uint8 {
+        range "15..100";
+      }
+      description
+        "Configure local expired time, with 100 milliseconds
+         granularity";
+    }
+    /*
+    transmit-interval (interval-value)
+    */
+    leaf transmit-interval {
+      type uint8 {
+        range "5..10";
+      }
+      description
+        "Configure the interval during which transmission is
+         allowed, with 100 milliseconds granularity";
+    }
+    /*
+    trigger-if-down
+    */
+    container trigger-if-down {
+      description
+        "Trigger interface down when failure detected";
+      leaf local-timer-expired {
+        type boolean;
+        default "false";
+        description
+          "Enable/Disable local-timer-expired";
+      }
+      leaf remote-link-fault {
+        type boolean;
+        default "false";
+        description
+          "Enable/Disable remote-link-fault";
+      }
+      leaf remote-dying-gasp {
+        type boolean;
+        default "false";
+        description
+          "Enable/Disable remote-dying-gasp";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet" {
+    description
+      "ericsson-efm-interface";
+    /*
+    link-oam
+    */
+    container link-oam {
+      presence "";
+      description
+        "Configure link-oam under port";
+      uses port-link-oam-grp;
+    }
+  }
+
+}

@@ -1,0 +1,909 @@
+module ericsson-qos-config-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-qos-config-ipos";
+
+  prefix "qoscfgipos";
+
+  import ericsson-qos-ipos {
+    prefix "qosipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-mpls-ipos {
+    prefix "mplsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-qos-config-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-07-10" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-03-30" {
+    description
+      "Add flow ip profile";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-03-27" {
+    description
+      "Change choice circuit-group-choice to be mandatory. fix
+       JIRA:22505";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-03-23" {
+    description
+      "Change ethernet to be mandatory which under 'contexts
+       dot1q propagate qos from'. fix JIRA IPOS-22539";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-22" {
+    description
+      "Add if-feature for ssr part";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-05-02" {
+    description
+      "Fix jira IPOS-9312";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-15" {
+    description
+      "Add qos for ssr";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-02-29" {
+    description
+      "Fix when/must condition issues";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "Initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature mpls-l2vpn {
+    description
+      "This feature indicates that the device supports the
+       mpls-l2vpn in qos-config.";
+  }
+
+  feature mpls-lsr {
+    description
+      "This feature indicates that the device supports the
+       mpls-lsr in qos-config.";
+  }
+
+  feature use-vlan-header {
+    description
+      "This feature indicates that the device supports the
+       mpls-use-vlan-header in qos-config.";
+  }
+
+  feature use-vlan-ethertype {
+    description
+      "This feature indicates that the device supports the
+       mpls-use-vlan-ethertype in qos-config.";
+  }
+
+  feature qos-conf-ssr {
+    description
+      "This feature indicates that the device supports ssr in
+       qos .";
+  }
+
+  grouping flow-ac-profile-grp {
+    description
+      "Flow admission control profile configuration mode";
+    /*
+    max-flows-per-circuit (mfpc-num)
+    */
+    leaf max-flows-per-circuit {
+      type uint32 {
+        range "1..2097152";
+      }
+      description
+        "Configure maximum flows per circuit";
+    }
+    /*
+    sustained-creation-rate (scr-num)
+    */
+    leaf sustained-creation-rate {
+      type uint32 {
+        range "1..2097152";
+      }
+      description
+        "Configure sustained flow creation rate per circuit";
+    }
+    /*
+    burst-creation-rate (bcr-num)
+    */
+    leaf burst-creation-rate {
+      type uint32 {
+        range "1..2097152";
+      }
+      description
+        "Configure burst flow creation rate per circuit";
+    }
+  }
+
+  grouping circuit-group-grp {
+    description
+      "Circuit group configuration mode";
+    /*
+    qos
+    */
+    container qos {
+      description
+        "Configure QoS parameters";
+      container policy {
+        description
+          "Configure policy";
+        list metering {
+          must "(./hierarchical or ./inherit)" {
+            error-message "Must configure a pattern: "
+            + "hierarchical or inherit";
+            description
+              "Must configure a pattern: hierarchical or
+               inherit";
+          }
+          key "pol-name";
+          max-elements 1;
+          description
+            "Set QoS metering policy to use";
+          leaf pol-name {
+            type leafref {
+	      path "/qosipos:qos/qosipos:policy/qosipos:"
+	      + "gpol-polname";
+            }
+	    must "/qosipos:qos/qosipos:policy[qosipos:"
+	    + "gpol-polname=current()]/qosipos:metering" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a metering policy name";
+            }
+            description
+              "Must specify a metering policy name";
+          }
+          choice metering-opt {
+            description
+              "";
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "Inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                type empty;
+                description
+                  "Enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice metering-opt1 {
+            description
+              "";
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPv6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        list policing {
+          must "(./hierarchical or ./inherit)" {
+            error-message "Must configure a pattern: "
+            + "hierarchical or inherit";
+            description
+              "Must configure a pattern: hierarchical or
+               inherit";
+          }
+          key "pol-name";
+          max-elements 1;
+          description
+            "Input policing";
+          leaf pol-name {
+            type leafref {
+	      path "/qosipos:qos/qosipos:policy/qosipos:"
+	      + "gpol-polname";
+            }
+	    must "/qosipos:qos/qosipos:policy[qosipos:"
+	    + "gpol-polname=current()]/qosipos:policing" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a policing policy name";
+            }
+            description
+              "Must specify a policing policy name";
+          }
+          choice policing-opt {
+            description
+              "";
+            case inherit {
+              leaf inherit {
+                type empty;
+                description
+                  "Inherit policy to children";
+              }
+            }
+            case hierarchical {
+              leaf hierarchical {
+                type empty;
+                description
+                  "Enable aggregate rate-limiting on the
+                   children.note:hierarchical can't be set
+                   currently!";
+              }
+            }
+          }
+          choice policing-opt1 {
+            description
+              "";
+            case ip {
+              container ip {
+                presence "";
+                description
+                  "Configure IP attributes";
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "Configure IPv6 attributes";
+                }
+                leaf acl-counters {
+                  type empty;
+                  mandatory true;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+            case ipv6-acl-counters {
+              leaf ipv6-acl-counters {
+                type empty;
+                description
+                  "Enable ACL counters";
+              }
+            }
+          }
+        }
+        list queuing {
+          key "queuing";
+          max-elements 1;
+          description
+            "Output queuing, must specify a QoS queuing policy
+             name";
+          leaf queuing {
+            type leafref {
+	      path "/qosipos:qos/qosipos:policy/qosipos:"
+	      + "gpol-polname";
+            }
+	    must "/qosipos:qos/qosipos:policy[qosipos:"
+	    + "gpol-polname=current()]/qosipos:pwfq" {
+              error-message "policy type is not correct";
+              description
+                "Must specify a queuing policy name";
+            }
+            description
+              "Must specify a queuing policy name";
+          }
+        }
+      }
+      leaf hierarchical-mode-strict {
+        type empty;
+        description
+          "Strict priority scheduling";
+      }
+      container profile {
+        description
+          "Configure profile";
+        list overhead {
+          key "name-overhead";
+          max-elements 1;
+          description
+            "Overhead profile";
+          leaf name-overhead {
+            type leafref {
+	      path "/qosipos:qos/qosipos:profile/qosipos:"
+	      + "profile-name";
+            }
+	    must "/qosipos:qos/qosipos:profile[qosipos:"
+	    + "profile-name=current()]/qosipos:overhead" {
+              error-message "profile type is not correct";
+              description
+                "Must specify a overhead profile name";
+            }
+            description
+              "Overhead profile name";
+          }
+          leaf inherit {
+            type empty;
+            description
+              "Inherit profile to children";
+          }
+        }
+        list resource {
+          key "resource";
+          max-elements 1;
+          description
+            "Resource profile";
+          leaf resource {
+            type leafref {
+	      path "/qosipos:qos/qosipos:profile/qosipos:"
+	      + "profile-name";
+            }
+	    must "/qosipos:qos/qosipos:profile[qosipos:"
+	    + "profile-name=current()]/qosipos:resource" {
+              error-message "profile type is not correct";
+              description
+                "Must specify a resource profile name";
+            }
+            description
+              "Resource profile name";
+          }
+        }
+      }
+      leaf weight {
+        type uint16 {
+          range "1..4096";
+        }
+        description
+          "Node weight";
+      }
+      container rate {
+        description
+          "Circuit rate limits";
+        leaf maximum {
+          type uint32 {
+            range "64..1000000";
+          }
+          must "not (../minimum) or number(.) > number(../minimum)" {
+            error-message "Min rate must be less than max rate";
+            description
+              "Min rate must be less than max rate";
+          }
+          description
+            "Maximum rate limit";
+        }
+        leaf minimum {
+          when "not (../../weight) and not (../../../../port/"
+          + "virtual-port)" {
+            description
+              "";
+          }
+          type uint32 {
+            range "64..1000000";
+          }
+          must "not (../maximum) or number(.) < number(../maximum)" {
+            error-message "Min rate must be less than max rate";
+            description
+              "Min rate must be less than max rate";
+          }
+          description
+            "Minimum rate limit";
+        }
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:router/"
+  + "mplsipos:mpls/mplsipos:propagate" {
+    description
+      "ericsson-qos-config";
+    /*
+    qos { from { mpls [ class-map-option [ class-map (map-name)
+     ] [ l2vpn-class-map (map-name) ] ] | mpls-lsr [ class-map
+     (map-name) ] } | to { mpls [ class-map-option [ class-map
+     (map-name) ] [ l2vpn-class-map (map-name) ] ] | mpls-lsr [
+     class-map (map-name) ] } | use-vlan-header { inner | outer }
+     | use-vlan-ethertype { 8100 | 9100 | 9200 | 88a8 | (custom-
+     hex) }  }
+    */
+    container qos {
+      description
+        "Propagate QoS classification values";
+      container from {
+        description
+          "Set packet classification on ingress";
+        container mpls {
+          description
+            "Set packet classification from MPLS EXP bits on
+             ingress";
+          leaf mpls-enable {
+            type boolean;
+            default "true";
+            description
+              "Enable/Disable mpls-enable";
+          }
+          container class-map-option {
+            when "../mpls-enable='true'" {
+              description
+                "";
+            }
+            description
+              "Specify class map option";
+            leaf class-map {
+              type string;
+	      must "/qosipos:qos/qosipos:class-map[qosipos:"
+	      + "map-name=current()]/qosipos:mpls/qosipos:in" {
+                error-message "class-map type is not correct";
+                description
+                  "Ingress MPLS classification map name";
+              }
+              description
+                "Use a custom packet classification mapping";
+            }
+            leaf l2vpn-class-map {
+              type leafref {
+		path "/qosipos:qos/qosipos:class-map/qosipos:"
+		+ "map-name";
+              }
+              description
+                "Use a custom packet classification mapping for
+                 l2vpn";
+            }
+          }
+        }
+        container mpls-lsr {
+          description
+            "LSR packet classification mapping";
+          leaf mpls-lsr-enable {
+            type boolean;
+            default "true";
+            description
+              "Enable/Disable mpls-lsr-enable";
+          }
+          leaf class-map {
+            when "../mpls-lsr-enable='true'" {
+              description
+                "";
+            }
+            type leafref {
+	      path "/qosipos:qos/qosipos:class-map/qosipos:"
+	      + "map-name";
+            }
+            description
+              "Use a custom packet classification mapping for
+               lsr";
+          }
+        }
+      }
+      container to {
+        description
+          "Set packet classification from internal packet
+           classification on egress";
+        container mpls {
+          description
+            "Set MPLS EXP bits from internal packet
+             classification on egress";
+          leaf mpls-enable {
+            type boolean;
+            default "true";
+            description
+              "Enable/Disable mpls-enable";
+          }
+          container class-map-option {
+            when "../mpls-enable='true'" {
+              description
+                "";
+            }
+            description
+              "Specify class map option";
+            leaf class-map {
+              type leafref {
+		path "/qosipos:qos/qosipos:class-map/qosipos:"
+		+ "map-name";
+              }
+              description
+                "Use a custom packet classification mapping";
+            }
+            leaf l2vpn-class-map {
+              type leafref {
+		path "/qosipos:qos/qosipos:class-map/qosipos:"
+		+ "map-name";
+              }
+              description
+                "Use a custom packet classification mapping for
+                 l2vpn";
+            }
+          }
+        }
+        container mpls-lsr {
+          description
+            "LSR packet classification mapping";
+          leaf mpls-lsr-enable {
+            type boolean;
+            default "true";
+            description
+              "Enable/Disable mpls-lsr-enable";
+          }
+          leaf class-map {
+            when "../mpls-lsr-enable='true'" {
+              description
+                "";
+            }
+            type leafref {
+	      path "/qosipos:qos/qosipos:class-map/qosipos:"
+	      + "map-name";
+            }
+            description
+              "Use a custom packet classification mapping in
+               lsr";
+          }
+        }
+      }
+      leaf use-vlan-header {
+        type enumeration {
+          enum inner {
+            value 0;
+            description
+              "Use the 802.1p value from the CVLAN header";
+          }
+          enum outer {
+            value 1;
+            description
+              "Use the 802.1p value from the SVLAN header";
+          }
+        }
+        default "inner";
+        description
+          "Propagate from ethernet use DOT1P from given header";
+      }
+      leaf use-vlan-ethertype {
+        type union {
+          type enumeration {
+            enum 8100 {
+              value 0;
+              description
+                "8100 ether type (hexadecimal)";
+            }
+            enum 9100 {
+              value 1;
+              description
+                "9100 ether type (hexadecimal)";
+            }
+            enum 9200 {
+              value 2;
+              description
+                "9200 ether type (hexadecimal)";
+            }
+            enum 88a8 {
+              value 3;
+              description
+                "88a8 ether type (hexadecimal)";
+            }
+          }
+          type string {
+            pattern '0x[0-9a-fA-F]{1,4}';
+          }
+        }
+        default "8100";
+        description
+          "Propagate from ethernet, layer2 payload has given
+           ethertype";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-qos-config";
+    /*
+    flow admission-control profile (prof-name)
+    */
+    list flow-admission-control-profile {
+      if-feature qos-conf-ssr;
+      key "prof-name";
+      description
+        "Configure a flow admission control profile";
+      leaf prof-name {
+        type string;
+        description
+          "Specify the name of a flow admission control profile";
+      }
+      uses flow-ac-profile-grp;
+    }
+    /*
+    circuit-group (grp-name) { port (port-val) [ virtual-port ]
+     | link-group (lg-name)[ virtual-port ] | parent-circuit-
+     group (cg-name) }
+    */
+    list circuit-group {
+      if-feature qos-conf-ssr;
+      key "grp-name";
+      description
+        "Configure a circuit group";
+      leaf grp-name {
+        type string;
+        description
+          "Specify the name of the circuit group";
+      }
+      choice circuit-group-choice {
+        mandatory true;
+        description
+          "";
+        case port {
+          list port {
+            key "port-val";
+            description
+              "Specify the port for this circuit group";
+            leaf port-val {
+              type string;
+              description
+                "Enter slot/port";
+            }
+            leaf virtual-port {
+              type empty;
+              description
+                "Specify virtual port model";
+            }
+            uses circuit-group-grp;
+          }
+        }
+        case link-group {
+          list link-group {
+            key "lg-name";
+            description
+              "Specify the link group for this circuit group";
+            leaf lg-name {
+              type string;
+              description
+                "Specify the name of the link group";
+            }
+            leaf virtual-port {
+              type empty;
+              description
+                "Specify virtual port model";
+            }
+            uses circuit-group-grp;
+          }
+        }
+        case parent-circuit-group {
+          list parent-circuit-group {
+            key "parent-circuit-group";
+            description
+              "Specify the parent-circuit-group for this
+               circuit-group";
+            leaf parent-circuit-group {
+              type string;
+              description
+                "Specify the name of the parent circuit group";
+            }
+            uses circuit-group-grp;
+          }
+        }
+      }
+    }
+    /*
+    flow ip profile (prof-name)
+    */
+    list flow-ip-profile {
+      if-feature qos-conf-ssr;
+      key "prof-name";
+      description
+        "Configure a flow IP profile";
+      leaf prof-name {
+        type string;
+        description
+          "Specify the name of a flow IP profile";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:dot1q" {
+    description
+      "ericsson-qos-config";
+    /*
+    propagate qos {< to [ inner | both ] ethernet [ class-map
+     (class-name) ] >| <from [ inner ] ethernet [ class-map
+     (class-name) ]> }
+    */
+    container propagate-qos {
+      must "./to or ./from" {
+        error-message "must have sub's to or from.";
+        description
+          "must have sub's to or from.";
+      }
+      presence "";
+      description
+        "Propagate QoS classification values";
+      container to {
+        presence "";
+        description
+          "Set packet external priority from internal packet
+           classification on egress";
+        choice to-opt {
+          description
+            "";
+          case inner {
+            leaf inner {
+              type empty;
+              description
+                "Set 802.1p bits of inner tag from internal
+                 packet classification on egress";
+            }
+          }
+          case both {
+            leaf both {
+              type empty;
+              description
+                "Set 802.1p bits of inner and outer tags from
+                 internal packet classification on egress";
+            }
+          }
+        }
+        leaf ethernet {
+          type empty;
+          mandatory true;
+          description
+            "Set ethernet 802.1p bits from internal packet
+             classification on egress";
+        }
+        leaf class-map {
+          when "/qosipos:qos/qosipos:class-map/qosipos:ethernet/"
+          + "qosipos:out" {
+            description
+              "";
+          }
+          type leafref {
+            path "/qosipos:qos/qosipos:class-map/qosipos:map-name";
+          }
+          must "/qosipos:qos/qosipos:class-map[qosipos:map-name = "
+          + "current()]/qosipos:ethernet/qosipos:out" {
+            error-message "class-map must be ethernet type for "
+            + "out direction";
+            description
+              "leafref to class-map with ethernet out type";
+          }
+          description
+            "Use a custom packet classification mapping";
+        }
+      }
+      container from {
+        presence "";
+        description
+          "Set internal packet classification from packet
+           external priority on ingress";
+        leaf inner {
+          type empty;
+          description
+            "Set internal packet classification from 802.1p bits
+             of inner tag on egress";
+        }
+        leaf ethernet {
+          type empty;
+          mandatory true;
+          description
+            "Set internal packet classification from ethernet
+             802.1p bits on ingress";
+        }
+        leaf class-map {
+          when "/qosipos:qos/qosipos:class-map/qosipos:ethernet/"
+          + "qosipos:in" {
+            description
+              "";
+          }
+          type leafref {
+            path "/qosipos:qos/qosipos:class-map/qosipos:map-name";
+          }
+          must "/qosipos:qos/qosipos:class-map[qosipos:map-name = "
+          + "current()]/qosipos:ethernet/qosipos:in" {
+            error-message "class-map must be ethernet type for "
+            + "in direction";
+            description
+              "leafref to class-map with ethernet in type";
+          }
+          description
+            "Use a custom packet classification mapping";
+        }
+      }
+    }
+  }
+
+}

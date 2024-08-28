@@ -1,0 +1,290 @@
+module ericsson-event-tracking-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-event-tracking-ipos";
+
+  prefix "eventtrackingipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-event-tracking-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-06-19" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-05-16" {
+    description
+      "Delete 'when' condition under bfd,cfm and link-group";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-02-26" {
+    description
+      "Change the type of lg-name from string to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-04-10" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping multi-chassis-link-group-grp {
+    description
+      "Multi-chassis link group configuration mode";
+    /*
+    track (track-name) action renegotiate-link [ log ] [ trap ]
+    */
+    container track {
+      presence "";
+      description
+        "Configure multi-chassis link-group track object";
+      leaf track-name {
+        type string;
+        mandatory true;
+        description
+          "Object name";
+      }
+      leaf action {
+        type empty;
+        mandatory true;
+        description
+          "Configure action";
+      }
+      leaf renegotiate-link {
+        type empty;
+        mandatory true;
+        description
+          "Renegotiate link group";
+      }
+      leaf log {
+        type empty;
+        description
+          "Log the event";
+      }
+      leaf trap {
+        type empty;
+        description
+          "Generate SNMP trap";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-event-tracking";
+    /*
+    multi-chassis link-group
+    */
+    container multi-chassis-link-group {
+      presence "";
+      description
+        "Container multi-chassis link group";
+      uses multi-chassis-link-group-grp;
+    }
+    /*
+    tracked-object (track-name) { <bfd  <neighbor { (nbr-addr) |
+     (addr-v6) }> <context (con-name)> [ log ]> | <cfm <instance
+     (id-val)> <domain-name (name-val)> <maintenance-association
+     (name-val)> <remote-mep (id-val)> [ ccm-fail ] [ rdi-recv ]
+     [ if-stat-tlv ] [ log ]> | <link-group (lg-name) [ icr-
+     reroute ] [ log ]> }
+    */
+    list tracked-object {
+      key "track-name";
+      unique "tracked-object-choice/link-group/link-group/lg-name";
+      description
+        "Configure tracked object";
+      leaf track-name {
+        type string;
+        description
+          "Tracked object name";
+      }
+      choice tracked-object-choice {
+        mandatory true;
+        description
+          "Tracked object type";
+        case bfd {
+          container bfd {
+            description
+              "IPv4 address, global IPv6 address, IPv6 link
+               local address, or interface name of the BFD
+               neighbor referenced by ETI.";
+            leaf neighbor {
+              type union {
+                type inet:ipv4-address;
+                type inet:ipv6-address;
+              }
+              mandatory true;
+              description
+                "BFD Neighbor";
+            }
+            leaf context {
+              type leafref {
+		path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+		+ "context-name";
+              }
+              mandatory true;
+              description
+                "Name of the context in which the object is
+                 configured.";
+            }
+            leaf log {
+              type empty;
+              description
+                "Log the tracked object";
+            }
+          }
+        }
+        case cfm {
+          container cfm {
+            description
+              "Operations, administration, and maintenance CFM
+               instance ID.";
+            leaf instance {
+              type uint16 {
+                range "1..65535";
+              }
+              mandatory true;
+              description
+                "CFM instance ID";
+            }
+            leaf domain-name {
+              type string;
+              mandatory true;
+              description
+                "Maintenance domain name";
+            }
+            leaf maintenance-association {
+              type string;
+              mandatory true;
+              description
+                "MA short name";
+            }
+            leaf remote-mep {
+              type uint16 {
+                range "1..8191";
+              }
+              mandatory true;
+              description
+                "Remote MEP ID";
+            }
+            leaf ccm-fail {
+              type empty;
+              description
+                "Track CCM fail event";
+            }
+            leaf rdi-recv {
+              type empty;
+              description
+                "Track RDI receive event";
+            }
+            leaf if-stat-tlv {
+              type empty;
+              description
+                "Track interface status TLV event";
+            }
+            leaf log {
+              type empty;
+              description
+                "Log the tracked object";
+            }
+          }
+        }
+        case link-group {
+          container link-group {
+            description
+              "Link group";
+            leaf lg-name {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Link group name";
+            }
+            leaf icr-reroute {
+              type empty;
+              description
+                "Publish LAG state for ICR traffic reroute";
+            }
+            leaf log {
+              type empty;
+              description
+                "Log the tracked object";
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

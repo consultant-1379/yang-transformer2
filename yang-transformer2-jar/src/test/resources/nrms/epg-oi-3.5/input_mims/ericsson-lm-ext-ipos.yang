@@ -1,0 +1,164 @@
+module ericsson-lm-ext-ipos {
+  yang-version 1.1;
+  namespace urn:rdns:com:ericsson:oammodel:ericsson-lm-ext-ipos;
+  prefix lmxipos;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ericsson-lm {
+    prefix lme;
+  }
+
+  organization "Ericsson AB";
+  contact "Ericsson first line support via email";
+  description "License Management model.
+               Copyright (c) 2018-2019 Ericsson AB. All rights reserved.";
+
+
+  revision "2019-09-09" {
+    description "Remove nels configuration host augment.";
+    yexte:version 1;
+    yexte:release 0;
+    yexte:correction 4;
+  }
+
+  revision "2019-01-08" {
+    description "Change nels configuration host type to ipv4 address, replace description.";
+    yexte:version 1;
+    yexte:release 0;
+    yexte:correction 3;
+  }
+
+  revision "2018-11-07" {
+    description "New actions swith-to-nels and switch-to-elim are introduced, leaf mode is added";
+    yexte:version 1;
+    yexte:release 0;
+    yexte:correction 2;
+  }
+
+  revision "2018-10-30" {
+    description "Add enable and disable IU mode";
+    yexte:version 1;
+    yexte:release 0;
+    yexte:correction 1;
+  }
+
+  revision "2018-07-12" {
+    description "The yang model based on lm mini model";
+    yexte:version 1;
+    yexte:release 0;
+    yexte:correction 0;
+  }
+
+  typedef lm-modes {
+    type enumeration {
+      enum elim {
+        value 0;
+        description "ELIM mode";
+      }
+
+      enum nels {
+        value 1;
+        description "NELS mode";
+      }
+    }
+
+    description
+      "The mode types of the License Manager.";
+  }
+
+  augment "/lme:lm" {
+    description "extend ericsson-lm with IPOS attributes";
+    container grace-period {
+      config false;
+      description
+        "The grace period expiry date and time.
+         The box will reload after the grace period expires.";
+
+      leaf grace-state {
+        type boolean;
+        config false;
+        description "Indicates whether the system is in grace period.";
+      }
+
+      leaf expiration {
+        type yang:date-and-time;
+        config false;
+        description
+           "Expiry date and time.";
+      }
+
+      leaf time-remaining {
+        type uint32;
+        config false;
+        units "seconds";
+        description
+           "Remaining time before reload.";
+      }
+    }
+
+    leaf enable-iu {
+      type empty;
+      description
+        "Enable IU mode on the platform.";
+    }
+
+    leaf mode {
+      if-feature lme:nels-configuration;
+      type lm-modes;
+      config false;
+      description
+        "The current mode of the License Manager.";
+    }
+  }
+
+  augment "/lme:lm/lme:key-file-management" {
+    description "extend ericsson-lm key-file-management with IPOS attributes";
+    action switch-to-nels {
+      if-feature lme:nels-configuration;
+      description
+        "Change deployment type to NeLS. When executed this can not be undone.";
+      output {
+        leaf return-value {
+          type boolean;
+          mandatory true;
+          description
+            "Indicates whether the synchronization of NELS
+                      information succeeded or not.";
+        }
+      }
+    }
+
+    action switch-to-elim {
+      if-feature lme:nels-configuration;
+      description
+        "Change deployment type to ELIM. When executed this can not be undone.";
+      output {
+        leaf return-value {
+          type boolean;
+          mandatory true;
+          description
+            "Indicates whether the synchronization of ELIM
+                      information succeeded or not.";
+        }
+      }
+    }
+  }
+
+  deviation "/lme:lm/lme:emergency-unlock" {
+      deviate replace {
+          config false;
+      }
+  }
+
+}

@@ -1,0 +1,1541 @@
+module ericsson-l2vlan-ext-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-l2vlan-ext-ipos";
+
+  prefix "l2vlanxipos";
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-ethernet-ext-ipos {
+    prefix "ethxipos";
+  }
+
+  import ericsson-lag-ext-ipos {
+    prefix "lagxipos";
+  }
+
+  import ericsson-mirror-policy-ipos {
+    prefix "mirrorpolicyipos";
+  }
+
+  import ericsson-bvi-ext-ipos {
+    prefix "bvixipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-l2vlan-ext-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-09-04" {
+    description
+      "Add obsolete/deprecated/preliminary label to the
+       description of the obsolete/deprecated/preliminary node";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-15" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "14";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "13";
+  }
+
+  revision "2018-05-23" {
+    description
+      "add must for mirror";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "12";
+  }
+
+  revision "2018-04-13" {
+    description
+      "add must and cli-only for ip host";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "11";
+  }
+
+  revision "2018-04-10" {
+    description
+      "Add track model under dot1q pvc";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "10";
+  }
+
+  revision "2018-04-09" {
+    description
+      "Add ip host function";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "9";
+  }
+
+  revision "2018-04-05" {
+    description
+      "Modify the multicast bandwidth for PVC under the port
+       bvi";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "8";
+  }
+
+  revision "2018-03-02" {
+    description
+      "Add 9100 | 9200 for tunnel ethertype";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-02-01" {
+    description
+      "Add must condition for QinQ";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-01-25" {
+    description
+      "set status obsolete for subscribe micro-bfd";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-01-23" {
+    description
+      "refine the error-message for encapsulation-dot1q must
+       condition";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-01-12" {
+    description
+      "Add circuit-group-member under pvc";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-09-29" {
+    description
+      "Confd can support bvi QinQ configuration";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-07-24" {
+    description
+      "Add new container 'mirror' in cfg-dot1q-pvc-grp";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-15" {
+    description
+      "IPOS-11938 New command for subscribe micro-bfd";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-07-11" {
+    description
+      "Add new container 'mirror' in dot1q-pvc-grp";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-06-02" {
+    description
+      "New commands for Multicast";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-12" {
+    description
+      "Add when condition for dot1q.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-11" {
+    description
+      "Add must condition for dot1q.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-30" {
+    description
+      "For Side Effect difference modification.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature link-pinning {
+    description
+      "This feature indicates that the device supports
+       link-pinning in l2vlan.";
+  }
+
+  feature mac-address {
+    description
+      "This feature indicates that the device supports
+       mac-address in l2vlan.";
+  }
+
+  feature qos-intf-ssr {
+    description
+      "This feature indicates that the device supports flow
+       apply in l2vlan.";
+  }
+
+  feature ip-host {
+    description
+      "This feature indicates that the device supports ip-host
+       in l2vlan.";
+  }
+
+  grouping dot1q-pvc-grp {
+    description
+      "Dot1q PVC configuration mode";
+    /*
+    circuit-group-member (grp-name)
+    */
+    leaf circuit-group-member {
+      type string;
+      description
+        "Specify the circuit group for this PVC(s)";
+    }
+    /*
+    ipv4 multicast maximum-bandwidth (bw-val) { percent | Kbps |
+     Mbps | Gbps }
+    */
+    container ipv4-multicast-maximum-bandwidth {
+      presence "";
+      description
+        "Set maximum bandwidth for subscribers";
+      leaf bw-val {
+        type uint16 {
+          range "1..65535";
+        }
+        mandatory true;
+        description
+          "Maximum bandwidth in Kbps/Mbps/Gbps/percent";
+      }
+      choice ipv4-multicast-maximum-bandwidth-choice {
+        default Mbps;
+        description
+          "";
+        case percent {
+          leaf percent {
+            type empty;
+            description
+              "Input in percentage form";
+          }
+        }
+        case Kbps {
+          leaf Kbps {
+            type empty;
+            description
+              "Kilo bits per sec";
+          }
+        }
+        case Mbps {
+          leaf Mbps {
+            type empty;
+            description
+              "Mega bits per sec";
+          }
+        }
+        case Gbps {
+          leaf Gbps {
+            type empty;
+            description
+              "Giga bits per sec";
+          }
+        }
+      }
+    }
+    /*
+    ipv6 multicast maximum-bandwidth (bw-val) { percent | Kbps |
+     Mbps | Gbps }
+    */
+    container ipv6-multicast-maximum-bandwidth {
+      presence "";
+      description
+        "Set maximum bandwidth for subscribers";
+      leaf bw-val {
+        type uint16 {
+          range "1..65535";
+        }
+        mandatory true;
+        description
+          "Maximum bandwidth in Kbps/Mbps/Gbps/percent";
+      }
+      choice ipv6-multicast-maximum-bandwidth-choice {
+        default Mbps;
+        description
+          "";
+        case percent {
+          leaf percent {
+            type empty;
+            description
+              "Input in percentage form";
+          }
+        }
+        case Kbps {
+          leaf Kbps {
+            type empty;
+            description
+              "Kilo bits per sec";
+          }
+        }
+        case Mbps {
+          leaf Mbps {
+            type empty;
+            description
+              "Mega bits per sec";
+          }
+        }
+        case Gbps {
+          leaf Gbps {
+            type empty;
+            description
+              "Giga bits per sec";
+          }
+        }
+      }
+    }
+    /*
+    description (desc-str)
+    */
+    leaf description {
+      type string;
+      description
+        "Set description string";
+    }
+    /*
+    enabled
+    */
+    leaf enabled {
+      type boolean;
+      default "true";
+      description
+        "Shutdown the PVC";
+    }
+    /*
+    track { < vrrp (vrrp-id) (intf-name) (intf-ctx) > | none }
+    */
+    container track {
+      presence "";
+      description
+        "Track monitor/backup routers for redundancy";
+      choice track {
+        description
+          "";
+        case vrrp {
+          container vrrp {
+            description
+              "Virtual Router Redundancy Protocol (VRRP)";
+            leaf vrrp-id {
+              type uint8 {
+                range "1..255";
+              }
+              mandatory true;
+              description
+                "Virtual router ID";
+            }
+            leaf intf-name {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Name of the interface to track VRRP session";
+            }
+            leaf intf-ctx {
+              type leafref {
+		path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+		+ "context-name";
+              }
+              mandatory true;
+              description
+                "Context name to be tracked under";
+            }
+          }
+        }
+        case none {
+          leaf none {
+            type empty;
+            description
+              "Disable following a VRRP session";
+          }
+        }
+      }
+    }
+    /*
+    mac-address (mac-addr)
+    */
+    leaf mac-address {
+      if-feature mac-address;
+      type yang:mac-address;
+      description
+        "Configure MAC address";
+    }
+    /*
+    subscribe micro-bfd
+    */
+    leaf subscribe-micro-bfd {
+      type empty;
+      status obsolete;
+      description
+        "[OBSOLETE]Micro BFD events for the link group";
+    }
+    /*
+    mirror { <policy (mirror-name) { in | out } [source-tag {
+     dot1q (tag-id) | dot1ad (tag-id) } ] [ <ip [ ipv6 ] acl-
+     counters> | ipv6 acl-counters ]> | <destination (dest-name)>
+     }
+    */
+    container mirror {
+      description
+        "Configure mirror policy or destination";
+      choice mirror {
+        description
+          "";
+        case policy {
+          list policy {
+            key "policy-choice";
+            max-elements 2;
+            description
+              "Configure mirror policy";
+            leaf policy-choice {
+              type enumeration {
+                enum in {
+                  value 0;
+                  description
+                    "Configure inbound mirror policy";
+                }
+                enum out {
+                  value 1;
+                  description
+                    "Configure outbound mirror policy";
+                }
+              }
+              description
+                "Configure mirror policy";
+            }
+            leaf mirror-name {
+              type leafref {
+		path "/ctxsipos:contexts/mirrorpolicyipos:"
+		+ "mirror-policy/mirrorpolicyipos:mirror-polname";
+              }
+              mandatory true;
+              description
+                "Mirror policy name";
+            }
+            container source-tag {
+              description
+                "Configure mirror source tag";
+              choice source-tag {
+                description
+                  "";
+                case dot1q {
+                  leaf dot1q {
+                    type uint16 {
+                      range "1..4094";
+                    }
+                    description
+                      "Configure Dot1q Ethernet type";
+                  }
+                }
+                case dot1ad {
+                  leaf dot1ad {
+                    type uint16 {
+                      range "1..4094";
+                    }
+                    description
+                      "Configure Dot1ad Ethernet type";
+                  }
+                }
+              }
+            }
+            choice policy-opt1 {
+              description
+                "";
+              case ip {
+                container ip {
+                  presence "";
+                  description
+                    "Configure IP attributes";
+                  leaf ipv6 {
+                    type empty;
+                    description
+                      "Configure IPv6";
+                  }
+                  leaf acl-counters {
+                    type empty;
+                    mandatory true;
+                    description
+                      "Enable ACL counters";
+                  }
+                }
+              }
+              case ipv6-acl-counters {
+                leaf ipv6-acl-counters {
+                  type empty;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+          }
+        }
+        case destination {
+          leaf destination {
+            type string {
+              length "1..39";
+            }
+            description
+              "Configure mirror destination";
+          }
+        }
+      }
+    }
+    /*
+    bind interface (intf-name) (intf-ctx)
+    */
+    container bind-interface {
+      presence "";
+      description
+        "Bind to an interface";
+      leaf intf-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Name of interface to bind to";
+      }
+      leaf intf-ctx {
+        type leafref {
+	  path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+	  + "context-name";
+        }
+        mandatory true;
+        description
+          "Context name to be bound under";
+      }
+    }
+  }
+
+  grouping dot1q-pvc-lag-grp {
+    description
+      "Dot1q PVC configuration mode";
+    /*
+    mac-address (mac-addr)
+    */
+    leaf mac-address {
+      if-feature mac-address;
+      type yang:mac-address;
+      description
+        "Configure MAC address";
+    }
+    /*
+    bind interface (intf-name) (intf-ctx)
+    */
+    container bind-interface {
+      presence "";
+      description
+        "Bind to an interface";
+      leaf intf-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Name of interface to bind to";
+      }
+      leaf intf-ctx {
+        type leafref {
+	  path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+	  + "context-name";
+        }
+        mandatory true;
+        description
+          "Context name to be bound under";
+      }
+    }
+    /*
+    description (desc-str)
+    */
+    leaf description {
+      type string;
+      description
+        "Set description string";
+    }
+    /*
+    enabled
+    */
+    leaf enabled {
+      type boolean;
+      default "true";
+      description
+        "Shutdown the PVC";
+    }
+    /*
+    track { < vrrp (vrrp-id) (intf-name) (intf-ctx) > | none }
+    */
+    container track {
+      presence "";
+      description
+        "Track monitor/backup routers for redundancy";
+      choice track {
+        description
+          "";
+        case vrrp {
+          container vrrp {
+            description
+              "Virtual Router Redundancy Protocol (VRRP)";
+            leaf vrrp-id {
+              type uint8 {
+                range "1..255";
+              }
+              mandatory true;
+              description
+                "Virtual router ID";
+            }
+            leaf intf-name {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Name of the interface to track VRRP session";
+            }
+            leaf intf-ctx {
+              type leafref {
+		path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+		+ "context-name";
+              }
+              mandatory true;
+              description
+                "Context name to be tracked under";
+            }
+          }
+        }
+        case none {
+          leaf none {
+            type empty;
+            description
+              "Disable following a VRRP session";
+          }
+        }
+      }
+    }
+  }
+
+  grouping cfg-dot1q-pvc-grp {
+    description
+      "";
+    /*
+    mirror { <policy (mirror-name) { in | out } [source-tag {
+     dot1q (tag-id) | dot1ad (tag-id) } ] [ <ip [ ipv6 ] acl-
+     counters> | ipv6 acl-counters ]> | <destination (dest-name)>
+     }
+    */
+    container mirror {
+      description
+        "Configure mirror policy or destination";
+      choice mirror {
+        description
+          "";
+        case policy {
+          list policy {
+            must "not(starts-with(../../../../if:name, 'bvi-'))" {
+              error-message "mirror policy is not applicable for "
+              + "the pvc under BVI ports";
+              description
+                "Mirror policy is not applicable for the PVC
+                 under BVI ports";
+            }
+            key "policy-choice";
+            max-elements 2;
+            description
+              "Configure mirror policy";
+            leaf policy-choice {
+              type enumeration {
+                enum in {
+                  value 0;
+                  description
+                    "Configure inbound mirror policy";
+                }
+                enum out {
+                  value 1;
+                  description
+                    "Configure outbound mirror policy";
+                }
+              }
+              description
+                "Configure mirror policy";
+            }
+            leaf mirror-name {
+              type leafref {
+		path "/ctxsipos:contexts/mirrorpolicyipos:"
+		+ "mirror-policy/mirrorpolicyipos:mirror-polname";
+              }
+              mandatory true;
+              description
+                "Mirror policy name";
+            }
+            container source-tag {
+              description
+                "Configure mirror source tag";
+              choice source-tag {
+                description
+                  "";
+                case dot1q {
+                  leaf dot1q {
+                    type uint16 {
+                      range "1..4094";
+                    }
+                    description
+                      "Configure Dot1q Ethernet type";
+                  }
+                }
+                case dot1ad {
+                  leaf dot1ad {
+                    type uint16 {
+                      range "1..4094";
+                    }
+                    description
+                      "Configure Dot1ad Ethernet type";
+                  }
+                }
+              }
+            }
+            choice policy-opt1 {
+              description
+                "";
+              case ip {
+                container ip {
+                  presence "";
+                  description
+                    "Configure IP attributes";
+                  leaf ipv6 {
+                    type empty;
+                    description
+                      "Configure IPv6";
+                  }
+                  leaf acl-counters {
+                    type empty;
+                    mandatory true;
+                    description
+                      "Enable ACL counters";
+                  }
+                }
+              }
+              case ipv6-acl-counters {
+                leaf ipv6-acl-counters {
+                  type empty;
+                  description
+                    "Enable ACL counters";
+                }
+              }
+            }
+          }
+        }
+        case destination {
+          leaf destination {
+            type string {
+              length "1..39";
+            }
+            must "not(starts-with(../../../../if:name, 'bvi-')) "
+            + "and not(starts-with(../../../../if:name, 'lag-'))" {
+              error-message "mirror destination is not "
+              + "applicable for the pvc under BVI ports or LAG";
+              description
+                "Mirror policy is not applicable for the PVC
+                 under BVI ports";
+            }
+            description
+              "Configure mirror destination";
+          }
+        }
+      }
+    }
+    /*
+    mac-address (mac-addr)
+    */
+    leaf mac-address {
+      if-feature mac-address;
+      type yang:mac-address;
+      description
+        "Configure MAC address";
+    }
+    /*
+    bind interface (intf-name) (intf-ctx)
+    */
+    container bind-interface {
+      presence "";
+      description
+        "Bind to an interface";
+      leaf intf-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Name of interface to bind to";
+      }
+      leaf intf-ctx {
+        type leafref {
+	  path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+	  + "context-name";
+        }
+        mandatory true;
+        description
+          "Context name to be bound under";
+      }
+    }
+    /*
+    circuit-group-member (grp-name)
+    */
+    leaf circuit-group-member {
+      type string;
+      description
+        "Specify the circuit group for this PVC(s)";
+    }
+    /*
+    ipv4 multicast maximum-bandwidth (bw-val) { percent | Kbps |
+     Mbps | Gbps }
+    */
+    container ipv4-multicast-maximum-bandwidth {
+      must "not(contains(substring-after(../../../if:name, '.'), "
+      + "'.'))" {
+        error-message "Multicast bandwidth option is not allowed "
+        + "under QinQ PVCs.";
+        description
+          "Multicast bandwidth option is not allowed under QinQ
+           PVCs.";
+      }
+      presence "";
+      description
+        "Set maximum bandwidth for subscribers";
+      leaf bw-val {
+        type uint16 {
+          range "1..65535";
+        }
+        mandatory true;
+        description
+          "Maximum bandwidth in Kbps/Mbps/Gbps/percent";
+      }
+      choice ipv4-multicast-maximum-bandwidth-choice {
+        default Mbps;
+        description
+          "";
+        case percent {
+          leaf percent {
+            type empty;
+            description
+              "Input in percentage form";
+          }
+        }
+        case Kbps {
+          leaf Kbps {
+            type empty;
+            description
+              "Kilo bits per sec";
+          }
+        }
+        case Mbps {
+          leaf Mbps {
+            type empty;
+            description
+              "Mega bits per sec";
+          }
+        }
+        case Gbps {
+          leaf Gbps {
+            type empty;
+            description
+              "Giga bits per sec";
+          }
+        }
+      }
+    }
+    /*
+    ipv6 multicast maximum-bandwidth (bw-val) { percent | Kbps |
+     Mbps | Gbps }
+    */
+    container ipv6-multicast-maximum-bandwidth {
+      must "not(contains(substring-after(../../../if:name, '.'), "
+      + "'.'))" {
+        error-message "Multicast bandwidth option is not allowed "
+        + "under QinQ PVCs.";
+        description
+          "Multicast bandwidth option is not allowed under QinQ
+           PVCs.";
+      }
+      presence "";
+      description
+        "Set maximum bandwidth for subscribers";
+      leaf bw-val {
+        type uint16 {
+          range "1..65535";
+        }
+        mandatory true;
+        description
+          "Maximum bandwidth in Kbps/Mbps/Gbps/percent";
+      }
+      choice ipv6-multicast-maximum-bandwidth-choice {
+        default Mbps;
+        description
+          "";
+        case percent {
+          leaf percent {
+            type empty;
+            description
+              "Input in percentage form";
+          }
+        }
+        case Kbps {
+          leaf Kbps {
+            type empty;
+            description
+              "Kilo bits per sec";
+          }
+        }
+        case Mbps {
+          leaf Mbps {
+            type empty;
+            description
+              "Mega bits per sec";
+          }
+        }
+        case Gbps {
+          leaf Gbps {
+            type empty;
+            description
+              "Giga bits per sec";
+          }
+        }
+      }
+    }
+    /*
+    ip host { (route-prefix) | (host-addr) } [ (host-mac) ]
+    */
+    list ip-host {
+      if-feature ip-host;
+      must "(../bind-interface)" {
+        error-message "pvc is not bound to an interface";
+        description
+          "PVC is not bound to an interface";
+      }
+      key "ip-host-choice";
+      max-elements 4;
+      description
+        "Configure IP Host on this circuit";
+      leaf ip-host-choice {
+        type union {
+          type typesipos:ipv4-address-mask;
+          type inet:ipv4-address;
+        }
+        description
+          "Configure the destination subnet or IP address on
+           this circuit";
+      }
+      leaf host-mac {
+        type yang:mac-address;
+        description
+          "MAC address of the host on this circuit does not
+           support IPv4 prefix";
+      }
+    }
+    /*
+    track { < vrrp (vrrp-id) (intf-name) (intf-ctx) > | none }
+    */
+    container track {
+      presence "";
+      description
+        "Track monitor/backup routers for redundancy";
+      choice track {
+        description
+          "";
+        case vrrp {
+          container vrrp {
+            description
+              "Virtual Router Redundancy Protocol (VRRP)";
+            leaf vrrp-id {
+              type uint8 {
+                range "1..255";
+              }
+              mandatory true;
+              description
+                "Virtual router ID";
+            }
+            leaf intf-name {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Name of the interface to track VRRP session";
+            }
+            leaf intf-ctx {
+              type leafref {
+		path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+		+ "context-name";
+              }
+              mandatory true;
+              description
+                "Context name to be tracked under";
+            }
+          }
+        }
+        case none {
+          leaf none {
+            type empty;
+            description
+              "Disable following a VRRP session";
+          }
+        }
+      }
+    }
+  }
+
+  grouping bvi-dot1q-grp {
+    description
+      "";
+  }
+
+  augment "/if:interfaces/if:interface/lagxipos:link-group" {
+    description
+      "ericsson-l2vlan";
+    /*
+    dot1q
+    */
+    container dot1q {
+      when "(../lagxipos:encapsulation-dot1q)" {
+        description
+          "";
+      }
+      description
+        "dot1q related configuration";
+      container tunnel {
+        description
+          "Dot1q tunnel configuration";
+        leaf ethertype {
+          type enumeration {
+            enum 8100 {
+              value 0;
+              description
+                "8100 ether type (hexadecimal)";
+            }
+            enum 88a8 {
+              value 1;
+              description
+                "88a8 ether type (hexadecimal)";
+            }
+            enum 9100 {
+              value 2;
+              description
+                "9100 ether type (hexadecimal) only for spider
+                 based cards";
+            }
+          }
+          default "8100";
+          description
+            "Dot1q tunnel ethertype configuration";
+        }
+      }
+      list pvc {
+        key "pvc-start-vlan";
+        description
+          "Create a Dot1q pvc";
+        leaf pvc-start-vlan {
+          type uint16 {
+            range "1..4095";
+          }
+          description
+            "VLAN ID";
+        }
+        leaf pvc-choice {
+          type enumeration {
+            enum explicit {
+              value 0;
+              description
+                "Specifies that the configuration for the
+                 individual PVCs in the range of static PVCs is
+                 not expanded in the configuration file. This
+                 keyword has no effect on the functionality of
+                 the PVCs, but only on whether their
+                 configuration is stored a range or
+                 individually.";
+            }
+            enum on-demand {
+              value 1;
+              description
+                "Specifies an on-demand (listening) PVC or a
+                 range of on-demand PVCs. An on-demand PVC is
+                 created in memory only after traffic is detected
+                 on it.";
+            }
+          }
+          mandatory true;
+          description
+            "Specify PVC configuration";
+        }
+        leaf end-vlan {
+          type uint32;
+          description
+            "Specify a range of VLANs";
+        }
+        leaf profile {
+          type leafref {
+	    path "/ctxsipos:contexts/ctxipos:dot1q/ctxipos:"
+	    + "profile";
+          }
+          description
+            "Specify a Dot1q profile";
+        }
+        leaf link-pinning {
+          if-feature link-pinning;
+          type empty;
+          description
+            "Link pinning Dot1q pvc";
+        }
+        uses dot1q-pvc-lag-grp;
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    description
+      "ericsson-l2vlan";
+    /*
+    dot1q
+    */
+    container dot1q {
+      when "../if:type = 'ianaift:l2vlan'" {
+        description
+          "";
+      }
+      description
+        "dot1q related configuration";
+      container pvc {
+        must "(/if:interfaces/if:interface[if:name = "
+        + "substring-before(current()/../../if:name,'.')]/"
+	+ "bvixipos:bvi/bvixipos:encapsulation-dot1q) or (/if:"
+	+ "interfaces/if:interface[if:name = "
+        + "substring-before(current()/../../if:name,'.')]/"
+        + "ethxipos:ethernet/ethxipos:encapsulation-dot1q) or (/"
+        + "if:interfaces/if:interface[if:name = "
+        + "substring-before(current()/../../if:name,'.')]/"
+        + "lagxipos:link-group/lagxipos:encapsulation-dot1q)" {
+          error-message "% Cannot create the dot1q pvc because "
+          + "encapsulation-dot1q is not enabled. Configure "
+          + "encapsulation-dot1q under the parent interface first.
+                  % Cannot delete/update the interface "
+          + "which is parent interface for dot1q pvc. Remove the "
+          + "child dot1q pvc interface and then delete/update the "
+          + "interface.";
+          description
+            "";
+        }
+	must "not(contains(substring-after(current()/../../if:"
+	+ "name, '.'), '.')) or (/if:interfaces/if:interface[if:"
+	+ "name = concat(substring-before(current()/../../if:"
+	+ "name,'.')"
+        + ",'.',substring-before(substring-after(current()/../../"
+        + "if:name, '.'),'.'))]/l2vlanxipos:dot1q/l2vlanxipos:pvc/"
+        + "l2vlanxipos:encapsulation-1qtunnel)" {
+          error-message "% Cannot create inner pvc because the "
+          + "parent pvc is not a tunnel pvc. Configure "
+          + "encapsulation-1qtunnel under the parent pvc first.
+                  % Cannot delete/update the interface "
+          + "which is tunnel pvc for inner pvc. Remove the inner "
+          + "pvc interface and then delete/update the tunnel pvc "
+          + "interface.";
+          description
+            "";
+        }
+        presence "";
+        description
+          "Create a Dot1q pvc";
+        leaf profile {
+          type leafref {
+	    path "/ctxsipos:contexts/ctxipos:dot1q/ctxipos:"
+	    + "profile";
+          }
+          description
+            "Specify a Dot1q profile";
+        }
+        leaf encapsulation-1qtunnel {
+          type empty;
+          description
+            "Dot1q tunnel (1q in 1q)";
+        }
+        choice pvc-opt {
+          description
+            "";
+          case load-balance {
+            leaf load-balance {
+              type empty;
+              must "../../../if:type='ianaift:l2vlan'" {
+                error-message "Load-balance only can be under "
+                + "l2vlan mode";
+                description
+                  "Load balance can be optional under L2 VLAN
+                   mode";
+              }
+              description
+                "Load balance Dot1q pvc";
+            }
+          }
+          case link-pinning {
+            leaf link-pinning {
+              if-feature link-pinning;
+              type empty;
+              must "not(starts-with(../../../if:name, 'bvi-'))" {
+                error-message "link-pinning is not applicable "
+                + "under BVI ports";
+                description
+                  "Link pinning is not applicable under BVI
+                   ports";
+              }
+              must "../../../if:type='ianaift:l2vlan'" {
+                error-message "Link-pinning only can be under "
+                + "link-group mode";
+                description
+                  "Link-pinning can be optional under link-group
+                   mode";
+              }
+              description
+                "Link pinning Dot1q pvc";
+            }
+          }
+        }
+        uses cfg-dot1q-pvc-grp;
+      }
+      list pvc-list {
+        must "not(./ipv6-multicast-maximum-bandwidth and "
+        + "(contains(substring-after(../../if:name, '.'), '.') or "
+        + "(contains(../../if:name, '.') and (../pvc/"
+        + "encapsulation-1qtunnel))))" {
+          error-message "The multicast bandwidth option is not "
+          + "allowed under QinQ PVCs.";
+          description
+            "The multicast bandwidth option is not allowed under
+             QinQ PVCs.";
+        }
+        must "not(./ipv4-multicast-maximum-bandwidth and "
+        + "(contains(substring-after(../../if:name, '.'), '.') or "
+        + "(contains(../../if:name, '.') and (../pvc/"
+        + "encapsulation-1qtunnel))))" {
+          error-message "The multicast bandwidth option is not "
+          + "allowed under QinQ PVCs.";
+          description
+            "The multicast bandwidth option is not allowed under
+             QinQ PVCs.";
+        }
+        must "not(starts-with(../../if:name, 'bvi-'))" {
+          error-message "pvc-list is not applicable under BVI "
+          + "ports";
+          description
+            "pvc-list is not applicable under BVI ports";
+        }
+        key "inner-start-vlan";
+        description
+          "Create inner PVCs in the tunnel";
+        leaf inner-start-vlan {
+          type uint16 {
+            range "1..4095";
+          }
+          description
+            "Inner VLAN ID";
+        }
+        leaf pvc-list-choice {
+          type enumeration {
+            enum explicit {
+              value 0;
+              description
+                "Specifies that the configuration for the
+                 individual PVCs in the range of static PVCs is
+                 not expanded in the configuration file. This
+                 keyword has no effect on the functionality of
+                 the PVCs, but only on whether their
+                 configuration is stored a range or
+                 individually.";
+            }
+            enum on-demand {
+              value 1;
+              description
+                "Specifies an on-demand (listening) PVC or a
+                 range of on-demand PVCs. An on-demand PVC is
+                 created in memory only after traffic is detected
+                 on it.";
+            }
+          }
+          mandatory true;
+          description
+            "Specify PVC configuration";
+        }
+        leaf end-vlan {
+          type uint32;
+          description
+            "Specify a range of VLANs";
+        }
+        leaf profile {
+          type leafref {
+	    path "/ctxsipos:contexts/ctxipos:dot1q/ctxipos:"
+	    + "profile";
+          }
+          description
+            "Specify a Dot1q profile";
+        }
+        choice pvc-list-opt1 {
+          description
+            "";
+          case load-balance {
+            leaf load-balance {
+              type empty;
+              description
+                "Load balance Dot1q pvc";
+            }
+          }
+          case link-pinning {
+            leaf link-pinning {
+              if-feature link-pinning;
+              type empty;
+              description
+                "Link pinning Dot1q pvc";
+            }
+          }
+        }
+        uses dot1q-pvc-grp;
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxipos:ethernet" {
+    description
+      "ericsson-l2vlan";
+    /*
+    dot1q
+    */
+    container dot1q {
+      when "(../ethxipos:encapsulation-dot1q)" {
+        description
+          "";
+      }
+      description
+        "dot1q related configuration";
+      container tunnel {
+        description
+          "Dot1q tunnel configuration";
+        leaf ethertype {
+          type enumeration {
+            enum 8100 {
+              value 0;
+              description
+                "8100 ether type (hexadecimal)";
+            }
+            enum 88a8 {
+              value 1;
+              description
+                "88a8 ether type (hexadecimal)";
+            }
+            enum 9100 {
+              value 2;
+              description
+                "9100 ether type (hexadecimal)";
+            }
+            enum 9200 {
+              value 3;
+              description
+                "9200 ether type (hexadecimal)";
+            }
+          }
+          default "8100";
+          description
+            "Dot1q tunnel ethertype configuration";
+        }
+      }
+      list pvc {
+        key "pvc-start-vlan";
+        description
+          "Create a Dot1q pvc";
+        leaf pvc-start-vlan {
+          type uint16 {
+            range "1..4095";
+          }
+          description
+            "VLAN ID";
+        }
+        leaf pvc-choice {
+          type enumeration {
+            enum explicit {
+              value 0;
+              description
+                "Specifies that the configuration for the
+                 individual PVCs in the range of static PVCs is
+                 not expanded in the configuration file. This
+                 keyword has no effect on the functionality of
+                 the PVCs, but only on whether their
+                 configuration is stored a range or
+                 individually.";
+            }
+            enum on-demand {
+              value 1;
+              description
+                "Specifies an on-demand (listening) PVC or a
+                 range of on-demand PVCs. An on-demand PVC is
+                 created in memory only after traffic is detected
+                 on it.";
+            }
+          }
+          mandatory true;
+          description
+            "Specify PVC configuration";
+        }
+        leaf end-vlan {
+          type uint32;
+          description
+            "Specify a range of VLANs";
+        }
+        leaf profile {
+          type leafref {
+	    path "/ctxsipos:contexts/ctxipos:dot1q/ctxipos:"
+	    + "profile";
+          }
+          description
+            "Specify a Dot1q profile";
+        }
+        leaf load-balance {
+          type empty;
+          description
+            "Load balance Dot1q pvc";
+        }
+        uses dot1q-pvc-grp;
+      }
+    }
+  }
+
+}

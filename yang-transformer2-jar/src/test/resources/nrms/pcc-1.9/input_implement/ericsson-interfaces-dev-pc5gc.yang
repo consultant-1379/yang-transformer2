@@ -1,0 +1,120 @@
+module ericsson-interfaces-dev-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interfaces-dev-pc5gc";
+  prefix ifdpc5gc;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-base-if-type-pc5gc {
+    prefix pcbift;
+  }
+  import ericsson-if-types-pc5gc {
+    prefix pcift;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model deviate IETF interfaces.
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-08-09 {
+    description
+      "Change interface type";
+    reference
+      "EN/LZN 704 0249";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2019-09-05 {
+    description
+      "Deviation on IETF interface YANG";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/if:interfaces/if:interface/if:name" {
+    deviate replace {
+      type string {
+        length "1..127";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/if:description" {
+    deviate replace {
+      type string {
+        length "1..1023";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/if:admin-status" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/if:oper-status" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/if:last-change" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/if:if-index" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/if:phys-address" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/if:higher-layer-if" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/if:lower-layer-if" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/if:speed" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/if:statistics" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/if:enabled" {
+    deviate add {
+      must "../if:type != 'pcift:softwareLoopback' or . = 'true'" {
+        error-message "The loopback interface is always enabled";
+        description
+          "The loopback interface is always enabled";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/if:type" {
+    deviate replace {
+      type identityref {
+        base pcbift:pc-interface-type;
+      }
+    }
+    deviate add {
+      yexte:restricted;
+    }
+  }
+}

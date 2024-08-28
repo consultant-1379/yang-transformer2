@@ -1,0 +1,438 @@
+module ericsson-pcep-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-pcep-router6000";
+
+  prefix "pceprouter6000";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-pcep-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-04-26" {
+    description
+      "Fix Datastore validation issues - HX63585";
+    reference
+      "rfc6020";
+    yexte:version "4";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-09-24" {
+    description
+      "Fix rollback issue with fast detect token";
+    reference
+      "rfc6020";
+    yexte:version "4";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "4";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-05-02" {
+    description
+      "Adding new leaf binding-sid";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-04-24" {
+    description
+      "IPOS-23213:Encrypting pce password";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-03-26" {
+    description
+      "IPOS-23213:Adding new CLI for password md5";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-02-06" {
+    description
+      "Change the PCE Peer ref_path";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-29" {
+    description
+      "IPOS-17857 Bring PCEP command under contexts router";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-17" {
+    description
+      "IPOS-20575 - Change type of pce-peer to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-01-15" {
+    description
+      "Adding must conditions";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-01-12" {
+    description
+      "Removing context option under PCC";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-11-21" {
+    description
+      "Changing macro values";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-10-25" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping pcep-grp {
+    description
+      "PCEP configuration mode";
+    /*
+    pce (pce-id)
+    */
+    list pce {
+      key "pce";
+      max-elements 2;
+      description
+        "Configure a pce (path computation element)";
+      leaf pce {
+        type string {
+          length "0..30";
+        }
+        description
+          "PCE name";
+      }
+      uses pce-grp;
+    }
+    /*
+    pcc (pcc-id)
+    */
+    list pcc {
+      key "pcc";
+      max-elements 1;
+      description
+        "Configure a pcc (path computation client)";
+      leaf pcc {
+        type string {
+          length "0..30";
+        }
+        description
+          "PCC name";
+      }
+      uses pcc-grp;
+    }
+  }
+
+  grouping pce-grp {
+    description
+      "pce (path computation element) configuration mode";
+    /*
+    ip address (addr-value)
+    */
+    container ip {
+      description
+        "PCE's IP configuration";
+      leaf address {
+        type inet:ipv4-address;
+        description
+          "PCE's IPv4 Address";
+      }
+    }
+    /*
+    password md5 {(clear-text) | encrypted (encrypted-text)}
+    */
+    container password-md5 {
+      description
+        "Use md5 authentication";
+      choice password-md5 {
+        description
+          "Specify the password encryption choice";
+        case clear-text {
+          leaf clear-text {
+            type string {
+              length "1..39";
+            }
+            description
+              "Password string upto 39 characters";
+          }
+        }
+        case encrypted {
+          leaf encrypted {
+            type string {
+              length "1..80";
+            }
+            description
+              "Set encrypted password";
+          }
+        }
+      }
+    }
+    /*
+    keepalive (keepalive-value)
+    */
+    leaf keepalive {
+      type uint8 {
+        range "0..255";
+      }
+      must "not (../deadtimer) or number(.) < "
+      + "number(../deadtimer)" {
+        error-message "Keepalive timer must be less than "
+        + "deadtimer value";
+        description
+          "Keepalive timer must be less than deadtimer value";
+      }
+      default "30";
+      description
+        "PCE's keepalive message interval";
+    }
+    /*
+    deadtimer (deadtimer-value)
+    */
+    leaf deadtimer {
+      type uint8 {
+        range "1..255";
+      }
+      must "not (../keepalive) or number(.) > "
+      + "number(../keepalive)" {
+        error-message "Keepalive timer must be less than "
+        + "deadtimer value";
+        description
+          "Keepalive timer must be less than deadtimer value";
+      }
+      default "120";
+      description
+        "PCEP session dead-timer";
+    }
+  }
+
+  grouping pcc-grp {
+    description
+      "pcc (path computation client) configuration mode";
+    /*
+    ip address (addr-value)
+    */
+    container ip {
+      description
+        "PCC's IP configuration";
+      leaf address {
+        type inet:ipv4-address;
+        description
+          "PCC's IPv4 Address";
+      }
+    }
+    /*
+    binding-sid
+    */
+    leaf binding-sid {
+      type empty;
+      description
+        "Enable binding segment identifier allocation";
+    }
+    /*
+    pce-peer (peer-id) {role [(primary) | (secondary)] }
+    */
+    list pce-peer {
+      key "peer-id";
+      max-elements 2;
+      description
+        "Assign a PCE-peer to this PCC";
+      leaf peer-id {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxsr6k:router/pceprouter6000:"
+          + "pcep/pceprouter6000:pce/pceprouter6000:pce";
+        }
+        description
+          "Pce-peer name";
+      }
+      container role {
+        presence "";
+        description
+          "Assign a role for this pce-peer";
+        choice role-opt {
+          description
+            "Specify the role of the PCE-PEER";
+          case primary {
+            leaf primary {
+              type empty;
+              description
+                "Make this pce-peer primary";
+            }
+          }
+          case secondary {
+            leaf secondary {
+              type empty;
+              description
+                "Make this pce-peer secondary";
+            }
+          }
+        }
+      }
+    }
+    /*
+    admin-distance (distance-id)
+    */
+    leaf admin-distance {
+      type uint8 {
+        range "1..255";
+      }
+      default "12";
+      description
+        "Assign admin distance value";
+    }
+    /*
+    state-timeout (value)
+    */
+    leaf state-timeout {
+      type uint8 {
+        range "0..255";
+      }
+      must "not (../redelegation-timeout) or number(.) > number"
+      + "(../redelegation-timeout)" {
+        error-message "redelegation-timeout must be less than "
+        + "state-timeout";
+        description
+          "redelegation-timeout must be less than state-timeout";
+      }
+      default "60";
+      description
+        "Configure state timeout value for PCC instance";
+    }
+    /*
+    redelegation-timeout (redelegation-value)
+    */
+    leaf redelegation-timeout {
+      type uint8 {
+        range "0..255";
+      }
+      must "not (../state-timeout) or number(.) < number"
+      + "(../state-timeout)" {
+        error-message "redelegation-timeout must be less than "
+        + "state-timeout";
+        description
+          "redelegation-timeout must be less than state-timeout";
+      }
+      default "30";
+      description
+        "Configure redelegation timeout value for PCC instance";
+    }
+    /*
+    fast-detect {s-bfd (primary) [backup]}
+    */
+    container fast-detect {
+      description
+        "Configure Fast Failure Detection";
+      container s-bfd {
+        description
+          "Fast-detect via Seamless Bidirectional Forwarding
+           Detection";
+        leaf primary {
+          type empty;
+          description
+            "Monitor all primary SR-PCC lsps";
+        }
+        leaf backup {
+          type empty;
+          description
+            "Monitor all backup SR-PCC lsps";
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxsr6k:router" {
+    description
+      "ericsson-pcep";
+    /*
+    pcep
+    */
+    container pcep {
+      presence "";
+      description
+        "Configure PCEP";
+      uses pcep-grp;
+    }
+  }
+
+}

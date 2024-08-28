@@ -1,0 +1,102 @@
+module ericsson-dscp-remark-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-dscp-remark-router6000";
+
+  prefix "dscpremarkR6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-dscp-remark-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-09-27" {
+    description
+      "changing namespace for the model";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-05" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping remark-grp {
+    description
+      "Configure dscp remark value";
+    /*
+    remark (value) to (value)
+    */
+    list remark {
+      key "remark";
+      description
+        "Configure dscp remark value";
+      leaf remark {
+        type uint8 {
+          range "0..63";
+        }
+        description
+          "Differentiated services codepoint value";
+      }
+      container to {
+        description
+          "Remark dscp to new value";
+        leaf to {
+          type uint8 {
+            range "0..63";
+          }
+          mandatory true;
+          description
+            "Differentiated services codepoint value";
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-dscp-remark-router6000";
+    /*
+    dscp profile (profile-name)
+    */
+    container dscp {
+      description
+        "Configure dscp profile";
+      list profile {
+        key "profile";
+        description
+          "Configure dscp profile for dscp remarking";
+        leaf profile {
+          type string;
+          description
+            "Name of the dscp profile (maximum 63 chars)";
+        }
+        uses remark-grp;
+      }
+    }
+  }
+
+}

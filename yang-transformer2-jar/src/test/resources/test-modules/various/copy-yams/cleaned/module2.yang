@@ -1,0 +1,4 @@
+module module2 {
+	prefix this;
+	namespace "urn:test:module2";
+}

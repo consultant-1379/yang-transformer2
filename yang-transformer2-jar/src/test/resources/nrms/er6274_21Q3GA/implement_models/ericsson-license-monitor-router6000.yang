@@ -1,0 +1,234 @@
+module ericsson-license-monitor-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-license-monitor-router6000";
+
+  prefix "licensermonitor6k";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-license-monitor-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-06-19" {
+    description
+      "modify yang file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2019-10-18" {
+    description
+      "modify yang file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2019-09-06" {
+    description
+      "modify yang file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2019-07-23" {
+    description
+      "modify yang file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2019-05-12" {
+    description
+      "Router6000 initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping license-monitoring-grp {
+    description
+      "License monitoring mode";
+    /*
+    modify { FAT1023253_1 (quantity-kw) | FAT1023871_1
+     (quantity-kw) | FAT1023595_1 (quantity-kw) | FAT1023872_1
+     (quantity-kw) | FAT1024069_1 (quantity-kw) | FAT1024107_1
+     (quantity-kw) | FAT1024215_1 (quantity-kw) | FAT1023230_1
+     (quantity-kw) | FAT1023467_1 (quantity-kw) | FAT1023250_1
+     (quantity-kw) | FAT1023458_1 (quantity-kw) | FAT1024053_25
+     (quantity-kw) | FAT1023483_100 (quantity-kw) | FAT1023953_1
+     (quantity-kw) | FAT1023955_1 (quantity-kw) }
+    */
+    container modify {
+      description
+        "Configure license monitoring manual-unlock modify";
+      leaf FAT1023253_1 {
+        type uint64 {
+          range "0..1";
+        }
+        description
+          "Token number of Feature Key, IPOS";
+      }
+      leaf FAT1023871_1 {
+        type uint64 {
+          range "0..1";
+        }
+        description
+          "Token number of Feature Key, Shortest Path Based Segment Routing";
+      }
+      leaf FAT1023595_1 {
+        type uint64 {
+          range "0..1";
+        }
+        description
+          "Token number of Feature Key, 1588/PTP";
+      }
+      leaf FAT1023872_1 {
+        type uint64 {
+          range "0..1";
+        }
+        description
+          "Token number of Feature Key, Segment Routing for Traffic Engineering";
+      }
+      leaf FAT1024069_1 {
+        type uint64 {
+          range "0..1";
+        }
+        description
+          "Token number of Feature Key, SLA_LICENSE_KEY";
+      }
+      leaf FAT1024107_1 {
+        type uint64 {
+          range "0..1";
+        }
+        description
+          "Token number of Feature Key, EVPN Advanced Functions";
+      }
+      leaf FAT1023230_1 {
+        type uint64 {
+          range "0..65536";
+        }
+        description
+          "Token number of Capacity Key, L3-VPN-1";
+      }
+      leaf FAT1023467_1 {
+        type uint64 {
+          range "0..65536";
+        }
+        description
+          "Token number of Capacity Key, L2-VPN-1";
+      }
+      leaf FAT1023250_1 {
+        type uint64 {
+          range "0";
+        }
+        description
+          "Token number of Capacity Key, IPsec Activation";
+      }
+      leaf FAT1023458_1 {
+        type uint64 {
+          range "0";
+        }
+        description
+          "Token number of Capacity Key, 10GE port";
+      }
+      leaf FAT1024053_25 {
+        type uint64 {
+          range "0..255";
+        }
+        description
+          "Token number of Capacity Key, R6000 - 1x25G port cap license";
+      }
+      leaf FAT1023483_100 {
+        type uint64 {
+          range "0..255";
+        }
+        description
+          "Token number of Capacity Key, R6000-1x100G port lic";
+      }
+      leaf FAT1023953_1 {
+        type uint64 {
+          range "0";
+        }
+        description
+          "Token number of Capacity Key, 1 x Abis/IP Attach Unit license";
+      }
+      leaf FAT1023955_1 {
+        type uint64 {
+          range "0";
+        }
+        description
+          "Token number of Capacity Key, 1 x CES Attach Unit license";
+      }
+      leaf FAT1024215_1 {
+        type uint64 {
+          range "0..2";
+        }
+        description
+          "Token number of Capacity Key, CPRI/eCPRI conversion activation per CPRI LC";
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-license-monitor";
+    /*
+    license monitoring { auto-unlock | manual-unlock }
+    */
+    container license-monitoring {
+      description
+        "Configure license monitor";
+      choice license-monitoring {
+        case auto-unlock {
+          leaf auto-unlock {
+            type empty;
+            description
+              "Configure license monitor auto-unlock mode";
+          }
+        }
+        case manual-unlock {
+          container manual-unlock {
+            presence "";
+            description
+              "Configure license monitor manual-unlock mode";
+            uses license-monitoring-grp;
+          }
+        }
+      }
+    }
+  }
+
+}

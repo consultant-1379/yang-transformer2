@@ -1,0 +1,1511 @@
+module ericsson-route-policy-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-route-policy-router6000";
+
+  prefix "routepcyrouter6000";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-route-policy-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-04-03" {
+    description
+      "Modify the description of seq-num";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-21" {
+    description
+      "New container aigp-metric is added";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-16" {
+    description
+      "Set the order of case route-types to 1;set the order of
+       case dvsr,level-1 and level-2 to 2";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-29" {
+    description
+      "Set list seq min-element equal to 1 and add route-map;set
+       prepend gc=0x4000;add submode-regex mantatory;seq
+       gc=0;change order for route-map none;remove unused import";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-22" {
+    description
+      "add must condition for side effect";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-01" {
+    description
+      "Remove unnecessary presense in containers.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature dscp {
+    description
+      "This feature indicates that the device supports dscp.";
+  }
+
+  feature traffic-index {
+    description
+      "This feature indicates that the device supports
+       traffic-index.";
+  }
+
+  feature dvsr {
+    description
+      "This feature indicates that the device supports dvsr.";
+  }
+
+  grouping as-path-list-grp {
+    description
+      "AS path list configuration mode";
+    /*
+    description (submode-description)
+    */
+    leaf description {
+      type string {
+        length "1..79";
+      }
+      description
+        "Configure an AS path list description";
+    }
+    /*
+    seq (seq-num) { deny | permit } { any | (submode-regex) }
+    */
+    list seq {
+      key "seq-num";
+      description
+        "AS path list sequence number";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Sequence number 1..4294967295";
+      }
+      leaf seq-choice {
+        type enumeration {
+          enum deny {
+            value 0;
+            description
+              "Set AS path list deny operation";
+          }
+          enum permit {
+            value 1;
+            description
+              "Set AS path list permit operation";
+          }
+        }
+        mandatory true;
+        description
+          "leaf seq-choice.";
+      }
+      choice seq-choice1 {
+        mandatory true;
+        case any {
+          leaf any {
+            type empty;
+            mandatory true;
+            description
+              "Match any AS path (wildcard)";
+          }
+        }
+        case submode-regex {
+          leaf submode-regex {
+            type string {
+              length "1..79";
+            }
+            mandatory true;
+            description
+              "A regular expression to match BGP AS paths";
+          }
+        }
+      }
+    }
+  }
+
+  grouping community-list-grp {
+    description
+      "Community list configuration mode";
+    /*
+    description (submode-description)
+    */
+    leaf description {
+      type string {
+        length "1..79";
+      }
+      description
+        "Configure a community list description";
+    }
+    /*
+    seq (seq-num) { deny | permit } { any | (submode-aann) |
+     internet | local-as | no-advertise | no-export | reg-exp
+     (submode-regex) }
+    */
+    list seq {
+      key "seq-num";
+      description
+        "Community list sequence number";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Sequence number 1..4294967295";
+      }
+      leaf seq-choice {
+        type enumeration {
+          enum deny {
+            value 0;
+            description
+              "Set community list deny operation";
+          }
+          enum permit {
+            value 1;
+            description
+              "Set community list permit operation";
+          }
+        }
+        mandatory true;
+        description
+          "leaf seq-choice.";
+      }
+      choice seq-choice1 {
+        case any {
+          leaf any {
+            type empty;
+            description
+              "Match any community (wildcard)";
+          }
+        }
+        case submode-aann {
+          leaf submode-aann {
+            type string {
+              pattern '[0-9]{1,5}:[0-9]{1,5}';
+            }
+            description
+              "Community number in nn:nn format";
+          }
+        }
+        case internet {
+          leaf internet {
+            type empty;
+            description
+              "Advertise this route to the Internet
+               community.All routers belong to it";
+          }
+        }
+        case local-as {
+          leaf local-as {
+            type empty;
+            description
+              "Do not send outside a confed sub-as (well-known
+               community)";
+          }
+        }
+        case no-advertise {
+          leaf no-advertise {
+            type empty;
+            description
+              "Do not advertise to any peer (well-known
+               community)";
+          }
+        }
+        case no-export {
+          leaf no-export {
+            type empty;
+            description
+              "Do not export to EBGP peers (well-known
+               community)";
+          }
+        }
+        case reg-exp {
+          leaf reg-exp {
+            type string {
+              length "1..79";
+            }
+            description
+              "Match community list regular expression";
+          }
+        }
+      }
+    }
+  }
+
+  grouping ext-community-list-grp {
+    description
+      "Community list configuration mode";
+    /*
+    description (submode-description)
+    */
+    leaf description {
+      type string {
+        length "1..79";
+      }
+      description
+        "Configure a community list description";
+    }
+    /*
+    seq (seq-num) { deny | permit } { any |  reg-exp (submode-
+     regex) | (submode-number) }
+    */
+    list seq {
+      key "seq-num";
+      description
+        "Community list sequence number";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Sequence number 1..4294967295";
+      }
+      leaf seq-choice {
+        type enumeration {
+          enum deny {
+            value 0;
+            description
+              "Set community list deny operation";
+          }
+          enum permit {
+            value 1;
+            description
+              "Set community list permit operation";
+          }
+        }
+        mandatory true;
+        description
+          "leaf seq-choice.";
+      }
+      choice seq-choice1 {
+        case any {
+          leaf any {
+            type empty;
+            description
+              "Match any community (wildcard)";
+          }
+        }
+        case reg-exp {
+          leaf reg-exp {
+            type string {
+              length "1..79";
+            }
+            description
+              "Match community list regular expression";
+          }
+        }
+        case submode-number {
+          leaf submode-number {
+            type string;
+            description
+              "Extended community number,format is
+               {rt|ro}:{AS:nnnn|A.B.C.D:nn|AS[L]:nn}";
+          }
+        }
+      }
+    }
+  }
+
+  grouping ipv6-prefix-list-grp {
+    description
+      "IPv6 prefix list configuration mode";
+    /*
+    description (submode-description)
+    */
+    leaf description {
+      type string {
+        length "1..79";
+      }
+      description
+        "Configure an IPv6 prefix list description";
+    }
+    /*
+    seq (seq-num) { deny  | permit } { any | (ip-prefix) [ { ge
+     (ge-value) } [ le (le-value) ] | le (le-value) | eq (eq-
+     value) ] }
+    */
+    list seq {
+      key "seq-num";
+      description
+        "IPv6 prefix list sequence number";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Sequence number 1..4294967295";
+      }
+      leaf seq-choice {
+        type enumeration {
+          enum deny {
+            value 0;
+            description
+              "Set IPv6 prefix list deny operation";
+          }
+          enum permit {
+            value 1;
+            description
+              "Set prefix list permit operation";
+          }
+        }
+        mandatory true;
+        description
+          "leaf seq-choice.";
+      }
+      choice seq-choice1 {
+        case any {
+          leaf any {
+            type empty;
+            description
+              "Match any IPv6 prefix (wildcard)";
+          }
+        }
+        case ip-prefix {
+          container ip-prefix {
+            description
+              "container ip-prefix.";
+            leaf ip-prefix {
+              type inet:ipv6-prefix;
+              mandatory true;
+              description
+                "IPv6 prefix";
+            }
+            choice ip-prefix-opt {
+              case ge {
+                container ge {
+                  description
+                    "container ge.";
+                  leaf ge {
+                    type uint8 {
+                      range "1..128";
+                    }
+                    mandatory true;
+                    description
+                      "Prefix length greater than or equal
+                       specification";
+                  }
+                  leaf le {
+                    type uint8 {
+                      range "1..128";
+                    }
+                    description
+                      "Prefix length less than or equal
+                       specification";
+                  }
+                }
+              }
+              case le {
+                leaf le {
+                  type uint8 {
+                    range "1..128";
+                  }
+                  description
+                    "Prefix length less than or equal
+                     specification";
+                }
+              }
+              case eq {
+                leaf eq {
+                  type uint8 {
+                    range "1..128";
+                  }
+                  description
+                    "Prefix length equal specification";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping prefix-list-grp {
+    description
+      "prefix list configuration mode";
+    /*
+    description (submode-description)
+    */
+    leaf description {
+      type string {
+        length "1..79";
+      }
+      description
+        "Configure a prefix list description";
+    }
+    /*
+    seq (seq-num) { deny | permit } { any | (ip-prefix)  [ { ge
+     (ge-value)} [ le (le-value) ] | le (le-value) | eq (eq-
+     value) ] }
+    */
+    list seq {
+      key "seq-num";
+      description
+        "Prefix list sequence number";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Sequence number 1..4294967295";
+      }
+      leaf seq-choice {
+        type enumeration {
+          enum deny {
+            value 0;
+            description
+              "Set prefix list deny operation";
+          }
+          enum permit {
+            value 1;
+            description
+              "Set prefix list permit operation";
+          }
+        }
+        mandatory true;
+        description
+          "leaf seq-choice.";
+      }
+      choice seq-choice1 {
+        case any {
+          leaf any {
+            type empty;
+            description
+              "Match any prefix (wildcard)";
+          }
+        }
+        case ip-prefix {
+          container ip-prefix {
+            description
+              "container ip-prefix.";
+            leaf ip-prefix {
+              type inet:ipv4-prefix;
+              mandatory true;
+              description
+                "IP prefix";
+            }
+            choice ip-prefix-opt {
+              case ge {
+                container ge {
+                  description
+                    "container ge.";
+                  leaf ge {
+                    type uint8 {
+                      range "1..32";
+                    }
+                    mandatory true;
+                    description
+                      "Prefix length greater than or equal
+                       specification";
+                  }
+                  leaf le {
+                    type uint8 {
+                      range "1..32";
+                    }
+                    description
+                      "Prefix length less than or equal
+                       specification";
+                  }
+                }
+              }
+              case le {
+                leaf le {
+                  type uint8 {
+                    range "1..32";
+                  }
+                  description
+                    "Prefix length less than or equal
+                     specification";
+                }
+              }
+              case eq {
+                leaf eq {
+                  type uint8 {
+                    range "1..32";
+                  }
+                  description
+                    "Prefix length equal specification";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping route-map-grp {
+    description
+      "Route map configuration mode";
+    /*
+    set
+    */
+    container set {
+      description
+        "Set action";
+      container aigp-metric {
+        description
+          "Set AIGP Metric";
+        choice aigp-metric {
+          description
+            "specify the AIGP metric";
+          case metric-value {
+            leaf metric-value {
+              type uint32 {
+                range "0..4294967295";
+              }
+              description
+                "Number for AIGP Metric";
+            }
+          }
+          case igp-metric {
+            leaf igp-metric {
+              type empty;
+              description
+                "Use IGP Metric as AIGP metric";
+            }
+          }
+        }
+      }
+      container as-path {
+        description
+          "BGP aspath attribute";
+        leaf tag {
+          type empty;
+          description
+            "Set the tag as the AS path attribute";
+        }
+        leaf prepend {
+          type string;
+          description
+            "Prepend to AS path";
+        }
+      }
+      container community {
+        description
+          "BGP community attribute";
+        choice community {
+          case communities {
+            container communities {
+              description
+                "container communities.";
+              container communities {
+                description
+                  "Community number list";
+                leaf-list community-list {
+                  type union {
+                    type string {
+                      pattern '[0-9]{1,5}:[0-9]{1,5}';
+                    }
+                    type enumeration {
+                      enum no-export {
+                        value 0;
+                        description
+                          "Do not export to next AS (well-known
+                           community)";
+                      }
+                      enum no-advertise {
+                        value 1;
+                        description
+                          "Do not advertise to any peer
+                           (well-known community)";
+                      }
+                      enum local-as {
+                        value 2;
+                        description
+                          "Do not send outside a confed sub-as
+                           (well-known community)";
+                      }
+                      enum internet {
+                        value 3;
+                        description
+                          "Advertise to the community of all
+                           routers in the Internet";
+                      }
+                    }
+                  }
+                  min-elements 1;
+                  max-elements 8;
+                  description
+                    "Community number list";
+                }
+              }
+              leaf additive {
+                type empty;
+                description
+                  "Add to existing community";
+              }
+            }
+          }
+          case none {
+            leaf none {
+              type empty;
+              description
+                "No community attribute";
+            }
+          }
+        }
+      }
+      container community-list {
+        presence "";
+        description
+          "Set BGP community list (for deletion)";
+        leaf delete-name {
+          type string;
+          mandatory true;
+          description
+            "Community list name";
+        }
+        leaf delete {
+          type empty;
+          mandatory true;
+          description
+            "Delete communities matching list";
+        }
+      }
+      container dampening {
+        presence "";
+        description
+          "Set BGP route flag dampening parameters";
+        leaf half-life {
+          type uint8 {
+            range "1..45";
+          }
+          mandatory true;
+          description
+            "half-life of the penalty period";
+        }
+        leaf dampening-reuse {
+          type uint16 {
+            range "1..20000";
+          }
+          mandatory true;
+          description
+            "Route reuse threshold";
+        }
+        leaf dampening-suppress {
+          type uint16 {
+            range "1..20000";
+          }
+          mandatory true;
+          description
+            "Route suppress threshold";
+        }
+        leaf max-suppress {
+          type uint8 {
+            range "1..255";
+          }
+          mandatory true;
+          description
+            "Maximum time to suppress a route";
+        }
+      }
+      leaf dscp {
+        if-feature dscp;
+        type union {
+          type enumeration {
+            enum df {
+              value 0;
+              description
+                "Default Forwarding";
+            }
+            enum cs0 {
+              value 1;
+              description
+                "Class Selector 0";
+            }
+            enum cs1 {
+              value 2;
+              description
+                "Class Selector 1";
+            }
+            enum cs2 {
+              value 3;
+              description
+                "Class Selector 2";
+            }
+            enum cs3 {
+              value 4;
+              description
+                "Class Selector 3";
+            }
+            enum cs4 {
+              value 5;
+              description
+                "Class Selector 4";
+            }
+            enum cs5 {
+              value 6;
+              description
+                "Class Selector 5";
+            }
+            enum cs6 {
+              value 7;
+              description
+                "Class Selector 6";
+            }
+            enum cs7 {
+              value 8;
+              description
+                "Class Selector 7";
+            }
+            enum af11 {
+              value 9;
+              description
+                "Assured Forwarding  - Class 1/Drop precedence
+                 1";
+            }
+            enum af12 {
+              value 10;
+              description
+                "Assured Forwarding  - Class 1/Drop precedence
+                 2";
+            }
+            enum af13 {
+              value 11;
+              description
+                "Assured Forwarding  - Class 1/Drop precedence
+                 3";
+            }
+            enum af21 {
+              value 12;
+              description
+                "Assured Forwarding  - Class 2/Drop precedence
+                 1";
+            }
+            enum af22 {
+              value 13;
+              description
+                "Assured Forwarding  - Class 2/Drop precedence
+                 2";
+            }
+            enum af23 {
+              value 14;
+              description
+                "Assured Forwarding  - Class 2/Drop precedence
+                 3";
+            }
+            enum af31 {
+              value 15;
+              description
+                "Assured Forwarding  - Class 3/Drop precedence
+                 1";
+            }
+            enum af32 {
+              value 16;
+              description
+                "Assured Forwarding  - Class 3/Drop precedence
+                 2";
+            }
+            enum af33 {
+              value 17;
+              description
+                "Assured Forwarding  - Class 3/Drop precedence
+                 3";
+            }
+            enum af41 {
+              value 18;
+              description
+                "Assured Forwarding  - Class 4/Drop precedence
+                 1";
+            }
+            enum af42 {
+              value 19;
+              description
+                "Assured Forwarding  - Class 4/Drop precedence
+                 2";
+            }
+            enum af43 {
+              value 20;
+              description
+                "Assured Forwarding  - Class 4/Drop precedence
+                 3";
+            }
+            enum ef {
+              value 21;
+              description
+                "Expedited Forwarding";
+            }
+          }
+          type uint8 {
+            range "0..63";
+          }
+        }
+        description
+          "Diff-Serve Code Point (DSCP)";
+      }
+      container ext-community {
+        description
+          "BGP extended community attribute";
+        choice ext-community {
+          case communities {
+            container communities {
+              description
+                "container communities.";
+              container communities {
+                description
+                  "Community number list";
+                leaf-list community-list {
+                  type string;
+                  min-elements 1;
+                  max-elements 8;
+                  description
+                    "Community number list";
+                }
+              }
+              leaf additive {
+                type empty;
+                description
+                  "Add to existing community";
+              }
+            }
+          }
+          case none {
+            leaf none {
+              type empty;
+              description
+                "No extended_community attribute";
+            }
+          }
+        }
+      }
+      container ip {
+        description
+          "IP specific information";
+        leaf next-hop {
+          type union {
+            type enumeration {
+              enum prefix-address {
+                value 0;
+                description
+                  "Set next-hop address to IPv4 prefix address
+                   for host (/32) prefixes only";
+              }
+              enum peer-address {
+                value 1;
+                description
+                  "Set next-hop address to BGP peer address";
+              }
+            }
+            type inet:ipv4-address;
+          }
+          description
+            "Set route next-hop address";
+        }
+        leaf aggregate {
+          type string;
+          description
+            "Set IP aggregate prefix-list for redistribution";
+        }
+      }
+      container ipv6 {
+        description
+          "IPv6 specific information";
+        leaf next-hop {
+          type union {
+            type enumeration {
+              enum peer-address {
+                value 0;
+                description
+                  "Set next-hop address to BGP peer address";
+              }
+            }
+            type inet:ipv6-address;
+          }
+          description
+            "Set route next-hop address";
+        }
+        leaf aggregate {
+          type string;
+          description
+            "Set IPv6 aggregate prefix-list for redistribution";
+        }
+      }
+      leaf label {
+        type empty;
+        description
+          "Set Multiprotocol Label Switching (MPLS) label";
+      }
+      leaf level {
+        type enumeration {
+          enum transit-areas {
+            value 0;
+            description
+              "Redistribute into OSPF transit areas";
+          }
+          enum nssa-areas {
+            value 1;
+            description
+              "Redistribute into OSPF NSSA areas";
+          }
+          enum level-1 {
+            value 2;
+            description
+              "Redistribute into ISIS level 1 area";
+          }
+          enum level-2 {
+            value 3;
+            description
+              "Redistribute into ISIS level 2 areas";
+          }
+          enum level-1-2 {
+            value 4;
+            description
+              "Redistribute into ISIS level-1 and level-2 areas";
+          }
+        }
+        description
+          "Where to import route";
+      }
+      leaf local-preference {
+        type uint32 {
+          range "0..4294967295";
+        }
+        description
+          "Set BGP local preference path attribute";
+      }
+      leaf metric {
+        type union {
+          type string {
+            pattern '[\-+]\d{1,10}';
+          }
+          type uint32 {
+            range "0..4294967295";
+          }
+        }
+        description
+          "Set route metric for destination routing protocol";
+      }
+      leaf metric-type {
+        type enumeration {
+          enum external {
+            value 0;
+            description
+              "ISIS external metric";
+          }
+          enum internal {
+            value 1;
+            description
+              "Use IGP metric as the MED for BGP";
+          }
+          enum type-1 {
+            value 2;
+            description
+              "OSPF external type 1 metric";
+          }
+          enum type-2 {
+            value 3;
+            description
+              "OSPF external type 2 metric";
+          }
+        }
+        description
+          "Type of metric for destination routing protocol";
+      }
+      leaf origin {
+        type enumeration {
+          enum igp {
+            value 0;
+            description
+              "Local IGP";
+          }
+          enum egp {
+            value 1;
+            description
+              "Remote EGP";
+          }
+          enum incomplete {
+            value 2;
+            description
+              "Unknown origin";
+          }
+        }
+        description
+          "Set BGP origin path attribute";
+      }
+      leaf tag {
+        type uint32 {
+          range "0..4294967295";
+        }
+        description
+          "Set route tag for destination routing protocol";
+      }
+      leaf traffic-index {
+        if-feature traffic-index;
+        type uint8 {
+          range "1..32";
+        }
+        description
+          "Traffic index for statistics bucket";
+      }
+      leaf weight {
+        type uint16 {
+          range "0..65535";
+        }
+        description
+          "Set BGP weight";
+      }
+    }
+    /*
+    continue [ (continue-value) ]
+    */
+    container continue {
+      presence "";
+      description
+        "Continue to another sequence number";
+      leaf continue-value {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Sequence number";
+      }
+    }
+    /*
+    match
+    */
+    container match {
+      description
+        "Match criteria";
+      leaf as-path-list {
+        type string;
+        description
+          "Match BGP AS path list";
+      }
+      container community-list {
+        presence "";
+        description
+          "Match BGP community list";
+        leaf community-name {
+          type string;
+          mandatory true;
+          description
+            "Community list name";
+        }
+        leaf exact-match {
+          type empty;
+          description
+            "Exact match of BGP community list";
+        }
+      }
+      container ext-community-list {
+        presence "";
+        description
+          "Match BGP extended community list";
+        leaf community-name {
+          type string;
+          mandatory true;
+          description
+            "Extended community list name";
+        }
+        leaf exact-match {
+          type empty;
+          description
+            "Exact match of BGP extended community list";
+        }
+      }
+      list ip {
+        key "ip-choice";
+        description
+          "IP specific information";
+        leaf ip-choice {
+          type enumeration {
+            enum address {
+              value 0;
+              description
+                "Match IP route destination address";
+            }
+            enum next-hop {
+              value 1;
+              description
+                "Match IP route next-hop address";
+            }
+          }
+          description
+            "leaf ip-choice.";
+        }
+        leaf prefix-list {
+          type string;
+          mandatory true;
+          description
+            "Match IP prefix list";
+        }
+      }
+      list ipv6 {
+        key "ipv6-choice";
+        description
+          "IPv6 specific information";
+        leaf ipv6-choice {
+          type enumeration {
+            enum address {
+              value 0;
+              description
+                "Match IPv6 route destination address";
+            }
+            enum next-hop {
+              value 1;
+              description
+                "Match IPv6 route next-hop address";
+            }
+          }
+          description
+            "leaf ipv6-choice.";
+        }
+        leaf prefix-list {
+          type string;
+          mandatory true;
+          description
+            "Match IPv6 prefix list";
+        }
+      }
+      leaf metric {
+        type uint32 {
+          range "0..4294967295";
+        }
+        description
+          "Match route metric";
+      }
+      leaf tag {
+        type uint32 {
+          range "0..4294967295";
+        }
+        description
+          "Match route tag";
+      }
+      container route-type {
+        description
+          "Match route route-type";
+        choice route-type {
+          case dvsr {
+            leaf dvsr {
+              if-feature dvsr;
+              type empty;
+              description
+                "DVSR (dynamically verified static routing)";
+            }
+          }
+          case level-1 {
+            leaf level-1 {
+              type empty;
+              description
+                "ISIS level-1 routes";
+            }
+          }
+          case level-2 {
+            leaf level-2 {
+              type empty;
+              description
+                "ISIS level-2 routes";
+            }
+          }
+          case route-types {
+            container route-types {
+              description
+                "Combinations of internal, external,
+                 nssa-external";
+              leaf internal {
+                type empty;
+                description
+                  "Internal (OSPF intra-area/inter-area) routes";
+              }
+              container external {
+                presence "";
+                description
+                  "External (BGP, OSPF type 1/2) routes";
+                choice external-choice {
+                  case type-1 {
+                    leaf type-1 {
+                      type empty;
+                      description
+                        "OSPF external type 1 routes";
+                    }
+                  }
+                  case type-2 {
+                    leaf type-2 {
+                      type empty;
+                      description
+                        "OSPF external type 2 routes";
+                    }
+                  }
+                }
+              }
+              container nssa-external {
+                presence "";
+                description
+                  "nssa-external (OSPF NSSA type 1/2) routes";
+                choice nssa-external-choice {
+                  case type-1 {
+                    leaf type-1 {
+                      type empty;
+                      description
+                        "OSPF NSSA type 1 routes";
+                    }
+                  }
+                  case type-2 {
+                    leaf type-2 {
+                      type empty;
+                      description
+                        "OSPF NSSA type 2 routes";
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context" {
+    description
+      "ericsson-route-policy";
+    /*
+    route-map (map-name)
+    */
+    list route-map {
+      key "route-map";
+      description
+        "Configure a route map";
+      leaf route-map {
+        type string {
+          length "1..39";
+        }
+        description
+          "route map name";
+      }
+      leaf description {
+        type string {
+          length "1..79";
+        }
+        description
+          "Configure a route map description";
+      }
+      list seq {
+        key "seq-num";
+        min-elements 1;
+        description
+          "Configure a route map entry";
+        leaf seq-num {
+          type uint32 {
+            range "1..4294967295";
+          }
+          description
+            "Route map entry sequence number to insert
+             1..4294967295";
+        }
+        leaf seq-choice {
+          type enumeration {
+            enum deny {
+              value 0;
+              description
+                "Set route map deny operation";
+            }
+            enum permit {
+              value 1;
+              description
+                "Set route map permit operation";
+            }
+          }
+          mandatory true;
+          description
+            "leaf seq-choice.";
+        }
+        uses route-map-grp;
+      }
+    }
+    /*
+    as-path-list (aspath-name)
+    */
+    list as-path-list {
+      must "./seq or ./description" {
+        error-message "seq or description must be configured";
+        description
+          "seq or description must be configured";
+      }
+      key "as-path-list";
+      description
+        "BGP autonomous system path filter";
+      leaf as-path-list {
+        type string {
+          length "1..39";
+        }
+        description
+          "AS path list name";
+      }
+      uses as-path-list-grp;
+    }
+    /*
+    community-list (comm-name)
+    */
+    list community-list {
+      must "./seq or ./description" {
+        error-message "seq or description must be configured";
+        description
+          "seq or description must be configured";
+      }
+      key "community-list";
+      description
+        "BGP community list";
+      leaf community-list {
+        type string {
+          length "1..39";
+        }
+        description
+          "Community list name";
+      }
+      uses community-list-grp;
+    }
+    /*
+    ext-community-list (comm-name)
+    */
+    list ext-community-list {
+      must "./seq or ./description" {
+        error-message "seq or description must be configured";
+        description
+          "seq or description must be configured";
+      }
+      key "ext-community-list";
+      description
+        "BGP extended community list";
+      leaf ext-community-list {
+        type string {
+          length "1..39";
+        }
+        description
+          "Community list name";
+      }
+      uses ext-community-list-grp;
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ipv6" {
+    description
+      "ericsson-route-policy";
+    /*
+    prefix-list (list-name)
+    */
+    list prefix-list {
+      must "./seq or ./description" {
+        error-message "seq or description must be configured";
+        description
+          "seq or description must be configured";
+      }
+      key "prefix-list";
+      description
+        "Configure a prefix list";
+      leaf prefix-list {
+        type string {
+          length "1..39";
+        }
+        description
+          "Prefix list name";
+      }
+      uses ipv6-prefix-list-grp;
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip" {
+    description
+      "ericsson-route-policy";
+    /*
+    prefix-list (list-name)
+    */
+    list prefix-list {
+      must "./seq or ./description" {
+        error-message "seq or description must be configured";
+        description
+          "seq or description must be configured";
+      }
+      key "prefix-list";
+      description
+        "Configure a prefix list";
+      leaf prefix-list {
+        type string {
+          length "1..39";
+        }
+        description
+          "Prefix list name";
+      }
+      uses prefix-list-grp;
+    }
+  }
+
+}

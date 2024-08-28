@@ -1,0 +1,73 @@
+module ericsson-du5qitable-du-cr {
+    yang-version 1.1;
+    namespace "urn:rdns:com:ericsson:oammodel:ericsson-du5qitable-du-cr";
+    prefix "du5qitable";
+
+    import _3gpp-common-managed-element {
+        prefix me3gpp;
+    }
+    import _3gpp-common-top {
+        prefix top3gpp;
+    }
+    import _3gpp-nr-nrm-gnbdufunction {
+        prefix gnbdu3gpp;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ietf-inet-types {
+        prefix "inet";
+    }
+
+    organization
+      "Ericsson AB";
+    contact
+      "Ericsson first line support via email";
+    description
+      "Defines the YANG mapping of the DU5qitable.
+       
+       Copyright (c) 2021 Ericsson AB. All rights reserved.";
+    revision 2021-06-17 {
+        description
+          "First version.";
+        yexte:version 0;
+        yexte:release 1;
+        yexte:correction 0;
+    }
+    yexte:module-status preliminary;
+
+    grouping DU5qiTableGrp {
+        leaf default5qiTable {
+            description
+              "Indicates that the DU5qiTable instance is a default 5QI table.
+               
+               The default 5QI table will be used when no DU5qiTable has been configured for a resource partition.";
+            default false;
+            type boolean;
+            yexte:takes-effect "New connection";
+            yexte:dependencies "Only one DU5qiTable instance can have the attribute default5qiTable set to TRUE.";
+            status current {
+                yexte:preliminary;
+            }
+        }
+    }
+
+    augment "/me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction" {
+        description
+          "Adds Ericsson IOC DU5qiTable to 3gpp DU function.";
+        list DU5qiTable {
+            description
+              "Mapping from 5G QoS Identifier to parameters that have impact on QoS.";
+            key id;
+            max-elements 36;
+            uses top3gpp:Top_Grp;
+            container attributes {
+                uses DU5qiTableGrp;
+            }
+            must 'count(../DU5qiTable/attributes/default5qiTable[.=true()]) = 1' {
+                error-message
+                  "One and only one DU5qiTable must be default (default5qiTable = true).";
+            }
+        }
+    }
+}

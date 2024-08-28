@@ -1,0 +1,62 @@
+module enumeration-simple {
+
+    namespace "urn@test@enumeration-simple";
+    prefix this;
+
+    revision "2021-10-30";
+
+	feature my-feature;
+	
+	container cont1 {
+	
+		choice choice1 {
+			leaf leaf11 {
+				status deprecated;
+				type enumeration {
+					enum RED;
+					enum YELLOW;
+					enum GREEN;
+				}
+			}
+	
+			leaf leaf12 {
+				type enumeration {
+					enum BLUE { value 995; }
+					enum PINK;
+					enum PURPLE;
+				}
+			}
+		}
+
+		choice choice2 {
+
+			case case13 {
+
+				leaf leaf13 {
+					type enumeration {
+						enum TEAL;
+						enum ORANGE;
+						enum RUBY {
+							if-feature my-feature;
+						}
+					}
+				}
+			}
+
+			case case14 {
+
+				leaf leaf14 {
+					type union {
+						type enumeration {
+							enum BLACK;
+							enum WHITE;
+							enum GREY;
+						}
+						type string;
+					}
+				}
+			}
+		}
+	}
+	
+}

@@ -1,0 +1,195 @@
+module leafref-one {
+
+	namespace "urn#test#leafref-one";
+	prefix one;
+
+	revision "2021-07-30";
+
+	identity one-1;
+
+	identity one-2 {
+		base one-1;
+	}
+
+	identity one-3 {
+		base one:one-1;
+	}
+
+	list list1 {
+
+		key key1;
+		leaf key1 { type string; }
+
+		leaf-list leaflist11 {
+			type identityref {
+				base one:one-1;
+			}
+		}
+
+		leaf-list leaflist12 {
+			type int32 {
+				range "10 .. 20";
+			}
+		}
+
+		leaf-list leaflist13 {
+			type enumeration {
+				enum RED;
+				enum YELLOW;
+				enum GREEN;
+			}
+		}
+
+		choice choice1 {
+
+			leaf-list leaflist14 {
+				type string;
+			}
+	
+			leaf-list leaflist15 {
+				type boolean;
+			}
+		}
+
+		leaf-list leaflist16 {
+			type union {
+				type int16;
+				type string;
+			}
+		}
+
+		leaf-list leaflist17 {		// will be deviated
+			type enumeration {
+				enum MONDAY;
+				enum TUESDAY;
+			}
+		}
+	}
+
+	container cont2 {
+
+		leaf leaf21 {
+			type leafref {
+				path "/one:list1/one:leaflist11";
+			}
+		}
+
+		leaf leaf22 {
+			type leafref {
+				path "/list1/leaflist12";
+			}
+		}
+
+		leaf leaf23 {
+			type leafref {
+				path "../../list1/leaflist13";
+			}
+		}
+
+		leaf leaf24 {
+			type leafref {
+				path "/one:list1[key1='abc']/one:leaflist14";
+			}
+		}
+
+		choice choice1 {
+
+			case case25 {
+				leaf leaf25 {
+					type leafref {
+						path "./../../list1/leaflist15";
+					}
+				}
+			}
+			case case26 {
+				leaf leaf26 {
+					type leafref {
+						path "/one:list1[key1='abc']/../list1/leaflist16";
+					}
+				}
+			}
+		}
+
+		leaf leaf27 {
+			type leafref {
+				path "../../list1/leaflist17";
+			}
+		}
+	}
+
+	container cont3 {
+
+		leaf leaf31 {
+			type leafref {
+				path "/one:unknown-container";
+			}
+		}
+
+		leaf leaf32 {
+			type leafref {
+				path "/one:list1/../..";	// up too far
+			}
+		}
+
+		leaf leaf33 {
+			type leafref {
+				path "[ABC]";
+			}
+		}
+
+		leaf leaf34 {
+			type leafref {
+				path "/one:list1/one:unknown-leaf";
+			}
+		}
+
+		leaf leaf35 {
+			type leafref {
+				path "/../one:list1/one:unknown-leaf";
+			}
+		}
+
+		leaf leaf36 {			// no path
+			type leafref;
+		}
+
+		leaf leaf37 {			// null path
+			type leafref {
+				path;
+			}
+		}
+
+		leaf leaf38 {			// empty path
+			type leafref {
+				path "";
+			}
+		}
+	}
+
+	container cont4 {
+
+		action action41 {
+
+			input {
+				leaf42 {
+					type int32;
+				}
+				leaf43 {
+					type leafref {
+						path "../leaf42";
+					}
+				}
+			}
+			output {
+				leaf44 {
+					type int32;
+				}
+				leaf45 {
+					type leafref {
+						path "../leaf44";
+					}
+				}
+			}
+		}
+	}
+}

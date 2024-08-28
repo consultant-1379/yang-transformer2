@@ -1,0 +1,210 @@
+module ericsson-evpnpeer-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-evpnpeer-router6000";
+
+  prefix "evpnpeerrouter6000";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-evpnpeer-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-07-03" {
+    description
+      "Added ospf-sr to tunnel lsp";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2019-02-20" {
+    description
+      "MPLS lsp not seen in yang get config";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2019-02-12" {
+    description
+      "Fix delete and set profile";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-10-31" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping evpn-profile-grp {
+    description
+      "EVPN Profile configuration mode";
+    /*
+    peer (addr-value)
+    */
+    list peer {
+      key "peer";
+      description
+        "Peer address";
+      leaf peer {
+        type inet:ipv4-address;
+        description
+          "IPv4 Peer address";
+      }
+      uses evpn-profile-peer-grp;
+    }
+  }
+
+  grouping evpn-profile-peer-grp {
+    description
+      "EVPN Profile Peer configuration mode";
+    /*
+    tunnel lsp { isis-sr | ldp | pcc [ (pcc-lspname) ] | rsvp [
+     (rsvp-lspname) ] | static-sr [ (static-lspname) ] | mpls-
+     static (mpls-static-lspname) | ospf-sr }
+    */
+    container tunnel-lsp {
+      description
+        "Map to MPLS LSP tunnel";
+      choice tunnel-lsp {
+        case isis-sr {
+          leaf isis-sr {
+            type empty;
+            description
+              "Map to ISIS-SR LSP(s)";
+          }
+        }
+        case ldp {
+          leaf ldp {
+            type empty;
+            description
+              "Map to LDP LSP";
+          }
+        }
+        case pcc {
+          container pcc {
+            presence "";
+            description
+              "Map to PCC LSP(s)";
+            leaf pcc-lspname {
+              type string;
+              description
+                "LSP name";
+            }
+          }
+        }
+        case rsvp {
+          container rsvp {
+            presence "";
+            description
+              "Map to RSVP LSP(s)";
+            leaf rsvp-lspname {
+              type string;
+              description
+                "LSP name";
+            }
+          }
+        }
+        case static-sr {
+          container static-sr {
+            presence "";
+            description
+              "Map to Static-SR LSP";
+            leaf static-lspname {
+              type string;
+              description
+                "LSP name";
+            }
+          }
+        }
+        case mpls-static {
+          leaf mpls-static {
+            type string;
+            description
+              "Map to MPLS static LSP(s)";
+          }
+        }
+        case ospf-sr {
+          leaf ospf-sr {
+            type empty;
+            description
+              "Map to OSPF-SR LSP(s)";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-evpnpeer";
+    /*
+    evpn peer-profile-group (group-name)
+    */
+    container evpn {
+      description
+        "Configure evpn";
+      list peer-profile-group {
+        key "peer-profile-group";
+        description
+          "Configure EVPN Peer Profile Group.";
+        leaf peer-profile-group {
+          type string;
+          description
+            "Name of the profile group";
+        }
+        uses evpn-profile-grp;
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:evpn" {
+    description
+      "ericsson-evpnpeer";
+    /*
+    peer-profile-group (profile-name)
+    */
+    leaf peer-profile-group {
+      type string;
+      description
+        "Bind EVPN peer profile group to context";
+    }
+  }
+
+}

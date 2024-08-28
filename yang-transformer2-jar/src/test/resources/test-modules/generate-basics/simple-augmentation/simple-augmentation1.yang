@@ -1,0 +1,35 @@
+module simple-augmentation-one {
+
+	namespace "urn:test:simple-augmentation-one";
+	prefix this;
+
+	revision "2021-10-13";
+
+	feature feature1;
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string;
+		}
+
+		leaf leaf12 {
+			if-feature feature1;
+			type string;
+		}
+	}
+
+	container cont2 {
+
+		container cont3 {
+
+			leaf leaf35 {
+				type string;
+			}
+		}
+
+		leaf leaf21 {
+			type string;
+		}
+	}
+}

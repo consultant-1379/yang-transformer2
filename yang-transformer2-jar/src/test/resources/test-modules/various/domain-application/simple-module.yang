@@ -1,0 +1,34 @@
+module simple-module {
+
+	namespace "urn:test:simple-module";
+	prefix this;
+
+	revision "2023-07-12";
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string;
+		}
+
+		container cont2 {
+
+			leaf leaf21 {
+				type enumeration {
+					enum RED;
+					enum YELLOW;
+				}
+			}
+		}
+	}
+
+	container cont3 {
+
+		leaf leaf31 {
+			type string;
+		}
+		leaf leaf32 {
+			type string;
+		}
+	}
+}

@@ -1,0 +1,34 @@
+module if-feature-handling-module5 {
+
+	namespace "urn;test;if-feature-handling-module5";
+	prefix this;
+
+	revision "2022-09-25";
+
+	import if-feature-handling-module1 {
+		prefix mod1;
+	}
+
+	feature feature11;
+	feature feature12;
+
+	container cont51 {
+		presence "";
+		if-feature feature11;
+	}
+
+	container cont52 {
+		presence "";
+		if-feature this:feature11;
+	}
+
+	container cont53 {
+		presence "";
+		if-feature mod1:feature11;
+	}
+
+	container cont54 {
+		presence "";
+		if-feature "this:feature12 and mod1:feature19";
+	}
+}

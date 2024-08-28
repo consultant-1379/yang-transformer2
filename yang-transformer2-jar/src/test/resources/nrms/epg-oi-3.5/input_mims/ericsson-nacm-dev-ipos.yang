@@ -1,0 +1,71 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-nacm-dev-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-nacm-dev-ipos";
+
+  prefix "nacmxvipos";
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-netconf-acm {
+    prefix "nacm";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import tailf-common {
+    prefix tailf;
+  }
+
+  import ietf-system {
+    prefix sys;
+  }
+  
+  organization "Ericsson AB";
+  contact "iposcli@ericsson.com";
+
+  description
+    "ericsson-system-dev-ipos
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-05" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-09" {
+    description   "initial revision";
+    reference "RFC 6536: Network Configuration Protocol (NETCONF)
+                 Access Control Model";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+ /* deviation "/nacm:nacm/nacm:groups/nacm:group/nacm:user-name" {
+      deviate replace {
+        type leafref {
+          path "/sys:system/sys:authentication/sys:user/sys:name";
+        }
+      }
+  } 
+  } */
+}

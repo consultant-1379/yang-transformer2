@@ -1,0 +1,88 @@
+module ericsson-fm-ext-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-fm-ext-ipos";
+
+  prefix "fmipos";
+
+  import ericsson-fm {
+    prefix "fme";
+  }
+
+  import ericsson-yang-extensions {
+      prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-fm-ext-ipos
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-09-09" {
+    description
+      "fix incorrect release No.";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-07-12" {
+    description
+      "Add deviation.
+       YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-04" {
+    description
+      "Initial version of ipos fm yang model";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  typedef fm-mode {
+    type enumeration {
+      enum dn {
+        description
+          "DN format used for alarm source";
+      }
+      enum xpath {
+        description
+          "XPATH format used for alarm source";
+      }
+    }
+    description
+      "format of fm alarm source";
+  }
+
+  augment "/fme:fm" {
+    description
+      "ericsson-fm";
+    /*fm-mode*/
+    leaf mode {
+      type fm-mode;
+      default xpath;
+      description
+          "Alarm source format control";
+    }
+  }
+
+  deviation "/fme:fm/fme:alarm-model/fme:alarm-type/fme:configured-severity" {
+    deviate not-supported;
+  }
+}

@@ -1,0 +1,35 @@
+module simple-augmentation-two {
+
+	namespace "urn:test:simple-augmentation-two";
+	prefix this;
+
+	import simple-augmentation-one {
+		prefix sa1;
+	}
+
+	revision "2021-05-09";
+
+	feature feature2;
+
+	container cont4 {
+
+		leaf leaf43 {
+			type string;
+		}
+	}
+
+	augment "/sa1:cont2" {
+
+		leaf leaf27 {
+			type string;
+		}
+
+		container cont5 {
+			if-feature feature2;
+
+			leaf leaf51 {
+				type string;
+			}
+		}
+	}
+}

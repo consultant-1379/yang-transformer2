@@ -1,0 +1,144 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-l2vlan-ext-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-l2vlan-ext-dev-router6000";
+
+  prefix "l2vlanxvrouter6000";
+
+  import ericsson-l2vlan-ext-router6000 {
+    prefix "l2vlanxrouter6000";
+  }
+
+   import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+  
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-l2vlan-ext-dev-router6000
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-03-04" {
+    description
+      "deviation not support mirror destination";
+    reference
+      "rfc6020";
+    yexte:version "4";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-03-08" {
+    description
+      "deviation for micro-BFD.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-20" {
+    description
+      "deviation for ericsson-l2vlan-ext-dev-router6000.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  /*if:interfaces/if:interface->dot1q->pvc->load-balance*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/l2vlanxrouter6000:pvc-opt/l2vlanxrouter6000:load-balance" {
+    deviate not-supported;
+  }
+  
+  /*if:interfaces/if:interface->dot1q->pvc->ipv4-multicast-maximum-bandwidth*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/l2vlanxrouter6000:ipv4-multicast-maximum-bandwidth" {
+    deviate not-supported;
+  }
+  
+  /*dot1q->pvc->pvc-list->load-balance*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list/l2vlanxrouter6000:pvc-list-opt1/l2vlanxrouter6000:load-balance" {
+    deviate not-supported;
+  }         
+  
+  /*dot1q->pvc->pvc-list->ipv4-multicast-maximum-bandwidth*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list/l2vlanxrouter6000:ipv4-multicast-maximum-bandwidth" {
+    deviate not-supported;
+  }   
+ 
+  /*if:interfaces/if:interface/ethxrouter6000:ethernet->dot1q->pvc->ipv4-multicast-maximum-bandwidth*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/l2vlanxrouter6000:ipv4-multicast-maximum-bandwidth" {
+    deviate not-supported;
+  }
+ 
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/l2vlanxrouter6000:mirror/l2vlanxrouter6000:mirror/l2vlanxrouter6000:policy/l2vlanxrouter6000:policy/l2vlanxrouter6000:source-tag" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/l2vlanxrouter6000:mirror/l2vlanxrouter6000:mirror/l2vlanxrouter6000:destination" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/l2vlanxrouter6000:mirror/l2vlanxrouter6000:mirror/l2vlanxrouter6000:policy/l2vlanxrouter6000:policy/l2vlanxrouter6000:policy-opt1" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list/l2vlanxrouter6000:mirror/l2vlanxrouter6000:mirror/l2vlanxrouter6000:policy/l2vlanxrouter6000:policy/l2vlanxrouter6000:source-tag" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list/l2vlanxrouter6000:mirror/l2vlanxrouter6000:mirror/l2vlanxrouter6000:destination" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list/l2vlanxrouter6000:mirror/l2vlanxrouter6000:mirror/l2vlanxrouter6000:policy/l2vlanxrouter6000:policy/l2vlanxrouter6000:policy-opt1" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/l2vlanxrouter6000:mirror/l2vlanxrouter6000:mirror/l2vlanxrouter6000:policy/l2vlanxrouter6000:policy/l2vlanxrouter6000:source-tag" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/l2vlanxrouter6000:mirror/l2vlanxrouter6000:mirror/l2vlanxrouter6000:destination" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/l2vlanxrouter6000:mirror/l2vlanxrouter6000:mirror/l2vlanxrouter6000:policy/l2vlanxrouter6000:policy/l2vlanxrouter6000:policy-opt1" {
+    deviate not-supported;
+  }
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/l2vlanxrouter6000:subscribe-micro-bfd" {
+    deviate not-supported;
+  }
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list/l2vlanxrouter6000:subscribe-micro-bfd" {
+    deviate not-supported;
+  }
+}

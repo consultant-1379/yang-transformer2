@@ -1,0 +1,167 @@
+module ericsson-nd-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-nd-pc5gc";
+  prefix ndpc5gc;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-ip {
+    prefix ip;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model is for ericsson ND model.
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2019-12-11 {
+    description
+      "ericsson ND YANG";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  identity nd-fsm-state {
+    description
+      "Base identity for nd fsm state";
+  }
+
+  identity init {
+    base nd-fsm-state;
+    description
+      "init state of ND FSM";
+  }
+
+  identity incmp {
+    base nd-fsm-state;
+    description
+      "incmp state of ND FSM";
+  }
+
+  identity reach {
+    base nd-fsm-state;
+    description
+      "reach state of ND FSM";
+  }
+
+  identity stale {
+    base nd-fsm-state;
+    description
+      "stale state of ND FSM";
+  }
+
+  identity delay {
+    base nd-fsm-state;
+    description
+      "delay state of ND FSM";
+  }
+
+  identity probe {
+    base nd-fsm-state;
+    description
+      "probe state of ND FSM";
+  }
+
+  identity none {
+    base nd-fsm-state;
+    description
+      "identity it an error state";
+  }
+
+  identity intf {
+    base nd-fsm-state;
+    description
+      "identity it a local interface";
+  }
+
+  augment "/if:interfaces/if:interface/ip:ipv6" {
+    description
+      "Add a node to display the neighbor information on this interface,
+       especially the mapping from IPv6 addresses to link-layer addresses
+       for each neighbor.
+       Neighbor entry include 2 types, one is learned from packet sent by neighbor,
+       the other is deploied by this interface.";
+    container nd {
+
+      status current {
+        yexte:preliminary;
+      }
+
+      description
+        "Design the action about ND neighbor information.";
+      action neighbors {
+        description
+          "A collection of ND objects.";
+        output {
+          list neighbor {
+            config false;
+            key "instance-id";
+            description
+              "The current operational state of nd neighbors for each instance.";
+            leaf instance-id {
+              type string;
+              description
+                "The instance which interface is locating on.";
+            }
+            list cache {
+              key "ip";
+              description
+                "A list of current neighbor information for this interface,
+                 especially mappings from IPv6 addresses to link-layer addresses.";
+              reference
+                "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)";
+              leaf ip {
+                type inet:ipv6-address-no-zone;
+                description
+                  "The IPv6 address of neighbor, includes dynamic learned from neighbor or the primary
+                   IPv6 address deployed by local interface";
+              }
+              leaf link-layer-address {
+                type yang:phys-address;
+                mandatory true;
+                description
+                  "The link-layer address of the neighbor node.";
+              }
+              leaf age {
+                type uint32;
+                units "seconds";
+                description
+                  "The interval, in seconds, since the last updated time when
+                   receiveing the Neighbor Advertisment packet.";
+              }
+              leaf state {
+                type identityref {
+                  base nd-fsm-state;
+                }
+                description
+                  "nd fsm state.";
+              }
+              leaf vlan-id {
+                type uint32;
+                description
+                  "vlan id.";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

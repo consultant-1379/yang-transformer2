@@ -1,0 +1,47 @@
+module write-behaviour-dev {
+
+    namespace "urn_test_write-behaviour-dev";
+    prefix this;
+
+	import write-behaviour {
+		prefix wb;
+	}
+	
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	import ericsson-notifications {
+		prefix notife;
+	}
+    revision "2021-04-21";
+
+	augment /wb:cont1 {
+		leaf leaf11 {
+			type string;
+		}
+	}
+
+	deviation /wb:cont2 {
+		deviate replace {
+			config false;
+		}
+		deviate add {
+			notife:notifiable-state-data true;
+		}
+	}
+
+	augment /wb:cont3 {
+		leaf leaf31 {
+			type string;
+		}
+	}
+
+	deviation /wb:cont4 {
+		deviate replace {
+			config true;
+		}
+		deviate delete {
+			notife:notifiable-state-data true;
+		}
+	}
+}

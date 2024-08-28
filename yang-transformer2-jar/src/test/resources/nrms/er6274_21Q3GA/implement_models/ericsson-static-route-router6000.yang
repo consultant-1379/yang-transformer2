@@ -1,0 +1,638 @@
+module ericsson-static-route-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-static-route-router6000";
+
+  prefix "starouter6k";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-static-route-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-11-02" {
+    description
+      "IPOS-14039";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-12" {
+    description
+      "Modify imported module xxx not used, IPOS-12445";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-07-03" {
+    description
+      "refine based on review comments from feature owner,
+       IPOS-12015";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-10" {
+    description
+      "IPOS-7943 IPOS-7192 IPOS-8312";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-08" {
+    description
+      "support dvsr";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-02-22" {
+    description
+      "support ip route track";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-18" {
+    description
+      "HV:HV53277 [Spitfire 17B] Yang Model for IPFRR and remote
+       LFA doesnot support in 17B. Remove if-feature:
+       staticrouteipv4 and staticrouteipv6";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-30" {
+    description
+      "Fix side-effect";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip" {
+    description
+      "ericsson-static-route";
+    /*
+    static-route (ip-prefix) <next-hop-type {next-hop-address
+     |next-hop-interface|next-hop-context}> <next-hop {(next-hop-
+     value-address)|{null0}|(onext-hop-value-name)}> [connected]
+     [bfd [strict]] [ dvsr (dvsr-profile) [ verify-address (vnh-
+     addr)] ] [distance (distance-value)] [cost (cost-value)]
+     [tag (tag-value)][permanent] [<ipfrr-addr (ipfrr-addr)
+     [backup-connected][backup-bfd [backup-strict]] [ backup-dvsr
+     (backup-dvsr-profile) [ backup-verify-address (backup-vnh-
+     addr)] ] [backup-distance (backup-distance-value)] [backup-
+     cost (backup-cost-value)] [backup-tag (backup-tag-value)]
+     [<track (eti-obj) data-plane>]>] [description (description-
+     str)] [ track {  (eti-obj) | icr } ]
+    */
+    list static-route {
+      key "ip-prefix next-hop-type next-hop";
+      description
+        "IP static route configuration command";
+      leaf ip-prefix {
+        type inet:ipv4-prefix;
+        description
+          "destination IP prefix";
+      }
+      leaf next-hop-type {
+        type enumeration {
+          enum next-hop-address {
+            value 0;
+            description
+              "Ipv4 static route next hop is ip address";
+          }
+          enum next-hop-interface {
+            value 1;
+            description
+              "Ipv4 static route next hop is l3 interface";
+          }
+          enum next-hop-context {
+            value 2;
+            description
+              "Ipv4 static route next hop is context";
+          }
+        }
+        description
+          "Ipv4 static route next hop type";
+      }
+      leaf next-hop {
+        type union {
+          type inet:ipv4-address;
+          type enumeration {
+            enum null0 {
+              value 0;
+              description
+                "Ipv4 static route next hop is null0 interface";
+            }
+          }
+          type string;
+        }
+        description
+          "Ipv4 static route next hop value";
+      }
+      leaf connected {
+        when "(../next-hop-type = 'next-hop-address')" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "IP nexthop on the connected circuit subnet";
+      }
+      container bfd {
+        when "(../next-hop-type = 'next-hop-address')" {
+          description
+            "";
+        }
+        presence "";
+        description
+          "Enable BFD for this route";
+        leaf strict {
+          type empty;
+          description
+            "strict";
+        }
+      }
+      container dvsr {
+        when "(../next-hop-type = 'next-hop-address')" {
+          description
+            "";
+        }
+        description
+          "DVSR (dynamically verified static routing)";
+        leaf dvsr-profile {
+          type string;
+          description
+            "DVSR profile name";
+        }
+        leaf verify-address {
+          when "../dvsr-profile" {
+            description
+              "";
+          }
+          type inet:ipv4-address;
+          description
+            "Optional. DVSR verify IP address";
+        }
+      }
+      leaf distance {
+        type uint8 {
+          range "1..255";
+        }
+        default "1";
+        description
+          "Static route distance";
+      }
+      leaf cost {
+        type uint8 {
+          range "0..15";
+        }
+        default "0";
+        description
+          "Static route cost";
+      }
+      leaf tag {
+        type uint32 {
+          range "0..4294967295";
+        }
+        default "0";
+        description
+          "Route tag";
+      }
+      leaf permanent {
+        when "not (../next-hop-type = 'next-hop-address')" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "route is permanent";
+      }
+      container ipfrr-addr {
+        when "(../next-hop-type = 'next-hop-address')" {
+          description
+            "";
+        }
+        presence "";
+        description
+          "IPFRR next-hop";
+        leaf ipfrr-addr {
+          type inet:ipv4-address;
+          mandatory true;
+          description
+            "IPFRR next-hop address";
+        }
+        leaf backup-connected {
+          type empty;
+          description
+            "IP backup nexthop on the connected circuit subnet";
+        }
+        container backup-bfd {
+          presence "";
+          description
+            "Enable BFD on backup next-hop";
+          leaf backup-strict {
+            type empty;
+            description
+              "strict";
+          }
+        }
+        container backup-dvsr {
+          description
+            "DVSR (dynamically verified static routing)";
+          leaf backup-dvsr-profile {
+            type string;
+            description
+              "DVSR profile name";
+          }
+          leaf backup-verify-address {
+            when "../backup-dvsr-profile" {
+              description
+                "";
+            }
+            type inet:ipv4-address;
+            description
+              "Optional. DVSR verify IP address";
+          }
+        }
+        leaf backup-distance {
+          type uint8 {
+            range "1..255";
+          }
+          description
+            "Backup static route distance";
+        }
+        leaf backup-cost {
+          type uint8 {
+            range "0..15";
+          }
+          description
+            "Backup static route cost";
+        }
+        leaf backup-tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "Backup route tag";
+        }
+        container track {
+          presence "";
+          description
+            "ETI (Event tracking object)";
+          leaf eti-obj {
+            type string;
+            mandatory true;
+            description
+              "ETI object name for IPFRR route";
+          }
+          leaf data-plane {
+            type empty;
+            mandatory true;
+            description
+              "Object will be tracked solely in data-plane";
+          }
+        }
+      }
+      leaf description {
+        type string;
+        description
+          "Add descriptive text for this route";
+      }
+      container track {
+        when "(../next-hop != 'null0')" {
+          description
+            "";
+        }
+        description
+          "ETI (Event tracking object)";
+        choice track {
+          case eti-obj {
+            leaf eti-obj {
+              type string;
+              description
+                "ETI object name for tracking LAG status";
+            }
+          }
+          case icr {
+            leaf icr {
+              type empty;
+              description
+                "Track ICR status";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ipv6" {
+    description
+      "ericsson-static-route";
+    /*
+    static-route (ipv6-prefix) <next-hop-type {next-hop-address
+     |next-hop-context|next-hop-interface}> <next-hop {(next-hop-
+     value-address)|(onext-hop-value-name)|{null0}}> [bfd
+     [strict]] [ dvsr (dvsr-profile) [ verify-address (vnh-addr)]
+     [interface (address)] ] [distance (distance-value) ] [cost
+     (cost-value)] [tag (tag-value)] [permanent ] [<ipfrr-addr
+     (ipfrr-addr) [backup-distance (backup-distance-value)]
+     [backup-bfd [backup-strict]] [ backup-dvsr (backup-dvsr-
+     profile) [ backup-verify-address (backup-vnh-addr)]
+     [interface (backup-interface-name)] ] [backup-cost (backup-
+     cost-value)] [backup-tag (backup-tag-value)] [<track (eti-
+     obj) data-plane>] >] [description (description-str)]
+    */
+    list static-route {
+      key "ipv6-prefix next-hop-type next-hop";
+      description
+        "IPv6 static route configuration command";
+      leaf ipv6-prefix {
+        type inet:ipv6-prefix;
+        description
+          "IPv6 prefix";
+      }
+      leaf next-hop-type {
+        type enumeration {
+          enum next-hop-address {
+            value 0;
+            description
+              "Ipv6 static route next hop is ipv6 address";
+          }
+          enum next-hop-context {
+            value 1;
+            description
+              "IPv6 next-hop into another context";
+          }
+          enum next-hop-interface {
+            value 2;
+            description
+              "Ipv6 static route next hop is Interface";
+          }
+        }
+        description
+          "Ipv6 static route next hop type";
+      }
+      leaf next-hop {
+        type union {
+          type inet:ipv6-address;
+          type string;
+          type enumeration {
+            enum null0 {
+              value 0;
+              description
+                "Ipv6 static route next hop is null0 interface";
+            }
+          }
+        }
+        description
+          "Ipv6 static route next hop value";
+      }
+      container bfd {
+        when "(../next-hop-type = 'next-hop-address')" {
+          description
+            "";
+        }
+        presence "";
+        description
+          "Enable BFD for this route";
+        leaf strict {
+          type empty;
+          description
+            "strict";
+        }
+      }
+      container dvsr {
+        when "(../next-hop-type = 'next-hop-address')" {
+          description
+            "";
+        }
+        description
+          "DVSR (dynamically verified static routing)";
+        leaf dvsr-profile {
+          type string;
+          description
+            "DVSR profile name";
+        }
+        leaf verify-address {
+          when "../dvsr-profile" {
+            description
+              "";
+          }
+          type inet:ipv6-address;
+          description
+            "Optional. DVSR verify IPv6 address";
+        }
+        leaf interface {
+          type string;
+          must "/if:interfaces/if:interface/if:name=concat(., "
+          + "'@', ../../../../ctxr6k:context-name)" {
+            error-message "Interface does not exist!";
+            description
+              "interface should be created already";
+          }
+          description
+            "Interface for IPv6 link local address";
+        }
+      }
+      leaf distance {
+        type uint8 {
+          range "1..255";
+        }
+        default "1";
+        description
+          "Static route distance";
+      }
+      leaf cost {
+        type uint8 {
+          range "0..15";
+        }
+        default "0";
+        description
+          "Static route cost";
+      }
+      leaf tag {
+        type uint32 {
+          range "0..4294967295";
+        }
+        default "0";
+        description
+          "Route tag";
+      }
+      leaf permanent {
+        when "not (../next-hop-type = 'next-hop-address')" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "route is permanent";
+      }
+      container ipfrr-addr {
+        when "(../next-hop-type = 'next-hop-address')" {
+          description
+            "";
+        }
+        presence "";
+        description
+          "IPFRR next-hop";
+        leaf ipfrr-addr {
+          type inet:ipv6-address;
+          mandatory true;
+          description
+            "IPFRR Global IPv6 next-hop address";
+        }
+        leaf backup-distance {
+          type uint8 {
+            range "1..255";
+          }
+          description
+            "Static route distance for backup next-hop";
+        }
+        container backup-bfd {
+          presence "";
+          description
+            "Enable BFD on backup next-hop";
+          leaf backup-strict {
+            type empty;
+            description
+              "strict";
+          }
+        }
+        container backup-dvsr {
+          description
+            "DVSR (dynamically verified static routing)";
+          leaf backup-dvsr-profile {
+            type string;
+            description
+              "DVSR profile name";
+          }
+          leaf backup-verify-address {
+            when "../backup-dvsr-profile" {
+              description
+                "";
+            }
+            type inet:ipv6-address;
+            description
+              "Optional. DVSR verify IPv6 address";
+          }
+          leaf interface {
+            type string;
+            must "/if:interfaces/if:interface/if:name=concat(., "
+            + "'@', ../../../../../ctxr6k:context-name)" {
+              error-message "Interface does not exist!";
+              description
+                "interface should be created already";
+            }
+            description
+              "Interface for IPv6 link local address";
+          }
+        }
+        leaf backup-cost {
+          type uint8 {
+            range "0..15";
+          }
+          description
+            "Static route cost";
+        }
+        leaf backup-tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "Route tag";
+        }
+        container track {
+          presence "";
+          description
+            "ETI (Event tracking object)";
+          leaf eti-obj {
+            type string;
+            mandatory true;
+            description
+              "ETI object name for IPFRR route";
+          }
+          leaf data-plane {
+            type empty;
+            mandatory true;
+            description
+              "Object will be tracked solely in data-plane";
+          }
+        }
+      }
+      leaf description {
+        type string;
+        description
+          "Add descriptive text for this route";
+      }
+    }
+  }
+
+}

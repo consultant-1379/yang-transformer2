@@ -1,0 +1,80 @@
+module ericsson-l2vlan-ext-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-l2vlan-ext-dev-ssr";
+
+  prefix "l2vlanxdevssr";
+
+  import ericsson-lag-ext-ipos {
+      prefix "lagxipos";
+  }
+
+  import ericsson-l2vlan-ext-ipos {
+      prefix "l2vlanxipos";
+  }
+
+  import ericsson-ethernet-ext-ipos {
+      prefix "ethxipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-l2vlan-ext-dev-ssr
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-05-03" {
+    description
+      "remove deviate l2vlanxipos:subscribe-micro-bfd";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+  revision "2018-01-12" {
+    description
+      "Initial revision.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/if:interfaces/if:interface/lagxipos:link-group/l2vlanxipos:dot1q/l2vlanxipos:pvc" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxipos:dot1q/l2vlanxipos:pvc-list" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet/l2vlanxipos:dot1q/l2vlanxipos:pvc" {
+    deviate not-supported;
+  }
+
+}

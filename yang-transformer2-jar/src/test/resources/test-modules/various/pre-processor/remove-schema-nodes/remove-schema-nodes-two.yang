@@ -1,0 +1,40 @@
+module remove-schema-nodes-two {
+
+    namespace "urn*test*remove-schema-nodes-two";
+    prefix this;
+
+    revision "2021-04-04";
+
+	import remove-schema-nodes-one {
+		prefix one;
+	}
+
+	augment /one:cont1 {
+	
+		container cont6 {
+		
+			leaf leaf61 {		// will be removed
+				type string;
+			}
+	
+			leaf leaf62 {
+				type string;
+			}
+		}
+
+	}
+
+	list list2 {
+		key leaf71;
+	
+		leaf leaf71 {			// will be removed
+			type string;
+		}
+
+		leaf leaf72 {				
+			type string;
+		}
+	}
+
+	rpc rpc4;					// will be removed
+}

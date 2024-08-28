@@ -1,0 +1,80 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-bridge-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bridge-dev-router6000";
+
+  prefix "bridgevrouter6000";
+
+  import ericsson-bridge-router6000{
+    prefix "bridgerouter6000";
+  }
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bridge-dev-router6000
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-18" {
+    description
+      "remove si-id.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-07" {
+    description
+      "deviation for ericsson-bridge-ipos.yang.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /*hide broadcast-rate-limit under bridge profile*/
+  deviation "/bridgerouter6000:bridge/bridgerouter6000:profile/bridgerouter6000:broadcast-rate-limit" {
+    deviate not-supported;
+  }
+
+  /*hide multicast-rate-limit under bridge profile*/
+  deviation "/bridgerouter6000:bridge/bridgerouter6000:profile/bridgerouter6000:multicast-rate-limit" {
+    deviate not-supported;
+  }
+
+  /*hide unknown-dest-rate-limit under bridge profile*/
+  deviation "/bridgerouter6000:bridge/bridgerouter6000:profile/bridgerouter6000:unknown-dest-rate-limit" {
+    deviate not-supported;
+  }
+
+  /*hide unknown-dest-rate-limit under bridge instance*/
+  deviation "/bridgerouter6000:bridge/bridgerouter6000:bridge-instance/bridgerouter6000:aging-time" {
+    deviate not-supported;
+  }
+
+}

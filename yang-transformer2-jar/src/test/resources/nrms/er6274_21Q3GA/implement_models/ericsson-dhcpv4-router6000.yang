@@ -1,0 +1,4109 @@
+module ericsson-dhcpv4-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-dhcpv4-router6000";
+
+  prefix "dhcpv4r6k";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-dhcpv4-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-04-26" {
+    description
+      "removed mandatory True for range-opt";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2019-01-24" {
+    description
+      "Presence Statement added for server-policy, and removed
+       for threshold";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2019-01-03" {
+    description
+      "Removed parent name from child names";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-01" {
+    description
+      "Added option router no-default";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2018-10-18" {
+    description
+      "corrected help string for tftp-server-address";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2018-10-03" {
+    description
+      "Added tftp-server-address(option 150)";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-08-21" {
+    description
+      "modify offset bug";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-25" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping config-dhcp-server-grp {
+    description
+      "DHCP configuration in a context mode";
+    /*
+    subnet (subnet-prefix) [ name (name-string) ]
+    */
+    list subnet {
+      key "subnet-prefix";
+      description
+        "Configure subnet IP address and netmask for DHCP
+         Server";
+      leaf subnet-prefix {
+        type typesrouter6000:ipos-ip-prefix;
+        description
+          "Address followed by mask or prefix length";
+      }
+      leaf name {
+        type string;
+        description
+          "Configure DHCP Server on the context";
+      }
+      uses config-dhcp-subnet-grp;
+    }
+    /*
+    vendor-class (vcid-string) [ offset (offset-val) ] subnet-
+     name (service-name)
+    */
+    list vendor-class {
+      key "vcid-string";
+      description
+        "Configure vendor class id to select a service";
+      leaf vcid-string {
+        type string;
+        description
+          "Configure vendor class identifier string";
+      }
+      leaf offset {
+        type int16 {
+          range "-255..256";
+        }
+        description
+          "offset of given vendor class id string in packet
+           option";
+      }
+      leaf subnet-name {
+        type empty;
+        mandatory true;
+        description
+          "Configure DHCP subnet to select options from";
+      }
+      leaf service-name {
+        type string;
+        mandatory true;
+        description
+          "Give name of a configured subnet";
+      }
+    }
+    /*
+    nak-on-subnet-deletion
+    */
+    leaf nak-on-subnet-deletion {
+      type empty;
+      description
+        "send NAK on RENEW for lease on a subnet that has been
+         deleted";
+    }
+    /*
+    allow-duplicate-mac
+    */
+    leaf allow-duplicate-mac {
+      type empty;
+      description
+        "Assign multiple leases to same MAC on different
+         circuits";
+    }
+    /*
+    bootp-enable-auto
+    */
+    leaf bootp-enable-auto {
+      type empty;
+      description
+        "Let BOOTP clients get IP addresses from subnet ranges";
+    }
+    /*
+    bootp-siaddr (siaddr-val)
+    */
+    leaf bootp-siaddr {
+      type inet:ipv4-address;
+      description
+        "Configure siaddr field for BOOTP replies";
+    }
+    /*
+    bootp-filename (filename-val)
+    */
+    leaf bootp-filename {
+      type string;
+      description
+        "Configure server name field for BOOTP replies";
+    }
+    /*
+    default-lease-time (time-val)
+    */
+    leaf default-lease-time {
+      type uint32 {
+        range "180..31536000";
+      }
+      description
+        "Configure default lease time to be given out to
+         clients";
+    }
+    /*
+    maximum-lease-time (time-val)
+    */
+    leaf maximum-lease-time {
+      type uint32 {
+        range "180..31536000";
+      }
+      description
+        "Configure maximum lease time that can be given out to
+         clients";
+    }
+    /*
+    offer-lease-time (time-val)
+    */
+    leaf offer-lease-time {
+      type uint16 {
+        range "60..360";
+      }
+      description
+        "Configure offer lease time that can be given out to
+         clients";
+    }
+    /*
+    threshold { { falling (value-1) [ rising (value-2) ] |
+     rising (value-2) [ falling (value-1) ] } { trap [log] | log
+     [trap] } }
+    */
+    container threshold {
+      description
+        "Configure rising or falling DHCP context usage
+         threshold";
+      container falling {
+        presence "";
+        description
+          "Configure a falling DHCP context usage threshold";
+        leaf value-1 {
+          type uint32 {
+            range "1..65536";
+          }
+          mandatory true;
+          description
+            "Falling threshold value";
+        }
+        leaf rising {
+          type uint32 {
+            range "1..65536";
+          }
+          description
+            "Configure a rising DHCP context usage threshold";
+        }
+        choice falling-choice {
+          case trap {
+            container trap {
+              presence "";
+              description
+                "Generate SNMP trap";
+              leaf log {
+                type empty;
+                description
+                  "Generate log message";
+              }
+            }
+          }
+          case log {
+            container log {
+              presence "";
+              description
+                "Generate log message";
+              leaf trap {
+                type empty;
+                description
+                  "Generate SNMP trap";
+              }
+            }
+          }
+        }
+      }
+      container rising {
+        presence "";
+        description
+          "Configure a rising DHCP context usage threshold";
+        leaf value-2 {
+          type uint32 {
+            range "1..65536";
+          }
+          mandatory true;
+          description
+            "Rising threshold value";
+        }
+        leaf falling {
+          type uint32 {
+            range "1..65536";
+          }
+          description
+            "Configure a falling DHCP context usage threshold";
+        }
+        choice rising-choice {
+          case trap {
+            container trap {
+              presence "";
+              description
+                "Generate SNMP trap";
+              leaf log {
+                type empty;
+                description
+                  "Generate log message";
+              }
+            }
+          }
+          case log {
+            container log {
+              presence "";
+              description
+                "Generate log message";
+              leaf trap {
+                type empty;
+                description
+                  "Generate SNMP trap";
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    option { { dhcp-server-identifier | subnet-mask | router-
+     solicitation-address | swap-server | broadcast-address }
+     (I-ip) | { domain-name-server | netbios-name-server | ntp-
+     server | www-server | secgw | nis-server | netbios-dd-server
+     | mobile-ip-home-agent  | lpr-server | log-server | irc-
+     server | time-server | x-display-manager | smtp-server |
+     streettalk-server | stk-dir-ass-server | nntp-server |
+     resource-location-server | impress-server | nisplus-server |
+     pop-server  | ien116-name-server | font-server | finger-
+     server | cookie-server | tftp-server-address } (I-ip1) [
+     (I-ip2) [ (I-ip3) [ (I-ip4) ] ] ] | { host-name | nis-domain
+     | netbios-scope | merit-dump | tftp-server-name | nisplus-
+     domain | bootfile-name | extensions-path | domain-name |
+     root-path } (t-val) | { ieee802-3-encapsulation | ip-
+     forwarding | all-subnets-local | mask-supplier | router-
+     discovery | trailer-encapsulation | non-local-source-routing
+     | tcp-keepalive-garbage | perform-mask-discovery }
+     (bool_val) | { static-route | policy-filter } (ip-add1)
+     (mask1) [ (ip-add2) (mask2) [ (ip-add3) (mask3) [ (ip-add4)
+     (mask4) ] ] ] | o-num { ip-address (ip-add) | numeric (num-
+     val) | string (str-word) } | { tcp-keepalive-interval  |
+     arp-cache-timeout | path-mtu-aging-timeout } (num-val2) | {
+     interface-mtu | path-mtu-plateau-table | boot-size | max-
+     dgram-reassembly } (num-val3) | { netbios-node-type |
+     default-tcp-ttl | default-ip-ttl } (num-val4) | time-offset
+     (num-val5) | router { no-default | (I-ip1) [ (I-ip2) [
+     (I-ip3) [ (I-ip4) ] ] ] } }
+    */
+    container option {
+      description
+        "Configure DHCP server RFC option";
+      container dhcp-server-identifier {
+        description
+          "container dhcp-server-identifier.";
+        container dhcp-server-identifier {
+          presence "";
+          description
+            "Configure dhcp server identifier";
+          leaf I-ip {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+        }
+        container subnet-mask {
+          presence "";
+          description
+            "Configure subnet mask";
+          leaf I-ip {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+        }
+        container router-solicitation-address {
+          presence "";
+          description
+            "Configure router solicitation address";
+          leaf I-ip {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+        }
+        container swap-server {
+          presence "";
+          description
+            "Configure swap server";
+          leaf I-ip {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+        }
+        container broadcast-address {
+          presence "";
+          description
+            "Configure broadcast address";
+          leaf I-ip {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+        }
+      }
+      container domain-name-server {
+        description
+          "container domain-name-server.";
+        container domain-name-server {
+          presence "";
+          description
+            "Configure domain name server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container netbios-name-server {
+          presence "";
+          description
+            "Configure NETBIOS name server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container ntp-server {
+          presence "";
+          description
+            "Configure NTP server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container www-server {
+          presence "";
+          description
+            "Configure WWW server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container secgw {
+          presence "";
+          description
+            "Configure secgw";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container nis-server {
+          presence "";
+          description
+            "Configure NIS server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container netbios-dd-server {
+          presence "";
+          description
+            "Configure netbios-dd server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container mobile-ip-home-agent {
+          presence "";
+          description
+            "Configure mobile-ip-home-agent server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container lpr-server {
+          presence "";
+          description
+            "Configure lpr server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container log-server {
+          presence "";
+          description
+            "Configure LOG server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container irc-server {
+          presence "";
+          description
+            "Configure IRC server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container time-server {
+          presence "";
+          description
+            "Configure TIME server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container x-display-manager {
+          presence "";
+          description
+            "Configure x-display manager";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container smtp-server {
+          presence "";
+          description
+            "Configure smtp server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container streettalk-server {
+          presence "";
+          description
+            "Configure streettalk server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container stk-dir-ass-server {
+          presence "";
+          description
+            "Configure streettalk directory assistance server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container nntp-server {
+          presence "";
+          description
+            "Configure NNTP server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container resource-location-server {
+          presence "";
+          description
+            "Configure resource location server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container impress-server {
+          presence "";
+          description
+            "Configure impress server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container nisplus-server {
+          presence "";
+          description
+            "Configure nisplus server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container pop-server {
+          presence "";
+          description
+            "Configure pop server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container ien116-name-server {
+          presence "";
+          description
+            "Configure ien116 name server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container font-server {
+          presence "";
+          description
+            "Configure FRONT server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container finger-server {
+          presence "";
+          description
+            "Configure finger server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container cookie-server {
+          presence "";
+          description
+            "Configure cookie server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container tftp-server-address {
+          presence "";
+          description
+            "Configure TFTP server IP address";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+      }
+      container host-name {
+        description
+          "container host-name.";
+        container host-name {
+          presence "";
+          description
+            "Configure host name";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container nis-domain {
+          presence "";
+          description
+            "Configure nis domain";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container netbios-scope {
+          presence "";
+          description
+            "Configure netbios scope";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container merit-dump {
+          presence "";
+          description
+            "merit dump";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container tftp-server-name {
+          presence "";
+          description
+            "Configure tftp server name";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container nisplus-domain {
+          presence "";
+          description
+            "Configure nisplus domain";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container bootfile-name {
+          presence "";
+          description
+            "Configure bootfile name";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container extensions-path {
+          presence "";
+          description
+            "Configure extensions path";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container domain-name {
+          presence "";
+          description
+            "Configure domain name";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container root-path {
+          presence "";
+          description
+            "Configure root path";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+      }
+      container ieee802-3-encapsulation {
+        description
+          "container ieee802-3-encapsulation.";
+        container ieee802-3-encapsulation {
+          presence "";
+          description
+            "Configure ieee encapsulation";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container ip-forwarding {
+          presence "";
+          description
+            "Configure ip forwarding";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container all-subnets-local {
+          presence "";
+          description
+            "Configure all subnets local";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container mask-supplier {
+          presence "";
+          description
+            "Configure mask supplier";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container router-discovery {
+          presence "";
+          description
+            "Configure router discovery";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container trailer-encapsulation {
+          presence "";
+          description
+            "Configure trailer encapsulation";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container non-local-source-routing {
+          presence "";
+          description
+            "Configure non local source routing";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container tcp-keepalive-garbage {
+          presence "";
+          description
+            "Configure tcp keepalive garbage";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container perform-mask-discovery {
+          presence "";
+          description
+            "Configure perform mask discovery";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+      }
+      container static-route {
+        description
+          "container static-route.";
+        container static-route {
+          presence "";
+          description
+            "Configure static route";
+          leaf ip-add1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address1";
+          }
+          leaf mask1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "mask1";
+          }
+          container static-route-opt {
+            description
+              "container static-route-opt.";
+            leaf ip-add2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address2";
+            }
+            leaf mask2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "mask 2";
+            }
+            container static-route-opt-opt {
+              description
+                "container static-route-opt-opt.";
+              leaf ip-add3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address3";
+              }
+              leaf mask3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "mask 3";
+              }
+              container static-route-opt-opt-opt {
+                description
+                  "container static-route-opt-opt-opt.";
+                leaf ip-add4 {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IP address4";
+                }
+                leaf mask4 {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "mask 4";
+                }
+              }
+            }
+          }
+        }
+        container policy-filter {
+          presence "";
+          description
+            "Configure policy filter";
+          leaf ip-add1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address1";
+          }
+          leaf mask1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "mask1";
+          }
+          container policy-filter-opt {
+            description
+              "container policy-filter-opt.";
+            leaf ip-add2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address2";
+            }
+            leaf mask2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "mask 2";
+            }
+            container policy-filter-opt-opt {
+              description
+                "container policy-filter-opt-opt.";
+              leaf ip-add3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address3";
+              }
+              leaf mask3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "mask 3";
+              }
+              container policy-filter-opt-opt-opt {
+                description
+                  "container policy-filter-opt-opt-opt.";
+                leaf ip-add4 {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IP address4";
+                }
+                leaf mask4 {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "mask 4";
+                }
+              }
+            }
+          }
+        }
+      }
+      container o-num {
+        description
+          "DHCP numbered option";
+        leaf ip-address {
+          type inet:ipv4-address;
+          description
+            "Configure ip address";
+        }
+        leaf numeric {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "Configure numeric";
+        }
+        leaf string {
+          type string;
+          description
+            "Configure string";
+        }
+      }
+      container tcp-keepalive-interval {
+        description
+          "container tcp-keepalive-interval.";
+        container tcp-keepalive-interval {
+          presence "";
+          description
+            "Configure tcp keepalive interval";
+          leaf num-val2 {
+            type uint32 {
+              range "0..4294967295";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value";
+          }
+        }
+        container arp-cache-timeout {
+          presence "";
+          description
+            "Configure arp cache timeout";
+          leaf num-val2 {
+            type uint32 {
+              range "0..4294967295";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value";
+          }
+        }
+        container path-mtu-aging-timeout {
+          presence "";
+          description
+            "Configure path mtu aging timeout";
+          leaf num-val2 {
+            type uint32 {
+              range "0..4294967295";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value";
+          }
+        }
+      }
+      container interface-mtu {
+        description
+          "container interface-mtu.";
+        container interface-mtu {
+          presence "";
+          description
+            "Configure interface mtu";
+          leaf num-val3 {
+            type uint16 {
+              range "0..65535";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+        container path-mtu-plateau-table {
+          presence "";
+          description
+            "Configure path mtu plateau table";
+          leaf num-val3 {
+            type uint16 {
+              range "0..65535";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+        container boot-size {
+          presence "";
+          description
+            "Configure boot size";
+          leaf num-val3 {
+            type uint16 {
+              range "0..65535";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+        container max-dgram-reassembly {
+          presence "";
+          description
+            "Configure path mtu aging timeout";
+          leaf num-val3 {
+            type uint16 {
+              range "0..65535";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+      }
+      container netbios-node-type {
+        description
+          "container netbios-node-type.";
+        container netbios-node-type {
+          presence "";
+          description
+            "Configure netbios node type";
+          leaf num-val4 {
+            type uint8 {
+              range "0..255";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+        container default-tcp-ttl {
+          presence "";
+          description
+            "Configure default tcp ttl";
+          leaf num-val4 {
+            type uint8 {
+              range "0..255";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+        container default-ip-ttl {
+          presence "";
+          description
+            "Configure default ip ttl";
+          leaf num-val4 {
+            type uint8 {
+              range "0..255";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+      }
+      leaf time-offset {
+        type int32 {
+          range "-2147483648..2147483647";
+        }
+        description
+          "Configure time offset";
+      }
+      container router {
+        description
+          "Configure router";
+        choice router {
+          case no-default {
+            leaf no-default {
+              type empty;
+              description
+                "Configure router no-default";
+            }
+          }
+          case I-ip1 {
+            container I-ip1 {
+              description
+                "container I-ip1.";
+              leaf I-ip1 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              container I-ip1-opt {
+                description
+                  "container I-ip1-opt.";
+                leaf I-ip2 {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IP address";
+                }
+                container I-ip1-opt-opt {
+                  description
+                    "container I-ip1-opt-opt.";
+                  leaf I-ip3 {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IP address";
+                  }
+                  leaf I-ip4 {
+                    type inet:ipv4-address;
+                    description
+                      "IP address";
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping config-dhcp-relay-grp {
+    description
+      "DHCP Server configuration mode";
+    /*
+    min-wait (wait-val)
+    */
+    leaf min-wait {
+      type uint8 {
+        range "0..60";
+      }
+      description
+        "Minimum time for client to wait before forwarding
+         requests";
+    }
+    /*
+    max-hops (hops-val)
+    */
+    leaf max-hops {
+      type uint8 {
+        range "1..16";
+      }
+      description
+        "Maximum number of hops allowed for requests";
+    }
+    /*
+    standby { (standby-ip) | (standby-name) }
+    */
+    leaf standby {
+      type union {
+        type inet:ipv4-address;
+        type string;
+      }
+      description
+        "Configure a standby dhcp server";
+    }
+    /*
+    forward-all
+    */
+    leaf forward-all {
+      type empty;
+      description
+        "Send the packets to all other configured servers";
+    }
+    /*
+    broadcast-discover
+    */
+    leaf broadcast-discover {
+      type empty;
+      description
+        "Broadcast discover packets to all servers in svr group";
+    }
+    /*
+    server-group (group-name)
+    */
+    leaf server-group {
+      type string;
+      description
+        "Associate a dhcp server to a server-group";
+    }
+  }
+
+  grouping config-dhcp-subnet-grp {
+    description
+      "DHCP configuration in a context mode";
+    /*
+    range (subnet-startip) (subnet-endip) [ threshold { {
+     falling (value-1) [ rising (value-2) ] | rising (value-2) [
+     falling (value-1) ] } { trap [log] | log [trap] } } ]
+    */
+    list range {
+      key "subnet-startip";
+      description
+        "Configure subnet IP address and netmask for DHCP
+         Server";
+      leaf subnet-startip {
+        type inet:ipv4-address;
+        description
+          "start IP Address for the range";
+      }
+      leaf subnet-endip {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "end IP Address for the range";
+      }
+      container range-opt {
+        description
+          "container range-opt.";
+        leaf threshold {
+          type empty;
+          description
+            "Configure rising or falling DHCP range usage
+             threshold";
+        }
+        container ipos-choice {
+          description
+            "container ipos-choice.";
+          choice ipos-choice-choice {
+            case falling {
+              container falling {
+                presence "";
+                description
+                  "Configure a falling DHCP range usage
+                   threshold";
+                leaf value-1 {
+                  type uint32 {
+                    range "1..65536";
+                  }
+                  mandatory true;
+                  description
+                    "Falling threshold value";
+                }
+                leaf rising {
+                  type uint16 {
+                    range "1..65535";
+                  }
+                  description
+                    "Configure a rising DHCP context usage
+                     threshold";
+                }
+              }
+            }
+            case rising {
+              container rising {
+                presence "";
+                description
+                  "Configure a rising DHCP context usage
+                   threshold";
+                leaf value-2 {
+                  type uint16 {
+                    range "1..65535";
+                  }
+                  mandatory true;
+                  description
+                    "Rising threshold value";
+                }
+                leaf falling {
+                  type uint16 {
+                    range "1..65535";
+                  }
+                  description
+                    "Configure a falling DHCP context usage
+                     threshold";
+                }
+              }
+            }
+          }
+          container ipos-choice-choice1 {
+            description
+              "container ipos-choice-choice1.";
+            container trap {
+              presence "";
+              description
+                "Generate SNMP trap";
+              leaf log {
+                type empty;
+                description
+                  "Generate log message";
+              }
+            }
+            container log {
+              presence "";
+              description
+                "Generate log message";
+              leaf trap {
+                type empty;
+                description
+                  "Generate SNMP trap";
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    mac-address (mac-addr) ip-address (addr-str)
+    */
+    list mac-address {
+      key "mac-address";
+      description
+        "Configure mac address to ip mapping";
+      leaf mac-address {
+        type yang:mac-address;
+        description
+          "the MAC address to be mapped to an ip address";
+      }
+      container ip-address {
+        description
+          "Configure IP address to assign";
+        leaf ip-address {
+          type inet:ipv4-address;
+          mandatory true;
+          description
+            "IP Address value";
+        }
+      }
+    }
+    /*
+    option82-ext1 <circuit-id1 (id-str)> <offset (offset-val)> <
+     max-addresses (maxip-val)>
+    */
+    list option82-ext1 {
+      key "circuit-id1 offset max-addresses";
+      description
+        "Configure option-82 sub options to map to an IP
+         address";
+      leaf circuit-id1 {
+        type string;
+        description
+          "the circuit ID in option 82 to be mapped to an IP
+           address";
+      }
+      leaf offset {
+        type uint32;
+        description
+          "offset of the identifier string in packets option-82
+           suboptions";
+      }
+      leaf max-addresses {
+        type uint16 {
+          range "1..65535";
+        }
+        description
+          "max number of IP addresses assignable for the circuit
+           ID";
+      }
+    }
+    /*
+    option82-ext2 <circuit-id2 (id-str)> <offset-ip (offset-
+     ipval)> <ip-address (addr-str)>
+    */
+    list option82-ext2 {
+      key "circuit-id2 offset-ip ip-address";
+      description
+        "Configure option-82 sub options to map to an IP
+         address";
+      leaf circuit-id2 {
+        type string;
+        description
+          "the circuit ID in option 82 to be mapped to an IP
+           address";
+      }
+      leaf offset-ip {
+        type uint32;
+        description
+          "offset of the identifier string in packets option-82
+           suboptions";
+      }
+      leaf ip-address {
+        type inet:ipv4-address;
+        description
+          "Configure IP address to assign";
+      }
+    }
+    /*
+    option82-ext3 circuit-id3 (id-str) { maxAdd-end (maxip-val)
+     | ipAddr-end (addr-str) }
+    */
+    list option82-ext3-circuit-id3 {
+      key "id-str";
+      description
+        "the circuit ID in option 82 to be mapped to an IP
+         address";
+      leaf id-str {
+        type string;
+        description
+          "the identifier string";
+      }
+      container option82-ext3-circuit-id3-choice {
+        description
+          "container option82-ext3-circuit-id3-choice.";
+        leaf maxAdd-end {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "max number of IP addresses assignable for the
+             circuit ID";
+        }
+        leaf ipAddr-end {
+          type inet:ipv4-address;
+          description
+            "Configure IP address to assign";
+        }
+      }
+    }
+    /*
+    option-82 remote-id (id-str) { offset (offset-val) ip-
+     address (addr-str) | ip-address (addr-str)}
+    */
+    list option-82-remote-id {
+      key "id-str";
+      description
+        "the remote ID in option 82 to be mapped to an IP
+         address";
+      leaf id-str {
+        type string;
+        description
+          "the identifier string";
+      }
+      choice option-82-remote-id-choice {
+        case offset {
+          container offset {
+            presence "";
+            description
+              "container offset.";
+            leaf offset {
+              type uint32;
+              mandatory true;
+              description
+                "offset of the identifier string in packets
+                 option-82 suboptions";
+            }
+            leaf ip-address {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "Configure IP address to assign";
+            }
+          }
+        }
+        case ip-address {
+          leaf ip-address {
+            type inet:ipv4-address;
+            description
+              "Configure IP address to assign";
+          }
+        }
+      }
+    }
+    /*
+    default-lease-time (time-val)
+    */
+    leaf default-lease-time {
+      type uint32 {
+        range "180..31536000";
+      }
+      description
+        "Configure default lease time to be given out to
+         clients";
+    }
+    /*
+    maximum-lease-time (time-val)
+    */
+    leaf maximum-lease-time {
+      type uint32 {
+        range "180..31536000";
+      }
+      description
+        "Configure maximum lease time that can be given out to
+         clients";
+    }
+    /*
+    offer-lease-time (time-val)
+    */
+    leaf offer-lease-time {
+      type uint16 {
+        range "60..360";
+      }
+      description
+        "Configure offer lease time that can be given out to
+         clients";
+    }
+    /*
+    option { { dhcp-server-identifier | subnet-mask | router-
+     solicitation-address | swap-server | broadcast-address }
+     (I-ip) | { domain-name-server | netbios-name-server | ntp-
+     server | www-server | secgw | nis-server | netbios-dd-server
+     | mobile-ip-home-agent  | lpr-server | log-server | irc-
+     server | time-server | x-display-manager | smtp-server |
+     streettalk-server | stk-dir-ass-server | nntp-server | res-
+     locat-server | impress-server | nisplus-server | pop-server
+     | ien116-name-server | font-server | finger-server | cookie-
+     server | tftp-server-address } (I-ip1) [ (I-ip2) [ (I-ip3) [
+     (I-ip4) ] ] ] | { host-name | nis-domain | netbios-scope |
+     merit-dump | tftp-server-name | nisplus-domain | bootfile-
+     name | extensions-path | domain-name | root-path } (t-val) |
+     { ieee802-3-encapsulation | ip-forwarding | all-subnets-
+     local | mask-supplier | router-discovery | trailer-
+     encapsulation | non-local-source-routing | tcp-keepalive-
+     garbage | perform-mask-discovery } (bool_val) | { static-rou
+     | policy-filt } (ip-add1) (mask1) [ (ip-add2) (mask2) [ (ip-
+     add3) (mask3) [ (ip-add4) (mask4) ] ] ] | o-num { ip-address
+     (ip-add) | numeric (num-val) | string (str-word) } | { tcp-
+     keepalive-interval  | arp-cache-timeout | path-mtu-aging-
+     timeout } (num-val2) | { interface-mtu | path-mtu-plateau-
+     table | boot-size | max-dgram-reassembly } (num-val3) | {
+     netbios-node-type | default-tcp-ttl | default-ip-ttl } (num-
+     val4) | time-offset (num-val5) | router { no-default |
+     (I-ip1) [ (I-ip2) [ (I-ip3) [ (I-ip4) ] ] ] } }
+    */
+    container option {
+      description
+        "Configure DHCP server RFC option";
+      container dhcp-server-identifier {
+        description
+          "container dhcp-server-identifier.";
+        container dhcp-server-identifier {
+          presence "";
+          description
+            "Configure dhcp server identifier";
+          leaf I-ip {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+        }
+        container subnet-mask {
+          presence "";
+          description
+            "Configure subnet mask";
+          leaf I-ip {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+        }
+        container router-solicitation-address {
+          presence "";
+          description
+            "Configure router solicitation address";
+          leaf I-ip {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+        }
+        container swap-server {
+          presence "";
+          description
+            "Configure swap server";
+          leaf I-ip {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+        }
+        container broadcast-address {
+          presence "";
+          description
+            "Configure broadcast address";
+          leaf I-ip {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+        }
+      }
+      container domain-name-server {
+        description
+          "container domain-name-server.";
+        container domain-name-server {
+          presence "";
+          description
+            "Configure domain name server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container netbios-name-server {
+          presence "";
+          description
+            "Configure NETBIOS name server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container ntp-server {
+          presence "";
+          description
+            "Configure NTP server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container www-server {
+          presence "";
+          description
+            "Configure WWW server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container secgw {
+          presence "";
+          description
+            "Configure secgw";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container nis-server {
+          presence "";
+          description
+            "Configure NIS server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container netbios-dd-server {
+          presence "";
+          description
+            "Configure netbios-dd server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container mobile-ip-home-agent {
+          presence "";
+          description
+            "Configure mobile-ip-home-agent server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container lpr-server {
+          presence "";
+          description
+            "Configure lpr server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container log-server {
+          presence "";
+          description
+            "Configure LOG server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container irc-server {
+          presence "";
+          description
+            "Configure IRC server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container time-server {
+          presence "";
+          description
+            "Configure TIME server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container x-display-manager {
+          presence "";
+          description
+            "Configure x-display manager";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container smtp-server {
+          presence "";
+          description
+            "Configure smtp server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container streettalk-server {
+          presence "";
+          description
+            "Configure streettalk server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container stk-dir-ass-server {
+          presence "";
+          description
+            "Configure streettalk directory assistance server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container nntp-server {
+          presence "";
+          description
+            "Configure NNTP server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container res-locat-server {
+          presence "";
+          description
+            "Configure resource location server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container impress-server {
+          presence "";
+          description
+            "Configure impress server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container nisplus-server {
+          presence "";
+          description
+            "Configure nisplus server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container pop-server {
+          presence "";
+          description
+            "Configure pop server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container ien116-name-server {
+          presence "";
+          description
+            "Configure ien116 name server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container font-server {
+          presence "";
+          description
+            "Configure FRONT server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container finger-server {
+          presence "";
+          description
+            "Configure finger server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container cookie-server {
+          presence "";
+          description
+            "Configure cookie server";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+        container tftp-server-address {
+          presence "";
+          description
+            "Configure TFTP server IP address";
+          leaf I-ip1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address";
+          }
+          container opt {
+            description
+              "container opt.";
+            leaf I-ip2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address";
+            }
+            container opt-opt {
+              description
+                "container opt-opt.";
+              leaf I-ip3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              leaf I-ip4 {
+                type inet:ipv4-address;
+                description
+                  "IP address";
+              }
+            }
+          }
+        }
+      }
+      container host-name {
+        description
+          "container host-name.";
+        container host-name {
+          presence "";
+          description
+            "Configure host name";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container nis-domain {
+          presence "";
+          description
+            "Configure nis domain";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container netbios-scope {
+          presence "";
+          description
+            "Configure netbios scope";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container merit-dump {
+          presence "";
+          description
+            "merit dump";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container tftp-server-name {
+          presence "";
+          description
+            "Configure tftp server name";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container nisplus-domain {
+          presence "";
+          description
+            "Configure nisplus domain";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container bootfile-name {
+          presence "";
+          description
+            "Configure bootfile name";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container extensions-path {
+          presence "";
+          description
+            "Configure extensions path";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container domain-name {
+          presence "";
+          description
+            "Configure domain name";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+        container root-path {
+          presence "";
+          description
+            "Configure root path";
+          leaf t-val {
+            type string {
+              length "1..64";
+            }
+            mandatory true;
+            description
+              "Text string";
+          }
+        }
+      }
+      container ieee802-3-encapsulation {
+        description
+          "container ieee802-3-encapsulation.";
+        container ieee802-3-encapsulation {
+          presence "";
+          description
+            "Configure ieee encapsulation";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container ip-forwarding {
+          presence "";
+          description
+            "Configure ip forwarding";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container all-subnets-local {
+          presence "";
+          description
+            "Configure all subnets local";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container mask-supplier {
+          presence "";
+          description
+            "Configure mask supplier";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container router-discovery {
+          presence "";
+          description
+            "Configure router discovery";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container trailer-encapsulation {
+          presence "";
+          description
+            "Configure trailer encapsulation";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container non-local-source-routing {
+          presence "";
+          description
+            "Configure non local source routing";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container tcp-keepalive-garbage {
+          presence "";
+          description
+            "Configure tcp keepalive garbage";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+        container perform-mask-discovery {
+          presence "";
+          description
+            "Configure perform mask discovery";
+          leaf bool_val {
+            type uint8 {
+              range "0..1";
+            }
+            mandatory true;
+            description
+              "Boolean";
+          }
+        }
+      }
+      container static-rou {
+        description
+          "container static-rou.";
+        container static-rou {
+          presence "";
+          description
+            "Configure static route";
+          leaf ip-add1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address1";
+          }
+          leaf mask1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "mask1";
+          }
+          container static-rou-opt {
+            description
+              "container static-rou-opt.";
+            leaf ip-add2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address2";
+            }
+            leaf mask2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "mask 2";
+            }
+            container static-rou-opt-opt {
+              description
+                "container static-rou-opt-opt.";
+              leaf ip-add3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address3";
+              }
+              leaf mask3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "mask 3";
+              }
+              container static-rou-opt-opt-opt {
+                description
+                  "container static-rou-opt-opt-opt.";
+                leaf ip-add4 {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IP address4";
+                }
+                leaf mask4 {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "mask 4";
+                }
+              }
+            }
+          }
+        }
+        container policy-filt {
+          presence "";
+          description
+            "Configure policy filter";
+          leaf ip-add1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IP address1";
+          }
+          leaf mask1 {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "mask1";
+          }
+          container policy-filt-opt {
+            description
+              "container policy-filt-opt.";
+            leaf ip-add2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "IP address2";
+            }
+            leaf mask2 {
+              type inet:ipv4-address;
+              mandatory true;
+              description
+                "mask 2";
+            }
+            container policy-filt-opt-opt {
+              description
+                "container policy-filt-opt-opt.";
+              leaf ip-add3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address3";
+              }
+              leaf mask3 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "mask 3";
+              }
+              container policy-filt-opt-opt-opt {
+                description
+                  "container policy-filt-opt-opt-opt.";
+                leaf ip-add4 {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IP address4";
+                }
+                leaf mask4 {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "mask 4";
+                }
+              }
+            }
+          }
+        }
+      }
+      container o-num {
+        description
+          "DHCP numbered option";
+        leaf ip-address {
+          type inet:ipv4-address;
+          description
+            "Configure ip address";
+        }
+        leaf numeric {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "Configure numeric";
+        }
+        leaf string {
+          type string;
+          description
+            "Configure string";
+        }
+      }
+      container tcp-keepalive-interval {
+        description
+          "container tcp-keepalive-interval.";
+        container tcp-keepalive-interval {
+          presence "";
+          description
+            "Configure tcp keepalive interval";
+          leaf num-val2 {
+            type uint32 {
+              range "0..4294967295";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value";
+          }
+        }
+        container arp-cache-timeout {
+          presence "";
+          description
+            "Configure arp cache timeout";
+          leaf num-val2 {
+            type uint32 {
+              range "0..4294967295";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value";
+          }
+        }
+        container path-mtu-aging-timeout {
+          presence "";
+          description
+            "Configure path mtu aging timeout";
+          leaf num-val2 {
+            type uint32 {
+              range "0..4294967295";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value";
+          }
+        }
+      }
+      container interface-mtu {
+        description
+          "container interface-mtu.";
+        container interface-mtu {
+          presence "";
+          description
+            "Configure interface mtu";
+          leaf num-val3 {
+            type uint16 {
+              range "0..65535";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+        container path-mtu-plateau-table {
+          presence "";
+          description
+            "Configure path mtu plateau table";
+          leaf num-val3 {
+            type uint16 {
+              range "0..65535";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+        container boot-size {
+          presence "";
+          description
+            "Configure boot size";
+          leaf num-val3 {
+            type uint16 {
+              range "0..65535";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+        container max-dgram-reassembly {
+          presence "";
+          description
+            "Configure path mtu aging timeout";
+          leaf num-val3 {
+            type uint16 {
+              range "0..65535";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+      }
+      container netbios-node-type {
+        description
+          "container netbios-node-type.";
+        container netbios-node-type {
+          presence "";
+          description
+            "Configure netbios node type";
+          leaf num-val4 {
+            type uint8 {
+              range "0..255";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+        container default-tcp-ttl {
+          presence "";
+          description
+            "Configure default tcp ttl";
+          leaf num-val4 {
+            type uint8 {
+              range "0..255";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+        container default-ip-ttl {
+          presence "";
+          description
+            "Configure default ip ttl";
+          leaf num-val4 {
+            type uint8 {
+              range "0..255";
+            }
+            mandatory true;
+            description
+              "DHCP numbered value3";
+          }
+        }
+      }
+      leaf time-offset {
+        type int32 {
+          range "-2147483648..2147483647";
+        }
+        description
+          "Configure time offset";
+      }
+      container router {
+        description
+          "Configure router";
+        choice router {
+          case no-default {
+            leaf no-default {
+              type empty;
+              description
+                "Configure router no-default";
+            }
+          }
+          case I-ip1 {
+            container I-ip1 {
+              description
+                "container I-ip1.";
+              leaf I-ip1 {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP address";
+              }
+              container I-ip1-opt {
+                description
+                  "container I-ip1-opt.";
+                leaf I-ip2 {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IP address";
+                }
+                container I-ip1-opt-opt {
+                  description
+                    "container I-ip1-opt-opt.";
+                  leaf I-ip3 {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "IP address";
+                  }
+                  leaf I-ip4 {
+                    type inet:ipv4-address;
+                    description
+                      "IP address";
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context" {
+    description
+      "ericsson-dhcpv4";
+    /*
+     dhcp { relay { server { < { (bprelay-ipaddr) | (bprelay-
+     name) } > } | server retries (retries-val) timeout (timeout-
+     val) | option [ hostname ] [ seperator (separator-char) ] [
+     format lg-name ] | suppress-nak } | server policy }
+    */
+    container dhcp {
+      description
+        "DHCP Configuration";
+      container relay {
+        description
+          "Configure DHCP Relay";
+        list server {
+          key "server";
+          description
+            "Configure a DHCP Server";
+          leaf server {
+            type union {
+              type inet:ipv4-address;
+              type string;
+            }
+            description
+              "leaf server.";
+          }
+          uses config-dhcp-relay-grp;
+        }
+        container server-retries {
+          presence "";
+          description
+            "Specifies the no. of consecutive packets to
+             timeout";
+          leaf retries-val {
+            type uint8 {
+              range "1..100";
+            }
+            mandatory true;
+            description
+              "Specify the number of retries";
+          }
+          leaf timeout {
+            type empty;
+            mandatory true;
+            description
+              "Specifies the timeout for the dhcp server";
+          }
+          leaf timeout-val {
+            type uint8 {
+              range "1..150";
+            }
+            mandatory true;
+            description
+              "Specify the timeout value (in sec) for a server";
+          }
+        }
+        container option {
+          presence "";
+          description
+            "Add the DHCP Relay Agent Option";
+          leaf hostname {
+            type empty;
+            description
+              "Prepend the hostname to agent circuit identifier";
+          }
+          leaf seperator {
+            type string;
+            description
+              "Configure a separator for option 82";
+          }
+          leaf format-lg-name {
+            type empty;
+            description
+              "Use lg-name instead of lg-id for Access
+               link-group";
+          }
+        }
+        leaf suppress-nak {
+          type empty;
+          description
+            "Do not orignate NAK for invalid request packets";
+        }
+      }
+      container server-policy {
+        presence "";
+        description
+          "Configure DHCP Server on the context";
+        uses config-dhcp-server-grp;
+      }
+    }
+  }
+
+}

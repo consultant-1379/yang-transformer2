@@ -1,0 +1,36 @@
+module ericsson-bridge-dev-ipos {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bridge-dev-ipos";
+  prefix iposbridgedev;
+
+  import ericsson-bridge-ipos {
+    prefix bridgeipos;
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "Copyright (c) 2018 Ericsson AB. All rights reserved";
+
+  revision "2018-03-29" {
+    description "initial revision";
+    reference "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/bridgeipos:bridge-state" {
+    deviate not-supported;
+  }
+}

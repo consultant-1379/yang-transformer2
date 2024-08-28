@@ -1,0 +1,90 @@
+module ericsson-mpls-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-mpls-dev-router6000";
+
+  prefix "mplsrouter6000";
+
+  import ericsson-mpls-router6000 {
+   prefix "mplsr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+   prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+   prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-mpls-dev-router6000
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-12-03" {
+    description
+      "Add propagate ttl mpls-to-ip to deviation file";
+    reference
+      "rfc6020";
+      yexte:version "2";
+      yexte:release "2";
+      yexte:correction "0";
+  }
+
+  revision "2020-07-10" {
+    description
+      "Removed propagate ttl from deviation file";
+    reference
+      "rfc6020";
+      yexte:version "2";
+      yexte:release "1";
+      yexte:correction "0";
+  }
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+   revision "2017-06-13" {
+    description
+      "deviation for propagate ttl";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "1";
+  }
+  revision "2017-03-30" {
+    description
+      "disable egress ";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "0";
+  }
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/mplsr6k:mpls/mplsr6k:egress-prefer-dscp-qos" {
+    deviate not-supported;
+  }
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/mplsr6k:mpls/mplsr6k:propagate/mplsr6k:ttl/mplsr6k:mpls-to-ip" {
+    deviate not-supported;
+  }
+  }

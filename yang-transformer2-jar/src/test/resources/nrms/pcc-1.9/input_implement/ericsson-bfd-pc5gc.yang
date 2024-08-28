@@ -1,0 +1,45 @@
+module ericsson-bfd-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bfd-pc5gc";
+  prefix bfdpc5gc;
+
+  import ietf-network-instance {
+    prefix ni;
+  }
+  import ericsson-routing-pc5gc {
+    prefix rtpc5gc;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "ericsson-bfd-pcg
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+  reference
+    "RFC 6020";
+
+  revision 2020-02-07 {
+    description
+      "YANG model description correction";
+    reference
+      "RFC XXXX";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  augment "/ni:network-instances/ni:network-instance/rtpc5gc:routing" {
+    description
+      "ericsson-bfd augmentation.";
+    container bfd {
+      description
+        "BFD top level container.";
+    }
+  }
+}

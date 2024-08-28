@@ -1,0 +1,32 @@
+module simple-deviation-two {
+
+    namespace "urn:test:simple-deviation-two";
+    prefix this;
+
+	import simple-deviation-one {
+		prefix sd1;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+
+    revision "2021-04-21";
+
+	deviation /sd1:cont1 {
+		deviate not-supported;
+	}
+
+	deviation /sd1:cont2/sd1:cont3 {
+		deviate not-supported;
+	}
+	
+	deviation /sd1:cont5/sd1:leaf58 {
+		deviate not-supported;
+	}
+	
+}

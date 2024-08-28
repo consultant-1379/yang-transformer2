@@ -1,0 +1,62 @@
+module identityref-namespaces-two {
+
+    namespace "urn/test/identityref-namespaces-two";
+    prefix two;
+
+    revision "2021-03-09";
+
+	import identityref-namespaces-one {
+		prefix one;
+	}
+
+	feature feature-two;
+
+	identity two-6 {			// derived = {6}
+		base one:one-1;
+	}
+
+	identity two-7 {			// derived = {7, 8}
+		base one:one-2;
+	}
+
+	identity two-8 {			// derived = {8}
+		base one:one-1;
+		base two-7;
+		if-feature two:feature-two;
+	}
+		
+	container cont2 {
+	
+		leaf leaf21 {
+			type identityref {
+				base two:two-6;
+			}
+		}
+
+		leaf leaf22 {
+			type identityref {
+				base two:two-7;
+			}
+		}
+
+		leaf leaf23 {
+			type identityref {
+				base two:two-8;
+			}
+		}
+
+		leaf leaf24 {
+			type identityref {
+				base one:one-3;
+			}
+		}
+
+		leaf leaf25 {
+			type identityref {
+				base one:one-3;
+				base one:one-9;
+			}
+		}
+	}
+	
+}

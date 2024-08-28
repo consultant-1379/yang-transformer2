@@ -1,0 +1,91 @@
+module ericsson-interface-dot1x-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-dot1x-router6000";
+
+  prefix "ifdot1xrouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-dot1x-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-09-06" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping port-dot1x-grp {
+    description
+      "configure dot1x under port";
+    /*
+    enable
+    */
+    leaf enable {
+      type empty;
+      description
+        "Enable dot1x under current port";
+    }
+    /*
+    mode { port-based | mac-based }
+    */
+    container mode {
+      description
+        "Configure dot1x mode under current port";
+      choice mode {
+        case port-based {
+          leaf port-based {
+            type empty;
+            description
+              "Dot1x port-based mode";
+          }
+        }
+        case mac-based {
+          leaf mac-based {
+            type empty;
+            description
+              "Dot1x mac-based mode";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet" {
+    description
+      "ericsson-dot1x-interface";
+    /*
+    dot1x authenticator
+    */
+    container dot1x-authenticator {
+      presence "";
+      description
+        "802.1x authenticator configuration";
+      uses port-dot1x-grp;
+    }
+  }
+
+}

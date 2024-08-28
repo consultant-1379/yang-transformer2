@@ -1,0 +1,111 @@
+module ericsson-swm-dev-ipr {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-swm-dev-ipr";
+  prefix swmd;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  import ericsson-swm {
+    prefix swme;
+  }
+
+ organization "Ericsson AB";
+ contact "Ericsson first line support via email";
+ description "Software management model.
+                          Copyright (c) 2017 Ericsson AB. All rights reserved.";
+
+ revision "2017-11-01" {
+     description "bool type changed to int to handle negative cases.";
+         yexte:version 2;
+         yexte:release 0;
+         yexte:correction 0;
+ }
+
+ revision "2017-05-15" {
+     description "
+         changed yexte:not-notifable to notife:notifiable-state-data false
+         added notfiable-state-data true to the swm container";
+         yexte:version 1;
+         yexte:release 1;
+         yexte:correction 0;
+ }
+
+ revision "2016-07-05" {
+         description "Initial version based on ECIM_SwM 4.1.0.";
+         yexte:version 1;
+         yexte:release 0;
+         yexte:correction 0;
+ }
+
+  deviation "/swme:swm/swme:user-label" {
+    deviate not-supported;
+  }
+
+  deviation "/swme:swm/swme:upgrade-package/swme:report-progress/swme:step" {
+    deviate not-supported;
+  }
+
+  deviation "/swme:swm/swme:upgrade-package/swme:report-progress/swme:step-progress-percentage" {
+    deviate not-supported;
+  }
+
+  deviation "/swme:swm/swme:upgrade-package/swme:user-label" {
+    deviate not-supported;
+  }
+
+  deviation "/swme:swm/swme:action-capable" {
+    deviate not-supported;
+  }
+
+  deviation "/swme:swm/swme:action-capable-info" {
+    deviate not-supported;
+  }
+
+  deviation "/swme:swm/swme:upgrade-package" {
+    deviate replace {
+        config false;
+    }
+  }
+
+  deviation "/swme:swm/swme:upgrade-package/swme:upgrade-package-id" {
+    deviate replace {
+        config false;
+    }
+  }
+
+  deviation "/swme:swm/swme:upgrade-package/swme:ignore-break-points" {
+    deviate not-supported;
+  }
+
+  deviation "/swme:swm/swme:upgrade-package/swme:activation-step/swme:serial-number" {
+    deviate replace {
+        config false;
+    }
+  }
+
+  deviation "/swme:swm/swme:upgrade-package/swme:activation-step/swme:name" {
+    deviate replace {
+        config false;
+    }
+  }
+
+  deviation "/swme:swm/swme:upgrade-package/swme:activation-step/swme:description" {
+    deviate replace {
+        config false;
+    }
+  }
+
+  deviation "/swme:swm/swme:upgrade-package/swme:uri" {
+    deviate replace {
+        config false;
+    }
+  }
+
+  deviation "/swme:swm/swme:upgrade-package/swme:password" {
+    deviate replace {
+        config false;
+    }
+  }
+}

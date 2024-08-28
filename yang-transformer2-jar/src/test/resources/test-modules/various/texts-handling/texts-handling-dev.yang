@@ -1,0 +1,74 @@
+module texts-handling-dev {
+
+	namespace "urn_test_texts-handling-dev";
+	prefix this;
+
+	import texts-handling {
+		prefix th;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision "2021-04-21";
+
+	deviation "/th:cont1/th:leaf12" {
+		deviate add {
+			yexte:updated-description "deviated desc leaf12";
+		}
+	}
+
+	deviation "/th:cont1/th:leaf13" {
+		deviate add {
+			yexte:updated-description "deviated desc leaf13";
+		}
+	}
+
+	deviation "/th:cont1/th:leaf15" {
+		deviate add {
+			yexte:disturbances "deviated disturbances leaf15";
+		}
+	}
+
+	deviation "/th:cont1/th:leaf17" {
+		deviate add {
+			yexte:side-effects "deviated side-effects leaf17";
+		}
+	}
+	
+	deviation "/th:cont1/th:leaf19" {
+		deviate add {
+			yexte:precondition "deviated precondition leaf19";
+		}
+	}
+	
+	deviation "/th:cont1/th:leaf21" {
+		deviate add {
+			yexte:dependencies "deviated dependencies leaf21";
+		}
+	}
+	
+	deviation "/th:cont1/th:leaf23" {
+		deviate add {
+			yexte:takes-effect "deviated takes-effect leaf23";
+		}
+	}
+
+	deviation "/th:cont2" {
+		deviate add {
+			yexte:updated-description "deviated desc cont2";
+		}
+	}
+
+	deviation "/th:cont3" {
+		deviate replace {
+			yexte:dependencies "deviated dependencies cont3";
+		}
+	}
+
+	deviation "/th:cont4" {
+		deviate replace {
+			yexte:precondition "deviated precondition cont4";
+		}
+	}
+}

@@ -1,0 +1,1421 @@
+module ericsson-interfaces-ext-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interfaces-ext-ipos";
+
+  prefix "ifxipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interfaces-ext-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-09-18" {
+    description
+      "Add condition on acl-group";
+    reference
+      "rfc7950";
+    yexte:version "2";
+    yexte:release "3";
+    yexte:correction "3";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "2";
+    yexte:release "3";
+    yexte:correction "2";
+  }
+
+  revision "2019-02-13" {
+    description
+      "add note for tcp-mss-replace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "3";
+    yexte:correction "1";
+  }
+
+  revision "2019-01-03" {
+    description
+      "Correct yang cmd of qos policy/metering for IPOS-4566";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-14" {
+    description
+      "SSR-4566 Support qos policy metering command for Apn
+       service interface";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2018-08-30" {
+    description
+      "SSR-4566 Add Apn service interface command in YANG model
+       -- apn_svcs interface";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-19" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-03-07" {
+    description
+      "nat under interface modeling";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-10" {
+    description
+      "Description 'IPV6' shouldn't display when configuring
+       l3-interface ip verify-unicast-source-reachable-via";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2017-11-29" {
+    description
+      "access-group in command ip and ipv6 should be placed
+       after any and receive";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2017-11-13" {
+    description
+      "SSR-8503 Support missed commands in YANG model -
+       intercontext interface";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2017-11-08" {
+    description
+      "IPOS-18022 ip reroute: bfd and truck should cover each
+       other";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-09-29" {
+    description
+      "update revision for ip change";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-07-27" {
+    description
+      "IPOS-13391 ip reroute: connot delete ip reroute by rpc
+       message.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-09" {
+    description
+      "Add command 'ip reroute' and 'ip multicast' under
+       l3-interface.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-20" {
+    description
+      "Add if type applicationLoopback under l3-interface.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-06-15" {
+    description
+      "Add 'when' condition for 'pool' in command 'ip pool'.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-25" {
+    description
+      "Add if type p2pOverLan under l3-interface.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-24" {
+    description
+      "IPOS-11149:context and interface new command";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-23" {
+    description
+      "IPOS-10756 change source address all condition";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-27" {
+    description
+      "IPOS-8528 Add ip source address model under
+       l3-interface.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-30" {
+    description
+      "IPOS-8033 [interface]The model ip access-group in
+       interface have some issue.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-10-20" {
+    description
+      "Add the ipv4/v6 type to fix the ipv4 and v6 addresses
+       can't be set successfully.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-29" {
+    description
+      "remove the if-feature of ipv6 adress added on
+       2016-07-08.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-08" {
+    description
+      "remove ipv6 verify and secondary address.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature multicast-output {
+    description
+      "This feature indicates that the device supports
+       multicast-output in interface.";
+  }
+
+  feature clear-df {
+    description
+      "This feature indicates that the device supports clear-df
+       in interface.";
+  }
+
+  feature mtu {
+    description
+      "This feature indicates that the device supports mtu in
+       interface.";
+  }
+
+  feature snmp-dhcp-server {
+    description
+      "This feature indicates that the device supports
+       snmp-dhcp-server in interface.";
+  }
+
+  feature snmp-flow-ip {
+    description
+      "This feature indicates that the device supports
+       snmp-flow-ip in interface.";
+  }
+
+  feature snmp-icmp-time-exceed {
+    description
+      "This feature indicates that the device supports
+       snmp-icmp-time-exceed in interface.";
+  }
+
+  feature igmp {
+    description
+      "This feature indicates that the device supports igmp in
+       interface.";
+  }
+
+  feature trafic-index-accounting {
+    description
+      "This feature indicates that the device supports
+       trafic-index-accounting in interface.";
+  }
+
+  feature icr {
+    description
+      "This feature indicates that the device supports icr in
+       interface.";
+  }
+
+  feature ipv6-mtu {
+    description
+      "This feature indicates that the device supports ipv6 mtu
+       in interface.";
+  }
+
+  feature packet-logging {
+    description
+      "This feature indicates that the device supports packet
+       logging in interface.";
+  }
+
+  feature pbr {
+    description
+      "This feature indicates that the device supports pbr in
+       interface.";
+  }
+
+  feature ipv6 {
+    description
+      "This feature indicates that the device supports ipv6
+       address in interface.";
+  }
+
+  feature pool {
+    description
+      "This feature indicates that the device supports ip pool
+       in interface.";
+  }
+
+
+    identity p2pOverLan {
+      base if:interface-type;
+      description
+        "interface as point-to-point independent of circuit type";
+    }
+
+
+    identity applicationLoopback {
+      base if:interface-type;
+      description
+        "interface as an application loopback interface type";
+    }
+
+
+    identity intercontext {
+      base if:interface-type;
+      description
+        "interface as an inter-context interface type";
+    }
+
+
+    identity apnService {
+      base if:interface-type;
+      description
+        "interface an apn service interface type";
+    }
+
+  grouping if-grp {
+    description
+      "Interface configuration mode";
+    /*
+    multicast output [ accept-unknown-mac ]
+    */
+    container multicast-output {
+      if-feature multicast-output;
+      presence "";
+      description
+        "Enable interface for SRMR multicast output";
+      leaf accept-unknown-mac {
+        type empty;
+        description
+          "Accept joins from unknown MAC addresses";
+      }
+    }
+    /*
+    ipv6 { mtu (mtu-len) | link-local [ (local-addr) ] | {
+     address { addr-primary (addr) | addr-secondary (addr) } |
+     unnumbered (unnumbered-if) } | < access-group (cls-name)
+     (direction) [ count ] [ log ] > | verify unicast source
+     reachable-via { < any [ allow-default ] < [ access-group ]
+     (access-list) [ acl-count ] > > | < receive [ allow-default
+     ]  < [ access-group ] (access-list) [ acl-count] > > }}
+    */
+    container ipv6 {
+      description
+        "IPv6 configuration command";
+      leaf mtu {
+        if-feature ipv6-mtu;
+        type uint16 {
+          range "1280..16384";
+        }
+        description
+          "Set IP MTU size";
+      }
+      container link-local {
+        presence "";
+        description
+          "Configure a IPv6 link local address";
+        leaf local-addr {
+          type inet:ipv6-address;
+          description
+            "Link local IPv6 address";
+        }
+      }
+      choice ipv6-choice {
+        description
+          "";
+        case address {
+          container address {
+            description
+              "IP address to be configured";
+            leaf addr-primary {
+              type typesipos:ipv6-address-mask;
+              description
+                "IP address to be configured";
+            }
+            list addr-secondary {
+              key "addr-secondary";
+              max-elements 31;
+              description
+                "IP address to be configured";
+              leaf addr-secondary {
+                type typesipos:ipv6-address-mask;
+                must "../../addr-primary" {
+                  error-message "Configure a primary IP address "
+                  + "before configuring a v6 secondary address";
+                  description
+                    "";
+                }
+                description
+                  "IPv6 address";
+              }
+            }
+          }
+        }
+        case unnumbered {
+          leaf unnumbered {
+            type leafref {
+              path "/if:interfaces/if:interface/if:name";
+            }
+            description
+              "IP unnumbered address to be borrowed from another
+               interface";
+          }
+        }
+      }
+      list access-group {
+        key "direction";
+        description
+          "Apply packet access control";
+        leaf direction {
+          type typesipos:access_group_dir;
+          description
+            "The direction ACL list to be applied in the
+             interface";
+        }
+        leaf cls-name {
+          type string {
+            pattern '(\S+)|(\S+(\s\S+)*)';
+          }
+          mandatory true;
+          description
+            "Access list names (up to 10 names)";
+        }
+        leaf count {
+          type empty;
+          description
+            "Configure access list packet counting";
+        }
+        leaf log {
+          if-feature packet-logging;
+          type empty;
+          description
+            "Configure access list packet logging";
+        }
+      }
+      container verify-unicast-source-reachable-via {
+        if-feature pbr;
+        description
+          "Specify the validation for the source address";
+        choice verify-unicast-source-reachable-via-choice {
+          description
+            "";
+          case any {
+            container any {
+              presence "";
+              description
+                "Source IPv6 address can be reached by any
+                 interface";
+              leaf allow-default {
+                type empty;
+                description
+                  "Allow RPF to lookup the default route for
+                   verification";
+              }
+              container access-group {
+                presence "";
+                description
+                  "Apply access control to RPF IPv6 source
+                   address selection";
+                leaf access-list {
+                  type string;
+                  mandatory true;
+                  description
+                    "IPv6 access list names (up to 10 names)";
+                }
+                leaf acl-count {
+                  type empty;
+                  description
+                    "Enable IPv6 access list match counting";
+                }
+              }
+            }
+          }
+          case receive {
+            container receive {
+              presence "";
+              description
+                "Source address must be reachable through the
+                 incoming interface";
+              leaf allow-default {
+                type empty;
+                description
+                  "Allow RPF to lookup the default route for
+                   verification";
+              }
+              container access-group {
+                presence "";
+                description
+                  "Apply access control to RPF IPv6 source
+                   address selection";
+                leaf access-list {
+                  type string;
+                  mandatory true;
+                  description
+                    "IPv6 access list names (up to 10 names)";
+                }
+                leaf acl-count {
+                  type empty;
+                  description
+                    "Enable IPv6 access list match counting";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    ip { { nat (policy-name) [ acl-counters ] } | mtu (mtu-len)
+     |  { reroute (reroute-dest)  [ bfd [ track (reroute-eti2) ]
+     | track (reroute-eti) [ bfd ] ] }  | clear-df | { < address
+     { addr-primary (addr) [ tag  (tag-num)  ] | < addr-secondary
+     (addr)  [ tag  (tag-num)  ]> }  > | unnumbered (unnumbered-
+     if) }  | source-address { < options [ snmp ] [ telnet ] [
+     ssh ] [ dhcp-server ] [ syslog ] [ radius ] [ tacacs-plus ]
+     [ tftp ] [ ftp ] [ icmp-dest-unreachable ] [ icmp-time-
+     exceed ] [ netop ] [ flow-ip ] > | all } |< access-group
+     (cls-name) (direction) [ count ] [ log ] > | verify unicast
+     source reachable-via { < any [ rpf-count ] [ allow-default ]
+     <[ access-group ] (access-list) [ acl-count ] > >| < receive
+     [ allow-default ] < [ access-group ] (access-list) [ acl-
+     count ] > > } | tcp mss replace (direction) (mss-size) |
+     icmp suppress packet-too-big |  < pool { (pool-addr) |
+     <(start-addr) to (end-addr) > } [ name (name-str) ] [
+     falling-threshold (falling-threshold-size) { trap [ log ] |
+     log [ trap ] } ] > }
+    */
+    container ip {
+      description
+        "IP configuration command";
+      list nat {
+        key "policy-name";
+        description
+          "Apply NAT policy";
+        leaf policy-name {
+          type string;
+          description
+            "NAT policy name";
+        }
+        leaf acl-counters {
+          type empty;
+          description
+            "Enable ACL counters";
+        }
+      }
+      leaf mtu {
+        if-feature mtu;
+        type uint16 {
+          range "256..16384";
+        }
+        description
+          "Set IP MTU size";
+      }
+      container reroute {
+        presence "";
+        description
+          "Specify the reroute configuration";
+        leaf reroute-dest {
+          type inet:ipv4-address;
+          mandatory true;
+          description
+            "Destination of peer chassis";
+        }
+        choice reroute-opt {
+          description
+            "";
+          case bfd {
+            container bfd {
+              presence "";
+              description
+                "BFD monitoring";
+              leaf track {
+                type string;
+                description
+                  "Configure ETI tracking";
+              }
+            }
+          }
+          case track {
+            container track {
+              presence "";
+              description
+                "Configure ETI tracking";
+              leaf reroute-eti {
+                type string;
+                mandatory true;
+                description
+                  "ETI object name of IP reroute";
+              }
+              leaf bfd {
+                type empty;
+                description
+                  "BFD monitoring";
+              }
+            }
+          }
+        }
+      }
+      leaf clear-df {
+        if-feature clear-df;
+        type empty;
+        description
+          "Ignore DF bit on IP packets and fragment if required";
+      }
+      choice ip-choice {
+        description
+          "";
+        case address {
+          container address {
+            description
+              "IP address to be configured";
+            container addr-primary {
+              presence "";
+              description
+                "IP address to be configured";
+              leaf addr {
+                type typesipos:ipos-ip-prefix;
+                mandatory true;
+                description
+                  "Address followed by mask or prefix length";
+              }
+              leaf tag {
+                type uint32 {
+                  range "0..4294967295";
+                }
+                default "0";
+                description
+                  "Route tag";
+              }
+            }
+            list addr-secondary {
+              must "../addr-primary/addr" {
+                error-message "Configure a primary IP address "
+                + "before configuring a v4 secondary address";
+                description
+                  "Configure a primary IP address before
+                   configuring a secondary address";
+              }
+              key "addr";
+              max-elements 31;
+              description
+                "IP address to be configured";
+              leaf addr {
+                type typesipos:ipos-ip-prefix;
+                description
+                  "Address followed by mask or prefix length";
+              }
+              leaf tag {
+                type uint32 {
+                  range "0..4294967295";
+                }
+                default "0";
+                description
+                  "Route tag";
+              }
+            }
+          }
+        }
+        case unnumbered {
+          leaf unnumbered {
+            type leafref {
+              path "/if:interfaces/if:interface/if:name";
+            }
+            description
+              "IP unnumbered address to be borrowed from another
+               interface";
+          }
+        }
+      }
+      container source-address {
+        description
+          "Specify the source interface";
+        choice source-address {
+          description
+            "";
+          case options {
+            container options {
+              description
+                "Configure options";
+              leaf snmp {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:snmp)<2" {
+                  error-message "Conflict exists,snmp has "
+                  + "already been set under different interface "
+                  + "associated with the same context.";
+                  description
+                    "Conflict exists, SNMP already set under a
+                     different interface associated with the same
+                     context. ";
+                }
+                description
+                  "Configure source-interface for snmp";
+              }
+              leaf telnet {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:telnet)"
+                + "<2" {
+                  error-message "Conflict exists,telnet has "
+                  + "already been set under different interface "
+                  + "associated with the same context.";
+                  description
+                    "Conflict exists, TELNET already set under a
+                     different interface associated with the same
+                     context. ";
+                }
+                description
+                  "Configure source-interface for telnet";
+              }
+              leaf ssh {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:ssh)<2" {
+                  error-message "Conflict exists,ssh has already "
+                  + "been set under different interface associated "
+                  + "with the same context.";
+                  description
+                    "Conflict exists, SSH already set under a
+                     different interface associated with the same
+                     context. ";
+                }
+                description
+                  "Configure source-interface for ssh/sftp/scp";
+              }
+              leaf dhcp-server {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:"
+                + "dhcp-server)<2" {
+                  error-message "Conflict exists,dhcp-server has "
+                  + "already been set under different interface "
+                  + "associated with the same context.";
+                  description
+                    "Conflict exists, DHCP server already set
+                     under a different interface associated with
+                     the same context. ";
+                }
+                description
+                  "Configure source-interface for dhcp server.";
+              }
+              leaf syslog {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:syslog)"
+                + "<2" {
+                  error-message "Conflict exists,syslog has "
+                  + "already been set under different interface "
+                  + "associated with the same context.";
+                  description
+                    "Conflict exists,SYSLOG already set under a
+                     different interface associated with the same
+                     context. ";
+                }
+                description
+                  "Configure source-interface for syslog";
+              }
+              leaf radius {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:radius)"
+                + "<2" {
+                  error-message "Conflict exists,radius has "
+                  + "already been set under different interface "
+                  + "associated with the same context.";
+                  description
+                    "Conflict exists, radius already set under a
+                     different interface associated with the same
+                     context. ";
+                }
+                description
+                  "Configure source-interface for radius";
+              }
+              leaf tacacs-plus {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:"
+                + "tacacs-plus)<2" {
+                  error-message "Conflict exists,tacacs+ has "
+                  + "already been set under different interface "
+                  + "associated with the same context.";
+                  description
+                    "Conflict exists,TACACS+ already set under a
+                     different interface associated with the same
+                     context. ";
+                }
+                description
+                  "Configure source-interface for tacacs+";
+              }
+              leaf tftp {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:tftp)<2" {
+                  error-message "Conflict exists,tftp has "
+                  + "already been set under different interface "
+                  + "associated with the same context.";
+                  description
+                    "Conflict exists,TFTP already set under a
+                     different interface associated with the same
+                     context. ";
+                }
+                description
+                  "Configure source-interface for tftp";
+              }
+              leaf ftp {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:ftp)<2" {
+                  error-message "Conflict exists,ftp has already "
+                  + "been set under different interface associated "
+                  + "with the same context.";
+                  description
+                    "Conflict exists, FTP already set under a
+                     different interface associated with the same
+                     context. ";
+                }
+                description
+                  "Configure source-interface for ftp";
+              }
+              leaf icmp-dest-unreachable {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:"
+                + "icmp-dest-unreachable)<2" {
+                  error-message "Conflict exists,icmp-dest- "
+                  + "unreachable has already been set under "
+                  + "different interface associated with the same "
+                  + "context.";
+                  description
+                    "Conflict exists, ICMP-dest-unreachable
+                     already set under a different interface
+                     associated with the same context. ";
+                }
+                description
+                  "Configure source-interface for
+                   icmp-dest-unreachable";
+              }
+              leaf icmp-time-exceed {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:"
+                + "icmp-time-exceed)<2" {
+                  error-message "Conflict exists,icmp-time- "
+                  + "exceed has already been set under different "
+                  + "interface associated with the same context.";
+                  description
+                    "Conflict exists,ICMP-time-exceed already
+                     set under different interface associated
+                     with the same context. ";
+                }
+                description
+                  "Configure source-interface for
+                   icmp-time-exceed";
+              }
+              leaf netop {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:netop)"
+                + "<2" {
+                  error-message "Conflict exists,netop has "
+                  + "already been set under different interface "
+                  + "associated with the same context.";
+                  description
+                    "Conflict exists, NETOP already set under
+                     different interface associated with the same
+                     context. ";
+                }
+                description
+                  "Configure source-interface for netop";
+              }
+              leaf flow-ip {
+                type empty;
+                must "count(/if:interfaces/if:interface/ifxipos:"
+                + "l3-interface[ifxipos:context=current()/../../"
+                + "../../ifxipos:context]/ifxipos:ip/ifxipos:"
+                + "source-address/ifxipos:options/ifxipos:flow-ip)"
+                + "<2" {
+                  error-message "Conflict exists,flow-ip has "
+                  + "already been set under different interface "
+                  + "associated with the same context.";
+                  description
+                    "Conflict exists, FLOW IP already set under
+                     different interface associated with the same
+                     context. ";
+                }
+                description
+                  "Configure source-interface for rflow";
+              }
+            }
+          }
+          case all {
+            leaf all {
+              type empty;
+              must "count(/if:interfaces/if:interface/ifxipos:"
+              + "l3-interface[ifxipos:context=current()/../../../"
+              + "ifxipos:context]/ifxipos:ip/ifxipos:"
+              + "source-address/ifxipos:all)+count(/if:interfaces/"
+              + "if:interface/ifxipos:l3-interface[ifxipos:"
+              + "context=current()/../../../ifxipos:context]/"
+              + "ifxipos:ip/ifxipos:source-address/ifxipos:"
+              + "options/.)<2" {
+                error-message "Conflict exists, there is a "
+                + "service already set for the same context.";
+                description
+                  "Conflict exists, there is a service already
+                   set for the same context.";
+              }
+              description
+                "Configure source-interface for all
+                 applications";
+            }
+          }
+        }
+      }
+      list access-group {
+        when "(../../../if:type != 'ianaift:softwareLoopback')" {
+          description
+            "";
+        }
+        key "direction";
+        description
+          "Apply packet access control";
+        leaf direction {
+          type typesipos:access_group_dir;
+          description
+            "The direction ACL list to be appiled in the
+             interface";
+        }
+        leaf cls-name {
+          type string {
+            pattern '(\S+)|(\S+(\s\S+)*)';
+          }
+          mandatory true;
+          description
+            "Access list name (up to 10 names); more than one
+             ACL enter with \"\" and space separator";
+        }
+        leaf count {
+          type empty;
+          description
+            "Configure access list packet counting";
+        }
+        leaf log {
+          if-feature packet-logging;
+          type empty;
+          description
+            "Configure access list packet logging";
+        }
+      }
+      container verify-unicast-source-reachable-via {
+        description
+          "Specify the validation for the source address";
+        choice verify-unicast-source-reachable-via-choice {
+          description
+            "";
+          case any {
+            container any {
+              presence "";
+              description
+                "Source IP address can be reached by any
+                 interface";
+              leaf rpf-count {
+                type empty;
+                description
+                  "Enables counting of the dropped packet
+                   because of RPF check fail";
+              }
+              leaf allow-default {
+                type empty;
+                description
+                  "Allow RPF to lookup the default route for
+                   verification";
+              }
+              container access-group {
+                presence "";
+                description
+                  "Apply access control to RPF IP source address
+                   selection";
+                leaf access-list {
+                  type string;
+                  mandatory true;
+                  description
+                    "IP access list names (up to 10 names)";
+                }
+                leaf acl-count {
+                  type empty;
+                  description
+                    "Enable IP access list match counting";
+                }
+              }
+            }
+          }
+          case receive {
+            container receive {
+              presence "";
+              description
+                "Source address must be reachable through the
+                 incoming interface";
+              leaf allow-default {
+                type empty;
+                description
+                  "Allow RPF to lookup the default route for
+                   verification";
+              }
+              container access-group {
+                presence "";
+                description
+                  "Apply access control to RPF IP source address
+                   selection";
+                leaf access-list {
+                  type string;
+                  mandatory true;
+                  description
+                    "IP access list names (up to 10 names)";
+                }
+                leaf acl-count {
+                  type empty;
+                  description
+                    "Enable IP access list match counting";
+                }
+              }
+            }
+          }
+        }
+      }
+      list tcp-mss-replace {
+        key "direction";
+        description
+          "Enables MSS option value replacement.
+          Note:
+          The ip tcp-mss-replace command is supported in
+           1-10ge-20-4-port card but not in 1-10ge-20-port card";
+        leaf direction {
+          type typesipos:access_group_dir;
+          description
+            "The direction TCP MSS replace list to be applied in
+             the interface";
+        }
+        leaf mss-size {
+          type uint16 {
+            range "216..16344";
+          }
+          mandatory true;
+          description
+            "Maximum segment size to be used when replacing the
+             MSS value";
+        }
+      }
+      leaf icmp-suppress-packet-too-big {
+        type empty;
+        description
+          "Suppress error when a packet with DF flag is greater
+           than MTU";
+      }
+      container pool {
+        when "(../../../if:type != 'ifxipos:p2pOverLan') and (../"
+        + "../../if:type != 'ifxipos:applicationLoopback') and "
+        + "(../../../if:type != 'ifxipos:apnService')" {
+          description
+            "";
+        }
+        if-feature pool;
+        description
+          "Add an IP pool";
+        choice pool-choice {
+          description
+            "";
+          case pool-addr {
+            leaf pool-addr {
+              type typesipos:ipos-ip-prefix;
+              description
+                "IP pool address prefix";
+            }
+          }
+          case start-addr {
+            container start-addr {
+              presence "";
+              description
+                "IP pool start IP address";
+              leaf to {
+                type empty;
+                mandatory true;
+                description
+                  "Configure an IP pool range";
+              }
+              leaf end-addr {
+                type inet:ipv4-address;
+                mandatory true;
+                description
+                  "IP pool end IP address";
+              }
+            }
+          }
+        }
+        leaf name {
+          type string;
+          description
+            "Configure an IP pool name";
+        }
+        container pool-opt1 {
+          presence "";
+          description
+            "Container pool-opt1";
+          leaf falling-threshold {
+            type empty;
+            mandatory true;
+            description
+              "Configure an IP pool falling threshold";
+          }
+          leaf falling-threshold-size {
+            type uint16 {
+              range "0..65535";
+            }
+            mandatory true;
+            description
+              "Falling threshold size";
+          }
+          choice pool-opt1-choice {
+            description
+              "";
+            case trap {
+              container trap {
+                presence "";
+                description
+                  "Generate SNMP trap";
+                leaf log {
+                  type empty;
+                  description
+                    "Generate log message";
+                }
+              }
+            }
+            case log {
+              container log {
+                presence "";
+                description
+                  "Generate log message";
+                leaf trap {
+                  type empty;
+                  description
+                    "Generate SNMP trap";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    icr { link-protection | transport | prefix-advertisement [
+     tracking ] }
+    */
+    container icr {
+      when "(../../if:type != 'ifxipos:p2pOverLan') and (../../if:"
+      + "type != 'ifxipos:applicationLoopback')" {
+        description
+          "";
+      }
+      if-feature icr;
+      description
+        "ICR (Inter-Chassis Resilience) configuration";
+      choice icr {
+        description
+          "";
+        case link-protection {
+          leaf link-protection {
+            type empty;
+            description
+              "Configure multi chassis link protection";
+          }
+        }
+        case transport {
+          leaf transport {
+            type empty;
+            description
+              "Configure ICR transport for MC-LAG";
+          }
+        }
+        case prefix-advertisement {
+          container prefix-advertisement {
+            presence "";
+            description
+              "Monitor the prefix route advertised";
+            leaf tracking {
+              type empty;
+              description
+                "Enable ICR tracking";
+            }
+          }
+        }
+      }
+    }
+    /*
+    traffic-index accounting
+    */
+    leaf traffic-index-accounting {
+      if-feature trafic-index-accounting;
+      type empty;
+      description
+        "Enable traffic index accounting";
+    }
+    /*
+    forward policy (fwd-name) in
+    */
+    container forward-policy {
+      when "../../if:type = 'ifxipos:applicationLoopback'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type string;
+        mandatory true;
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+    }
+    /*
+    context (ctx-name)
+    */
+    leaf context {
+      type leafref {
+        path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+        + "context-name";
+      }
+      mandatory true;
+      description
+        "Name of context which the interface belongs to";
+    }
+    /*
+    inter-context { p2p (ic-num) | lan (ic-num) }
+    */
+    container inter-context {
+      when "../../if:type = 'ifxipos:intercontext'" {
+        description
+          "";
+      }
+      description
+        "Configure as inter-context";
+      choice inter-context {
+        mandatory true;
+        description
+          "";
+        case p2p {
+          leaf p2p {
+            type uint16 {
+              range "1..3000";
+            }
+            mandatory true;
+            description
+              "Configure as an inter context point-to-point";
+          }
+        }
+        case lan {
+          leaf lan {
+            type uint16 {
+              range "1..3000";
+            }
+            mandatory true;
+            description
+              "Configure as an inter context LAN interface";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    description
+      "ericsson-interface";
+    /*
+    l3-interface
+    */
+    container l3-interface {
+      when "../if:type = 'ianaift:ipForward' or ../if:type = "
+      + "'ianaift:softwareLoopback' or ../if:type = 'ifxipos:"
+      + "p2pOverLan' or ../if:type = 'ifxipos:"
+      + "applicationLoopback' or ../if:type = 'ifxipos:"
+      + "intercontext' or ../if:type = 'ifxipos:apnService'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Configure a logical interface";
+      uses if-grp;
+    }
+  }
+
+}

@@ -1,0 +1,123 @@
+module ericsson-netconf-server-router6000 {
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-netconf-server-router6000";
+  prefix netconfsvrrouter6000;
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization 
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "Netconf server control";
+
+  revision 2018-06-05 {
+    description
+      "Mod module name and prefix  for Router6000.";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2017-09-18 {   
+    description      
+      "Make module name and prefix follow E/// naming rule.";  
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  revision 2015-09-25 {
+    description
+      "Allowed verbose_level are now configurable.";
+  }
+  revision 2015-08-18 {
+    description
+      "Allowed maximum agent session number are now configurable.";
+  }
+  revision 2013-02-14 {
+    description
+      "Modules are now configurable. Except implemented-rpcs which depends on module data model.";
+  }
+  revision 2012-11-13 {
+    description
+      "Removed parts implemented by library (RFC6022).";
+  }
+  revision 2011-10-20 {
+    description
+      "Initial revision";
+  }
+
+  container netconfserver {
+    container modules {
+      list module {
+        key "name";
+        leaf name {
+          type string;
+          description
+            "Name of module";
+        }
+        leaf enabled {
+          type boolean;
+          default false;
+          description
+            "Specify whether or not the module is allowed to be managed over server.";
+        }
+      }
+    }
+    leaf session_number {
+      type uint8 {
+        range "1..32";
+      }
+      default "4";
+      description
+        "Specify the allowed maximum netconf server agent session number.";
+    }
+    leaf verbose_level {
+      type enumeration {
+        enum "emergency";
+        enum "alert";
+        enum "critical";
+        enum "error";
+        enum "warning";
+        enum "notice";
+        enum "verbose";
+        enum "debug";
+      }
+      default "notice";
+      description
+        "Specify the verbose level in libnetconf.";
+    }
+  }
+  rpc netconf-server-reboot {
+    description
+      "Operation allowing privileged user to restart netconf server.";
+    input {
+      leaf type {
+        type enumeration {
+          enum "soft";
+          enum "hard";
+        }
+        default "soft";
+        description
+          "Soft restart only unplugs all device modules and reloads configuration.
+           Hard restart also abort all connections and reload the binary.";
+      }
+    }
+  }
+  rpc reload-module {
+    description
+      "Unload and load any loaded module." ;
+    input {
+      leaf module {
+        type leafref {
+          path "/netconfserver/modules/module/name";
+        }
+        mandatory true;
+        description
+          "Name of module to reload.";
+      }
+    }
+  }
+}

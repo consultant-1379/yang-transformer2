@@ -1,0 +1,72 @@
+module signed-integer-types {
+
+    namespace "urn+test+signed-integer-types";
+    prefix this;
+
+    revision "2021-01-31";
+	
+	container cont1 {
+	
+		leaf leaf11 {
+			type int8;
+		}
+
+		leaf leaf12 {
+			type int16;
+		}
+
+		leaf leaf13 {
+			type int32;
+			units "parsecs";
+		}
+
+		leaf leaf14 {
+			type int64;
+		}
+	}
+
+	container cont2 {
+
+		leaf leaf21 {
+			type int16 {
+				range "min .. max";
+			}
+		}
+
+		leaf leaf22 {
+			type int16 {
+				range "min .. 10";
+			}
+		}
+
+		leaf leaf23 {
+			type int16 {
+				range "2000 .. max";
+			}
+		}
+	
+		leaf leaf24 {
+			type int16 {
+				range "50 .. 300";
+			}
+		}
+
+		leaf leaf25 {
+			type int16 {
+				range "50 .. 300 | 400 .. 750";
+			}
+		}
+
+		leaf leaf26 {
+			type int16 {
+				range "50 .. 123456789012345678901234567890";		// provoke error
+			}
+		}
+	
+		leaf leaf27 {
+			type int16 {
+				range "ten .. twenty";		// provoke error
+			}
+		}
+	}	
+}

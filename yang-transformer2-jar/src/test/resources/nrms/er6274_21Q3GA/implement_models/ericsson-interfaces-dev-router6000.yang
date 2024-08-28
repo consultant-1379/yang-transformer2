@@ -1,0 +1,268 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-interfaces-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interfaces-dev-router6000";
+
+  prefix "ifvrouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization "Ericsson AB";
+  contact "iposcli@ericsson.com";
+
+  description
+    "ericsson-interfaces-dev-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+   revision "2021-04-27" {
+    description
+      "Correct the path";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+   revision "2019-03-04" {
+    description
+      "Correct the path";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-11-27" {
+    description
+      "Add shutdown command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-09-20" {
+    description
+      "disable LAG shutdown";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2015-12-07" {
+    description   "initial revision";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/if:interfaces/if:interface/if:enabled" {
+    deviate add {
+      must "((../if:type != 'ianaift:ipForward' "
+	    + " and "
+            + "../if:type != 'ianaift:softwareLoopback' "
+	    + " and "
+	    + "../if:type != 'ianaift:ieee8023adLag') "
+	    + " or "
+	    + "((../if:type = 'ianaift:ipForward' "
+	    + " or ../if:type = 'ianaift:softwareLoopback' "
+	    + " or ../if:type = 'ianaift:ieee8023adLag')"
+	    + " and . = 'true')) " {
+            error-message " IP interface/Loopback interface"
+	    + "/LAG can&apos;t be shut down";
+	    description "IP Interface/Loopback interface"
+            + "/LAG cannot be shut down";
+      }
+    }
+  }
+
+  deviation "/if:interfaces-state/if:interface/if:last-change" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces-state/if:interface/if:if-index" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces-state/if:interface/if:statistics/if:"
+        + "discontinuity-time" {
+    deviate not-supported;
+  }
+
+  /*
+   * Following nodes are not supported by
+   * IP Interface and Loopback Interface
+   */
+
+  deviation "/if:interfaces-state/if:interface/if:statistics" {
+    deviate add {
+      must "(../if:type != 'ianaift:ipForward' "
+	    + " and ../if:type != 'ianaift:softwareLoopback') " {
+            error-message "IP Interface/Loopback Interface "
+	    + "doesn't support any statistics";
+	    description "IP Interface/Loopback interface "
+            + "doesn't support any statistics";
+      }
+    }
+  }
+
+  deviation "/if:interfaces-state/if:interface/if:phys-address" {
+    deviate add {
+      must "(../if:type != 'ianaift:ipForward' "
+	    + " and ../if:type != 'ianaift:softwareLoopback') " {
+            error-message "IP Interface/Loopback Interface "
+	    + "doesn't support phys-address";
+	    description "IP Interface/Loopback interface "
+            + "doesn't support phys-address";
+      }
+    }
+  }
+
+  deviation "/if:interfaces-state/if:interface/if:higher-layer-if" {
+    deviate add {
+      must "(../if:type != 'ianaift:ipForward' "
+	    + " and ../if:type != 'ianaift:softwareLoopback') " {
+            error-message "IP Interface/Loopback Interface "
+	    + "doesn't support higher-layer-if";
+	    description "IP Interface/Loopback interface "
+            + "doesn't support higher-layer-if";
+      }
+    }
+  }
+
+  deviation "/if:interfaces-state/if:interface/if:speed" {
+    deviate add {
+      must "(../if:type != 'ianaift:ipForward' "
+	    + " and ../if:type != 'ianaift:softwareLoopback') " {
+            error-message "IP Interface/Loopback Interface "
+	    + "doesn't support speed";
+	    description "IP Interface/Loopback interface "
+            + "doesn't support speed";
+      }
+    }
+  }
+
+
+  /*
+   * Following nodes are not supported by Ethernet Port and
+   * Dot1q/QinQ Interface
+   */
+  deviation "/if:interfaces-state/if:interface/if:lower-layer-if" {
+    deviate add {
+      must "(../if:type != 'ianaift:ethernetCsmacd' "
+	    + " and ../if:type != 'ianaift:l2vlan') " {
+            error-message "Ethernet port/Dot1q/QinQ "
+	    + "doesn't support lower-layer-if";
+	    description "Ethernet port/Dot1q/QinQ "
+            + "doesn't support lower-layer-if";
+      }
+    }
+  }
+
+
+  /*
+   * Following nodes are not supported by Ethernet Port
+   */
+  deviation "/if:interfaces-state/if:interface/if:statistics/if:"
+        + "in-unknown-protos" {
+    deviate add {
+      must "(../../if:type != 'ianaift:ethernetCsmacd')" {
+            error-message "Ethernet port "
+	    + "doesn't support in-unknown-protos";
+	    description "Ethernet port "
+            + "doesn't support in-unknown-protos";
+      }
+    }
+  }
+
+  /*
+   * Following nodes are not supported by Dot1q/QinQ and Lag
+   */
+
+  deviation "/if:interfaces-state/if:interface/if:statistics/if:"
+        + "in-broadcast-pkts" {
+    deviate add {
+      must "(../../if:type != 'ianaift:ieee8023adLag' "
+	    + " and ../../if:type != 'ianaift:l2vlan') " {
+            error-message "Lag/Dot1q/QinQ "
+	    + "doesn't support in-broadcast-pkts";
+	    description "Lag/Dot1q/QinQ "
+            + "doesn't support in-broadcast-pkts";
+      }
+    }
+  }
+
+  deviation "/if:interfaces-state/if:interface/if:statistics/if:"
+        + "in-errors" {
+    deviate add {
+      must "(../../if:type != 'ianaift:ieee8023adLag' "
+	    + " and ../../if:type != 'ianaift:l2vlan') " {
+            error-message "Lag/Dot1q/QinQ "
+	    + "doesn't support in-errors";
+	    description "Lag/Dot1q/QinQ "
+            + "doesn't support in-errors";
+      }
+    }
+  }
+
+  deviation "/if:interfaces-state/if:interface/if:statistics/if:"
+        + "out-broadcast-pkts" {
+    deviate add {
+      must "(../../if:type != 'ianaift:ieee8023adLag' "
+	    + " and ../../if:type != 'ianaift:l2vlan') " {
+            error-message "Lag/Dot1q/QinQ "
+	    + "doesn't support out-broadcast-pkts";
+	    description "Lag/Dot1q/QinQ "
+            + "doesn't support out-broadcast-pkts";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface" {
+    deviate add {
+      must "if:type != 'ianaift:ipForward' or ifxrouter6000:l3-interface" {
+        error-message "Cannot create RFC 7223 interface for L3"
+        + "without creating child l3-interface";
+        description   "Cannot create RFC 7223 interface for L3"
+        + "without creating child l3-interface";
+        }
+    }
+  }
+
+
+}

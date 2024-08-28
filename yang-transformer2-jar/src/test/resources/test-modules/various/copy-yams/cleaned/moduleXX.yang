@@ -1,0 +1,6 @@
+module eric-ims-bgf---london3---2-2-5-260 {
+	prefix this;
+	namespace "urn:test:eric-ims-bgf---london3---2-2-5-260";
+
+	revision 2023-03-25;
+}

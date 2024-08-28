@@ -1,0 +1,89 @@
+module ericsson-diag-ipr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-diag-ipr";
+
+  prefix "diagipr";
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-diag-ipr
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-02-10" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /*
+  diag{ pod [ level (level-num)  | auto-provisioned-cards [
+   level (level-num)] ] }
+  */
+  container diag {
+    description
+      "Set Diagnostics mode";
+    container pod {
+      description
+        "Set Power-On Diagnostic mode";
+      leaf pod-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable pod-enable";
+      }
+      choice pod-opt {
+        description
+          "IPOS choice";
+        case level {
+          leaf level {
+            type uint8 {
+              range "1..2";
+            }
+            description
+              "Set POD level";
+          }
+        }
+        case auto-provisioned-cards {
+          container auto-provisioned-cards {
+            presence "";
+            description
+              "Set POD level";
+            leaf level {
+              type uint8 {
+                range "1..2";
+              }
+              description
+                "Set POD level";
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

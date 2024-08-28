@@ -1,0 +1,49 @@
+module identityref-namespaces-one {
+
+    namespace "urn#test#identityref-namespaces-one";
+    prefix one;
+
+    revision "2021-07-30";
+
+	feature feature-one;
+
+	identity one-1;				// derived = {1, 2, 3, 6, 7, 8, 10}
+
+	identity one-2 {			// derived = {2, 3, 7, 8}
+		base one-1;
+	}
+
+	identity one-3 {			// derived = {3}
+		base one:one-2;
+		if-feature feature-one;
+	}
+	
+	identity one-9;				// derived = {9}
+	
+	identity one-10 {			// derived = {10}
+		base one-1;
+		if-feature feature-one;
+	}
+
+	container cont1 {
+	
+		leaf leaf11 {
+			type identityref {
+				base one:one-1;
+			}
+		}
+
+		leaf leaf12 {
+			type identityref {
+				base one:one-2;
+			}
+		}
+
+		leaf leaf13 {
+			type identityref {
+				base one:one-3;
+			}
+		}
+	}
+	
+}

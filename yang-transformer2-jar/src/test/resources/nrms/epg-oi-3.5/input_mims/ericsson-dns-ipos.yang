@@ -1,0 +1,219 @@
+module ericsson-dns-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-dns-ipos";
+
+  prefix "dnsipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-dns-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision "2018-07-02" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-26" {
+    description
+      " Implement 'ip localhost' command in Confd";
+    reference
+      "RFC 6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-09-14" {
+    description
+      "initial revision";
+    reference
+      "RFC 6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:ipv6" {
+    description
+      "ericsson-dns";
+    /*
+    host {(hostname) (hostaddr)}
+    */
+    list host {
+      key "hostname";
+      max-elements 64;
+      description
+        "Add/remove a host name to IPv6 address mapping";
+      leaf hostname {
+        type string;
+        description
+          "Host name";
+      }
+      leaf hostaddr {
+        type inet:ipv6-address;
+        mandatory true;
+        description
+          "IPv6 address of the host";
+      }
+    }
+    /*
+    name-servers <addr (nameservers-addr1)>
+    */
+    container name-servers {
+      description
+        "Add/remove IPV6 address of primary and secondary name
+         servers, first configured as primary name servers";
+      leaf-list addr {
+        type inet:ipv6-address;
+        must "(((count(../addr)) + (count(current()/../../../"
+        + "ctxipos:ip/dnsipos:name-servers/dnsipos:addr))) <= 2)" {
+          error-message "Context name server limit exceeded";
+          description
+            "Context name server limit exceeded";
+        }
+        ordered-by user;
+        description
+          "Add/remove IPV6 address of primary and secondary name
+           servers, first configured as primary name servers";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:ip" {
+    description
+      "ericsson-dns";
+    /*
+    domain-lookup
+    */
+    leaf domain-lookup {
+      type empty;
+      description
+        "Enable/disable host name lookup";
+    }
+    /*
+    domain-name {<name (name-value)>}
+    */
+    container domain-name {
+      description
+        "Specifies up to six domain name service (DNS) names";
+      leaf-list name {
+        type string;
+        max-elements 6;
+        description
+          "Specifies up to six domain name service (DNS) names";
+      }
+    }
+    /*
+    host (hostname) (hostaddr)
+    */
+    list host {
+      key "hostname";
+      max-elements 64;
+      description
+        "Add/remove a host name to IP address mapping";
+      leaf hostname {
+        type string;
+        description
+          "Host name";
+      }
+      leaf hostaddr {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "IP address of the host";
+      }
+    }
+    /*
+    localhost (localhostname) (localhostaddr)
+    */
+    list localhost {
+      key "localhostname";
+      max-elements 64;
+      description
+        "Add/remove a host name to IP address mapping";
+      leaf localhostname {
+        type string;
+        description
+          "Local host name";
+      }
+      leaf localhostaddr {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "IP address of the local host";
+      }
+    }
+    /*
+    name-servers <addr (nameservers-addr1)>
+    */
+    container name-servers {
+      description
+        "Add/remove IP address of primary and secondary name
+         servers, first configured as primary name servers";
+      leaf-list addr {
+        type inet:ipv4-address;
+        must "(((count(../addr)) + (count(current()/../../../"
+        + "ctxipos:ipv6/dnsipos:name-servers/dnsipos:addr))) <= 2)" {
+          error-message "Context name server limit exceeded";
+          description
+            "Context name server limit exceeded";
+        }
+        ordered-by user;
+        description
+          "Add/remove IP address of primary and secondary name
+           servers, first configured as primary name servers";
+      }
+    }
+  }
+
+}

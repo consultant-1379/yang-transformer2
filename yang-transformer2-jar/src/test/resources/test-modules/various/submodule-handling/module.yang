@@ -1,0 +1,9 @@
+module module {
+
+	namespace "urn>test>module";
+	prefix this;
+
+	include submodule;
+
+	revision '2021-12-21';
+}

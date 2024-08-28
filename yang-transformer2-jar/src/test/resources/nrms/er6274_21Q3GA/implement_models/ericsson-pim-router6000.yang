@@ -1,0 +1,937 @@
+module ericsson-pim-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-pim-router6000";
+
+  prefix "pimr6k";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-pim-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "4";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "4";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-02-23" {
+    description
+      "add 'must' condition and unique attribute for rp-address";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-02-13" {
+    description
+      "Modify dense-mode and sparse-mode command.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-02-10" {
+    description
+      "IPOS-21752 Add default value for leaf refresh-interval";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-02-09" {
+    description
+      "Changed leaf bfd and leaf mdt-encapsulation-gre from must
+       condition to when condition";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2017-10-24" {
+    description
+      "IPOS-16965 PIM model side effect";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-10-19" {
+    description
+      "Remove default value of leaf bfd, This is a workaround
+       for JIRA IPOS-16843. We should have the default value back
+       when the fix comes";
+    reference
+      "rfc6826";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-08-10" {
+    description
+      "IPOS-13982 Unacceptable load time in ConfD";
+    reference
+      "rfc6826";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-15" {
+    description
+      "IPOS-12957 Create pim address-family ipv4/6 together, the
+       default value will cause rpc run fail";
+    reference
+      "rfc6826";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-02" {
+    description
+      "New commands for Multicast and static group ipv6";
+    reference
+      "rfc6826";
+  }
+
+  revision "2017-04-19" {
+    description
+      "add new command inband-signaling mldp";
+    reference
+      "rfc6826";
+  }
+
+  revision "2017-03-01" {
+    description
+      "add new command address-family ipv6";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-09-28" {
+    description
+      "resolve confd compile issues";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-04-20" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  grouping pim-grp {
+    description
+      "PIM configuration mode";
+    /*
+    graceful restart
+    */
+    leaf graceful-restart {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable graceful-restart";
+    }
+    /*
+    state-refresh disable
+    */
+    leaf state-refresh-disable {
+      type empty;
+      description
+        "Disable PIM State-Refresh processing";
+    }
+    /*
+    operation-mode { standard | legacy }
+    */
+    leaf operation-mode {
+      type enumeration {
+        enum standard {
+          value 0;
+          description
+            "Compliant to RFC standard";
+        }
+        enum legacy {
+          value 1;
+          description
+            "Compatible to Legacy Implementations";
+        }
+      }
+      default "standard";
+      description
+        "PIM operation mode";
+    }
+    /*
+    address-family
+    */
+    container address-family {
+      description
+        "Enter address family command mode";
+      container ipv4 {
+        presence "";
+        description
+          "IPv4 address family";
+        uses pim-af4-grp;
+      }
+      container ipv6 {
+        presence "";
+        description
+          "IPv6 address family";
+        uses pim-af6-grp;
+      }
+    }
+    /*
+    inband-signaling mldp
+    */
+    leaf inband-signaling-mldp {
+      type empty;
+      description
+        "Multi-point LDP";
+    }
+  }
+
+  grouping pim-af4-grp {
+    description
+      "PIM IPv4 address family configuration mode";
+    /*
+    rp-address (rpaddr-value) [ group-list (rpaddr-acl)]
+    */
+    list rp-address {
+      must "(./group-list) or (count(../rp-address) - count"
+      + "(../rp-address/group-list)) < 2" {
+        error-message "The rp address that is not bound to acl "
+        + "should be unique";
+        description
+          "";
+      }
+      key "rpaddr-value";
+      unique "group-list";
+      description
+        "PIM RP (Rendezvous Point) address";
+      leaf rpaddr-value {
+        type inet:ipv4-address;
+        description
+          "RP address for the group";
+      }
+      leaf group-list {
+        type string;
+        description
+          "Group-list";
+      }
+    }
+    /*
+    rp-candidate (cand-int) [ group-list (cand-acl) ]
+    */
+    list rp-candidate {
+      key "cand-int";
+      description
+        "To be a PIMv2 RP candidate";
+      leaf cand-int {
+        type string;
+        description
+          "Interface name";
+      }
+      leaf group-list {
+        type string;
+        description
+          "Group-list";
+      }
+    }
+    /*
+    bsr-candidate (cand-int) [ (cand-hashlen) [ (cand-prio) ] ]
+    */
+    container bsr-candidate {
+      presence "";
+      description
+        "Candidate to be bootstrap router";
+      leaf cand-int {
+        type string;
+        mandatory true;
+        description
+          "Interface name";
+      }
+      container bsr-candidate-opt {
+        description
+          "container bsr-candidate-opt.";
+        leaf cand-hashlen {
+          type uint8 {
+            range "0..32";
+          }
+          mandatory true;
+          description
+            "Hash mask length for RP selection";
+        }
+        leaf cand-prio {
+          type uint8 {
+            range "0..255";
+          }
+          description
+            "Priority value for candidate bootstrap router";
+        }
+      }
+    }
+    /*
+    static-group
+    */
+    container static-group {
+      description
+        "Static (*,G) or (S,G) entry";
+      list group {
+        key "group";
+        description
+          "Configure multicast static group address";
+        leaf group {
+          type typesrouter6000:ipv4-muticast-address;
+          description
+            "Multicast group IP address";
+        }
+      }
+      list group-oif {
+        key "grp-addr oif-interface";
+        description
+          "Configure multicast static group address";
+        leaf grp-addr {
+          type typesrouter6000:ipv4-muticast-address;
+          description
+            "Multicast group IP address";
+        }
+        leaf oif-interface {
+          type string;
+          description
+            "Outgoing interface or circuit";
+        }
+      }
+      list group-src {
+        key "grp-addr source";
+        description
+          "Configure multicast static group address";
+        leaf grp-addr {
+          type typesrouter6000:ipv4-muticast-address;
+          description
+            "Multicast group IP address";
+        }
+        leaf source {
+          type inet:ipv4-address;
+          description
+            "Configure multicast static source address";
+        }
+        choice group-src-opt {
+          case register {
+            leaf register {
+              type empty;
+              description
+                "PIM register flag";
+            }
+          }
+          case send-join {
+            leaf send-join {
+              type empty;
+              description
+                "Send join towards RPF";
+            }
+          }
+        }
+      }
+      list group-src-oif {
+        key "grp-addr source oif-interface";
+        description
+          "Configure multicast static group address";
+        leaf grp-addr {
+          type typesrouter6000:ipv4-muticast-address;
+          description
+            "Multicast group IP address";
+        }
+        leaf source {
+          type inet:ipv4-address;
+          description
+            "Configure multicast static source address";
+        }
+        leaf oif-interface {
+          type string;
+          description
+            "Outgoing interface or circuit";
+        }
+      }
+    }
+    /*
+    dual-join { group (grp-addr) source (src-addr) }
+    */
+    list dual-join {
+      key "group source";
+      description
+        "Static dual join (S,G) entry";
+      leaf group {
+        type typesrouter6000:ipv4-muticast-address;
+        description
+          "Configure dual join multicast group address";
+      }
+      leaf source {
+        type inet:ipv4-address;
+        description
+          "Configure dual join source address";
+      }
+      uses pim-dual-grp;
+    }
+    /*
+    accept-rp (rp-addr) [ (rp-acl) ]
+    */
+    list accept-rp {
+      key "rp-addr";
+      description
+        "RP accept filter";
+      leaf rp-addr {
+        type inet:ipv4-address;
+        description
+          "RP address for the group";
+      }
+      leaf rp-acl {
+        type string;
+        description
+          "Access list name";
+      }
+    }
+    /*
+    spt-threshold infinity [ group-list (threshold-acl) ]
+    */
+    container spt-threshold-infinity {
+      presence "";
+      description
+        "Threshold set to infinity";
+      leaf group-list {
+        type string;
+        description
+          "group list";
+      }
+    }
+    /*
+    ssm { default | range (rang-acl) }
+    */
+    container ssm {
+      description
+        "Source Specific Multicast (SSM) configuration";
+      choice ssm {
+        case default {
+          leaf default {
+            type empty;
+            description
+              "Default to range of 232.0.0.0/8 for SSM";
+          }
+        }
+        case range {
+          leaf range {
+            type string;
+            description
+              "Specify address range for SSM";
+          }
+        }
+      }
+    }
+    /*
+    anycast-rp (anycast-rp-addr) (rp-addr)
+    */
+    list anycast-rp {
+      key "anycast-rp-addr rp-addr";
+      description
+        "Configure Anycast-RP in PIM";
+      leaf anycast-rp-addr {
+        type inet:ipv4-address;
+        description
+          "Anycast-RP address";
+      }
+      leaf rp-addr {
+        type inet:ipv4-address;
+        description
+          "IP address of RP";
+      }
+    }
+    /*
+    interface (interface-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "Pim IPV4 interface";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface name";
+      }
+      uses pim-if-af4-grp;
+    }
+  }
+
+  grouping pim-af6-grp {
+    description
+      "PIM IPv6 address family configuration mode";
+    /*
+    static-group
+    */
+    container static-group {
+      description
+        "Static (*,G) or (S,G) entry";
+      list group-src {
+        key "grp-addr source";
+        description
+          "Configure multicast static group address";
+        leaf grp-addr {
+          type inet:ipv6-address;
+          description
+            "Multicast group IP address";
+        }
+        leaf source {
+          type inet:ipv6-address;
+          description
+            "Configure multicast static source address";
+        }
+        choice group-src-opt {
+          case register {
+            leaf register {
+              type empty;
+              description
+                "PIM register flag";
+            }
+          }
+          case send-join {
+            leaf send-join {
+              type empty;
+              description
+                "Send join towards RPF";
+            }
+          }
+        }
+      }
+      list group-src-oif {
+        key "grp-addr source oif-interface";
+        description
+          "Configure multicast static group address";
+        leaf grp-addr {
+          type inet:ipv6-address;
+          description
+            "Multicast group IP address";
+        }
+        leaf source {
+          type inet:ipv6-address;
+          description
+            "Configure multicast static source address";
+        }
+        leaf oif-interface {
+          type string;
+          description
+            "Outgoing interface or circuit";
+        }
+      }
+    }
+    /*
+    dual-join {group (grp-addr) source (src-addr)}
+    */
+    list dual-join {
+      key "group source";
+      description
+        "Static dual join (S,G) entry";
+      leaf group {
+        type inet:ipv6-address;
+        description
+          "Configure dual join multicast group address";
+      }
+      leaf source {
+        type inet:ipv6-address;
+        description
+          "Configure dual join source address";
+      }
+      uses pim-dual-grp;
+    }
+    /*
+    spt-threshold infinity [ group-list (threshold-acl) ]
+    */
+    container spt-threshold-infinity {
+      presence "";
+      description
+        "Threshold set to infinity";
+      leaf group-list {
+        type string;
+        description
+          "group list";
+      }
+    }
+    /*
+    interface (interface-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "Pim IPV6 interface";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface name";
+      }
+      uses pim-if-af6-grp;
+    }
+    /*
+    ssm { default | range (rang-acl) }
+    */
+    container ssm {
+      description
+        "Source Specific Multicast (SSM) configuration";
+      choice ssm {
+        case default {
+          leaf default {
+            type empty;
+            description
+              "Specifies a default SSM address range of
+               ff3x::/32";
+          }
+        }
+        case range {
+          leaf range {
+            type string;
+            description
+              "Access control list (ACL) used to specify the SSM
+               address range";
+          }
+        }
+      }
+    }
+  }
+
+  grouping pim-dual-grp {
+    description
+      "PIM dual join configuration mode";
+    /*
+    rpf-interface (rpf-intf) (rpf-intf2)
+    */
+    container rpf-interface {
+      description
+        "Configure dual rpf interfaces";
+      leaf rpf-intf {
+        type string;
+        mandatory true;
+        description
+          "Primary RPF interface name";
+      }
+      leaf rpf-intf2 {
+        type string;
+        mandatory true;
+        description
+          "Secondary RPF interface name";
+      }
+    }
+    /*
+    oif-interface (oif-intf)
+    */
+    leaf oif-interface {
+      type string;
+      description
+        "Configure dual join oif interface";
+    }
+    /*
+    send-join
+    */
+    leaf send-join {
+      type empty;
+      description
+        "Configure dual join send-join";
+    }
+  }
+
+  grouping pim-if-af4-grp {
+    description
+      "PIM IPv4 interface configuration mode";
+    /*
+    hello-interval (hello-interval)
+    */
+    leaf hello-interval {
+      type uint16 {
+        range "10..1800";
+      }
+      description
+        "PIM hello interval";
+    }
+    /*
+    dr-priority (dr-priority)
+    */
+    leaf dr-priority {
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "Set up PIM designated route (DR) priority";
+    }
+    /*
+    neighbor-filter (nbr-acl)
+    */
+    leaf neighbor-filter {
+      type string;
+      description
+        "PIM neighbors filter";
+    }
+    /*
+    bsr-border
+    */
+    leaf bsr-border {
+      type empty;
+      description
+        "Set up PIM border for BSR message on interface";
+    }
+    /*
+    sparse-mode [ passive ]
+    */
+    container sparse-mode {
+      presence "";
+      status obsolete;
+      description
+        "Enable PIM sparse mode operation";
+      leaf passive {
+        type empty;
+        status obsolete;
+        description
+          "Enabled PIM in passive mode";
+      }
+    }
+    /*
+    dense-mode
+    */
+    leaf dense-mode {
+      type empty;
+      status obsolete;
+      description
+        "Enable PIM dense mode operation";
+    }
+    /*
+    bfd
+    */
+    leaf bfd {
+      when "/if:interfaces/if:interface[if:name=current()/../pim"
+      + "r6k:interface]/if:type != 'ianaift:softwareLoopback'" {
+        description
+          "must not configure under loopback interface";
+      }
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable bfd";
+    }
+    /*
+    state-refresh origination-interval [ (refresh-interval) ]
+    */
+    container state-refresh-origination-interval {
+      must "(../mode/dense-mode)" {
+        error-message "error.Invalid interface for the "
+        + "configuration.";
+        description
+          "must configure under dense-mode";
+      }
+      presence "";
+      description
+        "PIM State-Refresh origination interval";
+      leaf refresh-interval {
+        type uint8 {
+          range "4..100";
+        }
+        default "60";
+        description
+          "Interval in seconds";
+      }
+    }
+    /*
+    boundary (boundary-acl)
+    */
+    leaf boundary {
+      type string;
+      description
+        "Boundary for administratively scoped multicast
+         addresses";
+    }
+    /*
+    mdt encapsulation gre
+    */
+    leaf mdt-encapsulation-gre {
+      when "/if:interfaces/if:interface[if:name=current()/../pim"
+      + "r6k:interface]/if:type = 'ianaift:softwareLoopback'" {
+        description
+          "must configure under loopback interface";
+      }
+      type empty;
+      description
+        "MDT encapsulation GRE";
+    }
+    /*
+    mode {dense-mode | <sparse-mode [ passive ]>}
+    */
+    container mode {
+      description
+        "Enable PIM sparse mode operation";
+      choice mode {
+        case dense-mode {
+          leaf dense-mode {
+            type empty;
+            description
+              "Enable PIM dense mode operation";
+          }
+        }
+        case sparse-mode {
+          container sparse-mode {
+            presence "";
+            description
+              "Enable PIM sparse mode operation";
+            leaf passive {
+              type empty;
+              description
+                "Enabled PIM in passive mode";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping pim-if-af6-grp {
+    description
+      "PIM IPv6 interface configuration mode";
+    /*
+    hello-interval (hello-interval)
+    */
+    leaf hello-interval {
+      type uint16 {
+        range "10..1800";
+      }
+      description
+        "PIM hello interval";
+    }
+    /*
+    dr-priority (dr-priority)
+    */
+    leaf dr-priority {
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "Set up PIM designated route (DR) priority";
+    }
+    /*
+    neighbor-filter (nbr-acl)
+    */
+    leaf neighbor-filter {
+      type string;
+      description
+        "PIM neighbors filter";
+    }
+    /*
+    sparse-mode [ passive ]
+    */
+    container sparse-mode {
+      presence "";
+      description
+        "Enable PIM sparse mode operation";
+      leaf passive {
+        type empty;
+        description
+          "Enabled PIM in passive mode";
+      }
+    }
+    /*
+    bfd
+    */
+    leaf bfd {
+      when "/if:interfaces/if:interface[if:name=current()/../pim"
+      + "r6k:interface]/if:type != 'ianaift:softwareLoopback'" {
+        description
+          "must not configure under loopback interface";
+      }
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable bfd";
+    }
+    /*
+    boundary (boundary-acl)
+    */
+    leaf boundary {
+      type string;
+      description
+        "Boundary for administratively scoped multicast
+         addresses";
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router" {
+    description
+      "ericsson-pim";
+    /*
+    pim
+    */
+    container pim {
+      presence "";
+      description
+        "Protocol Independent Multicast (PIM)";
+      uses pim-grp;
+    }
+  }
+
+}

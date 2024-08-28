@@ -1,0 +1,569 @@
+module ericsson-bridge-state-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bridge-state-router6000";
+
+  prefix "bridgestrouter6000";
+
+  import ericsson-bridge-router6000 {
+    prefix "bridgerouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization "Ericsson AB";
+  contact "iposcli@ericsson.com";
+
+  description
+     "ericsson-bridge-state-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-07-16" {
+    description   "changing namespace for the model";
+    reference "rfc6020.txt.";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2015-12-07" {
+    description   "initial revision";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment   "/bridgerouter6000:bridge-state"
+  {
+    description "Number of Bridges configured";
+    container global {
+        config false;
+        description "Number of Bridges configured";
+        container stats {
+            description "configure stats";
+            leaf bridge_count {
+            type uint32;
+                        description "Number of Bridges configured";
+            }
+            leaf cct_count {
+            type uint32;
+                        description "Number of circuits";
+            }
+            leaf si_cct_count {
+                type uint32;
+                        description "Number of service-instances";
+            }
+            leaf lg_cct_count {
+                type uint32;
+                        description "Number of L2 link groups";
+            }
+            leaf pw_cct_count {
+            type uint32;
+                        description "Number of pseudo circuits";
+            }
+            leaf dynamic_bfe_count {
+            type uint32;
+                        description "Number of dynamic MAC addresses";
+            }
+            leaf static_bfe_count {
+            type uint32;
+                        description "Number of static MAC addresses";
+            }
+            leaf drop_bfe_count {
+            type uint32;
+                        description "Number of drop MAC addresses";
+            }
+            leaf total_used_label_count {
+            type uint32;
+                        description "Total used label count";
+            }
+            leaf shl_label_count {
+                type uint32;
+                        description "Split horizon label count";
+            }
+            leaf bridge_instance_count {
+            type uint32;
+                        description "Bridge instance count";
+            }
+        }
+    }
+
+    list bridge {
+        key "bridge_name";
+        config false;
+        description "Bridge run-state attributes";
+        leaf bridge_name {
+            type string {
+            length "1..32";
+            }
+            description "Bridge name";
+        }
+        leaf bridge_id {
+            type int32;
+            description "Bridge ID";
+        }
+        leaf age_time {
+            type uint32;
+            description "Ageing time";
+        }
+        leaf bvi_cct_id {
+            type string{
+            length "1..64";
+            }
+            description "BVI circuit ID";
+        }
+        leaf learning_on {
+            type empty;
+            description "Learning enabled";
+        }
+        leaf qualified_learning {
+            type empty;
+            description "Qualified learning enabled";
+        }
+        leaf loop_detection {
+            type empty;
+            description "Loop detection attributes configured";
+        }
+        leaf mac_move_drop {
+            type empty;
+            description "MAC move enabled";
+        }
+        container stats {
+            description "count stats";
+            leaf cct_count {
+                type uint16;
+                description "Circuit count";
+            }
+            leaf static_bfe_count {
+                type uint16;
+                description "Static MAC count";
+            }
+            leaf dynamic_bfe_count {
+                type uint32;
+                description "Dynamic MAC count";
+            }
+            leaf drop_bfe_count {
+                type uint32;
+                description "Drop MAC count";
+            }
+            leaf pw_cct_count {
+                type uint32;
+                description "Pseudo-wire circuit count";
+            }
+        }
+
+        container vpls {
+            config false;
+            description "Bridge vpls run-state attributes";
+
+            leaf bridge_name {
+                type string {
+                    length "1..32";
+                }
+                description "Bridge name";
+            }
+            leaf bridge_id {
+                type int32;
+                description "Bridge ID";
+            }
+            container vpls_service_entry {
+                description "Bridge vpls service entry";
+                container stats{
+                    description "stats of instance count";
+                    leaf hub_instance_count {
+                        type uint32;
+                        description "Hub instance count";
+                    }
+                    leaf hub_spoke_instance_count {
+                        type uint32;
+                        description "Hub_spoke_instance_count";
+                    }
+                }
+                leaf localmode {
+                    type enumeration {
+                        enum VPLS_PW_PE_TYPE_PE_RS {
+                            value 1;
+                            description "VPLS_PW_PE_TYPE_PE_RS";
+                        }
+                        enum VPLS_PW_PE_TYPE_MTU_S {
+                            value 2;
+                            description "VPLS_PW_PE_TYPE_MTU_S";
+                        }
+                    }
+                    description "Pseudo wire circuit modes";
+                }
+            }
+        }
+
+        container bvi {
+            config false;
+            description "Bridge BVI run-state attributes";
+            leaf bridge_name {
+                type string {
+                length "1..32";
+                }
+            description "Bridge name";
+            }
+            leaf bridge_id {
+                type int32;
+                description "Bridge ID";
+            }
+            leaf vlan_id {
+                type uint32;
+                description "VLAN ID";
+            }
+            leaf smidx {
+            type uint32;
+            description "Smidx";
+            }
+            leaf bvi_name {
+            type string {
+            length "1..32";
+                }
+            description "BVI name";
+            }
+            leaf mac_addr {
+                 type string {
+             length "1..6";
+             }
+            description "MAC address";
+            }
+            leaf admin_up {
+            type boolean;
+            description "Admin UP";
+            }
+            leaf oper_up {
+            type boolean;
+            description "Operational state UP";
+            }
+            leaf demux_flag {
+            type boolean;
+            description "Demux flag";
+            }
+        }
+            
+        list circuit {
+            key "cct_id";
+            config false;
+            description "Bridge circuit run-state attributes";
+            leaf bridge_name {
+                type string {
+                    length "1..32";
+                }
+                description "Bridge name";
+            }
+            leaf bridge_id {
+                type int32;
+                description "Bridge ID";
+            }
+                    leaf cct_id {
+                        type string {
+                        length "1..64";
+                        }
+                        description "Circuit ID";
+                    }
+                    leaf vlan_range_count {
+                        type uint32;
+                        description "VLAN range count";
+            }
+                    list vlan_range{
+                        config false;
+                        leaf vlan_start {
+                            type uint32;
+                            description "Start of VLAN range";
+                        }
+            leaf vlan_end {
+                type uint32;
+                description "End of VLAN range";
+                }
+                description "VLAN Range";
+            }
+            leaf shg_map {
+                type uint32;
+                description "Split horizon group map";
+            }
+            leaf mac_limit {
+                type uint32;
+                            description "MAC limit";
+            }
+            leaf restricted {
+                type boolean;
+                description "Restricted circuit";
+            }
+            leaf slot_unique_index {
+                type uint32;
+                description "Slot unique index";
+            }
+            leaf loop_detect_priority {
+                type uint32;
+                description "Loop detection priority";
+            }
+                        leaf spg_id {
+                                type uint32;
+                                description "SPG id";
+                        }
+                        leaf aps_id {
+                                type uint16;
+                                description "APS id";
+                        }
+                        leaf lg_id {
+                                type uint16;
+                                description "Link Group id";
+                        }
+            leaf unknown_unicast {
+                    type enumeration {
+                        enum UNKNOWN_UNICAST_DROP {
+                            description "unknow unicast drop";
+                        }
+                        enum UNKNOWN_UNICAST_FLOOD {
+                            description "unkown unicast flood";
+                        }
+                }
+                description "Unknown unicast modes";
+            }
+            leaf cct_stale {
+                type empty;
+                description "Stale circuit";
+            }
+            leaf cct_deleted {
+                type empty;
+                description "Bridge circuit deleted";
+            }
+            leaf cct_ism_create {
+                type empty;
+                description "Bridge circuit ism create";
+            }
+            leaf cct_ism_cfg {
+                type empty;
+                description "Bridge circuit ism config";
+            }
+            leaf cct_wait_active {
+                 type empty;
+                 description "Bridge circuit wait is active";
+            }
+            leaf cct_sm_active {
+                 type empty;
+                 description "Bridge circuit sm active";
+            }
+            leaf cct_attach_pending {
+                 type empty;
+                 description "Bridge circuit attach pending";
+            }
+            leaf cct_attach_sent {
+                 type empty;
+                 description "Bridge circuit attach sent";
+            }
+            leaf cct_sui_valid {
+                 type empty;
+                 description "Bridge circuit slot unique index is valid";
+            }
+            leaf cct_pfe_valid {
+                 type empty;
+                 description "Bridge circuit PFE is valid";
+            }
+            leaf cct_pfe_update {
+                 type empty;
+                 description "Bridge circuit PFE updated";
+            }
+            leaf cct_oper_up {
+                 type empty;
+                 description "Bridge circuit operational state is UP";
+            }
+            leaf cct_lg_si {
+                 type empty;
+                 description "Circuit link-group service instance";
+            }
+            leaf cct_lg_reg {
+                 type empty;
+                 description "Circuit link-group reg";
+            }
+            leaf cct_lg_pkt_hash {
+                 type empty;
+                 description "Circuit link group pkt hash";
+            }
+            leaf cct_lg_ckt_hash {
+                 type empty;
+                 description "Circuit link group ckt hash";
+            }
+            leaf cct_profile_attr {
+                type empty;
+                description "Bridge circuit profile attribute";
+            }
+            leaf cct_vpls_cct {
+                type empty;
+                description "vpls circuit";
+            }
+            leaf cct_vpls_hub {
+                type empty;
+                description "vpls hub";
+            }
+            leaf cct_vpls_spoke {
+                type empty;
+                description "vpls spoke";
+            }
+            leaf cct_evpn_nh {
+                type empty;
+                description "evpn nh";
+            }
+            leaf cct_default_si {
+                type empty;
+                description "Default Service-instance";
+            }
+            leaf cct_fallback_ctag_si {
+                type empty;
+                description "Fallback CTAG service-instance";
+            }
+            leaf cct_cfg_stale {
+                type empty;
+                description "Circuit configuration stale";
+            }
+            leaf cct_ism_stale {
+                type empty;
+                description "Circuit ism stale";
+            }
+            leaf cct_active_up {
+                type empty;
+                description "Circuit active";
+            }
+            leaf cct_evpn_enabled {
+                type empty;
+                description "Evpn enabled";
+            }
+            leaf cct_in_error {
+                type empty;
+                description "Circuit in error";
+            }
+            container stats {
+                description "stats of dynamic MAC count";
+                leaf dynamic_bfe_count {
+                    type uint32;
+                    description "Dynamic MAC count";
+                }
+            }
+
+            list vlan {
+                key "vlan_id";
+                config false;
+                description "Bridge VLAN summary run-state attributes";
+                leaf bridge_name {
+                    type string {
+                        length "1..32";
+                    }
+                    description "Bridge name";
+                }
+                leaf bridge_id {
+                            type int32;
+                            description "Bridge ID";
+                }
+                        leaf vlan_id {
+                            type uint32;
+                            description "VLAN ID";
+                        }
+                        leaf cct_id {
+                            type string {
+                                length "1..64";
+                }
+                            description "Circuit ID";
+                        }
+                
+            container vlan_detail {
+                config false;
+                description "bridge VLAN detail";
+            leaf vlan_id {
+                type uint32;
+                description "VLAN ID";
+            }
+            leaf bridge_id {
+                type int32;
+                description "Bridge ID";
+                }
+                        leaf vlan_created {
+                            type empty;
+                            description "VLAN created";
+                        }
+                        leaf vlan_fadj_valid {
+                            type empty;
+                            description "VLAN fadj valid";
+                        }
+                        leaf vlan_pfe_valid {
+                            type empty;
+                            description "VLAN pfe valid";
+                        }
+                        leaf vlan_pfe_changed {
+                            type empty;
+                            description "VLAN pfe changed";
+                        }
+                        leaf vlan_fmth_valid {
+                            type empty;
+                            description "VLAN fmth valid";
+                        }                    
+                        leaf vlan_fmth_pending {
+                            type empty;
+                            description "VLAN fmth pending";
+                        }
+                        leaf vlan_bi_create {
+                            type empty;
+                            description "VLAN bi create";
+                        }
+                        leaf vlan_active {
+                            type empty;
+                            description "VLAN active";
+                        }
+                        leaf vlan_deleted {
+                            type empty;
+                            description "VLAN deleted";
+                        }
+                        container stats {
+                              description "count stats";
+                              leaf cct_count {
+                                  type uint32;
+                                  description "Circuit count";
+                              }
+                              leaf bfe_count {
+                                  type uint32;
+                                  description "Bridge forwarding entry count";
+                              }
+                              leaf static_bfe_count {
+                                  type uint32;
+                                  description "Static MAC count";
+                              }
+                        }
+                     }
+                
+                list bridge_table {
+                    config false;
+                    description "bridge table run-state attributes";
+                    leaf vlan_id {
+                        type uint32;
+                        description "VLAN ID";
+                    }
+                    leaf bridge_name {
+                        type string{
+                            length "1..32";
+                        }
+                        description "Bridge name";
+                    }
+                    leaf bridge_id {
+                        type int32;
+                        description "Bridge ID";
+                    }
+                    leaf cct_id {
+                        type uint32;
+                        description "Circuit ID";
+                    }
+                    leaf mac_addr {
+                        type string{
+                            length "1..6";
+                        }
+                        description "MAC address";
+                    }
+                }
+            }
+        }
+    }
+  }
+}

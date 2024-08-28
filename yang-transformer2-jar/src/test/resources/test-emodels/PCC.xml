@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TargetTypeInformation oc:ns="NODE" oc:name="PCC"
+	xmlns:oc="urn:com:ericsson:schema:xml:oss:oss_common"
+	xmlns="urn:com:ericsson:schema:xml:oss:oss_targettype"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<oc:modelCreationInfo author="Falcon" creationDate="03/06/2019">
+		<oc:designedModel componentId="vDU Common Models" />
+	</oc:modelCreationInfo>
+
+	<oc:desc>This is the target type information model for Network Element type PCC.</oc:desc>
+
+	<hasTargetVersionSpecificExtensions>true</hasTargetVersionSpecificExtensions>
+	
+	<platform>CBP-OI</platform>
+	<rootMoType namespace="PccTop" name="ManagedElement" />
+	<ciMoType namespace="CBPOI_MED" name="CbpOiConnectivityInformation" />
+
+</TargetTypeInformation>

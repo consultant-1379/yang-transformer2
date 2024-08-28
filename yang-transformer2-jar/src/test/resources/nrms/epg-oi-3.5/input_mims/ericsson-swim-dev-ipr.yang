@@ -1,0 +1,61 @@
+module ericsson-swim-dev-ipr {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-swim-dev-ipr";
+  prefix swimd;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  import ericsson-swim {
+    prefix swime;
+  }
+
+  organization "Ericsson AB";
+  contact "Ericsson first line support via email";
+
+  description
+   "Software inventory management model.
+		Copyright (c) 2017 Ericsson AB. All rights reserved.
+        Contains the software versions installed on the managed element. For
+        each software version, the software items that constitute the software
+        version are listed.";
+
+  revision "2016-07-05" {
+     description "Initial version based on ECIM_SwIM 1.2.1.";
+		yexte:version 1;
+		yexte:release 0;
+		yexte:correction 0;
+  }
+
+  deviation "/swime:swim/swime:sw-item" {
+    deviate replace {
+        config false;
+    }
+  }
+  deviation "/swime:swim/swime:sw-item/swime:sw-item-id" {
+    deviate replace {
+        config false;
+    }
+  }
+  deviation "/swime:swim/swime:sw-item/swime:user-label" {
+    deviate replace {
+        config false;
+    }
+  }
+  deviation "/swime:swim/swime:sw-version" {
+    deviate replace {
+        config false;
+    }
+  }
+  deviation "/swime:swim/swime:sw-version/swime:sw-version-id" {
+    deviate replace {
+        config false;
+    }
+  }
+  deviation "/swime:swim/swime:sw-version/swime:user-label" {
+    deviate replace {
+        config false;
+    }
+  }
+}

@@ -1,0 +1,722 @@
+module ericsson-lm {
+  yang-version 1.1;
+  namespace urn:rdns:com:ericsson:oammodel:ericsson-lm;
+  prefix lme;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ericsson-yang-types {
+    prefix typese;
+  }
+
+  import ericsson-notifications {
+    prefix notife;
+  }
+  organization "Ericsson AB";
+  contact "Ericsson first line support via email";
+  description "License Management model.
+               Copyright (c) 2017 Ericsson AB. All rights reserved.";
+
+  revision "2018-08-30" {
+    //ethbll
+    description 
+        "Remove is-system-created from root lm container
+        add notifiable-state-data true to the root lm container
+        made containers emergency-unlock config=true
+        removed unneccesary config=false statement where containing 
+          list/folder is already config=false";
+    reference "trouble_report #1600524 Remove is-system-created from fm, lm 
+          logm pmevent sub-equip-tracem swim";
+    yexte:version 2;
+    yexte:release 1;
+    yexte:correction 1;
+  }
+  
+  revision "2017-07-12" {
+    description "Remove unused shared leaf";
+    yexte:version 2;
+    yexte:release 0;
+    yexte:correction 2;
+  }
+
+  revision "2017-07-05" {
+    description "Remove unused features and system-created statement";
+    yexte:version 2;
+    yexte:release 0;
+    yexte:correction 1;
+  }
+
+  revision "2017-06-12" {
+    description "Refactor the model according to EOI decision of the common LM model.
+                 which inclues the common part between CBA LM and SGSN LM, ARWA is excluded.";
+    reference "ECIM_L 3.1.0 and CBA LM 6.0";
+    yexte:version 2;
+    yexte:release 0;
+    yexte:correction 0;
+  }
+
+  revision "2017-03-23" {
+    description "Corrected is-pass-phase errors.";
+    reference "ECIM_L 3.1.0 and CBA LM 6.0";
+    yexte:version 1;
+    yexte:release 2;
+    yexte:correction 0;
+  }
+  revision "2017-01-31" {
+    description "Version based on ECIM_LM 3.1.0";
+    reference "ECIM_L 3.1.0 and CBA LM 6.0";
+    yexte:version 1;
+    yexte:release 1;
+    yexte:correction 0;
+  }
+  feature key-file-installation {
+    description
+      "This feature allows the License Manager to support the installation of key file via key-file-management.
+      If the Managed Element does not support key file installation (e.g., because
+      the key file needs to be installed directly on the License Server to which the
+      Managed Element is connected), then no key-file-management  instance shall be created.";
+  }
+  feature nels-configuration {
+    description
+      "NeLS is an optional centralized network license control server,
+      located in the Customer network, which can provide customer licensing services,
+      it supports shared capacity across the network for a more
+      dynamic capacity distribution where it is needed. ";
+  }
+  feature integration-unlock {
+    description
+      "Enabled automatically when LmServer is first deployed. In this mode, LmServer first tries to retrieve the requested
+      license from the license server. If the license is found, LmServer behaves as in Normal mode for that license.
+      If the license is not found, LmServer grants the request for the duration of Integration Unlock mode.";
+  }
+  feature maintenance-unlock {
+    description
+      "Emergency unlock to be used during maintenance periods where you can give licenses in similar way as integration-unlock";
+  }
+  feature system-triggered-unlock {
+    description
+      " Reserved for certain applications on radio, similar to autonomous mode";
+  }
+  feature autonomous-mode {
+    description
+      "When the LmClient Library is unable to contact LmServer, it enters a standalone Autonomous mode.
+      This Autonomous mode is independent of the LmServer connection to the license repository. During the LmClient Autonomous mode,
+      only licenses already present in the LmClient Library cache can be used. Requests for other licenses or increased capacity fail.
+      The LmClient Autonomous mode is time limited to 24 hours.";
+  }
+
+  feature key-file-management {
+      description
+          " States of capacities that key file management.";
+  }
+
+  typedef lm-states {
+    type enumeration {
+      enum locked {
+        value 0;
+        description
+          "No key file is available for the License Manager, so
+                     license requests are rejected.";
+      }
+
+      enum normal {
+        value 1;
+        description
+          "Key file is available for the License Manager, so license
+                    requests are granted accordingly.";
+      }
+
+      enum integration-unlock {
+        value 2;
+        if-feature integration-unlock;
+        description
+          "All license requests are granted until first key file is
+                    delivered. The maximum duration the License Manager can
+                     function in this operational mode is pre-defined. When
+                    maximum duration expires and no other unlock applies, the
+                    License Manager goes into locked operational state.";
+      }
+
+      enum emergency-unlock {
+        value 4;
+        description
+          "All license requests are granted due to an emergency
+                    situation. The maximum duration the License Manager can
+                    function in this operational state is pre-defined. When
+                    maximum duration expires and no other unlock applies, the
+                    License Manager goes into locked operational state.";
+      }
+
+      enum autonomous-mode {
+        value 5;
+        if-feature autonomous-mode;
+        description
+          "The key file is not accessible and license requests are
+                    granted based on cached license information. The maximum
+                    duration the License Manager can function in this
+                    operational state is pre-defined. When maximum duration
+                    expires and no unlock state applies, the License Manager
+                    goes into locked operational state.";
+      }
+
+    }
+
+    description "Operational modes of the License Manager.";
+  }
+
+  typedef lm-activation-states {
+    type enumeration {
+      enum inactive {
+        value 0;
+        description
+          "The operational mode or grace period is inactive.";
+      }
+
+      enum activated {
+        value 1;
+        description
+          "The operational mode or grace period is activated.";
+      }
+
+      enum activated-expiring {
+        value 2;
+        description
+          "The operational mode or grace period is about to expire.";
+      }
+
+      enum expired {
+        value 3;
+        description
+          "The operational mode or grace period has expired. Note: The
+                    state is not applicable to all operational modes.";
+      }
+    }
+
+    description
+      "Operational modes activation states and License Manager
+             grace period.";
+  }
+
+  typedef lm-feature-states {
+    type enumeration {
+      enum deactivated {
+        value 0;
+        description "Deactivated";
+      }
+
+      enum activated {
+        value 1;
+        description "Activated";
+      }
+    }
+
+    description
+      "Indicates whether or not a certain feature is
+           administratively activated.";
+  }
+
+  typedef lm-license-states {
+    type enumeration {
+      enum disabled {
+        value 0;
+        description
+          "There is no valid license available for the feature or
+                    capacity.";
+      }
+
+      enum enabled {
+        value 1;
+        description "There is valid license available for the feature or
+                 capacity.";
+      }
+    }
+
+    description "The license state of a resource.";
+  }
+
+  typedef lm-service-states {
+    type enumeration {
+      enum inoperable {
+        value 0;
+        description "Inoperable";
+      }
+
+      enum operable {
+        value 1;
+        description "Operable";
+      }
+    }
+
+    description
+      "Whether a certain service is operable or not based on
+              license and feature states.";
+  }
+
+typedef nels-connection-status {
+    type enumeration {
+      enum undefined {
+        value 1;
+        description
+          "Enum value represents initial state before connection attempt to NeLS.";
+      }
+
+      enum connected {
+        value 2;
+        description
+          "Enum value represents connection toward NeLS is established, ";
+      }
+      enum not-connected {
+        value 3;
+        description
+          "Enum value represents connection toward NeLS is not established.";
+      }
+
+    }
+
+    description "Connection Status for NeLS.";
+  }
+  grouping state-expiration {
+    leaf activation-state {
+      type lm-activation-states;
+      config false;
+      mandatory true;
+      description "The activation state.";
+    }
+
+    leaf expiration {
+      type yang:date-and-time;
+      config false;
+      mandatory true;
+      description
+        "Expiry date and time. The value is empty
+                 if the activation state is inactive.";
+    }
+
+    description "State expiration configuration";
+  }
+
+  grouping lm-capacity-value {
+    leaf value {
+      when "../no-limit = 'false'";
+      type uint32;
+      description
+        "The capacity value. The value is invalid if no-limit=true.";
+    }
+
+    leaf no-limit {
+      type boolean;
+      mandatory true;
+      description
+         "True if the value is unlimited, false if the value is
+                defined by leaf value.";
+    }
+
+    description "Capacitly value configuration";
+  }
+
+  grouping unlock-data {
+    leaf activation-state {
+      type lm-activation-states;
+      config false;
+      mandatory true;
+      description "Activation state of this unlock.";
+    }
+
+    leaf expiration {
+      type yang:date-and-time;
+      config false;
+      description
+        "Expiry date and time of this unlock. The value is empty
+                 if the activation state is inactive";
+    }
+
+    leaf activations-left {
+      type uint8;
+      config false;
+      mandatory true;
+      description "Remaining allowed unlock activations left.";
+    }
+
+    description "unlock configuraiton";
+  }
+
+  container lm {
+    description "License management";
+    notife:notifiable-state-data true; 
+
+    leaf fingerprint {
+      type string;
+      config false;
+      description
+        "The unique identification of the Managed Element.";
+    }
+
+    leaf fingerprint-updateable {
+      type boolean;
+      config false;
+      mandatory true;
+      description
+        "Indicates whether or not the fingerprint of the Managed
+                 Element can be updated.";
+    }
+
+    leaf state {
+      type lm-states;
+      config false;
+      mandatory true;
+      description
+        "The current operational state of the License Manager.";
+    }
+
+    leaf last-inventory-change {
+      type yang:date-and-time;
+      config false;
+      mandatory true;
+      description
+        "Date and time of the last change in the license inventory.
+                 Change in the license inventory may occur when the key file
+                 is updated on the Managed Element or when license
+                 information is refreshed by synchronizing with license
+                 servers.";
+    }
+
+    leaf last-license-inventory-refresh {
+      type yang:date-and-time;
+      config false;
+      description
+        "Date and time when License Manager last synchronized the
+                 license inventory of the Managed Element.";
+    }
+
+    action refresh-license-inventory {
+      description
+        "Initiates the synchronization of Managed Element's license
+                 inventory. Return value is true if the synchronization
+                 succeeded, otherwise false.";
+      output {
+        leaf return-value {
+          type boolean;
+          mandatory true;
+          description
+            "Indicates whether the synchronization of license
+                      information succeeded or not.";
+        }
+      }
+    }
+
+    list feature-key {
+      key id;
+      config false;
+      description
+        "Key of a licensed feature that is available for the Managed
+                 Element.";
+      leaf id {
+        type string;
+        description "Identity of the feature-key entry.";
+      }
+
+      leaf name {
+        type string;
+        mandatory true;
+        description "The name of the feature represented by the key.";
+      }
+
+      leaf valid-from {
+        type yang:date-and-time;
+        mandatory true;
+        description "The date and time from which the key is valid.";
+      }
+
+      leaf expiration {
+        type yang:date-and-time;
+        description "The key expiry date and time. For perpetual keys, the value
+                 is empty.";
+      }
+
+      leaf key-id {
+        type string;
+        description
+          "Identity of the feature under license control. E.g.,
+                    CXC4011234, FAT1021234";
+      }
+
+      leaf product-type {
+        type string;
+        description
+          "Identifier of the type of product to which the capacity is
+                    related. This leaf is used only in systems where the
+                    different applications use separate key files to identify
+                    which application or product the capacity belongs to, e.g.
+                    SASN, GSN_GGSN, SSR 8000.";
+      }
+    }
+
+    list capacity-key {
+      key id;
+      config false;
+      description
+        "Key of a licensed capacity that is available for the
+                 Managed Element.";
+      leaf id {
+        type string;
+        description "The identity of the capacity-key entry.";
+      }
+
+      container licensed-capacity-limit {
+        description
+          "Licensed capacity limit as defined in the installed key
+                    file.";
+        uses lme:lm-capacity-value;
+      }
+
+      leaf capacity-unit {
+        type string;
+        mandatory true;
+        description "The licensed capacity measuring unit.";
+      }
+
+      leaf granted-capacity-level {
+        type uint32;
+        description
+          "The capacity level currently granted by the License
+                    Manager. The leaf value is based on requests and
+                     releases of capacity units made by License Users. If such
+                    requests and releases are not made by License Users, the
+                    value of the leaf defaults to the licensed capacity
+                    limit. Note: The value of the leaf is not based on
+                    Performance Management data.";
+      }
+
+      leaf licensed-capacity-limit-reached {
+        type boolean;
+        mandatory true;
+        description
+          "Indicates whether or not current capacity usage reaches the
+                    licensed capacity limit.";
+      }
+
+      leaf name {
+        type string;
+        mandatory true;
+        description "The name of the feature represented by the key.";
+      }
+
+      leaf valid-from {
+        type yang:date-and-time;
+        mandatory true;
+        description "The date and time from which the key is valid.";
+      }
+
+      leaf expiration {
+        type yang:date-and-time;
+        description
+          "The key expiry date and time. For perpetual keys, the value
+                    is not set.";
+      }
+
+      leaf shared {
+        type boolean;
+        description
+          "Indicates whether the key is shared among Managed Elements
+                    or dedicated to the Managed Element. A key is dedicated to
+                    the Managed Element if the key can be used only by the
+                    Managed Element. This is always the case when the ELIM
+                    format is used. A key can be shared among multiple Managed
+                     Elements if it is installed on a License Server to which
+                    multiple Managed Elements connect.";
+      }
+
+      leaf key-id {
+        type string;
+        description
+          "Identity of the feature under license control. E.g.,
+                    CXC4011234, FAT1021234";
+      }
+
+      leaf product-type {
+        type string;
+        description
+          "Identifier of the type of product to which the capacity is
+                    related. This leaf is used only in systems where the
+                    different applications use separate key files to identify
+                    which application or product the capacity belongs to, e.g.
+                    SASN, GSN_GGSN, SSR 8000.";
+      }
+
+    }
+
+    container emergency-unlock {
+      description "Emergency Unlock state information.";
+      uses unlock-data;
+
+      action activate {
+        description
+          "Initiates activation of the unlock operational
+           mode. Return value is true if the activation succeeded,
+           otherwise false.";
+        output {
+          leaf return-value {
+            type boolean;
+            mandatory true;
+            description "Indicates whether the activation succeeded or not.";
+          }
+        }
+      }
+    }
+
+    container integration-unlock {
+      if-feature integration-unlock;
+      config false;
+      description "Integration Unlock state information.";
+      uses unlock-data;
+    }
+
+    container autonomous-mode {
+      if-feature autonomous-mode;
+      config false;
+      description "Autonomous Mode state information.";
+      uses state-expiration;
+    }
+
+    container key-file-management {
+      if-feature key-file-management;
+      config false;
+      description
+        "Enables installation of key files and provides information
+         about the installed key file.";
+
+      container report-progress {
+        description
+          "Reference to the progress report including the result of
+                    the initiated key file installation.";
+        uses typese:async-action-progress;
+      }
+
+      action install-key-file {
+        if-feature key-file-installation;
+        description
+          "Initiates the key file installation defined by the URI
+                    given as a parameter. The return value is the action Id if
+                    the initiation succeeded, otherwise it is 0. The
+                    installation is an asynchronous operation. Progress is
+                    reported via leaf report-progress. This action cannot be invoked multiple times in parallel.";
+        input {
+          leaf uri {
+            type inet:uri;
+            mandatory true;
+            description
+              "The URI of the key file that is to be installed. The URI
+                         may refer to a local (e.g.,
+                        file://data/dir/subdir/rbs006.xml) or to a remote (e.g.,
+                        sftp://myuser@myhostname.ericsson.local/dir/subdir/rbs006.xml)
+                        file. If user name is needed to access the referenced file
+                        then the URI shall include the user name. The URI must not
+                        contain password.";
+          }
+
+          leaf password {
+            type string;
+            description
+              "Password to access the referenced file. If authentication
+                             is not password based, this parameter will be ignored.";
+            yexte:is-passphrase;
+          }
+        }
+
+        output {
+          leaf return-value {
+            type typese:progress-report-id;
+            mandatory true;
+            description
+              "Key to the progress-report list entry where
+              information about the progress and the result of
+              the operation can be found.";
+          }
+        }
+      }
+
+      list key-file-information {
+        key key-file-information-id;
+        description
+          "Basic information about the key file installed on the
+                    Managed Element.";
+        leaf key-file-information-id {
+          type string;
+          description
+            "Identity of the key-file-information entry.";
+        }
+
+        leaf sequence-number {
+          type uint32;
+          description
+            "Sequence number of the key file. If sequence number is not
+                      available, this value is 0.";
+        }
+
+        leaf installation-time {
+          type yang:date-and-time;
+          mandatory true;
+          description
+            "Date and time when key file was installed on the Managed
+                      Element.";
+        }
+
+        leaf locatable {
+          type boolean;
+          mandatory true;
+          description "Indicates whether or not the key file can currently be
+                 located.";
+        }
+
+        leaf product-type {
+          type string;
+          description
+            "Identifier of the product type to which the capacity is
+                      related. This leaf is used only in systems where
+                      different applications use separate key files to identify
+                      to which application or product the capacity belongs, e.g:
+                      SASN, GSN_GGSN, or SSR 8000.";
+        }
+      }
+    }
+
+    container nels-configuration {
+      if-feature nels-configuration;
+      presence "NeLS Configuration";
+      description
+        "Enables Network License Server (NeLS) configuration parameters";
+
+      leaf host {
+        type inet:host;
+        mandatory true;
+        description
+          "IPv6, IPv4 or DNS name.";
+      }
+
+      leaf port {
+        type inet:port-number;
+        mandatory true;
+        description
+          "The port number that is used to connect to NeLS." ;
+      }
+
+      leaf connection-status {
+        type nels-connection-status;
+        config false;
+        mandatory true;
+        description
+          "Represents status of the connection toward NeLS.";
+      }
+    }
+  }
+}

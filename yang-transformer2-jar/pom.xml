@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>yang-transformer2</artifactId>
+		<groupId>com.ericsson.oss.mediation.modeling.yangtools</groupId>
+		<version>1.0.36-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>yang-transformer2-jar</artifactId>
+
+	<packaging>jar</packaging>
+
+	<name>[${project.parent.artifactId}] JAR</name>
+
+	<properties>
+		<version.yang-parser-jar>2.0.9</version.yang-parser-jar>
+		<version.yang-validator-jar>1.4.22</version.yang-validator-jar>
+		<version.slf4j.binding>1.7.5</version.slf4j.binding>
+		<sonar.sources>pom.xml,src/main/java</sonar.sources>
+		<sonar.exclusions>**/*.java</sonar.exclusions>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.ericsson.oss.mediation.modeling.yangtools</groupId>
+			<artifactId>yang-parser-jar</artifactId>
+			<version>${version.yang-parser-jar}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ericsson.oss.itpf.modeling</groupId>
+			<artifactId>modeling-common-jar</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ericsson.oss.mediation.modeling.tools</groupId>
+			<artifactId>network-model-transformer-api-jar</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ericsson.oss.mediation.modeling.tools</groupId>
+			<artifactId>network-model-transformer-jar</artifactId>
+			<exclusions>
+				<!-- Don't need that - pulls in too much other stuff not needed -->
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-slf4j-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+				</exclusion>
+			</exclusions> 
+		</dependency>
+		<dependency>
+			<groupId>com.ericsson.oss.mediation.modeling.tools</groupId>
+			<artifactId>network-model-identity-converter-jar</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.ericsson.oss.mediation.modeling.yangtools</groupId>
+			<artifactId>yang-validator-jar</artifactId>
+			<version>${version.yang-validator-jar}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.ericsson.oss.itpf.modeling.tools</groupId>
+			<artifactId>model-processing-jar</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<!-- Don't need that - pulls in too much other stuff not needed -->
+				<exclusion>
+					<groupId>org.apache.maven</groupId>
+					<artifactId>maven-plugin-api</artifactId>
+				</exclusion>
+			</exclusions> 
+		</dependency>
+		<dependency>
+			<groupId>com.ericsson.oss.itpf.modeling</groupId>
+			<artifactId>model-deployment-jar</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<!-- Don't need those - pulls in too much other stuff not needed -->
+				<exclusion>
+					<groupId>org.apache.maven</groupId>
+					<artifactId>maven-plugin-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.ericsson.oss.itpf.modeling</groupId>
+					<artifactId>model-deployment-bro-agent-jar</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.ericsson.oss.itpf.modeling</groupId>
+					<artifactId>model-deployment-scheduler-jar</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-slf4j-impl</artifactId>
+				</exclusion>
+			</exclusions> 
+		</dependency>
+		<dependency>
+			<groupId>com.ericsson.oss.itpf.modeling</groupId>
+			<artifactId>default-mdt-plugins-jar</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.ericsson.oss.itpf.modeling</groupId>
+			<artifactId>model-service-jar</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<!-- Don't need that - pulls in too much other stuff not needed -->
+				<exclusion>
+					<groupId>com.ericsson.oss.itpf.modeling</groupId>
+					<artifactId>model-deployment-client-jar</artifactId>
+				</exclusion>
+			</exclusions> 
+		</dependency>
+	</dependencies>
+
+</project>

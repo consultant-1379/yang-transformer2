@@ -1,0 +1,80 @@
+module ericsson-brm-dev-ipr {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-brm-dev-ipr";
+  prefix brmd;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  import ericsson-brm {
+    prefix brme;
+  }
+
+organization "Ericsson AB";
+contact "Ericsson first line support via email";
+description "Software management model.
+              Copyright (c) 2017 Ericsson AB. All rights reserved.";
+
+revision "2017-05-15" {
+     description "
+         changed yexte:not-notifable to notife:notifiable-state-data false
+         added notfiable-state-data true to the brm container";
+         yexte:version 1;
+         yexte:release 1;
+         yexte:correction 0;
+}
+
+revision "2016-07-05" {
+         description "Initial version based on ECIM_BrM 4.1.0.";
+         yexte:version 1;
+         yexte:release 0;
+         yexte:correction 0;
+}
+
+  deviation "/brme:brm/brme:backup-manager" {
+    deviate replace {
+        config false;
+    }
+  }
+  deviation "/brme:brm/brme:backup-manager/brme:id" {
+    deviate replace {
+        config false;
+    }
+  }
+  deviation "/brme:brm/brme:backup-manager/brme:backup" {
+    deviate replace {
+        config false;
+    }
+  }
+  deviation "/brme:brm/brme:backup-manager/brme:backup/brme:id" {
+    deviate replace {
+        config false;
+    }
+  }
+  deviation "/brme:brm/brme:backup-manager/brme:label-store" {
+    deviate replace {
+        config false;
+    }
+  } 
+
+  deviation "/brme:brm/brme:export-package-label-prefix" {
+    deviate not-supported;
+  }
+  deviation "/brme:brm/brme:backup-manager/brme:failsafe-backup" {
+    deviate not-supported;
+  }
+  deviation "/brme:brm/brme:backup-manager/brme:cancel-current-action" {
+    deviate not-supported;
+  } 
+  deviation "/brme:brm/brme:backup-manager/brme:backup/brme:sw-version" {
+    deviate not-supported;
+  }
+  deviation "/brme:brm/brme:backup-manager/brme:backup/brme:cancel-current-action" {
+    deviate not-supported;
+  } 
+  deviation "/brme:brm/brme:backup-manager/brme:label-store/brme:restore-escalation-list" {
+    deviate not-supported;
+  }
+}
+

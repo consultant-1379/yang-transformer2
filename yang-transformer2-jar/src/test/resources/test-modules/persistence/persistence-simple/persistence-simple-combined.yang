@@ -1,0 +1,71 @@
+module persistence-simple-combined {
+
+	namespace "urn:test:persistence-simple-combined";
+	prefix this;
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision "2021-10-18";
+
+	container cont1 {			// regular NP container, should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+
+		leaf leaf11 {			// 'config true' / 'static true' / 'status deprecated', should be generated as FROM_DELEGATE / NOT_ALLOWED
+			status deprecated;
+			yexte:static-data true;
+			type string;
+		}
+	}
+
+	container cont2 {			// 'status preliminary' container, should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+		status current {
+			yexte:preliminary;
+		}
+
+		leaf leaf21 {			// 'config true' / 'static true' / 'status deprecated', should be generated as FROM_DELEGATE / NOT_ALLOWED
+			status deprecated;
+			yexte:static-data true;
+			type string;
+		}
+	}
+
+	container cont3 {			// 'static true' container, should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+		yexte:static-data true;
+
+		leaf leaf31 {			// 'config true' / 'static true' / 'status deprecated', should be generated as FROM_DELEGATE / NOT_ALLOWED
+			status deprecated;
+			type string;
+		}
+	}
+
+	container cont4 {			// 'config false' / 'notified' container, should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+		config false;
+		notife:notifiable-state-data true;
+
+		leaf leaf41 {			// 'config false' / 'notified' / 'status deprecated', should be generated as FROM_DELEGATE / NOT_ALLOWED
+			status deprecated;
+			type string;
+		}
+
+		leaf leaf42 {			// 'config false' / 'notified' / 'static true', should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+			yexte:static-data true;
+			type string;
+		}
+
+		leaf leaf43 {			// 'config false' / 'not notified' / 'static true', should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+			notife:notifiable-state-data false;
+			yexte:static-data true;
+			type string;
+		}
+
+		leaf leaf44 {			// 'config false' / 'not notified' / 'status deprecated', should be generated as FROM_DELEGATE / NOT_ALLOWED
+			notife:notifiable-state-data false;
+			status deprecated;
+			type string;
+		}
+	}
+}

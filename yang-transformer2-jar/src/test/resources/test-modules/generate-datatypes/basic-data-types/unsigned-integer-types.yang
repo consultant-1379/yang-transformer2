@@ -1,0 +1,70 @@
+module unsigned-integer-types {
+
+    namespace "urn::test::unsigned-integer-types";
+    prefix this;
+
+    revision "2021-10-15";
+	
+	container cont1 {
+	
+		leaf leaf11 {
+			type uint8;
+		}
+
+		leaf leaf12 {
+			type uint16;
+		}
+
+		leaf leaf13 {
+			type uint32;
+		}
+
+		leaf leaf14 {
+			type uint64;
+		}
+	}
+
+	container cont2 {
+
+		leaf leaf21 {
+			type uint16 {
+				range "min .. max";
+			}
+		}
+
+		leaf leaf22 {
+			type uint16 {
+				range "min .. 10";
+			}
+		}
+
+		leaf leaf23 {
+			type uint16 {
+				range "2000 .. max";
+			}
+		}
+	
+		leaf leaf24 {
+			type uint16 {
+				range "50 .. 300";
+			}
+		}
+
+		leaf leaf25 {
+			type uint16 {
+				range "50 .. 300 | 400 .. 750";
+			}
+		}
+
+		leaf leaf26 {
+			type uint16 {
+				range "50 .. 123456789012345678901234567890";		// provoke error
+			}
+		}
+	
+	}	
+	
+
+	
+	
+}

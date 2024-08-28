@@ -1,0 +1,299 @@
+module ericsson-data-collector-adp {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-data-collector-adp";
+  prefix dcadp;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-yang-types {
+    prefix typese;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ericsson-ftp-client {
+    prefix ftpclie;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "Module for the DDC (Diagnostic Data Collector) service in the ADP system.
+     The module enables collecting data in the form of Diagnostic
+     Data Bundles (DDBs). DDBs can be collected periodically or on demand.
+     The collected data is stored in a file named
+     diagnosticCollection-PROFILEID-NODEIDENTIFIER-IP-TIMESTAMP.
+     The file is automatically sent to an external SFTP server after the end of data collection.
+
+     Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+  revision 2020-11-25 {
+    description "Added kubernetes-information to data-to-collect";
+    yexte:version "1";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision 2020-09-02 {
+    description "Added fixed-files to data-to-collect ";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision 2020-07-01 {
+    description "Added software-information to data-to-collect ";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision 2020-02-05 {
+    description
+      "First version";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  container diagnostic-data-collection {
+    description
+      "Configuration of the DDC service. Data collection can be done
+       periodically or immediately triggered by an action";
+    action collect-ddb {
+      description
+        "Triggers the immediate collection and export of a DDB.
+         The time period covered by the DDB is delimited by the
+         collection-window leaf and the time when the DDB is created except
+         for the software-information, fixed-files and kubernetes-information.
+         The progress of the action is visible in a progress-report list entry.
+         Only one action can run at a time.";
+      input {
+        leaf profile {
+          type leafref {
+            path "/diagnostic-data-collection/collector-profile/profile-id";
+          }
+          mandatory true;
+          description
+            "A reference to a defined collector profile.";
+        }
+      }
+      output {
+        leaf return-value {
+          type leafref {
+            path "/diagnostic-data-collection/progress-report/action-id";
+          }
+          mandatory true;
+          description
+            "A reference to the progress-report list entry where
+             information about the progress and the result of
+             the operation can be found.";
+        }
+      }
+    }
+    list collector-profile {
+      key "profile-id";
+      description
+        "Properties of a DDB to be collected. The profile can be created
+         by the system or the operator. System created profiles should not
+         be removed.";
+      leaf profile-id {
+        type string {
+          pattern '[a-zA-Z0-9]+';
+        }
+      }
+      leaf name {
+        type string;
+        description
+          "A name for the collector profile.";
+      }
+      leaf profile-type {
+        type enumeration {
+          enum collection-profile {
+            value 0;
+            description
+              "The collection-profile enum is representing
+               the profile that is created for periodic collection.
+               The system may create profiles named xxx-system.
+               System-created profiles should not be removed.";
+          }
+          enum action-profile {
+            value 1;
+            description
+              "The action-profile enum is representing
+               the profile that will be created by the user.";
+          }
+        }
+      }
+      leaf-list data-to-collect {
+        type enumeration {
+          enum logs {
+            value 0;
+          }
+          enum metrics {
+            value 1;
+          }
+          enum files {
+            value 2;
+          }
+          enum software-information {
+            value 3;
+          }
+          enum fixed-files {
+            value 4;
+          }
+          enum kubernetes-information {
+            value 5;
+          }
+          // enum alarms  -- For Future use, the alarms will include Faults
+          // enum traces  -- For Future use
+        }
+        min-elements 1;
+      }
+      leaf-list export-ddb-to {
+        type enumeration {
+          enum sftp {
+            value 0;
+            description
+              "The sftp enum indicates that the DDB is sent
+               to an external SFTP server.";
+          }
+        }
+        must '. != "sftp" or /diagnostic-data-collection/sftp-server' {
+          error-message "The SFTP server must be defined.";
+        }
+      }
+      leaf-list files-to-collect {
+        when '../data-to-collect = "files"';
+        type string;
+        min-elements 1;
+        description
+          "Files to be collected. The list can contain individual
+           files or directories.";
+        reference
+          "DDC User Guide";
+      }
+      leaf-list fixed-files-to-collect {
+        when '../data-to-collect = "fixed-files"';
+        type string;
+        min-elements 1;
+        description
+          "Files to be always collected regardless of the time stamp. The
+           list can contain individual files or directories.";
+        reference
+          "DDC User Guide";
+      }
+      leaf-list log-plane {
+        when '../data-to-collect = "logs"';
+        type string;
+        min-elements 1;
+        description
+          "Log planes from which the log records are collected.";
+        reference
+          "DDC User Guide";
+      }
+      leaf sftp {
+        when '../export-ddb-to = "sftp"';
+        type leafref {
+          path "/diagnostic-data-collection/sftp-server/name";
+        }
+        mandatory true;
+        description
+          "A reference to a defined SFTP server.";
+      }
+      leaf collection-window {
+        type uint32 {
+          range "1..max";
+        }
+        units "minutes";
+        default "15";
+        description
+          "When a DDB is created, it contains data about the previous period
+           of collection-window minutes.
+           If collection-window is greater than collection-interval, some data
+           can be included in multiple DDBs.
+           The system may not support huge collection windows.";
+      }
+    }
+    uses ftpclie:sftp-client-grouping {
+      refine sftp-server {
+        description
+          "There is no need for multiple SFTP servers, as redundancy
+           is handled by multiple endpoints.";
+      max-elements 1 ;
+      }
+    }
+    list progress-report {
+      key "action-id";
+      config false;
+      description
+        "Represents the progress report and final result of the
+         ongoing (asynchronous) collect-ddb action.
+         Only one action can be executed at a time.";
+      uses typese:async-action-progress;
+    }
+    container data-collector {
+      description
+        "Configuration and state data for periodic data-collection.";
+      leaf profile {
+        type leafref {
+          path "/diagnostic-data-collection/collector-profile/profile-id";
+        }
+        description
+          "A reference to a defined collector profile.";
+      }
+      leaf collection-interval {
+        type uint32 {
+          range "1..max";
+        }
+        units "minutes";
+        default "10";
+        description
+          "At the end of each collection interval a DDB is created
+           and exported.";
+      }
+      leaf administrative-state {
+        type typese:basic-adm-state;
+        default "locked";
+        description
+          "The administrative state of the data collection.";
+      }
+      leaf transfer-status {
+        type union {
+          type enumeration {
+            enum ok {
+              value 0;
+              description
+                "The status of the last attempted transfer is 'ok'.";
+            }
+          }
+          type string;
+        }
+        default "ok";
+        config false;
+        description
+          "The status of the lastattempted transfer.
+           Either it is 'ok' or an error string describing
+           the reason of the failure.";
+      }
+      leaf last-successful-transfer {
+        type yang:date-and-time;
+        config false;
+        description
+          "The date and time of the last successful transfer.";
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,101 @@
+module ericsson-telemetry-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-telemetry-dev-router6000";
+
+  prefix "telemetrydev";
+
+  // import some basic types
+  import openconfig-inet-types {
+    prefix oc-inet;
+  }
+  import openconfig-extensions {
+    prefix oc-ext;
+  }
+  import openconfig-telemetry-types {
+    prefix oc-telemetry-types;
+  }
+
+  import openconfig-telemetry {
+    prefix oc-telemetry;
+  }
+  
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-telemetry-dev-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-07-02" {
+    description
+      "initial version 
+	   disable the unsupported leaves on openconfig telemetry";
+    reference
+      "rfc6020";
+	yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /* hide unsupported container and leaves */
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:sensor-groups/oc-telemetry:sensor-group/oc-telemetry:state" {
+    deviate not-supported;
+  }
+
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:sensor-groups/oc-telemetry:sensor-group/oc-telemetry:sensor-paths/oc-telemetry:sensor-path/oc-telemetry:state" {
+    deviate not-supported;
+  }
+
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:sensor-groups/oc-telemetry:sensor-group/oc-telemetry:sensor-paths/oc-telemetry:sensor-path/oc-telemetry:config/oc-telemetry:exclude-filter" {
+    deviate not-supported;
+  }
+
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:state" {
+    deviate not-supported;
+  }
+
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:destinations/oc-telemetry:destination/oc-telemetry:state" {
+    deviate not-supported;
+  }
+
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent/oc-telemetry:subscription/oc-telemetry:state" {
+    deviate not-supported;
+  }
+
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent/oc-telemetry:subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:state" {
+    deviate not-supported;
+  }
+
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent/oc-telemetry:subscription/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:state" {
+    deviate not-supported;
+  }
+
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent/oc-telemetry:subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:config/oc-telemetry:heartbeat-interval" {
+    deviate not-supported;
+  }
+
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent/oc-telemetry:subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:config/oc-telemetry:suppress-redundant" {
+    deviate not-supported;
+  }
+
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:dynamic" {
+    deviate not-supported;
+  }
+  
+  deviation "/oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent/oc-telemetry:subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:config/oc-telemetry:sample-interval" {
+    deviate replace {
+      type uint64 {
+        range "5000..86400000";
+      }
+    }
+  }
+}

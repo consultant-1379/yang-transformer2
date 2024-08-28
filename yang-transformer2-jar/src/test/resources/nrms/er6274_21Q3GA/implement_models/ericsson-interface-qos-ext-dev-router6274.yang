@@ -1,0 +1,430 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-interface-qos-ext-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-qos-ext-dev-router6274";
+
+  prefix "ifqosxvrouter6274";
+
+  import ericsson-interface-qos-ext-router6000 {
+    prefix "ifqosxrouter6000";
+
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-lag-ext-router6000 {
+    prefix "lagxrouter6000";
+  }
+
+  import ericsson-l2vlan-ext-router6000 {
+    prefix "l2vlanxrouter6000";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-qos-ext-dev-router6274
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-05-15" {
+    description
+      "delete 'qos hierarchical priority-group'";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2020-07-07" {
+    description
+      "modify queue rate pir and cir in port and pvc";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-22" {
+    description
+      "deviation for IPOS 18.1.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-07-10" {
+    description
+      "deviation for IPOS 17.2.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /*link-group*/
+
+  /*hide if:interfaces/if:interface/lagxrouter6000:link-group->qos->rate*/
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/ifqosxrouter6000:qos/ifqosxrouter6000:rate" {
+    deviate not-supported;
+  }
+
+  /*hide if:interfaces/if:interface/lagxrouter6000:link-group->qos->policy->protocol-rate-limit*/
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/ifqosxrouter6000:qos/ifqosxrouter6000:policy/ifqosxrouter6000:protocol-rate-limit" {
+    deviate not-supported;
+  }
+
+  /*hide if:interfaces/if:interface/lagxrouter6000:link-group->qos->hierarchical*/
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/ifqosxrouter6000:qos/ifqosxrouter6000:hierarchical" {
+    deviate not-supported;
+  }
+
+  /*pvc-list*/
+  /*hide if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list->flow-apply */
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list/ifqosxrouter6000:flow-apply" {
+    deviate not-supported;
+  }
+
+  /*hide if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list->qos->policy->protocol-rate-limit*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list/ifqosxrouter6000:qos/ifqosxrouter6000:policy/ifqosxrouter6000:protocol-rate-limit" {
+    deviate not-supported;
+  }
+
+  /*pvc*/
+
+  /*hide if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc->flow-apply*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/ifqosxrouter6000:flow-apply" {
+    deviate not-supported;
+  }
+
+  /*hide if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc->qos->policy->protocol-rate-limit*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/ifqosxrouter6000:qos/ifqosxrouter6000:policy/ifqosxrouter6000:protocol-rate-limit" {
+    deviate not-supported;
+  }
+
+  /*L3-interface*/
+  /*hide if:interfaces/if:interface/ifxrouter6000:l3-interface->propagate-qos->to-ip*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface/ifqosxrouter6000:propagate-qos/ifqosxrouter6000:to-ip" {
+    deviate not-supported;
+  }
+
+  /*ethernet*/
+  /*hide if:interfaces/if:interface/ethxrouter6000:ethernet->qos->policy->protocol-rate-limit*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/ifqosxrouter6000:qos/ifqosxrouter6000:policy/ifqosxrouter6000:protocol-rate-limit" {
+    deviate not-supported;
+  }
+
+  /*hide if:interfaces/if:interface/ethxrouter6000:ethernet->qos->hierarchical->multicast*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/ifqosxrouter6000:qos/ifqosxrouter6000:hierarchical/ifqosxrouter6000:multicast" {
+    deviate not-supported;
+  }
+
+  /*hide if:interfaces/if:interface/ethxrouter6000:ethernet->qos->hierarchical->weight*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/ifqosxrouter6000:qos/ifqosxrouter6000:hierarchical/ifqosxrouter6000:weight" {
+    deviate not-supported;
+  }
+
+  /*hide if:interfaces/if:interface/ethxrouter6000:ethernet->qos->profile->resource*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/ifqosxrouter6000:qos/ifqosxrouter6000:profile/ifqosxrouter6000:resource" {
+    deviate not-supported;
+  }
+
+  /*link-group->dot1q pvc*/
+  /*hide if:interfaces/if:interface/lagxrouter6000:link-group/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc:-> qos-> rate*/
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/ifqosxrouter6000:qos/ifqosxrouter6000:rate" {
+    deviate not-supported;
+  }
+
+  /*hide if:interfaces/if:interface/lagxrouter6000:link-group/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc:-> qos-> weight*/
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/ifqosxrouter6000:qos/ifqosxrouter6000:weight" {
+    deviate not-supported;
+  }
+
+  /*hide if:interfaces/if:interface/lagxrouter6000:link-group/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc:->qos->policy->protocol-rate-limit*/
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc/ifqosxrouter6000:qos/ifqosxrouter6000:policy/ifqosxrouter6000:protocol-rate-limit" {
+    deviate not-supported;
+  }
+
+  /*merge from old deviation file*/
+
+  /*ethernet*/
+  /*Spitfire 6274: ethernet->qos->rate->maximum->rate-num: 1000..100000000*/
+  /*from "4..1000000" to "1000..100000000"*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:maximum/ifqosxrouter6000:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "1000..100000000";
+      }
+    }
+  }
+
+  /*dot1q pvc = for non-explicit pvc and qinq, it is general configuration of L2VLAN*/
+  /*Spitfire 6274: dot1q->pvc->qos->rate->pir->rate-num:937..100000000*/
+  /*change range from "325..10000000" to "937..100000000"*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:pir/ifqosxrouter6000:rate-num" {
+      deviate replace {
+      type uint32 {
+        range "937..100000000";
+      }
+    }
+  }
+
+  /*Spitfire R6274: dot1q->pvc->qos->rate->pir->burst->2048..129024*/
+  /*change range from "1000..523264" to "2048..129024"*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:pir/ifqosxrouter6000:burst" {
+      deviate replace {
+        type uint32 {
+          range "2048..129024";
+        }
+      }
+      deviate add {
+        default "16384";
+      }
+  }
+
+  /*Spitfire 6274: dot1q->pvc->qos->rate->cir->rate-num:937..100000000*/
+  /*change range from "325..10000000" to "937..100000000"*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:cir/ifqosxrouter6000:rate-num" {
+      deviate replace {
+      type uint32 {
+        range "937..100000000";
+      }
+    }
+  }
+
+  /*Spitfire 6274: dot1q->pvc->qos->rate->cir->burst->2048..129024*/
+  /*change range from "1000..523264" to "2048..129024"*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:cir/ifqosxrouter6000:burst" {
+      deviate replace {
+        type uint32 {
+          range "2048..129024";
+        }
+      }
+      deviate add {
+        default "16384";
+      }
+  }
+
+  /*Spitfire P1S: dot1q->pvc->qos->weight:1..253*/
+  /*change range from "1..4096" to "1..253"*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:weight" {
+    deviate replace {
+      type uint16 {
+        range "1..253";
+      }
+    }
+  }
+
+  /*dot1q pvc-list = only for explicit qinq*/
+  /*Spitfire 6274: dot1q->pvc-list->qos->rate->pir->rate-num:937..100000000*/
+  /*change range from "325..10000000" to "937..100000000"*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:pir/ifqosxrouter6000:rate-num" {
+      deviate replace {
+      type uint32 {
+        range "937..100000000";
+      }
+    }
+  }
+
+  /*Spitfire 6274: dot1q->pvc-list->qos->rate->pir->burst->2048..129024*/
+  /*change range from "1000..523264" to "2048..129024"*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:pir/ifqosxrouter6000:burst" {
+      deviate replace {
+        type uint32 {
+          range "2048..129024";
+        }
+      }
+      deviate add {
+        default "16384";
+      }
+  }
+
+  /*Spitfire 6274: dot1q->pvc-list->qos->rate->cir->rate-num:937..100000000*/
+  /*change range from "325..10000000" to "937..100000000"*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:cir/ifqosxrouter6000:rate-num" {
+      deviate replace {
+      type uint32 {
+        range "937..100000000";
+      }
+    }
+  }
+
+  /*Spitfire 6274: dot1q->pvc-list->qos->rate->cir->burst->2048..129024*/
+  /*change range from "1000..523264" to "2048..129024"*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:cir/ifqosxrouter6000:burst" {
+      deviate replace {
+        type uint32 {
+          range "2048..129024";
+        }
+      }
+      deviate add {
+        default "16384";
+      }
+  }
+
+  /*Spitfire P1S: dot1q->pvc-list->qos->weight:1..253*/
+  /*change range from "1..256" to "1..253"*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:weight" {
+    deviate replace {
+      type uint16 {
+        range "1..253";
+      }
+    }
+  }
+
+
+
+  /*ethernet dot1q pvc = only for explicit pvc */
+  /*Spitfire 6274: ethernet->dot1q->pvc->qos->rate->pir->rate-num:937..100000000*/
+  /*change range from "325..10000000" to "937..100000000"*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:pir/ifqosxrouter6000:rate-num" {
+      deviate replace {
+      type uint32 {
+        range "937..100000000";
+      }
+    }
+  }
+
+  /*Spitfire 6274: ethernet->dot1q->pvc->qos->rate->pir->burst->2048..129024*/
+  /*change range from "1000..523264" to "2048..129024"*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:pir/ifqosxrouter6000:burst" {
+      deviate replace {
+        type uint32 {
+          range "2048..129024";
+        }
+      }
+      deviate add {
+        default "16384";
+      }
+  }
+
+  /*Spitfire 6274: ethernet->dot1q->pvc->qos->rate->cir->rate-num:937..100000000*/
+  /*change range from "325..10000000" to "937..100000000"*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:cir/ifqosxrouter6000:rate-num" {
+      deviate replace {
+      type uint32 {
+        range "937..100000000";
+      }
+    }
+  }
+
+  /*Spitfire 6274: ethernet->dot1q->pvc->qos->rate->cir->burst->2048..129024*/
+  /*change range from "1000..523264" to "2048..129024"*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:rate/ifqosxrouter6000:cir/ifqosxrouter6000:burst" {
+      deviate replace {
+        type uint32 {
+          range "2048..129024";
+        }
+      }
+      deviate add {
+        default "16384";
+      }
+  }
+
+  /*Spitfire P1S: ethernet->dot1q->pvc->qos->weight:1..253*/
+  /*change range from "1..256" to "1..253"*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:weight" {
+    deviate replace {
+      type uint16 {
+        range "1..253";
+      }
+    }
+  }
+
+  /*link-group-dot1q-pvc only for explicit pvc*/
+  /*link-group->dot1q->pvc->qos->hierarchical->mode->strict*/
+  /*there is not CLI under link-group*/
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:hierarchical-mode-strict" {
+      deviate not-supported;
+  }
+  /*ethernet->dot1q->pvc only for explicit pvc*/
+  /*ethernet->dot1q->pvc->qos->hierarchical->mode->strict*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:hierarchical-mode-strict" {
+      deviate not-supported;
+  }
+
+  /*dot1q->pvc*/
+  /*dot1q->pvc->qos->hierarchical->mode->strict*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:hierarchical-mode-strict" {
+      deviate not-supported;
+  }
+
+  /*dot1q pvc-list*/
+  /*dot1q->pvc-list->qos->hierarchical->mode->strict*/
+  deviation "/if:interfaces/if:interface/l2vlanxrouter6000:dot1q/l2vlanxrouter6000:pvc-list"
+  + "/ifqosxrouter6000:qos/ifqosxrouter6000:hierarchical-mode-strict" {
+      deviate not-supported;
+  }
+
+ /*deviation for IPOS 18.1*/
+ /*link-group*/
+
+  /*hide if:interfaces/if:interface/lagxrouter6000:link-group->qos->port-queue-depth*/
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/ifqosxrouter6000:qos/ifqosxrouter6000:port-queue-depth" {
+    deviate not-supported;
+  }
+
+  /*ethernet*/
+
+  /*hide if:interfaces/if:interface/ethxrouter6000:ethernet->qos->port-queue-depth*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/ifqosxrouter6000:qos/ifqosxrouter6000:port-queue-depth" {
+    deviate not-supported;
+  }
+
+}

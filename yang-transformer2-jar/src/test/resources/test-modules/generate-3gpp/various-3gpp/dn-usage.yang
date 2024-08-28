@@ -1,0 +1,52 @@
+module dn-usage {
+
+	namespace "urn:test:dn-usage";
+	prefix this;
+
+	revision "2023-06-15";
+
+	import _3gpp-common-yang-types {
+		prefix types3gpp;
+	}
+
+	list MocA {
+		key id;
+		leaf id { type string; }
+
+		container attributes {
+
+			leaf leaf01 {
+				type string;
+			}
+
+			leaf leaf02 {
+				type types3gpp:DistinguishedName;
+			}
+
+			leaf leaf03 {
+				type typedef1;
+			}
+
+			uses grouping1;
+		}
+	}
+
+	typedef typedef1 {
+		type types3gpp:DistinguishedName;
+	}
+
+	grouping grouping1 {
+
+		leaf leaf11 {
+			type string;
+		}
+
+		leaf leaf12 {
+			type types3gpp:DistinguishedName;
+		}
+
+		leaf leaf13 {
+			type typedef1;
+		}
+	}
+}

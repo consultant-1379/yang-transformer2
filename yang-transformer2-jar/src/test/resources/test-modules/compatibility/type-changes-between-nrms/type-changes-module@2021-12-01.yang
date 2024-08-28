@@ -1,0 +1,21 @@
+module type-changes-module {
+
+	namespace "urn:test:type-changes-module";
+	prefix this;
+
+	revision "2021-12-01";
+
+	container cont1 {
+
+		leaf leaf11 {
+			type int32;
+		}
+
+		leaf leaf12 {
+			type enumeration {
+				enum RED;
+				enum YELLOW;
+			}
+		}
+	}
+}

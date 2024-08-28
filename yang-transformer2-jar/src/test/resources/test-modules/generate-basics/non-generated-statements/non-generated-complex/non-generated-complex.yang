@@ -1,0 +1,82 @@
+module non-generated-complex {
+
+	namespace "urn:test:non-generated-complex";
+	prefix this;
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision "2022-06-30";
+
+	container cont1 {
+		config true;
+
+		container cont2 {
+			config false;
+
+			container cont3 {
+				presence "";
+			}
+		}
+
+		list list4 {
+			config true;
+			key leaf41;
+
+			leaf leaf41 {
+				type string;
+			}
+		}
+	}
+
+	container cont5 {
+		config false;
+		notife:notifiable-state-data true;
+
+		container cont6 {
+			presence "";
+			notife:notifiable-state-data false;
+		}
+	}
+
+	container cont7 {
+		config false;
+		yexte:static-data true;
+
+		container cont8 {
+			presence "";
+		}
+
+		container cont9 {
+			presence "";
+			yexte:static-data false;
+		}
+	}
+
+	container cont10 {
+		choice choice1 {
+			case case1 {
+				container cont11 {
+					presence "";
+				}
+			}
+			case case2 {
+				container cont12 {
+					presence "";
+				}
+			}
+		}
+
+		action action1 {
+			input {
+				container cont13 {
+					presence "";
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,2824 @@
+module ericsson-ospf-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ospf-router6000";
+
+  prefix "ospfr6k";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-ospf-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-28" {
+    description
+      "JIRA: R6K-2099 Fixing YANG validation errors";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2021-02-25" {
+    description
+      "Crypytograpic support for ospfv2 Route Authentication
+       feature";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2020-06-24" {
+    description
+      "add srgb, sr disatance and prefix-sid and adj-sid and
+       tilfa to support ospf-sr";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-02-07" {
+    description
+      "Updated maximum ECMPs configuration";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "5";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-31" {
+    description
+      "JIRA:IPOS-21366 Added new ospf-interface list under
+       areat,it's key type is leafref and obsolete the original
+       area interface list.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "5";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-02" {
+    description
+      "JIRA:SSR-6748 Added App-ID for LIM Application Id for LIM
+       feature.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2017-12-30" {
+    description
+      "IPOS 7880 Restricting microloop-delay cmd to local
+       context and modifying it`s upper-limit value to 15 seconds
+       ";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2017-12-07" {
+    description
+      "VRE 2366 Adding redistribute seg and service
+       fabric-hello-interval yang commands";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2017-10-30" {
+    description
+      "IPOS 7880 Micro-loop feature configuration.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-10-25" {
+    description
+      "update revision for local-as description.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-03-22" {
+    description
+      "IPOS 7048 [ospfv3] Failed to replace snmp traps.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-03-09" {
+    description
+      "IPOS-7763 retransmit-interval in OSPF model should keep
+       the previous type as uint16";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-09" {
+    description
+      "IPOS-7307 remote-lfa can't be supported on CONFD both CLI
+       and netconf";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-18" {
+    description
+      "HV:HV53277 [Spitfire 17B] Yang Model for IPFRR and remote
+       LFA doesnot support in 17B. Remove if-feature: lfa and
+       srlg";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-12" {
+    description
+      "Enhance when/must constraints";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature cost {
+    description
+      "This feature indicates that the device supports cost in
+       ospf.";
+  }
+
+  feature nonstop-routing {
+    description
+      "This feature indicates that the device supports
+       nonstop-routing in ospf.";
+  }
+
+  feature mpls-tunnel-shortcuts {
+    description
+      "This feature indicates that the device supports
+       mpls-tunnel-shortcuts in ospf.";
+  }
+
+  feature redistribute-application-sgsn-mme {
+    description
+      "This feature indicates that the device supports
+       redistribute-application-sgsn-mme in ospf.";
+  }
+
+  feature redistribute-bgf {
+    description
+      "This feature indicates that the device supports
+       redistribute-bgf in ospf.";
+  }
+
+  feature redistribute-cg-nat {
+    description
+      "This feature indicates that the device supports
+       redistribute-cg-nat in ospf.";
+  }
+
+  feature redistribute-epg {
+    description
+      "This feature indicates that the device supports
+       redistribute-epg in ospf.";
+  }
+
+  feature redistribute-ipsec {
+    description
+      "This feature indicates that the device supports
+       redistribute-ipsec in ospf.";
+  }
+
+  feature redistribute-msp {
+    description
+      "This feature indicates that the device supports
+       redistribute-msp in ospf.";
+  }
+
+  feature redistribute-nat {
+    description
+      "This feature indicates that the device supports
+       redistribute-nat in ospf.";
+  }
+
+  feature redistribute-rip {
+    description
+      "This feature indicates that the device supports
+       redistribute-rip in ospf.";
+  }
+
+  feature redistribute-sasn {
+    description
+      "This feature indicates that the device supports
+       redistribute-sasn in ospf.";
+  }
+
+  feature redistribute-seg {
+    description
+      "This feature indicates that the device supports
+       redistribute-seg in ospf.";
+  }
+
+  feature redistribute-subscriber {
+    description
+      "This feature indicates that the device supports
+       redistribute-subscriber in ospf.";
+  }
+
+  feature redistribute-vrrp {
+    description
+      "This feature indicates that the device supports
+       redistribute-vrrp in ospf.";
+  }
+
+  feature redistribute-wifi-ac {
+    description
+      "This feature indicates that the device supports
+       redistribute-wifi-ac in ospf.";
+  }
+
+  feature redistribute-wmg {
+    description
+      "This feature indicates that the device supports
+       redistribute-wmg in ospf.";
+  }
+
+  feature redistribute-dvsr {
+    description
+      "This feature indicates that the device supports
+       redistribute-dvsr in ospf.";
+  }
+
+  grouping ospf-grp {
+    description
+      "OSPF configuration mode";
+    /*
+    area (ospf-areaip)
+    */
+    list area {
+      key "area";
+      description
+        "Configure OSPF area";
+      leaf area {
+        type inet:ipv4-address;
+        description
+          "Area identifier (IP address)";
+      }
+      uses ospf-area-grp;
+    }
+    /*
+    fast-lsa-origination
+    */
+    leaf fast-lsa-origination {
+      type empty;
+      description
+        "Configure fast-lsa-origination";
+    }
+    /*
+    spf-timers (ospf-spfdelayspec) (ospf-spfholdtime)
+    */
+    container spf-timers {
+      must "./ospf-spfdelayspec and ./ospf-spfholdtime" {
+        error-message "ospf-spfdelayspec and ospf-spfholdtime "
+        + "must be configured";
+        description
+          "Please configure ospf-spfdelayspec and
+           ospf-spfholdtime";
+      }
+      description
+        "Configure shortest-path-first route calculation timers";
+      leaf ospf-spfdelayspec {
+        type uint32 {
+          range "0..4294967295";
+        }
+        default "5";
+        description
+          "SPF delay value (in seconds)";
+      }
+      leaf ospf-spfholdtime {
+        type uint32 {
+          range "0..4294967295";
+        }
+        default "10";
+        description
+          "SPF hold-time value (in seconds)";
+      }
+    }
+    /*
+    fast-convergence [ (ospf-fcmsdelay)] [(ospf-fcextraspfs) ]
+    */
+    container fast-convergence {
+      description
+        "Configure fast convergence scheduling parameters";
+      leaf fast-convergence-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable fast-convergence-enable";
+      }
+      leaf ospf-fcmsdelay {
+        when "../fast-convergence-enable='true'" {
+          description
+            "";
+        }
+        type uint16 {
+          range "0..999";
+        }
+        default "100";
+        description
+          "SPF delay value (in milli-seconds)";
+      }
+      leaf ospf-fcextraspfs {
+        when "../fast-convergence-enable='true'" {
+          description
+            "";
+        }
+        type uint8 {
+          range "0..15";
+        }
+        default "3";
+        description
+          "Number of additional SPFs allowed in hold-time";
+      }
+    }
+    /*
+    distance [ intra-area (intra-spec) ] [ inter-area (inter-
+     spec) ] [ external (ext-spec) ]
+    */
+    container distance {
+      description
+        "Configure OSPF protocol distance";
+      leaf intra-area {
+        type uint8 {
+          range "10..255";
+        }
+        default "110";
+        description
+          "OSPF distance value for OSPF intra-area routes";
+      }
+      leaf inter-area {
+        type uint8 {
+          range "10..255";
+        }
+        default "110";
+        description
+          "OSPF distance value for OSPF inter-area routes";
+      }
+      leaf external {
+        type uint8 {
+          range "10..255";
+        }
+        default "110";
+        description
+          "OSPF distance value for routes external to the OSPF
+           domain";
+      }
+    }
+    /*
+    auto-cost [ reference-bandwidth (bandwidth-spec) ]
+    */
+    container auto-cost {
+      description
+        "Configure bandwidth-based interface cost computation";
+      leaf auto-cost-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable auto-cost-enable";
+      }
+      leaf reference-bandwidth {
+        when "../auto-cost-enable='true'" {
+          description
+            "";
+        }
+        type uint32 {
+          range "1..4294967";
+        }
+        default "100";
+        description
+          "Reference bandwith for interface cost computation";
+      }
+    }
+    /*
+    ldp-igp-synchronization [ timeout (timeout-spec) ]
+    */
+    container ldp-igp-synchronization {
+      presence "";
+      description
+        "Set ldp-igp synchronization";
+      leaf timeout {
+        type uint16 {
+          range "5..65535";
+        }
+        description
+          "LDP OSPF sync expire time";
+      }
+    }
+    /*
+    log-neighbor-up-down
+    */
+    leaf log-neighbor-up-down {
+      type empty;
+      description
+        "Log transitions to/from Full neighbor state";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Shutdown the OSPF instance";
+    }
+    /*
+    router-id (id-spec)
+    */
+    leaf router-id {
+      type inet:ipv4-address;
+      description
+        "Configure OSPF router-id";
+    }
+    /*
+    default-metric (metric-value)
+    */
+    leaf default-metric {
+      type uint32 {
+        range "1..16777215";
+      }
+      description
+        "Configure metric for redistributed routes";
+    }
+    /*
+    maximum { redistribute-quantum (quantum-value) |
+     redistribute (total-value) [ retry-interval (delay-value) ]
+     }
+    */
+    container maximum {
+      description
+        "Configure maximum values";
+      leaf redistribute-quantum {
+        type uint16 {
+          range "1..40000";
+        }
+        default "2000";
+        description
+          "Maximum prefixes to redistribute each interval";
+      }
+      container redistribute {
+        presence "";
+        description
+          "Maximum prefixes to redistribute";
+        leaf total-value {
+          type uint32 {
+            range "1..400000";
+          }
+          mandatory true;
+          description
+            "Number of prefixes";
+        }
+        leaf retry-interval {
+          type uint8 {
+            range "5..120";
+          }
+          default "10";
+          description
+            "Redistriubtion retry interval";
+        }
+      }
+    }
+    /*
+    originate-default { always  [ metric (metric-spec) ] [
+     metric-type (type-spec) ] | route-map (map-spec) [ metric
+     (metric-spec) ] [ metric-type (type-spec) ] }
+    */
+    container originate-default {
+      description
+        "Configure OSPF default origination";
+      choice originate-default {
+        case always {
+          container always {
+            presence "";
+            description
+              "Always originate an OSPF default";
+            leaf metric {
+              type uint32 {
+                range "1..16777215";
+              }
+              default "1";
+              description
+                "Metric for originated OSPF default";
+            }
+            leaf metric-type {
+              type uint8 {
+                range "1..2";
+              }
+              description
+                "OSPF originated default metric type value";
+            }
+          }
+        }
+        case route-map {
+          container route-map {
+            presence "";
+            description
+              "Originate an OSPF default when configured
+               route-map matches";
+            leaf map-spec {
+              type string;
+              mandatory true;
+              description
+                "Route-map identifier";
+            }
+            leaf metric {
+              type uint32 {
+                range "1..16777215";
+              }
+              default "1";
+              description
+                "Metric for originated OSPF default";
+            }
+            leaf metric-type {
+              type uint8 {
+                range "1..2";
+              }
+              description
+                "OSPF originated default metric type value";
+            }
+          }
+        }
+      }
+    }
+    /*
+    redistribute { static [ dvsr ]| subscriber [ address |
+     static ] | bgp (proto-id) | isis (isis-tag) [ level-1 |
+     level-2 ] | rip (rip-instance) | nat | vrrp | ospf (proto-
+     id) [ intra-area ] [ inter-area ] [ external [ type-1 |
+     type-2 ]] [ nssa [ type-1 | type-2 ]] | ipsec | epg | sasn |
+     seg | wmg | lim | msp | bgf | wifi-ac | cg-nat | application
+     sgsn-mme | connected }  [ metric (metric-spec) ] [ metric-
+     type (type-spec)] [ tag (tag-spec)] [ route-map (map-spec) ]
+    */
+    container redistribute {
+      description
+        "Redistribute routes from another protocol into OSPF";
+      container static {
+        presence "";
+        description
+          "Static routes";
+        leaf dvsr {
+          if-feature redistribute-dvsr;
+          type empty;
+          description
+            "DVSR (dynamically verified static routing)";
+        }
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container subscriber {
+        if-feature redistribute-subscriber;
+        presence "";
+        description
+          "Subscriber routes";
+        choice subscriber-opt {
+          case address {
+            leaf address {
+              type empty;
+              description
+                "Subscriber address routes";
+            }
+          }
+          case static {
+            leaf static {
+              type empty;
+              description
+                "Subscriber static routes";
+            }
+          }
+        }
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list bgp {
+        key "bgp";
+        description
+          "Border Gateway Protocol (BGP)";
+        leaf bgp {
+          type uint32 {
+            range "1..4294967295";
+          }
+          description
+            "Autonomous system (AS) number or confederation
+             identifier";
+        }
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list isis {
+        key "isis-tag";
+        description
+          "ISO IS-IS";
+        leaf isis-tag {
+          type string;
+          description
+            "ISIS Tag";
+        }
+        choice isis-opt {
+          case level-1 {
+            leaf level-1 {
+              type empty;
+              description
+                "IS-IS level-1 routes only";
+            }
+          }
+          case level-2 {
+            leaf level-2 {
+              type empty;
+              description
+                "IS-IS level-2 routes";
+            }
+          }
+        }
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list rip {
+        if-feature redistribute-rip;
+        key "rip";
+        description
+          "Routing Information Protocol (RIP)";
+        leaf rip {
+          type string;
+          description
+            "RIP Instance";
+        }
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container nat {
+        if-feature redistribute-nat;
+        presence "";
+        description
+          "Network Address Translation (NAT)";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container vrrp {
+        if-feature redistribute-vrrp;
+        presence "";
+        description
+          "Virtual Router Redundancy Protocol (VRRP) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      list ospf {
+        key "proto-id";
+        description
+          "Open Shortest Path First (OSPF)";
+        leaf proto-id {
+          type uint16 {
+            range "1..65535";
+          }
+          must ".!=../../../ospf" {
+            error-message "Redistribution of routes from this "
+            + "ospf process not allowed";
+            description
+              "Please input a different route of ospf";
+          }
+          description
+            "OSPF instance identifier";
+        }
+        leaf intra-area {
+          type empty;
+          description
+            "OSPF intra-area routes only";
+        }
+        leaf inter-area {
+          type empty;
+          description
+            "OSPF inter-area routes only";
+        }
+        container external {
+          presence "";
+          description
+            "OSPF external routes only";
+          leaf external-opt {
+            type enumeration {
+              enum type-1 {
+                value 0;
+                description
+                  "OSPF external type 1 routes only";
+              }
+              enum type-2 {
+                value 1;
+                description
+                  "OSPF external type 2 routes only";
+              }
+            }
+            description
+              "leaf external-opt.";
+          }
+        }
+        container nssa {
+          presence "";
+          description
+            "OSPF NSSA routes only";
+          leaf nssa-opt {
+            type enumeration {
+              enum type-1 {
+                value 0;
+                description
+                  "OSPF NSSA type 1 routes only";
+              }
+              enum type-2 {
+                value 1;
+                description
+                  "OSPF NSSA type 2 routes only";
+              }
+            }
+            description
+              "leaf nssa-opt.";
+          }
+        }
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container ipsec {
+        if-feature redistribute-ipsec;
+        presence "";
+        description
+          "IPsec routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container epg {
+        if-feature redistribute-epg;
+        presence "";
+        description
+          "Evolved Packet Gateway (EPG) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container sasn {
+        if-feature redistribute-sasn;
+        presence "";
+        description
+          "Service-Aware Support Node (SASN) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container seg {
+        if-feature redistribute-seg;
+        presence "";
+        description
+          "Security Gateway (SEG) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container wmg {
+        if-feature redistribute-wmg;
+        presence "";
+        description
+          "Wi-Fi Mobility Gateway (WMG) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container lim {
+        if-feature redistribute-seg;
+        presence "";
+        description
+          "Lawful Interception Module(LIM) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container msp {
+        if-feature redistribute-msp;
+        presence "";
+        description
+          "Multi-Service Proxy (MSP) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container bgf {
+        if-feature redistribute-bgf;
+        presence "";
+        description
+          "Border Gateway Function (BGF) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container wifi-ac {
+        if-feature redistribute-wifi-ac;
+        presence "";
+        description
+          "WiFi Access Concentrator (WiFiAC) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container cg-nat {
+        if-feature redistribute-cg-nat;
+        presence "";
+        description
+          "Carrier Grade Network Address Translation (CGNAT)
+           routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container application-sgsn-mme {
+        if-feature redistribute-application-sgsn-mme;
+        presence "";
+        description
+          "SGSN and Mobility Management Entity(MME) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+      container connected {
+        presence "";
+        description
+          "Connected (direct) routes";
+        leaf metric {
+          type uint32 {
+            range "1..16777215";
+          }
+          description
+            "Metric for redistributed routes";
+        }
+        leaf metric-type {
+          type uint8 {
+            range "1..2";
+          }
+          description
+            "Metric type for redistributed routes";
+        }
+        leaf tag {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "OSPF external route tag";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map reference";
+        }
+      }
+    }
+    /*
+    summary-address (range-spec) [ not-advertise | tag (tag-
+     spec) ]
+    */
+    list summary-address {
+      key "range-spec";
+      description
+        "Configure range to summarize (aggregate) inter-AS
+         routes";
+      leaf range-spec {
+        type typesrouter6000:ipos-ip-prefix;
+        description
+          "Address followed by mask or prefix length";
+      }
+      choice summary-address-opt {
+        case not-advertise {
+          leaf not-advertise {
+            type empty;
+            description
+              "Do not advertise routes matching specified range";
+          }
+        }
+        case tag {
+          leaf tag {
+            type uint32 {
+              range "0..4294967295";
+            }
+            default "0";
+            description
+              "OSPF external route tag";
+          }
+        }
+      }
+    }
+    /*
+    stub-router [ on-startup [ (timer-value) ] | bgp-converge-
+     delay  [ (timer-value) ] | strict-bgp-tracking ]
+    */
+    container stub-router {
+      presence "";
+      description
+        "Configure Stub router - minimize transit traffic";
+      choice stub-router-opt {
+        case on-startup {
+          container on-startup {
+            presence "";
+            description
+              "Active on startup until timer expires";
+            leaf timer-value {
+              type uint16 {
+                range "10..3600";
+              }
+              default "150";
+              description
+                "Timer value";
+            }
+          }
+        }
+        case bgp-converge-delay {
+          container bgp-converge-delay {
+            presence "";
+            description
+              "Active on startup until timer expires or BGP
+               converges";
+            leaf timer-value {
+              type uint16 {
+                range "10..3600";
+              }
+              default "150";
+              description
+                "Timer value";
+            }
+          }
+        }
+        case strict-bgp-tracking {
+          leaf strict-bgp-tracking {
+            type empty;
+            description
+              "Active whenever BGP has not converged";
+          }
+        }
+      }
+    }
+    /*
+    graceful-restart [ helper [ strict-checking ] | (restart-
+     period) ]
+    */
+    container graceful-restart {
+      presence "";
+      description
+        "Configure graceful restart - attempt to maintain
+         adjacencies";
+      container helper {
+        description
+          "Configure graceful restart helper mode";
+        leaf helper-enable {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable helper-enable";
+        }
+        leaf strict-checking {
+          when "../helper-enable='true'" {
+            description
+              "";
+          }
+          type empty;
+          description
+            "Exit graceful restart helper mode on LSA change";
+        }
+      }
+      leaf restart-period {
+        type uint16 {
+          range "10..900";
+        }
+        default "120";
+        description
+          "Graceful restart period";
+      }
+    }
+    /*
+    vpn { [ domain-id (id-addr) ] [ local-as { (as-num) | (num-
+     nnnn) } ] [ domain-tag (tag-value) ] }
+    */
+    container vpn {
+      when "../../../ctxr6k:vpn-rd" {
+        description
+          "";
+      }
+      description
+        "VPN Provider Edge/Customer Edge (PE/CE) routing";
+      leaf domain-id {
+        type inet:ipv4-address;
+        must "(../local-as) or (../domain-tag)" {
+          error-message "Configuration of domain-tag or local-as "
+          + "required";
+          description
+            "Configuration of domain-tag or local-as required";
+        }
+        description
+          "Configure OSPF VPN Domain ID";
+      }
+      leaf local-as {
+        type union {
+          type uint16 {
+            range "1..65535";
+          }
+          type string {
+            pattern '((((6[0-5][0-5][0-3][0-5]|[1-5][0-9]{4}|[1-'
+            + '9][0-9]{1,3}|0*[1-9])|(0(x|X)0{1,3}[1-9a-'
+            + 'fA-F])|(0(x|X)0{1,2}[1-9a-fA-F][0-9a-'
+            + 'fA-F])|(0(x|X)0[1-9a-fA-F][0-9a-fA-F]{2})|(0(x|X)[1'
+            + '-9a-fA-F][0-9a-fA-F]{0,3})):((6[0-5][0-5][0-3][0-5]|'
+            + '[1-5][0-9]{4}|[1-9][0-9]{1,3}|0*[0-9])|(0(x|X)([0'
+            + '-9a-fA-F]{1,4}))))|((0*|(0(x|X)0{1,})):((6[0-5][0-5]'
+            + '[0-3][0-5]|[1-5][0-9]{4}|[1-9][0-9]{1,3}|0*[1-9])|(0'
+            + '(x|X)0{1,3}[1-9a-fA-F])|(0(x|X)0{1,2}[1-9a-fA-F][0'
+            + '-9a-fA-F])|(0(x|X)0[1-9a-fA-F][0-9a-'
+            + 'fA-F]{2})|(0(x|X)[1-9a-fA-F][0-9a-fA-F]{0,3}))))';
+          }
+        }
+        description
+          "Configure OSPF local AS(1..65535 AS number or nn:nn
+           AS number in nn:nn format)";
+      }
+      leaf domain-tag {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Configure OSPF VPN domain tag";
+      }
+    }
+    /*
+    mpls { traffic-engineering | igp-shortcuts | tunnel-
+     shortcuts }
+    */
+    container mpls {
+      description
+        "Configure Multi-Protocol Label Switching (MPLS)";
+      leaf traffic-engineering {
+        type empty;
+        description
+          "MPLS Traffic Engineering";
+      }
+      leaf igp-shortcuts {
+        when "not(../../ospfr6k:segment-routing)" {
+          description
+            "can't configure igp-shortcuts, when segment-routing
+             enabled";
+        }
+        type empty;
+        description
+          "Use Label Switched Paths (LSPs) as intra-area
+           next-hops";
+      }
+      leaf tunnel-shortcuts {
+        when "not(../../ospfr6k:segment-routing)" {
+          description
+            "can't configure tunnel-shortcuts, when
+             segment-routing enabled";
+        }
+        if-feature mpls-tunnel-shortcuts;
+        type empty;
+        description
+          "Use Label Switched Paths (LSPs) for tunneling";
+      }
+    }
+    /*
+    capabilities { area-scope | as-scope }
+    */
+    leaf capabilities {
+      type enumeration {
+        enum area-scope {
+          value 0;
+          description
+            "Area scoped opaque LSA";
+        }
+        enum as-scope {
+          value 1;
+          description
+            "AS scoped opaque LSA";
+        }
+      }
+      description
+        "Configure capabilities LSA origination";
+    }
+    /*
+    snmp traps { all | { virtifstatechange | nbrstatechange |
+     virtnbrstatechange | ifconfigerror | virtifconfigerror |
+     ifauthfailure | virtifauthfailure | ifrxbadpacket |
+     virtifrxbadpacket | txretransmit | virtiftxretransmit
+     |originatelsa | maxagelsa | ifstatechange  } }
+    */
+    container snmp-traps {
+      description
+        "Configure SNMP traps";
+      choice snmp-traps {
+        case all {
+          leaf all {
+            type empty;
+            description
+              "Enable sending all supported OSPF traps";
+          }
+        }
+        case snmp-traps-choice {
+          leaf snmp-traps-choice {
+            type bits {
+              bit virtifstatechange {
+                position 0;
+                description
+                  "Enable sending ospfIfVirtIfStateChange traps";
+              }
+              bit nbrstatechange {
+                position 1;
+                description
+                  "Enable sending ospfNbrStateChange traps";
+              }
+              bit virtnbrstatechange {
+                position 2;
+                description
+                  "Enable sending ospfVirtNbrStateChange traps";
+              }
+              bit ifconfigerror {
+                position 3;
+                description
+                  "Enable sending ospfIfConfigError traps";
+              }
+              bit virtifconfigerror {
+                position 4;
+                description
+                  "Enable sending ospfVirtIfConfigError traps";
+              }
+              bit ifauthfailure {
+                position 5;
+                description
+                  "Enable sending ospfIfAuthFailure traps";
+              }
+              bit virtifauthfailure {
+                position 6;
+                description
+                  "Enable sending ospfIfAuthFailure traps";
+              }
+              bit ifrxbadpacket {
+                position 7;
+                description
+                  "Enable sending ospfIfRxBadPacket traps";
+              }
+              bit virtifrxbadpacket {
+                position 8;
+                description
+                  "Enable sending ospfVirtIfRxBadPacket traps";
+              }
+              bit txretransmit {
+                position 9;
+                description
+                  "Enable sending ospftxretransmit traps";
+              }
+              bit virtiftxretransmit {
+                position 10;
+                description
+                  "Enable sending ospfVirtIfTxRetransmit traps";
+              }
+              bit originatelsa {
+                position 11;
+                description
+                  "Enable sending ospfOriginateLsa traps";
+              }
+              bit maxagelsa {
+                position 12;
+                description
+                  "Enable sending ospfMaxAgeLsa traps";
+              }
+              bit ifstatechange {
+                position 13;
+                description
+                  "Enable sending ospfIfStateChange traps";
+              }
+            }
+            description
+              "leaf snmp-traps-choice.";
+          }
+        }
+      }
+    }
+    /*
+    priority-prefix (prefix-list)
+    */
+    leaf priority-prefix {
+      type string;
+      description
+        "Configure OSPF prioritization of selected prefixes";
+    }
+    /*
+    nonstop-routing
+    */
+    leaf nonstop-routing {
+      if-feature nonstop-routing;
+      type empty;
+      description
+        "Configure OSPF nonstop routing";
+    }
+    /*
+    prefix-hiding
+    */
+    leaf prefix-hiding {
+      type empty;
+      description
+        "Configure prefix hiding";
+    }
+    /*
+    timers rib-eof-delay (eof-value)
+    */
+    container timers {
+      description
+        "Configure OSPF instance timers";
+      leaf rib-eof-delay {
+        type uint16 {
+          range "0..600";
+        }
+        default "40";
+        description
+          "Configure RIB End-of-File (EOF) Delay";
+      }
+    }
+    /*
+    lfa scheduling (inline-limit) (pass-limit)
+    */
+    container lfa-scheduling {
+      description
+        "Configure LFA scheduling parameters";
+      leaf inline-limit {
+        type uint16 {
+          range "0..1000";
+        }
+        default "10";
+        description
+          "Primary SPF limit for inline LFA computation (in
+           milli-seconds)";
+      }
+      leaf pass-limit {
+        type uint16 {
+          range "20..4000";
+        }
+        default "40";
+        description
+          "Limit on LFA SPF single pass computation (in
+           milli-seconds)";
+      }
+    }
+    /*
+    microloop-delay (delay-val)
+    */
+    leaf microloop-delay {
+      when "../../../ctxr6k:context-name='local'" {
+        description
+          "";
+      }
+      type uint16 {
+        range "10..15000";
+      }
+      description
+        "Configure micro-loop avoidance delay timer in msec";
+    }
+    /*
+    segment-routing
+    */
+    container segment-routing {
+      when "(../../../ctxr6k:context-name='local') and "
+      + "not(../ospfr6k:mpls/ospfr6k:igp-shortcuts) and "
+      + "not(../ospfr6k:mpls/ospfr6k:tunnel-shortcuts)" {
+        description
+          "OSPF Segment routing can be enabled only in local
+           context and when igp/tunnel shortcuts disabled";
+      }
+      description
+        "Configure segment routing";
+      container distance {
+        presence "";
+        description
+          "Configure admin distance for SR LSPs";
+        leaf sr-value {
+          type uint8 {
+            range "1..255";
+          }
+          default "13";
+          description
+            "SR admin distance value";
+        }
+      }
+      list global-block {
+        key "global-min";
+        description
+          "Configure segment routing";
+        leaf global-min {
+          type uint32 {
+           range "16000..147071"; 
+          }
+          description
+            "start of SRGB range \"16000..147071\"";
+        }
+        leaf through {
+          type uint32 {
+            range "16000..147071";
+          }
+          mandatory true;
+          description
+            "keyword";
+        }
+      }
+    }
+  }
+
+  grouping ospf-area-grp {
+    description
+      "OSPF area configuration mode";
+    /*
+    interface { (intf-addr) | (intf-name) }
+    */
+    list interface {
+      key "interface";
+      status obsolete;
+      description
+        "Configure OSPF area interface";
+      leaf interface {
+        type union {
+          type inet:ipv4-address;
+          type string {
+            pattern '.*@.*';
+          }
+        }
+        description
+          "leaf interface.";
+      }
+      uses ospf-if-grp;
+    }
+    /*
+    range (range-spec) [ not-advertise ]
+    */
+    list range {
+      key "range-spec";
+      description
+        "Configure range to summarize (aggregate) intra-area
+         routes";
+      leaf range-spec {
+        type typesrouter6000:ipos-ip-prefix;
+        description
+          "Address followed by mask or prefix length";
+      }
+      leaf not-advertise {
+        type empty;
+        description
+          "Do not advertise routes matching specified range";
+      }
+    }
+    /*
+    passive
+    */
+    leaf passive {
+      type empty;
+      description
+        "Force all area interfaces to passive)";
+    }
+    /*
+    virtual-link (vl-areaip) (ip-addr)
+    */
+    list virtual-link {
+      when "../area = '0' or ../area = '0.0.0.0'" {
+        description
+          "";
+      }
+      key "vl-areaip ip-addr";
+      description
+        "Configure OSPF virtual link";
+      leaf vl-areaip {
+        type inet:ipv4-address;
+        description
+          "Virtual link transit area identifier (IP address)";
+      }
+      leaf ip-addr {
+        type inet:ipv4-address;
+        description
+          "Virtual link end-point router id (IP address)";
+      }
+      uses ospf-virt-link-grp;
+    }
+    /*
+    sham-link (src-ip) (dest-ip)
+    */
+    list sham-link {
+      when "(../area = '0' or ../area = '0.0.0.0') and "
+      + "(../../../../ctxr6k:vpn-rd)" {
+        description
+          "";
+      }
+      key "src-ip dest-ip";
+      description
+        "Configure OSPF VPN sham link";
+      leaf src-ip {
+        type inet:ipv4-address;
+        description
+          "Sham link source IP address";
+      }
+      leaf dest-ip {
+        type inet:ipv4-address;
+        description
+          "Sham link destination IP address";
+      }
+      uses ospf-sham-link-grp;
+    }
+    /*
+    nssa-range (range-spec) [ not-advertise | tag (numeric-spec)
+     ]
+    */
+    list nssa-range {
+      when "not (../area = '0' or ../area = '0.0.0.0')" {
+        description
+          "";
+      }
+      key "range-spec";
+      description
+        "Configure range to summarize (aggregate) NSSA routes";
+      leaf range-spec {
+        type typesrouter6000:ipos-ip-prefix;
+        description
+          "Address followed by mask or prefix length";
+      }
+      choice nssa-range-opt {
+        case not-advertise {
+          leaf not-advertise {
+            type empty;
+            description
+              "Do not advertise routes matching specified range";
+          }
+        }
+        case tag {
+          leaf tag {
+            type uint32 {
+              range "0..4294967295";
+            }
+            description
+              "Configure tag value for NSSA Range";
+          }
+        }
+      }
+    }
+    /*
+    area-type { stub [ no-summary ] | nssa [ no-summary ] [ no-
+     default ] [ no-redistribution ] }
+    */
+    container area-type {
+      when "not (../area = '0' or ../area = '0.0.0.0')" {
+        description
+          "";
+      }
+      description
+        "Configure area type";
+      choice area-type {
+        case stub {
+          container stub {
+            presence "";
+            description
+              "stub area";
+            leaf no-summary {
+              type empty;
+              description
+                "Disable stub area ABR summary advertisement";
+            }
+          }
+        }
+        case nssa {
+          container nssa {
+            presence "";
+            description
+              "Not-So-Stubby-Area";
+            leaf no-summary {
+              type empty;
+              description
+                "Disable NSSA ABR summary advertisement";
+            }
+            leaf no-default {
+              type empty;
+              description
+                "Disable NSSA ABR default origination";
+            }
+            leaf no-redistribution {
+              type empty;
+              description
+                "Disable redistribution into NSSA";
+            }
+          }
+        }
+      }
+    }
+    /*
+    default-route [ metric (metric-spec) ] [ metric-type (type-
+     spec) ]
+    */
+    container default-route {
+      when "not (../area = '0' or ../area = '0.0.0.0')" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Configure OSPF area default route";
+      leaf metric {
+        type uint32 {
+          range "0..16777215";
+        }
+        description
+          "Metric for OSPF Stub of NSSA area";
+      }
+      leaf metric-type {
+        type uint8 {
+          range "1..2";
+        }
+        description
+          "Metric type for OSPF NSSA area";
+      }
+    }
+    /*
+    ospf-interface (intf-name)
+    */
+    list ospf-interface {
+      key "ospf-interface";
+      description
+        "Configure OSPF interface";
+      leaf ospf-interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface name";
+      }
+      uses ospf-if-grp;
+    }
+  }
+
+  grouping ospf-virt-link-grp {
+    description
+      "OSPF virtual link configuration mode";
+    /*
+    retransmit-interval (retrans-spec)
+    */
+    leaf retransmit-interval {
+      type uint16 {
+        range "1..120";
+      }
+      default "5";
+      description
+        "Configure interface retransmit interval";
+    }
+    /*
+    transmit-delay (delay-spec)
+    */
+    leaf transmit-delay {
+      type uint16 {
+        range "1..65535";
+      }
+      default "1";
+      description
+        "Configure interface transmission delay";
+    }
+    /*
+    hello-interval (interval-spec)
+    */
+    leaf hello-interval {
+      type uint16 {
+        range "1..65535";
+      }
+      default "10";
+      description
+        "Configure interface hello interval";
+    }
+    /*
+    router-dead-interval (interval-spec)
+    */
+    leaf router-dead-interval {
+      type uint16 {
+        range "1..65535";
+      }
+      description
+        "Configure interface router dead interval";
+    }
+    /*
+    authentication { none | simple (key-chain) | md5 (key-chain)
+     | cryptographic (key-chain) }
+    */
+    container authentication {
+      description
+        "Configure authentication for interface";
+      choice authentication {
+        case none {
+          leaf none {
+            type empty;
+            description
+              "No authentication";
+          }
+        }
+        case simple {
+          leaf simple {
+            type string;
+            description
+              "Simple authentication";
+          }
+        }
+        case md5 {
+          leaf md5 {
+            type string;
+            description
+              "md5 authentication";
+          }
+        }
+        case cryptographic {
+          leaf cryptographic {
+            type string;
+            description
+              "crypto authentication";
+          }
+        }
+      }
+    }
+  }
+
+  grouping ospf-if-grp {
+    description
+      "OSPF interface configuration mode";
+    /*
+    network-type { broadcast | non-broadcast | point-to-
+     multipoint | point-to-point }
+    */
+    leaf network-type {
+      type enumeration {
+        enum broadcast {
+          value 0;
+          description
+            "Broadcast network";
+        }
+        enum non-broadcast {
+          value 1;
+          description
+            "Non-broadcast network";
+        }
+        enum point-to-multipoint {
+          value 2;
+          description
+            "Point-to-multi-point network";
+        }
+        enum point-to-point {
+          value 3;
+          description
+            "Point-to-point network";
+        }
+      }
+      description
+        "Configure interface network type";
+    }
+    /*
+    retransmit-interval (retrans-spec)
+    */
+    leaf retransmit-interval {
+      type uint16 {
+        range "1..120";
+      }
+      default "5";
+      description
+        "Configure interface retransmit interval";
+    }
+    /*
+    transmit-delay (delay-spec)
+    */
+    leaf transmit-delay {
+      type uint16 {
+        range "1..65535";
+      }
+      default "1";
+      description
+        "Configure interface transmission delay";
+    }
+    /*
+    router-priority (priority-spec)
+    */
+    leaf router-priority {
+      type uint8 {
+        range "0..255";
+      }
+      default "1";
+      description
+        "Configure interface router priority";
+    }
+    /*
+    hello-interval (interval-spec)
+    */
+    leaf hello-interval {
+      type uint16 {
+        range "1..65535";
+      }
+      default "10";
+      description
+        "Configure interface hello interval";
+    }
+    /*
+    router-dead-interval (interval-spec)
+    */
+    leaf router-dead-interval {
+      type uint16 {
+        range "1..65535";
+      }
+      description
+        "Configure interface router dead interval";
+    }
+    /*
+    ignore-mtu
+    */
+    leaf ignore-mtu {
+      type empty;
+      description
+        "Ignore MTU in DD packets";
+    }
+    /*
+    cost (cost-spec)
+    */
+    leaf cost {
+      type uint16 {
+        range "1..65535";
+      }
+      default "1";
+      description
+        "Configure interface cost";
+    }
+    /*
+    passive
+    */
+    leaf passive {
+      type empty;
+      description
+        "Configure interface as passive";
+    }
+    /*
+    ldp-igp-synchronization
+    */
+    leaf ldp-igp-synchronization {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable ldp-igp-synchronization";
+    }
+    /*
+    bfd
+    */
+    leaf bfd {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable bfd";
+    }
+    /*
+    demand-circuit
+    */
+    leaf demand-circuit {
+      type empty;
+      description
+        "Configure demand circuit extensions (RFC 1793)";
+    }
+    /*
+    flood-reduction
+    */
+    leaf flood-reduction {
+      type empty;
+      description
+        "Configure reduced flooding using demand circuit
+         extensions";
+    }
+    /*
+    block-flooding
+    */
+    leaf block-flooding {
+      type empty;
+      description
+        "Block flooding completely";
+    }
+    /*
+    mpls traffic-engineering
+    */
+    leaf mpls-traffic-engineering {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable mpls-traffic-engineering";
+    }
+    /*
+    authentication { none | simple (key-chain) | md5 (key-chain)
+     | cryptographic (key-chain) }
+    */
+    container authentication {
+      description
+        "Configure authentication for interface";
+      choice authentication {
+        case none {
+          leaf none {
+            type empty;
+            description
+              "No authentication";
+          }
+        }
+        case simple {
+          leaf simple {
+            type string;
+            description
+              "Simple authentication";
+          }
+        }
+        case md5 {
+          leaf md5 {
+            type string;
+            description
+              "md5 authentication";
+          }
+        }
+        case cryptographic {
+          leaf cryptographic {
+            type string;
+            description
+              "crypto authentication";
+          }
+        }
+      }
+    }
+    /*
+    neighbor (nbr-addr) [ router-priority (priority-spec) ] [
+     poll-interval (interval-spec) ] [ cost (cost-spec) ]
+    */
+    list neighbor {
+      key "nbr-addr";
+      description
+        "Configure neighbor for interface";
+      leaf nbr-addr {
+        type inet:ipv4-address;
+        description
+          "IP address";
+      }
+      leaf router-priority {
+        type uint8 {
+          range "0..255";
+        }
+        default "1";
+        description
+          "Neighbor router priority";
+      }
+      leaf poll-interval {
+        type uint16 {
+          range "1..65535";
+        }
+        default "120";
+        description
+          "Neighbor poll interval";
+      }
+      leaf cost {
+        if-feature cost;
+        type uint16 {
+          range "1..65535";
+        }
+        default "1";
+        description
+          "P2MP Neighbor cost";
+      }
+    }
+    /*
+    prefix-hiding [ ignore-global ]
+    */
+    container prefix-hiding {
+      description
+        "Configure prefix hiding for interface";
+      leaf prefix-hiding-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable prefix-hiding-enable";
+      }
+      leaf ignore-global {
+        when "../prefix-hiding-enable='true'" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "Prefix hiding is irrespective of instance level
+           setting";
+      }
+    }
+    /*
+    lfa [ backup | [ protect { link-only | node-only } ] [
+     prefer ecmp | exclude ecmp ]  [ remote-lfa [ neighbor-proxy
+     ] ] ]
+    */
+    container lfa {
+      presence "";
+      description
+        "Configure Loop Free Alternative (LFA) computation";
+      leaf backup {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable backup";
+      }
+      container protect {
+        must "/if:interfaces/if:interface[if:name = current"
+        + "()/../../../ospf-interface]/if:type = "
+        + "'ifxrouter6000:p2pOverLan'" {
+          error-message "OSPF performs LFA computatation only "
+          + "for P2P interfaces";
+          description
+            "OSPF performs LFA computatation only for P2P
+             interfaces";
+        }
+        description
+          "container protect.";
+        leaf protect {
+          type enumeration {
+            enum link-only {
+              value 0;
+              description
+                "Only link protecting neighbors will be chosen
+                 as LFAs";
+            }
+            enum node-only {
+              value 1;
+              description
+                "Only node protecting neighbors will be chosen
+                 as LFAs";
+            }
+          }
+          description
+            "Configure LFA protection constraints";
+        }
+        choice protect-opt {
+          case prefer-ecmp {
+            leaf prefer-ecmp {
+              type empty;
+              description
+                "LFA selection prefers equal-cost multipath
+                 nexthops";
+            }
+          }
+          case exclude-ecmp {
+            leaf exclude-ecmp {
+              type empty;
+              description
+                "LFA selection excludes equal-cost multipath
+                 nexthops";
+            }
+          }
+        }
+        container remote-lfa {
+          when "../../../../../../../ctxr6k:context-"
+          + "name='local'" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "Configure Remote LFA computation";
+          leaf neighbor-proxy {
+            when "not(../../ospfr6k:protect)" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Configure remote LFA neighbor proxy computation";
+          }
+        }
+      }
+    }
+    /*
+    srlg (srlg-spec)
+    */
+    leaf-list srlg {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Configure interface Shared Risk Link Group (SRLG)";
+    }
+
+    /*
+    ti-lfa [backup | [protect {link-only | node-only}] [segment-
+     limit (limit-value)]]
+    */
+    container ti-lfa {
+      when "../../../../../ctxr6k:context-name='local'" {
+        description
+          "tilfa is configurable local context only.";
+      }
+      presence "";
+      description
+        "Configure Loop Free Alternate (TILFA) computation";
+      leaf backup {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable backup";
+      }
+      container protect {
+        description
+          "Configure TILFA protection";
+        leaf protect {
+          when "/if:interfaces/if:interface[if:name = current"
+          + "()/../../../../ospf-interface]/if:type = "
+          + "'ifxrouter6000:p2pOverLan'" {
+            description
+              "";
+          }
+          type enumeration {
+            enum link-only {
+              value 0;
+              description
+                "Only link protecting neighbors will be chosen
+                 as TILFAs";
+            }
+            enum node-only {
+              value 1;
+              description
+                "Only node protecting neighbors will be chosen
+                 as TILFAs";
+            }
+          }
+          description
+            "Configure TILFA protection constraints";
+        }
+        leaf segment-limit {
+          type uint8 {
+            range "0..2";
+          }
+          default "2";
+          description
+            "Configure TILFA segment limit";
+        }
+      }
+    }
+    /*
+    prefix-sid index (global-value) [ node ] [ explicit-null |
+     php ]
+    */
+    container prefix-sid-index {
+      when "../../../../../ctxr6k:context-name='local'" {
+        description
+          "prefix-sid option  applicable only for local context";
+      }
+      presence "";
+      description
+        "Index into the SRGB range";
+      leaf global-value {
+        type uint32 {
+          range "0..131071";
+        }
+        mandatory true;
+        description
+          "Segment identifier";
+      }
+      leaf node {
+        type empty;
+        description
+          "Configure as a node-segment identifier";
+      }
+      leaf prefix-sid-index-opt {
+        type enumeration {
+          enum explicit-null {
+            value 0;
+            description
+              "Enable explicit-NULL operation";
+          }
+          enum php {
+            value 1;
+            description
+              "Enable penultimate-hop pop operation";
+          }
+        }
+        description
+          "leaf prefix-sid-index-opt.";
+      }
+    }
+    /*
+    adjacency-sid absolute (local-value)
+    */
+    container adjacency-sid {
+      when "(../../../../../ctxr6k:context-name='local') and "
+      + "(/if:interfaces/if:interface[if:name = current"
+      + "()/../../ospf-interface]/if:type = "
+      + "'ifxrouter6000:p2pOverLan')" {
+        description
+          "adjacency-sid can be configured only on local context
+           and on p2p interfaces";
+      }
+      description
+        "Configure adjacency-segment identifier for the
+         interface";
+      leaf absolute {
+        type uint32 {
+          range "983040..999423";
+        }
+        description
+          "Identifier from local range";
+      }
+    }
+  }
+
+  grouping ospf-sham-link-grp {
+    description
+      "OSPF sham link configuration mode";
+    /*
+    retransmit-interval (retrans-spec)
+    */
+    leaf retransmit-interval {
+      type uint16 {
+        range "1..120";
+      }
+      default "5";
+      description
+        "Configure sham link retransmit interval";
+    }
+    /*
+    transmit-delay (delay-spec)
+    */
+    leaf transmit-delay {
+      type uint16 {
+        range "1..65535";
+      }
+      default "1";
+      description
+        "Configure sham link transmission delay";
+    }
+    /*
+    hello-interval (interval-spec)
+    */
+    leaf hello-interval {
+      type uint16 {
+        range "1..65535";
+      }
+      default "10";
+      description
+        "Configure sham link hello interval";
+    }
+    /*
+    router-dead-interval (interval-spec)
+    */
+    leaf router-dead-interval {
+      type uint16 {
+        range "1..65535";
+      }
+      description
+        "Configure sham link router dead interval";
+    }
+    /*
+    cost (cost-spec)
+    */
+    leaf cost {
+      type uint16 {
+        range "1..65535";
+      }
+      default "1";
+      description
+        "Configure sham link cost";
+    }
+    /*
+    authentication { none | simple (key-chain) | md5 (key-chain)
+     | cryptographic (key-chain) }
+    */
+    container authentication {
+      description
+        "Configure authentication for sham link";
+      choice authentication {
+        case none {
+          leaf none {
+            type empty;
+            description
+              "No authentication";
+          }
+        }
+        case simple {
+          leaf simple {
+            type string;
+            description
+              "Simple authentication";
+          }
+        }
+        case md5 {
+          leaf md5 {
+            type string;
+            description
+              "md5 authentication";
+          }
+        }
+        case cryptographic {
+          leaf cryptographic {
+            type string;
+            description
+              "crypto authentication";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router" {
+    description
+      "ericsson-ospf";
+    /*
+    ospf (instance-id)
+    */
+    list ospf {
+      key "ospf";
+      description
+        "Open Shortest Path First (OSPF)";
+      leaf ospf {
+        type uint16 {
+          range "1..65535";
+        }
+        description
+          "OSPF Instance Identifier";
+      }
+      uses ospf-grp;
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context" {
+    description
+      "ericsson-ospf";
+    /*
+    ospf { high-res-timers | maximum { paths (path-value) |
+     neighbor-exchange (exchange-value) } }
+    */
+    container ospf {
+      when "../ctxr6k:context-name='local'" {
+        description
+          "";
+      }
+      description
+        "Configure OSPF local context parameters";
+      leaf high-res-timers {
+        when "../../ctxr6k:context-name='local'" {
+          description
+            "";
+        }
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable high-res-timers";
+      }
+      container maximum {
+        when "../../ctxr6k:context-name='local'" {
+          description
+            "";
+        }
+        description
+          "Configure OSPF global limits";
+        leaf paths {
+          type uint8 {
+            range "1..64";
+          }
+          description
+            "Configure maximum number equal-cost route paths";
+        }
+        leaf neighbor-exchange {
+          type uint32 {
+            range "2..4294967295";
+          }
+          description
+            "Maximum neighbors exchanging concurrently";
+        }
+      }
+    }
+  }
+
+}

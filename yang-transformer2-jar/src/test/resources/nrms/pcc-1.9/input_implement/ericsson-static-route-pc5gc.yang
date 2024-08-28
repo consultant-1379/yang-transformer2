@@ -1,0 +1,186 @@
+module ericsson-static-route-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-static-route-pc5gc";
+  prefix srtpc5gc;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-routing-pc5gc {
+    prefix rtpc5gc;
+  }
+  import ietf-network-instance {
+    prefix ni;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ericsson-inet-types-pc5gc {
+    prefix inettpc5gc;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model is for STATIC in cloud routing engine.
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-11-25 {
+    description
+      "add validation when static route owner is up.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  revision 2019-06-04 {
+    description
+      "change prefix.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+  revision 2019-04-15 {
+    description
+      "initial revision.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ni:network-instances/ni:network-instance/rtpc5gc:ip" {
+    description
+      "ericsson-static-route";
+    /*
+    static-route (ip-prefix)
+     <next-hop {(next-hop-value-address)}>
+     [distance (distance-value)]
+     [cost (cost-value)]
+     [description (description-str)]
+     */
+    list static-route {
+      key "owner ip-prefix next-hop";
+      description
+        "IP static route configuration command";
+      leaf owner {
+        type identityref {
+          base inettpc5gc:service-owner;
+        }
+        description
+          "The owner of the service.";
+      }
+      leaf ip-prefix {
+        type inet:ipv4-prefix;
+        description
+          "Destination IP prefix";
+      }
+      leaf next-hop {
+        type inet:ipv4-address;
+        description
+          "IPv4 static route next hop value";
+      }
+      leaf bfd-enabled {
+        when "../srtpc5gc:owner != 'inettpc5gc:up'";
+        type boolean;
+        default false;
+        description
+          "Enable/Disable BFD for this IPv4 static route";
+      }
+      leaf distance {
+        when "../srtpc5gc:owner != 'inettpc5gc:up'";
+        type uint8 {
+          range "1..255";
+        }
+        default "1";
+        description
+          "Static route distance";
+      }
+      leaf cost {
+        when "../srtpc5gc:owner != 'inettpc5gc:up'";
+        type uint8 {
+          range "0..15";
+        }
+        default "0";
+        description
+          "Static route cost";
+      }
+      leaf description {
+        type string;
+        description
+          "Add descriptive text for this route";
+      }
+    }
+  }
+
+  augment "/ni:network-instances/ni:network-instance/rtpc5gc:ipv6" {
+    description
+      "ericsson-static-route";
+    /*
+    static-route (ipv6-prefix)
+     <next-hop {(next-hop-value-address)}>
+     [distance (distance-value) ]
+     [cost (cost-value)]
+     [description (description-str)]
+     */
+    list static-route {
+      key "owner ipv6-prefix next-hop";
+      description
+        "IPv6 static route configuration command";
+      leaf owner {
+        type identityref {
+          base inettpc5gc:service-owner;
+        }
+        description
+          "The owner of the service.";
+      }
+      leaf ipv6-prefix {
+        type inet:ipv6-prefix;
+        description
+          "IPv6 prefix";
+      }
+      leaf next-hop {
+        type inet:ipv6-address;
+        description
+          "Ipv6 static route next hop value";
+      }
+      leaf bfd-enabled {
+        when "../srtpc5gc:owner != 'inettpc5gc:up'";
+        type boolean;
+        default false;
+        description
+          "Enable/Disable BFD for this IPv6 static route";
+      }
+      leaf distance {
+        when "../srtpc5gc:owner != 'inettpc5gc:up'";
+        type uint8 {
+          range "1..255";
+        }
+        default "1";
+        description
+          "Static route distance";
+      }
+      leaf cost {
+        when "../srtpc5gc:owner != 'inettpc5gc:up'";
+        type uint8 {
+          range "0..15";
+        }
+        default "0";
+        description
+          "Static route cost";
+      }
+      leaf description {
+        type string;
+        description
+          "Add descriptive text for this route";
+      }
+    }
+  }
+}

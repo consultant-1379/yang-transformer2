@@ -1,0 +1,63 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-interface-arp-ext-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-arp-ext-dev-router6000";
+
+  prefix "ifarpxvrouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-interface-arp-ext-router6000{
+    prefix "ifarpxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-arp-ext-dev-router6000
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-07" {
+    description
+      "deviation for ericsson-interface-arp-ext-ipos.yang.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /*hide context -> interface -> ip arp sync-icr*/
+  deviation "/if:interfaces/if:interface/ifxrouter6000:l3-interface/ifxrouter6000:ip/ifarpxrouter6000:arp/ifarpxrouter6000:sync-icr" {
+    deviate not-supported;
+  }
+}

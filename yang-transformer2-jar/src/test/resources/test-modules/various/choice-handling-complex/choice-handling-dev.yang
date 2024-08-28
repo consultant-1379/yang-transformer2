@@ -1,0 +1,96 @@
+module choice-handling-dev {
+
+    namespace "urn::test::choice-handling-dev";
+    prefix this;
+	
+    revision "2021-11-29";
+    
+    import choice-handling {
+    	prefix ch;
+    }
+
+	// -----------------------------------------------------
+
+	augment "/ch:cont1/choice11" {
+	
+		case case119 {
+			leaf leaf119 { type string; }
+		}	
+	}
+
+	augment "/ch:cont1/choice12" {
+	
+		case case129 {
+			leaf leaf129 { type string; }
+		}	
+	}
+
+	augment "/ch:cont1/ch:choice13/ch:case132" {
+
+		leaf leaf139 { type string; }
+	}
+
+	augment "/ch:cont1" {
+	
+		choice choice19 {
+		
+			case case198 {
+				leaf leaf198 { type string; }
+			}
+			case case199 {
+			}
+		}
+	}
+
+	augment "/ch:cont1/this:choice19/this:case198" {
+
+		leaf leaf199 { type string; }
+	}
+	
+	// -----------------------------------------------------
+	// -----------------------------------------------------
+
+	deviation "/ch:cont2/ch:choice22" {
+		deviate not-supported;
+	}
+
+	deviation "/ch:cont2/ch:choice23/case231" {
+		deviate not-supported;
+	}
+
+	deviation "/ch:cont2/ch:choice24/case241/leaf241" {
+		deviate not-supported;
+	}
+
+	deviation "/ch:cont2/ch:choice25/case251" {
+		deviate not-supported;
+	}
+	augment "/ch:cont2/ch:choice25" {
+		case case252 {
+			leaf leaf252 { type string; }
+		}
+	}
+
+	// -----------------------------------------------------
+	// -----------------------------------------------------
+	
+	deviation "/ch:cont3/ch:choice31/case311" {
+		deviate not-supported;
+	}
+
+	deviation "/ch:cont3/ch:choice32/case321" {
+		deviate not-supported;
+	}
+	deviation "/ch:cont3/ch:choice32/case324" {
+		deviate not-supported;
+	}
+
+	deviation "/ch:cont3/ch:choice33/case331/cont332" {
+		deviate not-supported;
+	}
+	deviation "/ch:cont3/ch:choice33/case334/leaf335" {
+		deviate not-supported;
+	}
+
+			
+}

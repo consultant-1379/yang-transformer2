@@ -1,0 +1,64 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-arp-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-arp-dev-router6000";
+
+  prefix "arpvrouter6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+  
+  import ericsson-arp-router6000{
+    prefix "arprouter6000";
+  }
+  
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+   
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-arp-dev-rotuer6000
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-07" {
+    description
+      "deviation for ericsson-arp-ipos.yang.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  
+  /*hide context -> ip arp maximum*/
+  
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip/arprouter6000:arp/arprouter6000:maximum" {
+    deviate not-supported;
+  }
+}

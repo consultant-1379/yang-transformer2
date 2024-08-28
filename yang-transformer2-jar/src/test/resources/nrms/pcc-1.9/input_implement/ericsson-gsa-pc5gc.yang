@@ -1,0 +1,591 @@
+module ericsson-gsa-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-gsa-pc5gc";
+  prefix gsapc5gc;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-network-instance {
+    prefix ni;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-if-types-pc5gc {
+    prefix pcift;
+  }
+  import ietf-interfaces {
+    prefix if;
+    reference
+      "RFC 8343: A YANG Data Model for Interface Management";
+  }
+  import ericsson-route-policy-pc5gc {
+    prefix rtpolpc5gc;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "ericsson-gsa-pc5gc
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-08-09 {
+    description
+      "Change interface type";
+    reference
+      "EN/LZN 704 0249";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision 2020-02-10 {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  /*
+  gsa
+   */
+
+  container gsa {
+    status current {
+      yexte:preliminary;
+    }
+
+    presence "";
+    description
+      "Configure Geographical State Arbiter";
+    container local {
+      presence "";
+      description
+        "Configure local interface and port";
+      /*
+      interface (name-val)
+       */
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        must "/if:interfaces/if:interface[if:name=current()]/if:type = 'pcift:softwareLoopback'" {
+          error-message
+            "gsa local interface must be a configured softwareLoopback type interface";
+          description
+            "gsa local interface must be a configured softwareLoopback type interface";
+        }
+        mandatory true;
+        description
+          "local interface";
+      }
+      leaf port {
+        type uint16 {
+          range "63500..65535";
+        }
+        mandatory true;
+        description
+          "Configure port number";
+      }
+    }
+    /*
+    peer <ip { (remote-ipv6) | (remote-ipv4) }> <port (port-number)>
+     */
+    list peer {
+      key "ip";
+      max-elements 1;
+      description
+        "Configure peer remote address";
+      leaf ip {
+        type inet:ip-address;
+        description
+          "Specify IPv4(A.B.C.D) or IPv6(X:X:X:X::X) address";
+      }
+      leaf port {
+        type uint16 {
+          range "63500..65535";
+        }
+        mandatory true;
+        description
+          "Configure peer port number";
+      }
+    }
+    container keepalive {
+      presence "";
+      description
+        "Configure keepalive";
+      leaf interval {
+        type uint16 {
+          range "1..21845";
+        }
+        default "1";
+        description
+          "Configure keepalive interval in secs(in seconds)";
+      }
+      leaf holdtime {
+        type uint16 {
+          range "5..65535";
+        }
+        must 'number(.) >= (number(../interval) * 3)' {
+          error-message "Holdtime should be at least 3 times the "
+                      + "interval";
+          description
+            "";
+        }
+        mandatory true;
+        description
+          "Configure keepalive holdtime in secs.";
+      }
+    }
+    /*
+    peer-detection (detection-val)
+     */
+    leaf peer-detection {
+      type uint16 {
+        range "10..300";
+      }
+      default "60";
+      description
+        "Configure peer detection time";
+    }
+    /*
+    prefix modification <network-instance (ni-name)>
+    <route-map (map-name)><low (low-val)> <high (high-val)>
+    <active(active-val)> <standby (standby-val)>
+     */
+    list prefix-modification {
+      key "network-instance";
+      description
+        "Configure prefix modification";
+      leaf network-instance {
+        type leafref {
+          path "/ni:network-instances/ni:network-instance/ni:name";
+        }
+        mandatory true;
+        description
+          "Configure network-instance name";
+      }
+      leaf route-map {
+        type leafref {
+          path "/ni:network-instances/ni:network-instance[ni:name = current()/../network-instance]/rtpolpc5gc:route-map/rtpolpc5gc:name";
+        }
+        mandatory true;
+        description
+          "Configure route map name";
+      }
+      leaf low {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure low tag value";
+      }
+      leaf high {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure high tag value";
+      }
+      leaf active {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure active tag value";
+      }
+      leaf standby {
+        type uint32 {
+          range "0..4294967295";
+        }
+        mandatory true;
+        description
+          "Configure standby tag value";
+      }
+    }
+    /*
+    priority { high | low }
+     */
+    leaf priority {
+      type enumeration {
+        enum high {
+          description
+            "Configure priority high";
+        }
+        enum low {
+          description
+            "Configure priority low";
+        }
+      }
+      description
+        "Configure priority (high or low)";
+    }
+    /*
+    gsa preempt
+     */
+    leaf preempt {
+      type empty;
+      description
+        "Configure preempt switchback to the preferred active node";
+    }
+    /*
+    gsa switchover <force>
+    */
+    action switchover {
+      description
+        "Perform switchover from ACTIVE to STANDBY";
+      tailf:confirm-text "Do you really want to perform gsa switchover?" {
+        tailf:confirm-default "true";
+      }
+      input {
+        leaf force {
+          type empty;
+          description
+            "Perform force switchover from ACTIVE to STANDBY";
+        }
+      }
+      output {
+        list status {
+          config false;
+          key "instance-id";
+          description
+            "The current operational output for each instance";
+          leaf instance-id {
+            type string;
+            description
+              "The specific instance id";
+          }
+          leaf information {
+            type string;
+            description
+              "Show switchover information";
+          }
+        }
+      }
+    }
+
+    /*
+    gsa state
+    */
+    action state {
+      description
+        "Get gsa state information";
+      output {
+        list states {
+          config false;
+          key "instance-id";
+          description
+            "The current operational state of gsa for each instance";
+          leaf instance-id {
+            type string;
+            description
+              "The specific instance id";
+          }
+          leaf local-role {
+            type string;
+            description
+              "Master or Slave";
+          }
+          leaf gsa-state {
+            type string;
+            description
+              "Gsa state (such as active or standby)";
+          }
+          leaf local-ipv4 {
+            type string;
+            description
+              "Gsa local IPv4(A.B.C.D) address";
+          }
+          leaf local-ipv6 {
+            type string;
+            description
+              "Gsa local IPv6(X:X:X:X::X) address";
+          }
+          leaf peer-ip {
+            type string;
+            description
+              "Gsa peer remote IPv4(A.B.C.D) or IPv6(X:X:X:X::X) address";
+          }
+          leaf peer-connected {
+            type string;
+            description
+              "Gsa peer connected or disconnected";
+          }
+          leaf bulk-sync-state {
+            type string;
+            description
+              "The state of bulksync is complete or not";
+          }
+          leaf priority {
+            type string;
+            description
+              "Gsa priority (high or low)";
+          }
+        }
+      }
+    }
+
+    /*
+    gsa prefix [ ipv4 <ipv4-prefix> | ipv6 <ipv6-prefix> ]
+    */
+    action prefix {
+      description
+        "Get gsa prefix information";
+      input {
+        choice afi-choice {
+          description
+            "show gsa prefix information ipv4/ipv6";
+          case ipv4 {
+            leaf ipv4 {
+              type string;
+              description
+                "Prefix-ipv4/prefix-length";
+            }
+          }
+          case ipv6 {
+            leaf ipv6 {
+              type string;
+              description
+                "Prefix-ipv6/prefix-length";
+            }
+          }
+        }
+      }
+      output {
+        list prefixes {
+          config false;
+          key "instance-id";
+          description
+            "The current operational state of gsa prefix for each instance";
+          leaf instance-id {
+            type string;
+            description
+              "The specific instance id";
+          }
+          leaf local-role {
+            type string;
+            description
+              "Master or Slave";
+          }
+          leaf prefix-count {
+            type uint32;
+            description
+              "The current count of gsa prefixes";
+          }
+          list prefix {
+            key "prefix network-instance";
+            leaf prefix {
+              type string;
+              description
+                "Prefix-ip/prefix-length";
+            }
+            leaf network-instance {
+              type string;
+              description
+                "The specific network instance";
+            }
+            leaf bgp-status {
+              type string;
+              description
+                "The type of gsa prefix is 'tracked' or 'advertised'";
+            }
+            leaf num-adv-peer {
+              type uint8;
+              description
+                "Number of the prefix peers/peergroups on local";
+            }
+            leaf local-path-length {
+              type int32;
+              description
+                "Local As path length of the prefix";
+            }
+            leaf num-peer {
+              type uint8;
+              description
+                "Number of the prefix peers/peergroups on remote";
+            }
+            leaf peer-path-length {
+              type uint8;
+              description
+                "Peer As path length of the prefix";
+            }
+            leaf owner {
+              type string;
+              description
+                "The name of gsa client who advertised the prefix";
+            }
+          }
+        }
+      }
+    }
+
+    /*
+    gsa history
+    */
+    action history {
+      description
+        "Get gsa history information";
+      output {
+        list histories {
+          config false;
+          key "instance-id";
+          description
+            "The current operational state of gsa history for each instance";
+          leaf instance-id {
+            type string;
+            description
+              "The specific instance id";
+          }
+          leaf local-role {
+            type string;
+            description
+              "Master or Slave";
+          }
+          list history {
+            key "time";
+            leaf time {
+              type string;
+              description
+                "The timestamp of gsa state change";
+            }
+            leaf transition {
+              type string;
+              description
+                "The transition of gsa fsm";
+            }
+            leaf reason {
+              type string;
+              description
+                "The reason of gsa state change";
+            }
+          }
+        }
+      }
+    }
+
+    container log {
+      /*
+      gsa log set size <value>
+      */
+      action set {
+        description
+          "Set gsa log size";
+        input {
+          leaf size {
+            mandatory true;
+            type uint16 {
+              range "1..5000";
+            }
+            description
+              "Set the size of gsa log array";
+          }
+        }
+        output {
+          list status {
+            config false;
+            key "instance-id";
+            description
+              "The current operational output for each instance";
+            leaf instance-id {
+              type string;
+              description
+                "The specific instance id";
+            }
+            leaf information {
+              type string;
+              description
+                "The information of gsa log setting";
+            }
+          }
+        }
+      }
+
+      /*
+      gsa log clear
+      */
+      action clear {
+        description
+          "Clear gsa log";
+        output {
+          list status {
+            config false;
+            key "instance-id";
+            description
+              "The current operational output for each instance";
+            leaf instance-id {
+              type string;
+              description
+                "The specific instance id";
+            }
+            leaf information {
+              type string;
+              description
+                "The information of gsa log clearing";
+            }
+          }
+        }
+      }
+
+      /*
+      gsa log get
+      */
+      action get {
+        description
+          "Get or set gsa log information";
+        output {
+          list logs {
+            config false;
+            key "instance-id";
+            description
+              "The current operational output for each instance";
+            leaf instance-id {
+              type string;
+              description
+                "The specific instance id";
+            }
+            leaf local-role {
+              type string;
+              description
+                "Master or Slave";
+            }
+            leaf max-size {
+              type uint32;
+              description
+                "The max size of gsa log array";
+            }
+            leaf log-count {
+              type uint32;
+              description
+                "The current count of gsa log array";
+            }
+            list log {
+              key "time";
+              leaf time {
+                type string;
+                description
+                  "The timestamp of a gsa log";
+              }
+              leaf content {
+                type string;
+                description
+                  "The content of a gsa log";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

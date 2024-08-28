@@ -1,0 +1,73 @@
+module ericsson-qosprioritymapping-du-cr {
+    yang-version 1.1;
+    namespace "urn:rdns:com:ericsson:oammodel:ericsson-qosprioritymapping-du-cr";
+    prefix "qosprioritymapping";
+
+    import _3gpp-common-managed-element {
+        prefix me3gpp;
+    }
+    import _3gpp-common-top {
+        prefix top3gpp;
+    }
+    import _3gpp-common-yang-types {
+        prefix types3gpp;
+    }
+    import _3gpp-nr-nrm-gnbdufunction {
+        prefix gnbdu3gpp;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ietf-inet-types {
+        prefix "inet";
+    }
+
+    organization
+      "Ericsson AB";
+    contact
+      "Ericsson first line support via email";
+    description
+      "Defines the YANG mapping of the QosPriorityMapping.
+       
+       Copyright (c) 2021 Ericsson AB. All rights reserved.";
+    revision 2021-06-17 {
+        description
+          "First version.";
+        yexte:version 0;
+        yexte:release 1;
+        yexte:correction 0;
+    }
+    yexte:module-status preliminary;
+
+    grouping QosPriorityMappingGrp {
+        leaf defaultDomain {
+            description
+              "Default Priority Domain.
+               
+               The default Priority Domain is used for all unmapped Priority Levels.";
+            type int32 {
+                range "48";
+            }
+            default 48;
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+    }
+
+    augment "/me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction" {
+        description
+          "Adds Ericsson IOC QoSPriorityMapping to 3gpp DU function.";
+        list QosPriorityMapping {
+            description
+              "Mapping from 5G QoS priorities to parameters that have impact on QoS.";
+            key id;
+            uses top3gpp:Top_Grp;
+            max-elements 1;
+            container attributes {
+                uses QosPriorityMappingGrp;
+            }
+        }
+    }
+}

@@ -1,0 +1,65 @@
+module persistence-simple-static-data {
+
+    namespace "urn:test:persistence-simple-static-data";
+    prefix this;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	
+    revision "2021-07-20";
+
+	container cont1 {			// regular NP container, should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+	
+		leaf leaf11 {			// regular leaf, should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+			type string;
+		}
+
+		leaf leaf12 {			// 'sd true', should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+			yexte:static-data true;
+			type string;
+		}
+
+		container cont2 {		// 'config false' but 'sd true', MOC should be generated as FROM_PERSISTENCE / NOT_ALLOWED.
+			config false;
+			yexte:static-data true;
+
+			leaf leaf21 {		// 'config false' and 'sd false', should be generated as FROM_DELEGATE / NOT_ALLOWED.
+				type string;
+				yexte:static-data false;
+			}
+		}
+	}
+
+	container cont3 {			// 'config false' and 'sd false', MOC should not be generated.
+		config false;
+
+		leaf leaf31 {			// The 'sd true' makes no difference, MOC will not be generated and neither the leaf
+			yexte:static-data true;
+			type string;
+		}
+	}
+
+	container cont4 {			// 'config false' and 'sd true', MOC should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+		config false;
+		yexte:static-data true;
+
+		leaf leaf41 {			// 'config false' and 'sd true', should be generated as FROM_PERSISTENCE / NOT_ALLOWED.
+			type string;
+		}
+
+		leaf leaf42 {			// 'config false' and 'sd false', should be generated as FROM_DELEGATE / NOT_ALLOWED.
+			type string;
+			yexte:static-data false;
+		}
+	}
+
+	list list5 {				// regular NP container, should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+		key leaf51;
+		
+		leaf leaf51 {			// Strange scenraio but possible, should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+			type string;
+			yexte:static-data true;
+		}
+	}
+}

@@ -1,0 +1,805 @@
+module ericsson-system-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-system-router6000";
+
+  prefix "systemrouter6000";
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-system-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-04-23" {
+    description
+      "fix ENM unsupport commands for system model";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2019-04-19" {
+    description
+      "fix some errors found in validation";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2019-01-29" {
+    description
+      "add console baudrate and remove root-user";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-10-23" {
+    description
+      "Fix TR HX24137";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-07-31" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+
+    typedef number64 {
+       type uint64;
+       description
+       "unsigned 64 bit number" ;
+       }
+
+    typedef str_filename {
+       type string;
+       description
+       "File name" ;
+       }
+
+
+
+    typedef ssh_logl_crypto {
+        type enumeration {
+            enum DEBUG {
+                value 1;
+                description "DEBUG level.";
+            }
+            enum DEBUG1 {
+                value 2;
+                description "DEBUG1 level.";
+            }
+            enum DEBUG2 {
+                value 3;
+                description "DEBUG2 level.";
+            }
+            enum DEBUG3 {
+                value 4;
+                description "DEBUG3 level.";
+            }
+            enum ERROR {
+                value 5;
+                description "ERROR level.";
+            }
+            enum FATAL {
+                value 6;
+                description "FATAL level.";
+            }
+            enum INFO {
+                value 7;
+                description "INFO level.";
+            }
+            enum QUIET {
+                value 8;
+                description "QUIET level.";
+            }
+            enum VERBOSE {
+                value 9;
+                description "VERBOSE level.";
+            }
+        }
+        description "loglevel algorithms support";
+    }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-system";
+    /*
+    ssh server
+    */
+    container ssh-server {
+      description
+        "Set server attributes";
+      leaf start-drop {
+        type uint8 {
+          range "1..36";
+        }
+        default "16";
+        description
+          "Max. number of concurrent unauthenticated connections
+           (default 16)";
+      }
+      leaf rate-drop {
+        type uint8 {
+          range "1..100";
+        }
+        default "100";
+        description
+          "Probability of dropping unauthenticated connections
+           (default 100%)";
+      }
+      leaf full-drop {
+        type uint8 {
+          range "1..36";
+        }
+        default "16";
+        description
+          "Full drop of concurrent unauthenticated connections
+           (default 16)";
+      }
+      leaf max-retries {
+        type uint8 {
+          range "1..100";
+        }
+        description
+          "Set Maximum retry limit for paswords";
+      }
+      leaf max-connections {
+        type uint8 {
+          range "1..100";
+        }
+        description
+          "Set Maximum client connections possible in one
+           second";
+      }
+      leaf probe-interval {
+        type uint16 {
+          range "1..600";
+        }
+        description
+          "Set probe interval for client liveliness in seconds";
+      }
+      container macs {
+        presence "";
+        description
+          "Configure the list of MACs the ssh server will
+           support";
+        leaf hmac-md5 {
+          type empty;
+          description
+            "leaf hmac-md5.";
+        }
+        leaf hmac-md5-96 {
+          type empty;
+          description
+            "leaf hmac-md5-96.";
+        }
+        leaf hmac-md5-96-etm-openssh-com {
+          type empty;
+          description
+            "leaf hmac-md5-96-etm-openssh-com.";
+        }
+        leaf hmac-md5-etm-openssh-com {
+          type empty;
+          description
+            "leaf hmac-md5-etm-openssh-com.";
+        }
+        leaf hmac-ripemd160 {
+          type empty;
+          description
+            "leaf hmac-ripemd160.";
+        }
+        leaf hmac-ripemd160-etm-openssh-com {
+          type empty;
+          description
+            "leaf hmac-ripemd160-etm-openssh-com.";
+        }
+        leaf hmac-ripemd160-openssh-com {
+          type empty;
+          description
+            "leaf hmac-ripemd160-openssh-com.";
+        }
+        leaf hmac-sha1 {
+          type empty;
+          description
+            "leaf hmac-sha1.";
+        }
+        leaf hmac-sha1-96 {
+          type empty;
+          description
+            "leaf hmac-sha1-96.";
+        }
+        leaf hmac-sha1-96-etm-openssh-com {
+          type empty;
+          description
+            "leaf hmac-sha1-96-etm-openssh-com.";
+        }
+        leaf hmac-sha1-etm-openssh-com {
+          type empty;
+          description
+            "leaf hmac-sha1-etm-openssh-com.";
+        }
+        leaf hmac-sha2-256 {
+          type empty;
+          description
+            "leaf hmac-sha2-256.";
+        }
+        leaf hmac-sha2-256-etm-openssh-com {
+          type empty;
+          description
+            "leaf hmac-sha2-256-etm-openssh-com.";
+        }
+        leaf hmac-sha2-512 {
+          type empty;
+          description
+            "leaf hmac-sha2-512.";
+        }
+        leaf hmac-sha2-512-etm-openssh-com {
+          type empty;
+          description
+            "leaf hmac-sha2-512-etm-openssh-com.";
+        }
+        leaf umac-128-etm-openssh-com {
+          type empty;
+          description
+            "leaf umac-128-etm-openssh-com.";
+        }
+        leaf umac-128-openssh-com {
+          type empty;
+          description
+            "leaf umac-128-openssh-com.";
+        }
+        leaf umac-64-etm-openssh-com {
+          type empty;
+          description
+            "leaf umac-64-etm-openssh-com.";
+        }
+        leaf umac-64-openssh-com {
+          type empty;
+          description
+            "leaf umac-64-openssh-com.";
+        }
+      }
+      container key-exchange {
+        presence "";
+        description
+          "Configure the list of Key-exchange the ssh server
+           will support";
+        leaf curve25519-sha256 {
+          type empty;
+          description
+            "leaf curve25519-sha256.";
+        }
+        leaf curve25519-sha256-libssh-org {
+          type empty;
+          description
+            "leaf curve25519-sha256-libssh-org.";
+        }
+        leaf diffie-hellman-group-exchange-sha1 {
+          type empty;
+          description
+            "leaf diffie-hellman-group-exchange-sha1.";
+        }
+        leaf diffie-hellman-group-exchange-sha256 {
+          type empty;
+          description
+            "leaf diffie-hellman-group-exchange-sha256.";
+        }
+        leaf diffie-hellman-group1-sha1 {
+          type empty;
+          description
+            "leaf diffie-hellman-group1-sha1.";
+        }
+        leaf diffie-hellman-group14-sha1 {
+          type empty;
+          description
+            "leaf diffie-hellman-group14-sha1.";
+        }
+        leaf diffie-hellman-group14-sha256 {
+          type empty;
+          description
+            "leaf diffie-hellman-group14-sha256.";
+        }
+        leaf diffie-hellman-group16-sha512 {
+          type empty;
+          description
+            "leaf diffie-hellman-group16-sha512.";
+        }
+        leaf diffie-hellman-group18-sha512 {
+          type empty;
+          description
+            "leaf diffie-hellman-group18-sha512.";
+        }
+        leaf ecdh-sha2-nistp256 {
+          type empty;
+          description
+            "leaf ecdh-sha2-nistp256.";
+        }
+        leaf ecdh-sha2-nistp384 {
+          type empty;
+          description
+            "leaf ecdh-sha2-nistp384.";
+        }
+        leaf ecdh-sha2-nistp521 {
+          type empty;
+          description
+            "leaf ecdh-sha2-nistp521.";
+        }
+      }
+      leaf-list loglevel {
+        type ssh_logl_crypto;
+        description
+          "Configure the list of Loglevel the ssh server will
+           support";
+      }
+    }
+    /*
+    timeout { session idle (idle-num) | login response
+     (response-num) }
+    */
+    container timeout {
+      description
+        "Set timeouts";
+      container session {
+        description
+          "Set the CLI session timeout";
+        leaf idle {
+          type uint32 {
+            range "0..99999";
+          }
+          description
+            "Set the CLI session inactivity timeout";
+        }
+      }
+      container login {
+        description
+          "Set the CLI login timeout";
+        leaf response {
+          type uint32 {
+            range "0..99999";
+          }
+          description
+            "Set the CLI login timeout response time";
+        }
+      }
+    }
+    /*
+    banner { exec text (exec-str) | login text (login-str) |
+     motd text (motd-str) }
+    */
+    container banner {
+      description
+        "banner configuration command";
+      container exec {
+        description
+          "Configure message displayed before entering exec
+           mode";
+        leaf text {
+          type string;
+          description
+            "c banner-text c, where 'c' is a delimiting
+             character (/ is default)";
+        }
+      }
+      container login {
+        description
+          "Configure message displayed before login prompt";
+        leaf text {
+          type string;
+          description
+            "c banner-text c, where 'c' is a delimiting
+             character (/ is default)";
+        }
+      }
+      container motd {
+        description
+          "Configure message of the day";
+        leaf text {
+          type string;
+          description
+            "c banner-text c, where 'c' is a delimiting
+             character (/ is default)";
+        }
+      }
+    }
+    /*
+    monitor < duration (duration-value) >
+    */
+    container monitor {
+      presence "";
+      description
+        "Monitoring option";
+      leaf duration {
+        type uint16 {
+          range "1..65535";
+        }
+        mandatory true;
+        description
+          "Configure duration of monitoring";
+      }
+    }
+    /*
+    boot < configuration (cfg-file) >
+    */
+    container boot {
+      presence "";
+      description
+        "Set boot parameters";
+      leaf configuration {
+        type str_filename;
+        mandatory true;
+        description
+          "configuration file";
+      }
+    }
+    /*
+    system
+    */
+    container system {
+      description
+        "Set system parameters";
+      container alarm {
+        description
+          "Sets system level alarm options";
+        container soft-limit {
+          description
+            "Set soft limit for alarms";
+          leaf arp {
+            type uint8 {
+              range "1..99";
+            }
+            description
+              "Soft limit arp table alarms";
+          }
+          leaf fib {
+            type uint8 {
+              range "1..99";
+            }
+            description
+              "Soft limit fib table alarms";
+          }
+          leaf lfib {
+            type uint8 {
+              range "1..99";
+            }
+            description
+              "Soft limit lfib table alarms";
+          }
+          leaf xc {
+            type uint8 {
+              range "1..99";
+            }
+            description
+              "Soft limit xc table alarms";
+          }
+        }
+        leaf transceiver-suppress {
+          type empty;
+          description
+            "Suppress all transceiver releated alarms";
+        }
+      }
+      container clock {
+        description
+          "Set time of day clock";
+        list timezone {
+          key "timezone-str";
+          description
+            "Configure time zone";
+          leaf timezone-str {
+            type string;
+            description
+              "time zone name";
+          }
+          leaf timezone-hr {
+            type uint32;
+            mandatory true;
+            description
+              "Hours offset from UTC";
+          }
+          leaf timezone-min {
+            type uint8 {
+              range "0..59";
+            }
+            description
+              "Minutes offset from UTC";
+          }
+          leaf local {
+            type empty;
+            description
+              "Select as local timezone";
+          }
+        }
+        list summer-time {
+          key "summer-str";
+          description
+            "Configure summer (daylight savings) time";
+          leaf summer-str {
+            type string;
+            description
+              "time zone name";
+          }
+          leaf summer-str2 {
+            type string;
+            mandatory true;
+            description
+              "time zone name in summer";
+          }
+          choice summer-time-choice {
+            case date {
+              container date {
+                description
+                  "Configure absolute summer time";
+                leaf summer-date1 {
+                  type typesrouter6000:system-date;
+                  mandatory true;
+                  description
+                    "Date when summer-time  savings begins";
+                }
+                leaf summer-date2 {
+                  type typesrouter6000:system-date;
+                  mandatory true;
+                  description
+                    "Date when summer-time savings ends";
+                }
+              }
+            }
+            case recurring {
+              container recurring {
+                presence "";
+                description
+                  "Configure recurring summer time";
+                container recurring-opt {
+                  presence "";
+                  description
+                    "Configure recurring summer time option";
+                  choice recurring-opt-choice {
+                    case summer-week {
+                      leaf summer-week {
+                        type uint8 {
+                          range "1..4";
+                        }
+                        description
+                          "Week number to start";
+                      }
+                    }
+                    case first-start {
+                      leaf first-start {
+                        type empty;
+                        description
+                          "First week of the month";
+                      }
+                    }
+                    case last-start {
+                      leaf last-start {
+                        type empty;
+                        description
+                          "Last week of the month";
+                      }
+                    }
+                  }
+                  leaf summer-day {
+                    type string;
+                    mandatory true;
+                    description
+                      "Weekday to start";
+                  }
+                  leaf summer-month {
+                    type string;
+                    mandatory true;
+                    description
+                      "Month to start";
+                  }
+                  leaf summer-time {
+                    type uint8 {
+                      range "0..23";
+                    }
+                    mandatory true;
+                    description
+                      "Time to start";
+                  }
+                  choice recurring-opt-choice1 {
+                    case summer-week2 {
+                      leaf summer-week2 {
+                        type uint8 {
+                          range "1..4";
+                        }
+                        description
+                          "Week number to end";
+                      }
+                    }
+                    case first-end {
+                      leaf first-end {
+                        type empty;
+                        description
+                          "First week of the month";
+                      }
+                    }
+                    case last-end {
+                      leaf last-end {
+                        type empty;
+                        description
+                          "Last week of the month";
+                      }
+                    }
+                  }
+                  leaf summer-day2 {
+                    type string;
+                    mandatory true;
+                    description
+                      "Weekday to end";
+                  }
+                  leaf summer-month2 {
+                    type string;
+                    mandatory true;
+                    description
+                      "Month to end";
+                  }
+                  leaf summer-time2 {
+                    type uint8 {
+                      range "0..23";
+                    }
+                    mandatory true;
+                    description
+                      "Time to end";
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      container confirmations {
+        description
+          "Set system confirmations";
+        leaf context {
+          type empty;
+          description
+            "Ask for confirmation on context creation";
+        }
+        leaf port-encapsulation {
+          type empty;
+          description
+            "Ask for confirmation on port encapsulation changes";
+        }
+        leaf removal-warn {
+          type string;
+          description
+            "Set warning message for feature removal";
+        }
+      }
+      container console {
+        description
+          "Set system level console options";
+        leaf baudrate {
+          type enumeration {
+            enum 9600 {
+              value 0;
+              description
+                "set console baudrate 9600bps";
+            }
+            enum 115200 {
+              value 1;
+              description
+                "set console baudrate 115200bps";
+            }
+          }
+          description
+            "set console baudrate";
+        }
+        leaf port {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable port";
+        }
+        leaf root-user {
+          type boolean;
+          default "true";
+          status obsolete;
+          description
+            "Enable/Disable root-user";
+        }
+      }
+      leaf contact {
+        type string;
+        description
+          "Set the system contact";
+      }
+      leaf description {
+        type string;
+        description
+          "Add descriptive text for the system";
+      }
+      leaf dnprefix {
+        type string;
+        description
+          "It provides naming context allowing the managed
+           objects to be partitioned into logical domains";
+      }
+      leaf hostname {
+        type string;
+        description
+          "Set the system name";
+      }
+      container lacp {
+        description
+          "Set system LACP parameters";
+        leaf priority {
+          type uint16 {
+            range "0..65535";
+          }
+          description
+            "Configure LACP system priority";
+        }
+        leaf mac-addr {
+          type yang:mac-address;
+          description
+            "Configure LACP system mac-addr";
+        }
+      }
+      leaf location {
+        type string;
+        description
+          "Set the system location";
+      }
+      leaf delay {
+        type number64 {
+          range "1..1000";
+        }
+        description
+          "Set system delay time";
+      }
+    }
+  }
+
+}

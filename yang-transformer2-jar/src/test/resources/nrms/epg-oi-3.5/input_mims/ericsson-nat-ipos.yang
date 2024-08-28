@@ -1,0 +1,1190 @@
+module ericsson-nat-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-nat-ipos";
+
+  prefix "natipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-nat-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-03-13" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping nat-pool-record-grp {
+    description
+      "NAT pool record configuration mode";
+    /*
+    exclude { well-known | (port-start) [ to (port-end) ] }
+    */
+    container exclude {
+      description
+        "Exclude a port range from the pool";
+      choice exclude {
+        description
+          "";
+        case well-known {
+          leaf well-known {
+            type empty;
+            description
+              "Exclude port range from 0 to 1023";
+          }
+        }
+        case port-start {
+          container port-start {
+            description
+              "container port-start.";
+            leaf port-start {
+              type uint16 {
+                range "0..65535";
+              }
+              mandatory true;
+              description
+                "Define port range start";
+            }
+            leaf to {
+              type uint16 {
+                range "0..65535";
+              }
+              description
+                "Define port range end";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping nat-pool-grp {
+    description
+      "NAT pool configuration mode";
+    /*
+    address-prefix (address-pref)
+    */
+    list address-prefix {
+      key "address-prefix";
+      description
+        "Define NAT pool of ip addresses";
+      leaf address-prefix {
+        type typesipos:ipos-ip-prefix;
+        description
+          "Address followed by mask or prefix length";
+      }
+    }
+    /*
+    logging-profile (profile-name) [ context (ctx-name) ]
+    */
+    list logging-profile {
+      key "profile-name context";
+      description
+        "Define logging-profile parameters";
+      leaf profile-name {
+        type string {
+          length "0..39";
+        }
+        description
+          "logging-profile name";
+      }
+      leaf context {
+        type string {
+          length "0..39";
+        }
+        description
+          "Define context of logging-profile";
+      }
+    }
+    /*
+    paired-mode subscriber [ over-subscription (oversub-ratio) [
+     port-limit (limit-num) ] ]
+    */
+    container paired-mode-subscriber {
+      presence "";
+      description
+        "Define paired-mode parameters for subscribers";
+      container over-subscription {
+        presence "";
+        description
+          "Define oversubscription ratio";
+        leaf oversub-ratio {
+          type uint16 {
+            range "1..2048";
+          }
+          mandatory true;
+          description
+            "Define oversubscription ratio";
+        }
+        leaf port-limit {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Define port limit";
+        }
+      }
+    }
+    /*
+    address-range (start-addr) < to (stop-addr) >
+    */
+    list address-range {
+      key "start-addr";
+      description
+        "Define NAT pool of ip addresses";
+      leaf start-addr {
+        type inet:ipv4-address;
+        description
+          "start IP address";
+      }
+      leaf to {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "Define range of ip addresses";
+      }
+    }
+  }
+
+  grouping nat-policy-acl-grp {
+    description
+      "NAT access list configuration mode";
+    /*
+    class (acl-name)
+    */
+    list class {
+      key "class";
+      description
+        "Define ACL class (drop is default mode)";
+      leaf class {
+        type string {
+          length "0..39";
+        }
+        description
+          "Class name";
+      }
+      uses nat-policy-acl-class-grp;
+    }
+  }
+
+  grouping policy-nat-grp {
+    description
+      "NAT policy configuration mode";
+    /*
+    ip
+    */
+    container ip {
+      description
+        "Define static ip address translation";
+      list dmz-source {
+        key "source-addr";
+        description
+          "Define source IP address to be translated";
+        leaf source-addr {
+          type inet:ipv4-address;
+          description
+            "Source IP address";
+        }
+        leaf nat-addr {
+          type inet:ipv4-address;
+          mandatory true;
+          description
+            "NAT IP address";
+        }
+        leaf context {
+          type string {
+            length "0..39";
+          }
+          description
+            "Define NAT IP address context";
+        }
+      }
+      container static-in {
+        description
+          "Translate incoming traffic";
+        list source {
+          key "source-addr";
+          description
+            "Define source IP address to be translated";
+          leaf source-addr {
+            type inet:ipv4-address;
+            description
+              "Source IP address";
+          }
+          leaf nat-addr {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "NAT IP address";
+          }
+          leaf context {
+            type string {
+              length "0..39";
+            }
+            description
+              "Define NAT IP address context";
+          }
+        }
+        list tcp {
+          key "source port";
+          description
+            "Define source IP address and TCP port to be
+             translated";
+          leaf source {
+            type inet:ipv4-address;
+            description
+              "Define source IP address to be translated";
+          }
+          leaf port {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "Define source port";
+          }
+          leaf nat-addr {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "NAT IP address";
+          }
+          leaf nat-port {
+            type uint16 {
+              range "1..65535";
+            }
+            mandatory true;
+            description
+              "Define NAT port";
+          }
+          leaf context {
+            type string {
+              length "0..39";
+            }
+            description
+              "Define NAT IP address context";
+          }
+        }
+        list udp {
+          key "source port";
+          description
+            "Define source IP address and UDP port to be
+             translated";
+          leaf source {
+            type inet:ipv4-address;
+            description
+              "Define source IP address to be translated";
+          }
+          leaf port {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "Define source port";
+          }
+          leaf nat-addr {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "NAT IP address";
+          }
+          leaf nat-port {
+            type uint16 {
+              range "1..65535";
+            }
+            mandatory true;
+            description
+              "Define NAT port";
+          }
+          leaf context {
+            type string {
+              length "0..39";
+            }
+            description
+              "Define NAT IP address context";
+          }
+        }
+      }
+      list static-out {
+        key "source";
+        description
+          "Translate outgoing traffic";
+        leaf source {
+          type inet:ipv4-address;
+          description
+            "Define source IP address to be translated";
+        }
+        leaf nat-addr {
+          type inet:ipv4-address;
+          mandatory true;
+          description
+            "NAT IP address";
+        }
+      }
+    }
+    /*
+    connections { tcp | udp | icmp } < maximum (conns-num) >
+    */
+    container connections {
+      description
+        "Define connection admission control parameters";
+      container tcp {
+        presence "";
+        description
+          "Define TCP connection admission control parameters";
+        leaf maximum {
+          type uint16 {
+            range "1..65535";
+          }
+          mandatory true;
+          description
+            "Define maximum number of connections";
+        }
+      }
+      container udp {
+        presence "";
+        description
+          "Define UDP connection admission control parameters";
+        leaf maximum {
+          type uint16 {
+            range "1..65535";
+          }
+          mandatory true;
+          description
+            "Define maximum number of connections";
+        }
+      }
+      container icmp {
+        presence "";
+        description
+          "Define ICMP connection admission control parameters";
+        leaf maximum {
+          type uint16 {
+            range "1..65535";
+          }
+          mandatory true;
+          description
+            "Define maximum number of connections";
+        }
+      }
+    }
+    /*
+    access-group (acl-name)
+    */
+    list access-group {
+      key "access-group";
+      description
+        "Define access-group to classify dynamic NAT";
+      leaf access-group {
+        type string {
+          length "0..39";
+        }
+        description
+          "Policy access group name";
+      }
+      uses nat-policy-acl-grp;
+    }
+    /*
+    timeout
+    */
+    container timeout {
+      description
+        "Define timeout";
+      leaf tcp {
+        type uint32 {
+          range "4..262143";
+        }
+        description
+          "Define TCP timeout";
+      }
+      leaf basic {
+        type uint32 {
+          range "4..262143";
+        }
+        description
+          "Define basic NAT timeout";
+      }
+      leaf abandoned {
+        type uint32 {
+          range "4..262143";
+        }
+        description
+          "Define abandoned timeout";
+      }
+      leaf udp {
+        type uint16 {
+          range "4..65535";
+        }
+        description
+          "Define UDP timeout";
+      }
+      leaf fin-reset {
+        type uint16 {
+          range "4..65535";
+        }
+        description
+          "Define TCP fin timeout";
+      }
+      leaf icmp {
+        type uint16 {
+          range "4..65535";
+        }
+        description
+          "Define ICMP timeout";
+      }
+      leaf syn {
+        type uint16 {
+          range "4..65535";
+        }
+        description
+          "Define TCP syn timeout";
+      }
+    }
+    /*
+    destination (ip-addr) [ (context) ]
+    */
+    container destination {
+      presence "";
+      description
+        "Configure to overwrite destination IP address";
+      leaf ip-addr {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "NAT destination IP address";
+      }
+      leaf context {
+        type string {
+          length "0..39";
+        }
+        description
+          "Context name";
+      }
+    }
+    /*
+    admission-control { tcp | udp | icmp }
+    */
+    container admission-control {
+      description
+        "Configure connection admission control";
+      leaf tcp {
+        type empty;
+        description
+          "TCP admission control";
+      }
+      leaf udp {
+        type empty;
+        description
+          "UDP admission control";
+      }
+      leaf icmp {
+        type empty;
+        description
+          "ICMP admission control";
+      }
+    }
+    /*
+    icmp-notification
+    */
+    leaf icmp-notification {
+      type empty;
+      description
+        "Configure icmp notification";
+    }
+    /*
+    inbound-refresh udp
+    */
+    leaf inbound-refresh-udp {
+      type empty;
+      description
+        "Configure inbound refresh behavior for UDP";
+    }
+    /*
+    endpoint-independent filtering
+    */
+    container endpoint-independent-filtering {
+      description
+        "Set endpoint-indepenent traffic filtering mode";
+      leaf udp {
+        type empty;
+        description
+          "Set endpoint-indepenent UDP traffic filtering mode";
+      }
+      leaf tcp {
+        type empty;
+        description
+          "Set endpoint-indepenent TCP traffic filtering mode";
+      }
+    }
+    /*
+    action { pool (pool-name) (context) | ignore | drop }
+    */
+    container action {
+      description
+        "Define action for not classified traffic";
+      choice action {
+        default drop;
+        description
+          "Define action for not classified traffic";
+        case pool {
+          list pool {
+            key "pool-name";
+            description
+              "Define NAT pool for not classified traffic";
+            leaf pool-name {
+              type string {
+                length "0..39";
+              }
+              description
+                "NAT pool name";
+            }
+            leaf context {
+              type string {
+                length "0..39";
+              }
+              mandatory true;
+              description
+                "Context name";
+            }
+          }
+        }
+        case ignore {
+          leaf ignore {
+            type empty;
+            description
+              "Configure to ignore not classified traffic";
+          }
+        }
+        case drop {
+          leaf drop {
+            type empty;
+            description
+              "Configure to drop not classified traffic";
+          }
+        }
+      }
+    }
+  }
+
+  grouping nat-profile-grp {
+    description
+      "NAT logging profile configuration mode";
+    /*
+    transport-protocol udp
+    */
+    leaf transport-protocol-udp {
+      type empty;
+      description
+        "Define transport protocol";
+    }
+    /*
+    export-version { v9 | v10 }
+    */
+    container export-version {
+      description
+        "Define export version";
+      choice export-version {
+        description
+          "";
+        case v9 {
+          leaf v9 {
+            type empty;
+            description
+              "NetFlow v9";
+          }
+        }
+        case v10 {
+          leaf v10 {
+            type empty;
+            description
+              "IPFIX v10";
+          }
+        }
+      }
+    }
+    /*
+    source (ip-addr) < port (source-port) >
+    */
+    container source {
+      presence "";
+      description
+        "Define exporter ip-address and port";
+      leaf ip-addr {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "Define exporter ip-address";
+      }
+      leaf port {
+        type uint16 {
+          range "1..65535";
+        }
+        mandatory true;
+        description
+          "Define exporter port";
+      }
+    }
+    /*
+    destination (ip-addr) [ context (ctx-name) ] < port (port-
+     num) >
+    */
+    container destination {
+      presence "";
+      description
+        "Define collector ip-address and port";
+      leaf ip-addr {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "Define collector ip-address";
+      }
+      leaf context {
+        type string {
+          length "0..39";
+        }
+        description
+          "Define collector context";
+      }
+      leaf port {
+        type uint16 {
+          range "1..65535";
+        }
+        mandatory true;
+        description
+          "Define collector port";
+      }
+    }
+    /*
+    dscp { (dscp-value) | df | cs0 | cs1 | cs2 | cs3 | cs4 | cs5
+     | cs6 | cs7 | af11 | af12 | af13 | af21 | af22 | af23 | af31
+     | af32 | af33 | af41 | af42 | af43 | ef }
+    */
+    container dscp {
+      description
+        "DSCP value";
+      choice dscp {
+        description
+          "";
+        case dscp-value {
+          leaf dscp-value {
+            type uint8 {
+              range "0..63";
+            }
+            description
+              "Differentiated services codepoint value";
+          }
+        }
+        case df {
+          leaf df {
+            type empty;
+            description
+              "Default Forwarding";
+          }
+        }
+        case cs0 {
+          leaf cs0 {
+            type empty;
+            description
+              "Class Selector 0";
+          }
+        }
+        case cs1 {
+          leaf cs1 {
+            type empty;
+            description
+              "Class Selector 1";
+          }
+        }
+        case cs2 {
+          leaf cs2 {
+            type empty;
+            description
+              "Class Selector 2";
+          }
+        }
+        case cs3 {
+          leaf cs3 {
+            type empty;
+            description
+              "Class Selector 3";
+          }
+        }
+        case cs4 {
+          leaf cs4 {
+            type empty;
+            description
+              "Class Selector 4";
+          }
+        }
+        case cs5 {
+          leaf cs5 {
+            type empty;
+            description
+              "Class Selector 5";
+          }
+        }
+        case cs6 {
+          leaf cs6 {
+            type empty;
+            description
+              "Class Selector 6";
+          }
+        }
+        case cs7 {
+          leaf cs7 {
+            type empty;
+            description
+              "Class Selector 7";
+          }
+        }
+        case af11 {
+          leaf af11 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 1/Drop precedence 1";
+          }
+        }
+        case af12 {
+          leaf af12 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 1/Drop precedence 2";
+          }
+        }
+        case af13 {
+          leaf af13 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 1/Drop precedence 3";
+          }
+        }
+        case af21 {
+          leaf af21 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 2/Drop precedence 1";
+          }
+        }
+        case af22 {
+          leaf af22 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 2/Drop precedence 2";
+          }
+        }
+        case af23 {
+          leaf af23 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 2/Drop precedence 3";
+          }
+        }
+        case af31 {
+          leaf af31 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 3/Drop precedence 1";
+          }
+        }
+        case af32 {
+          leaf af32 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 3/Drop precedence 2";
+          }
+        }
+        case af33 {
+          leaf af33 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 3/Drop precedence 3";
+          }
+        }
+        case af41 {
+          leaf af41 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 4/Drop precedence 1";
+          }
+        }
+        case af42 {
+          leaf af42 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 4/Drop precedence 2";
+          }
+        }
+        case af43 {
+          leaf af43 {
+            type empty;
+            description
+              "Assured Forwarding  - Class 4/Drop precedence 3";
+          }
+        }
+        case ef {
+          leaf ef {
+            type empty;
+            description
+              "Expedited Forwarding";
+          }
+        }
+      }
+    }
+    /*
+    maximum ip-packet-size (ip-size)
+    */
+    container maximum {
+      description
+        "Maximum export packet size";
+      leaf ip-packet-size {
+        type uint16 {
+          range "200..65520";
+        }
+        description
+          "Maximum export packet size";
+      }
+    }
+  }
+
+  grouping nat-policy-acl-class-grp {
+    description
+      "NAT access list class configuration mode";
+    /*
+    timeout
+    */
+    container timeout {
+      description
+        "Define timeout";
+      leaf tcp {
+        type uint32 {
+          range "4..262143";
+        }
+        description
+          "Define TCP timeout";
+      }
+      leaf basic {
+        type uint32 {
+          range "4..262143";
+        }
+        description
+          "Define basic NAT timeout";
+      }
+      leaf abandoned {
+        type uint32 {
+          range "4..262143";
+        }
+        description
+          "Define abandoned timeout";
+      }
+      leaf udp {
+        type uint16 {
+          range "4..65535";
+        }
+        description
+          "Define UDP timeout";
+      }
+      leaf fin-reset {
+        type uint16 {
+          range "4..65535";
+        }
+        description
+          "Define TCP fin timeout";
+      }
+      leaf icmp {
+        type uint16 {
+          range "4..65535";
+        }
+        description
+          "Define ICMP timeout";
+      }
+      leaf syn {
+        type uint16 {
+          range "4..65535";
+        }
+        description
+          "Define TCP syn timeout";
+      }
+    }
+    /*
+    destination (ip-addr) [ (context) ]
+    */
+    container destination {
+      presence "";
+      description
+        "Configure to overwrite destination IP address";
+      leaf ip-addr {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "NAT destination IP address";
+      }
+      leaf context {
+        type string {
+          length "0..39";
+        }
+        description
+          "Context name";
+      }
+    }
+    /*
+    admission-control { tcp | udp | icmp }
+    */
+    container admission-control {
+      description
+        "Configure connection admission control";
+      leaf tcp {
+        type empty;
+        description
+          "TCP admission control";
+      }
+      leaf udp {
+        type empty;
+        description
+          "UDP admission control";
+      }
+      leaf icmp {
+        type empty;
+        description
+          "ICMP admission control";
+      }
+    }
+    /*
+    icmp-notification
+    */
+    leaf icmp-notification {
+      type empty;
+      description
+        "Configure icmp notification";
+    }
+    /*
+    inbound-refresh udp
+    */
+    container inbound-refresh-udp {
+      description
+        "Configure inbound refresh behavior for UDP";
+    }
+    /*
+    endpoint-independent filtering
+    */
+    container endpoint-independent-filtering {
+      description
+        "Set endpoint-indepenent filtering mode for traffic in
+         the class";
+      leaf udp {
+        type empty;
+        description
+          "Set endpoint-indepenent filtering mode for UDP
+           traffic in the class";
+      }
+      leaf tcp {
+        type empty;
+        description
+          "Set endpoint-indepenent filtering mode for TCP
+           traffic in the class";
+      }
+    }
+    /*
+    action { pool (pool-name) (context) | ignore | drop }
+    */
+    container action {
+      description
+        "Define action for class traffic";
+      choice action {
+        default drop;
+        description
+          "Define action for class traffic";
+        case pool {
+          list pool {
+            key "pool-name";
+            description
+              "Define NAT pool for class traffic";
+            leaf pool-name {
+              type string {
+                length "0..39";
+              }
+              description
+                "NAT pool name";
+            }
+            leaf context {
+              type string {
+                length "0..39";
+              }
+              mandatory true;
+              description
+                "Context name";
+            }
+          }
+        }
+        case ignore {
+          leaf ignore {
+            type empty;
+            description
+              "Configure to ignore class traffic";
+          }
+        }
+        case drop {
+          leaf drop {
+            type empty;
+            description
+              "Configure to drop class traffic";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context" {
+    description
+      "ericsson-nat";
+    /*
+    nat
+    */
+    container nat {
+      description
+        "Configure NAT policy";
+      list policy {
+        key "policy-name";
+        description
+          "Configure NAT policy";
+        leaf policy-name {
+          type string {
+            length "0..39";
+          }
+          description
+            "NAT policy name";
+        }
+        leaf radius-guided {
+          type empty;
+          description
+            "Designate as Radius guided policy";
+        }
+        uses policy-nat-grp;
+      }
+      list logging-profile {
+        key "logging-profile";
+        description
+          "Configure NAT logging profile";
+        leaf logging-profile {
+          type string {
+            length "0..39";
+          }
+          description
+            "NAT logging-profile name";
+        }
+        uses nat-profile-grp;
+      }
+      leaf fragments {
+        type empty;
+        description
+          "Enables NAT on IP fragments";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:ip" {
+    description
+      "ericsson-nat";
+    /*
+    nat pool (pool-name) [ napt [ { multibind | paired-mode } [
+     logging ]  ] ]
+    */
+    list nat-pool {
+      key "pool-name";
+      description
+        "Configure NAT pool";
+      leaf pool-name {
+        type string {
+          length "0..39";
+        }
+        description
+          "NAT pool name";
+      }
+      container napt {
+        presence "";
+        description
+          "Configure NAPT pool";
+        container napt-opt {
+          description
+            "container napt-opt.";
+          choice napt-opt-choice {
+            description
+              "";
+            case multibind {
+              leaf multibind {
+                type empty;
+                description
+                  "Configure NAPT multibind pool";
+              }
+            }
+            case paired-mode {
+              leaf paired-mode {
+                type empty;
+                description
+                  "Configure paired pool";
+              }
+            }
+          }
+          leaf logging {
+            type empty;
+            description
+              "Configure logging pool";
+          }
+        }
+      }
+      uses nat-pool-grp;
+    }
+  }
+
+}

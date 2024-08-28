@@ -1,0 +1,116 @@
+module ericsson-l2-service-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-l2-service-dev-router6000";
+
+  prefix "l2servicerouter6000";
+
+  import ericsson-l2-service-router6000 {
+   prefix "l2servicer6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+  
+  import ietf-interfaces {
+    prefix "if";
+  }
+  
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-lag-ext-router6000 {
+    prefix "lagxrouter6000";
+  }
+  
+  import ericsson-yang-extensions { 
+    prefix yexte;
+  }  
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-l2-service-dev-router6000
+     Copyright (c) 2021-2022 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-03-04" {
+    description
+      "deviation not supported mirror destination";
+    reference
+      "rfc6020";
+    yexte:version "5";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2021-01-15" {
+    description
+      "not supported the cli service-instacne egress-check ignore";
+    reference
+      "rfc6020";
+    yexte:version "4";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-03-08" {
+    description
+      "deviation for micro-bfd";
+      yexte:version 2;
+      yexte:release 0;
+      yexte:correction 0;
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-31" {
+    description
+      "deviation for ericsson-l2-service-dev-router6000@2017-5-31.yang file";
+      yexte:version 1;
+      yexte:release 0;
+      yexte:correction 0;
+    reference
+      "rfc6020";
+  }
+
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2servicer6k:service-instance/l2servicer6k:circuit-group-member" {
+    deviate not-supported;
+  }
+ 
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/l2servicer6k:service-instance/l2servicer6k:circuit-group-member" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/lagxrouter6000:link-group/l2servicer6k:service-instance/l2servicer6k:mirror/l2servicer6k:mirror/l2servicer6k:destination" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2servicer6k:service-instance/l2servicer6k:mirror/l2servicer6k:mirror/l2servicer6k:destination" {
+    deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/l2servicer6k:service-instance/l2servicer6k:subscribe-micro-bfd" {
+    deviate not-supported;
+  }
+
+  deviation "/ctxsr6k:contexts/l2servicer6k:service-instance" {
+    deviate not-supported;
+  }
+}

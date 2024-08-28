@@ -1,0 +1,67 @@
+module ericsson-nrsectorcarrier-vdu-dev {
+  yang-version 1.1;
+  namespace urn:rdns:com:ericsson:oammodel:ericsson-nrsectorcarrier-vdu-dev;
+  prefix nrsectcarr3gppdev;
+
+  import _3gpp-common-managed-element { prefix me3gpp; }
+  import _3gpp-nr-nrm-gnbdufunction { prefix gnbdu3gpp; }
+  import _3gpp-nr-nrm-nrsectorcarrier { prefix nrsectcarr3gpp; }
+  import ericsson-yang-extensions { prefix yexte; }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "The module defines the NRSectorCarrier data model deviations for the Ericsson vDU.
+
+    Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+  revision 2021-05-04 {
+    description
+      "Deviations on _3gpp-nr-nrm-nrsectorcarrier.";
+    yexte:version 1;
+    yexte:release 0;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+
+  revision 2020-12-17 {
+    description
+      "Deviations on _3gpp-nr-nrm-nrsectorcarrier.";
+    yexte:version 0;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrsectcarr3gpp:NRSectorCarrier/nrsectcarr3gpp:attributes/nrsectcarr3gpp:vnfParametersList {
+    description "NRSectorCarrier::vnfParametersList is not supported.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrsectcarr3gpp:NRSectorCarrier/nrsectcarr3gpp:attributes/nrsectcarr3gpp:peeParametersList {
+    description "Monitoring of PEE parameters is not supported for Ericsson vDU.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrsectcarr3gpp:NRSectorCarrier/nrsectcarr3gpp:attributes/nrsectcarr3gpp:priorityLabel {
+    description "Label value for management system to take into account is not supported for Ericsson vDU.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/nrsectcarr3gpp:NRSectorCarrier/nrsectcarr3gpp:attributes/nrsectcarr3gpp:txDirection {
+    deviate replace {
+        mandatory false;
+	}
+    deviate add {
+	  default "DL_AND_UL";
+      must '. = "DL_AND_UL"' {
+        error-message
+          "Only DL_AND_UL is supported";
+      }
+    }
+  }
+}

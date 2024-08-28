@@ -1,0 +1,51 @@
+module complex-actions-dev {
+
+	namespace "urn+test+complex-actions-dev";
+	prefix this;
+
+	revision "2021-11-31";
+
+	import complex-actions {
+		prefix ca;
+	}
+
+	augment "/ca:cont1/ca:action11/ca:input" {
+		leaf param111 {
+			type empty;	// note attr in -dev namespace
+		}
+	}
+
+	augment "/ca:cont1/ca:action12/ca:output" {
+		leaf leaf122 {
+			type string;	// note attr in -dev namespace
+		}
+	}
+
+	deviation /ca:cont1/ca:action12/input/ca:param121 {
+		deviate not-supported;
+	}
+
+	augment "/ca:cont1" {
+
+		action action18 {				// note action in orig namespace
+			input {
+				container param181 {
+					leaf leaf1811 {
+						type string;	// note attr in -dev namespace
+					}
+					container struct1812 {	// not generated, struct-in-struct
+						presence "";
+					}
+				}
+			}
+			output {			// note auto-generated CDT in orig namespace
+				leaf leaf185 {	// note attr in -dev namespace
+					type string;
+				}
+				leaf leaf186 {	// note attr in -dev namespace
+					type string;
+				}
+			}
+		}
+	}
+}

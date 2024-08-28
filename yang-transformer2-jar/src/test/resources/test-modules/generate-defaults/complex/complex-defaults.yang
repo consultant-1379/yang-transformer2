@@ -1,0 +1,81 @@
+module complex-defaults {
+
+	namespace "urn_test_complex-defaults";
+	prefix this;
+
+	revision "2021-11-01";
+
+	import _3gpp-common-yang-extensions {
+		prefix yext3gpp;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string;
+			default  ;			// error in model.
+		}
+
+		leaf leaf12 {
+			type string;
+			default "abc";		// deleted by deviation
+		}
+
+		leaf leaf13 {
+			type string;
+			default "abc";		// replaced by deviation
+		}
+
+		leaf leaf14 {
+			type string;	// default added by deviation
+		}
+
+		leaf leaf15 {
+			type empty;
+			default true;
+		}
+	}
+
+	container cont2 {
+
+		leaf leaf21 {
+			type union {
+				type int32;
+				type string;
+			}
+			default 10;			// replaced by deviation
+		}
+	}
+
+	container cont3 {
+
+		leaf-list leaflist31 {
+			type string;		// replaced by deviation
+			default "abc";
+			default "def";
+		}
+	}
+
+	feature feature1;
+
+	identity identity-1;
+
+	identity identity-2 {
+		base identity-1;
+		if-feature feature1;
+	}
+
+	container cont4 {
+
+		leaf leaf41 {
+			type identityref {
+				base this:identity-1;
+			}
+			default this:identity-1;	// replaced by deviation
+		}
+	}
+}

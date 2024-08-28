@@ -1,0 +1,47 @@
+module ericsson-network-domain {
+	yang-version 1.1;
+	namespace urn:rdns:com:ericsson:oammodel:ericsson-network-domain;
+	prefix netdom;
+        
+        import ericsson-transport {
+               prefix tn;
+        }
+	import ericsson-yang-extensions { prefix yexte; }	
+
+  	organization "Ericsson AB";
+	contact "Ericsson first line support via email.";
+	description 
+		"The module implements transport network.
+		
+		It is recommended to review design-time defaults including used groupings
+		and deviate them based on implementation needs.
+
+		Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+	revision "2020-05-25" {
+        //preliminary
+	    description "
+	    	- model using ietf-system";
+		yexte:version 1;
+		yexte:release 0;
+		yexte:correction 0;
+	}
+        grouping networkdomaingrp {
+            leaf domain {
+                 type string;
+                 description "Fully qualified domain name of Network Domain";
+            }
+        }
+        augment /tn:transport {
+          list NetworkDomain {
+              key networkDomainId;
+              description 
+                      "This is a container for common network domain functions used";
+              leaf networkDomainId {
+                 type string;
+                 description "Holds the name used when identifying the MO";
+              }
+              uses networkdomaingrp;
+            }
+        }
+}

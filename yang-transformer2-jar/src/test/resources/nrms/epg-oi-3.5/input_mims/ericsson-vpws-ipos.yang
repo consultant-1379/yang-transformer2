@@ -1,0 +1,684 @@
+module ericsson-vpws-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-vpws-ipos";
+
+  prefix "vpwsipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-vpws-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-09-05" {
+    description
+      "Obsolete license-priority";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2019-03-27" {
+    description
+      "changed the type of profile name from leafref to string";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-09-04" {
+    description
+      "Add obsolete/deprecated/preliminary label to the
+       description of the obsolete/deprecated/preliminary node";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-21" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-03-06" {
+    description
+      "Current implementation of PCC LSP name under tunnel is
+       made obsolete and a new pcc command is added which makes
+       LSP name mandatory";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-03-06" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping pw-profile-backup-peer-grp {
+    description
+      "Pseudowire peer profile backup peer configuration mode";
+    /*
+    tunnel lsp { ldp | rsvp (pw-lspname) | isis | pcc-lsp (name)
+     | pcc [ (pcc-lspname) | mapping ] }
+    */
+    container tunnel-lsp {
+      description
+        "Map to MPLS LSP tunnel";
+      choice tunnel-lsp {
+        description
+          "";
+        case ldp {
+          leaf ldp {
+            type empty;
+            description
+              "Map to LDP LSP(s)";
+          }
+        }
+        case rsvp {
+          leaf rsvp {
+            type string;
+            description
+              "Map to RSVP LSP name";
+          }
+        }
+        case isis {
+          leaf isis {
+            type empty;
+            description
+              "Map to ISIS LSP(s)";
+          }
+        }
+        case pcc-lsp {
+          leaf pcc-lsp {
+            type string;
+            description
+              "Map to PCC LSP name";
+          }
+        }
+        case pcc {
+          container pcc {
+            presence "";
+            status obsolete;
+            description
+              "[OBSOLETE]Map to PCC LSP(s)";
+            choice pcc-opt {
+              description
+                "";
+              case pcc-lspname {
+                leaf pcc-lspname {
+                  type string;
+                  description
+                    "Leaf PCC LSP name";
+                }
+              }
+              case mapping {
+                leaf mapping {
+                  type empty;
+                  description
+                    "Use default pseudowire mapping";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping pw-peer-profile-grp {
+    description
+      "Pseudowire peer profile configuration mode";
+    /*
+    peer < ipv4 (addr-value) > [ context (ctx-name) ]
+    */
+    container peer {
+      description
+        "Peer address of the pseudowire";
+      container ipv4 {
+        description
+          "Container IPv4";
+        leaf ipv4 {
+          type inet:ipv4-address;
+          description
+            "IPv4 peer address of the pseudowire";
+        }
+        uses pw-profile-peer-grp;
+      }
+      leaf context {
+        type leafref {
+          path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+          + "context-name";
+        }
+        description
+          "Context address";
+      }
+    }
+    /*
+    backup-peer < ipv4 (addr-value) > [ context (ctx-name) ]
+    */
+    container backup-peer {
+      description
+        "Backup peer address of the pseudowire";
+      container ipv4 {
+        description
+          "Container IPv4";
+        leaf ipv4 {
+          type inet:ipv4-address;
+          description
+            "IPv4 peer address of the pseudowire";
+        }
+        uses pw-profile-backup-peer-grp;
+      }
+      leaf context {
+        type leafref {
+          path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+          + "context-name";
+        }
+        description
+          "Context address";
+      }
+    }
+  }
+
+  grouping pw-profile-peer-grp {
+    description
+      "Pseudowire peer profile peer configuration mode";
+    /*
+    tunnel { soft-gre [ source (ipv4-addr) ] | lsp { ldp | rsvp
+     (pw-lspname) | isis | pcc-lsp (name) | pcc [ (pcc-lspname) |
+     mapping ] } }
+    */
+    container tunnel {
+      description
+        "Map to specific tunnel path";
+      choice tunnel {
+        description
+          "";
+        case soft-gre {
+          container soft-gre {
+            presence "";
+            description
+              "Map to soft GRE tunnel";
+            leaf source {
+              type inet:ipv4-address;
+              description
+                "Source address (overrides the global soft GRE
+                 source)";
+            }
+          }
+        }
+        case lsp {
+          container lsp {
+            description
+              "Map to MPLS LSP tunnel";
+            choice lsp {
+              description
+                "";
+              case ldp {
+                leaf ldp {
+                  type empty;
+                  description
+                    "Map to Ldp LSP(s)";
+                }
+              }
+              case rsvp {
+                leaf rsvp {
+                  type string;
+                  description
+                    "Map to RSVP LSP name";
+                }
+              }
+              case isis {
+                leaf isis {
+                  type empty;
+                  description
+                    "Map to ISIS LSP(s)";
+                }
+              }
+              case pcc-lsp {
+                leaf pcc-lsp {
+                  type string;
+                  description
+                    "Map to PCC LSP name";
+                }
+              }
+              case pcc {
+                container pcc {
+                  presence "";
+                  status obsolete;
+                  description
+                    "[OBSOLETE]Map to PCC LSP(s)";
+                  choice pcc-opt {
+                    description
+                      "";
+                    case pcc-lspname {
+                      leaf pcc-lspname {
+                        type string;
+                        description
+                          "Leaf PCC LSP name";
+                      }
+                    }
+                    case mapping {
+                      leaf mapping {
+                        type empty;
+                        description
+                          "Use default pseudowire mapping";
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    control-word
+    */
+    leaf control-word {
+      type empty;
+      description
+        "Enable control word";
+    }
+    /*
+    log-up-down
+    */
+    leaf log-up-down {
+      type empty;
+      description
+        "Log PW state transitions";
+    }
+    /*
+    snmp trap
+    */
+    leaf snmp-trap {
+      type empty;
+      description
+        "Send SNMP traps on PW state transitions";
+    }
+    /*
+    ignore-mtu
+    */
+    leaf ignore-mtu {
+      type empty;
+      description
+        "Ignore MTU matching";
+    }
+    /*
+    auto-revert-delay (delay-value)
+    */
+    leaf auto-revert-delay {
+      type uint8 {
+        range "0..180";
+      }
+      description
+        "Enable auto revertion";
+    }
+    /*
+    vc-type { ethernet | vlan }
+    */
+    leaf vc-type {
+      type enumeration {
+        enum ethernet {
+          value 0;
+          description
+            "Ether (raw) mode type";
+        }
+        enum vlan {
+          value 1;
+          description
+            "VLAN (tagged) mode type";
+        }
+      }
+      description
+        "PW VC type";
+    }
+    /*
+    mtu (mtu-val)
+    */
+    leaf mtu {
+      type uint16 {
+        range "1200..9198";
+      }
+      description
+        "MTU of the PW";
+    }
+    /*
+    redundancy-mode { master-slave | independent }
+    */
+    leaf redundancy-mode {
+      type enumeration {
+        enum master-slave {
+          value 0;
+          description
+            "Master slave signaling mode";
+        }
+        enum independent {
+          value 1;
+          description
+            "Independent signaling  mode";
+        }
+      }
+      description
+        "Redundancy mode [master-slave|independent]";
+    }
+  }
+
+  grouping pw-instance-grp {
+    description
+      "Pseudowire peer intance configuration mode";
+    /*
+    pw-id (pwid-val)
+    */
+    leaf pw-id {
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "PW ID";
+    }
+    /*
+    peer-profile (profile-name) [ mpls | vxlan ]
+    */
+    container peer-profile {
+      description
+        "PW peer profile";
+      leaf profile-name {
+        type string;
+        description
+          "Name of the peer profile";
+      }
+      choice peer-profile-opt {
+        default mpls;
+        description
+          "";
+        case mpls {
+          container mpls {
+            presence "";
+            description
+              "PW peer encap MPLS (default MPLS)";
+            uses pw-instance-peer-profile-grp;
+          }
+        }
+        case vxlan {
+          container vxlan {
+            presence "";
+            description
+              "Configure VXLAN encapsulation";
+            uses pw-instance-peer-profile-vxlan-grp;
+          }
+        }
+      }
+    }
+    /*
+    mirror destination (dest-name)
+    */
+    container mirror {
+      description
+        "Mirror destination portal";
+      leaf destination {
+        type string;
+        description
+          "Mirror destination portal";
+      }
+    }
+    /*
+    license-priority ( license-priority )
+    */
+    leaf license-priority {
+      type uint8 {
+        range "1..100";
+      }
+      status obsolete;
+      description
+        "[OBSOLETE]Configure license priority for pseudowire
+         instance";
+    }
+    /*
+    vlan-rewrite
+    */
+    container vlan-rewrite {
+      presence "";
+      description
+        "VLAN rewrite options";
+      uses pw-instance-vlan-rewrite-grp;
+    }
+  }
+
+  grouping pw-instance-peer-profile-grp {
+    description
+      "Pseudowire instance peer profile configuration mode";
+    /*
+    signaling-proto { ldp | none }
+    */
+    leaf signaling-proto {
+      type enumeration {
+        enum ldp {
+          value 0;
+          description
+            "LDP protocol";
+        }
+        enum none {
+          value 1;
+          description
+            "Static";
+        }
+      }
+      description
+        "PW signaling Protocol";
+    }
+    /*
+    label < in (in-val) > < out (out-val) >
+    */
+    container label {
+      description
+        "Set the static PW labels";
+      leaf in {
+        type uint32 {
+          range "22..251903";
+        }
+        description
+          "Set label for inbound packets on the PW";
+      }
+      leaf out {
+        type uint32 {
+          range "22..251903";
+        }
+        description
+          "Set label for outbound packets on the PW";
+      }
+    }
+    /*
+    backup-peer (ipv4) [ pw-id (pwid-val) ]
+    */
+    container backup-peer {
+      description
+        "Backup pseudowire";
+      leaf ipv4 {
+        type inet:ipv4-address;
+        description
+          "IPv4 backup peer address of the pseudowire";
+      }
+      leaf pw-id {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Backup PW ID";
+      }
+    }
+  }
+
+  grouping pw-instance-peer-profile-vxlan-grp {
+    description
+      "Pseudowire instance peer profile VXLAN configuration
+       mode";
+    /*
+    vni (vni-val)
+    */
+    leaf vni {
+      type uint32 {
+        range "1..16777215";
+      }
+      description
+        "Configure VXLAN network identifier (VNI)";
+    }
+    /*
+    local-address (addr-val)
+    */
+    leaf local-address {
+      type inet:ipv4-address;
+      description
+        "Configure local address";
+    }
+  }
+
+  grouping pw-instance-vlan-rewrite-grp {
+    description
+      "";
+    /*
+    ingress < seq (seq-val) > push outer < dot1q (vlan-id) >
+     symmetric
+    */
+    container ingress {
+      description
+        "Rewrite option on ingress traffic";
+      leaf seq {
+        type uint8 {
+          range "1";
+        }
+        mandatory true;
+        description
+          "Order of applying rewrites";
+      }
+      leaf push {
+        type empty;
+        mandatory true;
+        description
+          "Push a new tag on the packet";
+      }
+      leaf outer {
+        type empty;
+        mandatory true;
+        description
+          "Operation applied on outer tag";
+      }
+      leaf dot1q {
+        type uint16 {
+          range "1..4094";
+        }
+        mandatory true;
+        description
+          "Rewrite VLAN tags of Dot1q packets";
+      }
+      leaf symmetric {
+        type empty;
+        mandatory true;
+        description
+          "Apply rewrite option on both directions";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-vpws";
+    /*
+    pseudowire { peer-profile (profile-name) | instance
+     (instance-id) }
+    */
+    container pseudowire {
+      description
+        "Configure Pseudowire";
+      list peer-profile {
+        key "peer-profile";
+        description
+          "Configure a Pseudowire Peer Profile.";
+        leaf peer-profile {
+          type string;
+          description
+            "Name of the profile";
+        }
+        uses pw-peer-profile-grp;
+      }
+      list instance {
+        key "instance";
+        description
+          "Configure a Pseudowire instance";
+        leaf instance {
+          type string {
+            pattern '\d{1,10}|\d{1,10}\s*\-\s*\d{1,10}';
+          }
+          description
+            "Pseudowire instance identifier range 1..4294967295,
+             also can config range with '-'.";
+        }
+        uses pw-instance-grp;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,41 @@
+module namespace-boundary-handling-three {
+
+    namespace "urn.test.namespace-boundary-handling-three";
+    prefix this;
+
+    revision "2021-05-13";
+
+	import namespace-boundary-handling-one {
+		prefix one;
+	}
+
+	import namespace-boundary-handling-two {
+		prefix two;
+	}
+
+	augment /one:cont1/two:cont6 {
+	
+		container cont8 {
+			leaf leafXX { type string; }
+		}
+	}
+
+	augment /one:cont2/two:cont6 {
+	
+		container cont8 {
+			leaf leafXX { type string; }
+		}
+	}
+
+	augment /one:cont3/two:cont7 {
+	
+		container cont8 {
+			leaf leafXX { type string; }
+			
+			container cont9 {
+				leaf leafXX { type string; }
+			}
+		}
+	}
+	
+}

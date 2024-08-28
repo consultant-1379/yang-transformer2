@@ -1,0 +1,58 @@
+module system-created {
+
+	namespace "urn!test!system-created";
+	prefix this;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	import ericsson-yang-types {
+		prefix typese;
+	}
+
+	import _3gpp-common-yang-extensions {
+		prefix yext3gpp;
+	}
+
+	revision "2021-12-02";
+
+	container cont1 {
+		presence "";
+	}
+
+	container cont2 {
+		presence "";
+	}
+
+	container cont3 {
+		presence "";
+		yexte:is-system-created;
+	}
+
+	container cont4 {
+		presence "";
+		yexte:is-system-created;
+	}
+
+	typedef typedef55 {
+		type typese:system-created-boolean;
+	}
+
+	container cont5 {
+
+		leaf leaf51 {
+			type typese:system-created-boolean;
+		}
+		leaf leaf52 {
+			type typedef55;
+		}
+	}
+
+	list list6 {
+		yext3gpp:only-system-created;
+
+		key id;
+		leaf id { type string; }
+	}
+}

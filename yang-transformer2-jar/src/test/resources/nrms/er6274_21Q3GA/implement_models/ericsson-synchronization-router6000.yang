@@ -1,0 +1,3012 @@
+module ericsson-synchronization-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-synchronization-router6000";
+
+  prefix "syncr6000";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-synchronization-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-08" {
+    description
+      "set default value of PTP-Clock different profile to fix
+       TR HY94782 and HY94759";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "9";
+    yexte:correction "1";
+  }
+
+  revision "2020-11-12" {
+    description
+      "change G.8275.2 receive timeout announce command under
+       the unicast-request-entry";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "9";
+    yexte:correction "0";
+  }
+
+  revision "2020-07-06" {
+    description
+      "set default value of wait-to-restore in
+       equipment-clock-grp as 5 instead of 0";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "8";
+    yexte:correction "2";
+  }
+
+  revision "2020-06-28" {
+    description
+      "set default value of reference priority as 255 instead of
+       1";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "8";
+    yexte:correction "1";
+  }
+
+  revision "2020-02-24" {
+    description
+      "add tod time probe and time-difference threshold command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "8";
+    yexte:correction "0";
+  }
+
+  revision "2019-10-21" {
+    description
+      "move equipment-clock from middile of file to end to fix
+       TR HX95254";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "7";
+    yexte:correction "2";
+  }
+
+  revision "2019-09-04" {
+    description
+      "fix g8275.2 unicast measurement threshold issue";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "7";
+    yexte:correction "1";
+  }
+
+  revision "2019-08-08" {
+    description
+      "add G.8275.2 virtual port measurement reference";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "7";
+    yexte:correction "0";
+  }
+
+  revision "2019-08-05" {
+    description
+      "add measurement command not-master";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "6";
+    yexte:correction "0";
+  }
+
+  revision "2019-07-25" {
+    description
+      "add measurement command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "5";
+    yexte:correction "0";
+  }
+
+  revision "2019-05-05" {
+    description
+      "add eeec command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2019-04-26" {
+    description
+      "add clock-recovery-algorithm command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2019-04-23" {
+    description
+      "modify mandatory attribute of ptp related commands";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2019-03-11" {
+    description
+      "add gnss-control-obtain command and new
+       satellite-systems";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-12-18" {
+    description
+      "add holdover-time-error-budget command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-10-17" {
+    description
+      "add antenna-port-overload-detect command";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-09-27" {
+    description
+      "change input-source slave-instance";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-07-18" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping sync_conf-grp {
+    description
+      "Enable sync configuration";
+    /*
+    bits  { input { bits-a | bits-b }  | output { bits-a |
+     bits-b } |  output-source {equipment-clock | ptp-clock} }
+    */
+    container bits {
+      description
+        "Configure BITS options";
+      container input {
+        description
+          "Configure BITS Input options";
+        container bits-a {
+          presence "";
+          description
+            "bits-a selection";
+          uses bits-input-grp;
+        }
+        container bits-b {
+          presence "";
+          description
+            "bits-b selection";
+          uses bits-input-grp;
+        }
+      }
+      container output {
+        description
+          "Configure BITS Output Options";
+        container bits-a {
+          presence "";
+          description
+            "bits-a selection";
+          uses bits-output-grp;
+        }
+        container bits-b {
+          presence "";
+          description
+            "bits-b selection";
+          uses bits-output-grp;
+        }
+      }
+      leaf output-source {
+        type enumeration {
+          enum equipment-clock {
+            value 0;
+            description
+              "Configure BITS Output Source as equipment clock";
+          }
+          enum ptp-clock {
+            value 1;
+            description
+              "Configure BITS Output Source as PTP clock";
+          }
+        }
+        description
+          "Configure BITS Output Source";
+      }
+    }
+    /*
+    tod {input | output} tod-a
+    */
+    container tod {
+      presence "";
+      description
+        "Configure Tod Options";
+      choice tod-choice {
+        case input {
+          container input {
+            presence "";
+            description
+              "Configure Tod Input Options";
+            uses tod_input_protocol-grp;
+          }
+        }
+        case output {
+          container output {
+            presence "";
+            description
+              "Configure Tod Output Options";
+            uses tod_output_protocol-grp;
+          }
+        }
+      }
+      leaf tod-a {
+        type empty;
+        description
+          "Configure tod-a selection";
+      }
+    }
+    /*
+    equipment-clock [g781]
+    */
+    container equipment-clock {
+      presence "";
+      description
+        "Configure Equipment Clock options";
+      leaf g781 {
+        type empty;
+        description
+          "G.781 reference selection algorithm";
+      }
+      uses equipment-clock-grp;
+    }
+    /*
+    ptp pm
+    */
+    leaf ptp-pm {
+      type empty;
+      description
+        "Enable performance monitor";
+    }
+    /*
+    ptp-clock {v1588v2 boundary | g8265-1 slave | {[g8275-1 t-bc
+     | g8275-2 t-bc-p]}}
+    */
+    container ptp-clock {
+      description
+        "Create or configure a PTP clock";
+      choice ptp-clock {
+        case v1588v2-boundary {
+          container v1588v2-boundary {
+            presence "";
+            description
+              "Boundary clock";
+            uses v1588v2_profile-grp;
+          }
+        }
+        case g8265-1-slave {
+          container g8265-1-slave {
+            presence "";
+            description
+              "Slave clock";
+            uses g8265_1_profile-grp;
+          }
+        }
+        case g8275-1-t-bc {
+          container g8275-1-t-bc {
+            description
+              "container g8275-1-t-bc.";
+            container g8275-1-t-bc {
+              presence "";
+              description
+                "Telecom boundary clock";
+              uses g8275_1_profile-grp;
+            }
+            container g8275-2-t-bc-p {
+              presence "";
+              description
+                "Telecom boundary clock";
+              uses g8275_2_profile-grp;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping bits-input-grp {
+    description
+      "configure bits-input";
+    /*
+    framing-type {t1 {esf | sf} | k2048 | e1 {crc4 | no-crc4}}
+    */
+    container framing-type {
+      description
+        "Configure framing type";
+      choice framing-type {
+        case t1 {
+          container t1 {
+            description
+              "T1 framing";
+            choice t1 {
+              case esf {
+                leaf esf {
+                  type empty;
+                  description
+                    "T1-ESF framing";
+                }
+              }
+              case sf {
+                leaf sf {
+                  type empty;
+                  description
+                    "T1-SF framing";
+                }
+              }
+            }
+          }
+        }
+        case k2048 {
+          leaf k2048 {
+            type empty;
+            description
+              "2048 kHz unframed";
+          }
+        }
+        case e1 {
+          container e1 {
+            description
+              "E1 framing";
+            choice e1 {
+              case crc4 {
+                leaf crc4 {
+                  type empty;
+                  description
+                    "E1-CRC4 framing";
+                }
+              }
+              case no-crc4 {
+                leaf no-crc4 {
+                  type empty;
+                  description
+                    "E1-no-CRC4 framing";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    ssm option v2 {gen1 | gen2}
+    */
+    container ssm-option-v2 {
+      presence "";
+      description
+        "Option 2";
+      leaf ssm-option-v2-choice {
+        type enumeration {
+          enum gen1 {
+            value 0;
+            description
+              "Option 2 - Gen 1";
+          }
+          enum gen2 {
+            value 1;
+            description
+              "Option 2 - Gen 2";
+          }
+        }
+        mandatory true;
+        description
+          "leaf ssm-option-v2-choice.";
+      }
+    }
+    /*
+    high-impedance-standby
+    */
+    leaf high-impedance-standby {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable high-impedance-standby";
+    }
+  }
+
+  grouping bits-output-grp {
+    description
+      "configure bits-output";
+    /*
+    framing-type {t1 {esf | sf} | k2048 | e1 {crc4 | no-crc4}}
+    */
+    container framing-type {
+      description
+        "Configure framing type";
+      choice framing-type {
+        case t1 {
+          container t1 {
+            description
+              "T1 framing";
+            choice t1 {
+              case esf {
+                leaf esf {
+                  type empty;
+                  description
+                    "T1-ESF framing";
+                }
+              }
+              case sf {
+                leaf sf {
+                  type empty;
+                  description
+                    "T1-SF framing";
+                }
+              }
+            }
+          }
+        }
+        case k2048 {
+          leaf k2048 {
+            type empty;
+            description
+              "2048 kHz unframed";
+          }
+        }
+        case e1 {
+          container e1 {
+            description
+              "E1 framing";
+            choice e1 {
+              case crc4 {
+                leaf crc4 {
+                  type empty;
+                  description
+                    "E1-CRC4 framing";
+                }
+              }
+              case no-crc4 {
+                leaf no-crc4 {
+                  type empty;
+                  description
+                    "E1-no-CRC4 framing";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    ssm option v2 {gen1 | gen2}
+    */
+    container ssm-option-v2 {
+      presence "";
+      description
+        "Option 2";
+      leaf ssm-option-v2-choice {
+        type enumeration {
+          enum gen1 {
+            value 0;
+            description
+              "Option 2 - Gen 1";
+          }
+          enum gen2 {
+            value 1;
+            description
+              "Option 2 - Gen 2";
+          }
+        }
+        mandatory true;
+        description
+          "leaf ssm-option-v2-choice.";
+      }
+    }
+    /*
+    squelch {ais | ql-dnu | rai | shut} quality-level {ql-dus |
+     ql-eec2 | ql-prov | ql-prs | ql-smc | ql-st2 | ql-st3 | ql-
+     st3e | ql-stu | ql-tnc | ql-dnu2 | ql-eec1 | ql-prc | ql-sec
+     | ql-ssu-a | ql-ssu-b | ql-unkn}
+    */
+    container squelch {
+      presence "";
+      description
+        "Squelch selection";
+      choice squelch-choice {
+        case ais {
+          leaf ais {
+            type empty;
+            description
+              "Transmit AIS";
+          }
+        }
+        case ql-dnu {
+          leaf ql-dnu {
+            type empty;
+            description
+              "Transmit SSM code ql-dus/ql-dnu";
+          }
+        }
+        case rai {
+          leaf rai {
+            type empty;
+            description
+              "Transmit RAI";
+          }
+        }
+        case shut {
+          leaf shut {
+            type empty;
+            description
+              "Shut down the Tx signal";
+          }
+        }
+      }
+      leaf quality-level {
+        type empty;
+        mandatory true;
+        description
+          "Select Quality Level";
+      }
+      choice squelch-choice1 {
+        case ql-dus {
+          leaf ql-dus {
+            type empty;
+            description
+              "Set Do Not Use For Sync level";
+          }
+        }
+        case ql-eec2 {
+          leaf ql-eec2 {
+            type empty;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+        }
+        case ql-prov {
+          leaf ql-prov {
+            type empty;
+            description
+              "Set the QL Provisionable level";
+          }
+        }
+        case ql-prs {
+          leaf ql-prs {
+            type empty;
+            description
+              "Set the (PRS) Traceable level";
+          }
+        }
+        case ql-smc {
+          leaf ql-smc {
+            type empty;
+            description
+              "Set the SMC Traceable level";
+          }
+        }
+        case ql-st2 {
+          leaf ql-st2 {
+            type empty;
+            description
+              "Set the Stratum-2 Traceable level";
+          }
+        }
+        case ql-st3 {
+          leaf ql-st3 {
+            type empty;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+        }
+        case ql-st3e {
+          leaf ql-st3e {
+            type empty;
+            description
+              "Set the Stratum-3E Traceable level";
+          }
+        }
+        case ql-stu {
+          leaf ql-stu {
+            type empty;
+            description
+              "Set the Sync Traceability Unknown level";
+          }
+        }
+        case ql-tnc {
+          leaf ql-tnc {
+            type empty;
+            description
+              "Set the Transit Node Clock (TNC) Traceable level";
+          }
+        }
+        case ql-dnu2 {
+          leaf ql-dnu2 {
+            type empty;
+            description
+              "Set the Do Not Use level";
+          }
+        }
+        case ql-eec1 {
+          leaf ql-eec1 {
+            type empty;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+        }
+        case ql-prc {
+          leaf ql-prc {
+            type empty;
+            description
+              "Set the PRC Traceable level";
+          }
+        }
+        case ql-sec {
+          leaf ql-sec {
+            type empty;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+        }
+        case ql-ssu-a {
+          leaf ql-ssu-a {
+            type empty;
+            description
+              "Set the SSU-A Traceable level";
+          }
+        }
+        case ql-ssu-b {
+          leaf ql-ssu-b {
+            type empty;
+            description
+              "Set the SSU-B Traceable level";
+          }
+        }
+        case ql-unkn {
+          leaf ql-unkn {
+            type empty;
+            description
+              "Set the Unknown level";
+          }
+        }
+      }
+    }
+  }
+
+  grouping tod_input_protocol-grp {
+    description
+      "Enable sync tod input cmd";
+    /*
+    protocol { hptsi | ericsson-combined ericsson-personality}
+    */
+    container protocol {
+      description
+        "Set the ToD input port protocol";
+      choice protocol {
+        case hptsi {
+          leaf hptsi {
+            type empty;
+            description
+              "hptsi protocol";
+          }
+        }
+        case ericsson-combined-ericsson-personality {
+          leaf ericsson-combined-ericsson-personality {
+            type empty;
+            description
+              "Ericsson-personality";
+          }
+        }
+      }
+    }
+    /*
+    dump gpsstats
+    */
+    leaf dump-gpsstats {
+      type empty;
+      description
+        "Information received from GPSS";
+    }
+    /*
+    high-impedance-standby
+    */
+    leaf high-impedance-standby {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable high-impedance-standby";
+    }
+    /*
+    lpps-loopback
+    */
+    leaf lpps-loopback {
+      type empty;
+      description
+        "Configure and access the 1pps input mode";
+    }
+    /*
+    antenna-port-overload-detect
+    */
+    leaf antenna-port-overload-detect {
+      type empty;
+      description
+        "Configure antenna port overload detect";
+    }
+    /*
+    gnss-control-obtain
+    */
+    leaf gnss-control-obtain {
+      type empty;
+      description
+        "Obtain control of GPS04";
+    }
+    /*
+    satellite-system { beidou_only | galileo_only | glonass_only
+     | gps_beidou | gps_galileo | gps_glonass | gps_only |
+     gps_qzss_beidou | gps_qzss_galileo | gps_qzss_glonass |
+     qzss_gps }
+    */
+    container satellite-system {
+      description
+        "Select the different satellite systems, GPS,Beidou,etc";
+      choice satellite-system {
+        case beidou_only {
+          leaf beidou_only {
+            type empty;
+            description
+              "Support Beidou satellite system for GPS03/04";
+          }
+        }
+        case galileo_only {
+          leaf galileo_only {
+            type empty;
+            description
+              "Support Galileo satellite system for GPS04";
+          }
+        }
+        case glonass_only {
+          leaf glonass_only {
+            type empty;
+            description
+              "Support Glonass satellite system for GPS04";
+          }
+        }
+        case gps_beidou {
+          leaf gps_beidou {
+            type empty;
+            description
+              "Support GPS and Beidou satellite systems for
+               GPS03/04";
+          }
+        }
+        case gps_galileo {
+          leaf gps_galileo {
+            type empty;
+            description
+              "Support GPS and GALILEO satellite systems for
+               GPS04";
+          }
+        }
+        case gps_glonass {
+          leaf gps_glonass {
+            type empty;
+            description
+              "Support GPS and GLONASS satellite systems for
+               GPS03/04";
+          }
+        }
+        case gps_only {
+          leaf gps_only {
+            type empty;
+            description
+              "Support GPS satellite system for GPS03/04";
+          }
+        }
+        case gps_qzss_beidou {
+          leaf gps_qzss_beidou {
+            type empty;
+            description
+              "Support GPS, BEIDOU,and QZSS satellite systems
+               for GPS04";
+          }
+        }
+        case gps_qzss_galileo {
+          leaf gps_qzss_galileo {
+            type empty;
+            description
+              "Support GPS, GALILEO,and QZSS satellite systems
+               for GPS04";
+          }
+        }
+        case gps_qzss_glonass {
+          leaf gps_qzss_glonass {
+            type empty;
+            description
+              "Support GPS, GLONASS,and QZSS satellite systems
+               for GPS04";
+          }
+        }
+        case qzss_gps {
+          leaf qzss_gps {
+            type empty;
+            description
+              "Support GPS and QZSS satellite systems for GPS04";
+          }
+        }
+      }
+    }
+    /*
+    alarm-filter (value)
+    */
+    leaf alarm-filter {
+      type uint8 {
+        range "1..60";
+      }
+      default "36";
+      description
+        "Configure alarm-filter in minutes";
+    }
+    /*
+    cable-delay (value) (value2)
+    */
+    container cable-delay {
+      description
+        "Configure cable-delay in nanoseconds";
+      leaf value {
+        type int32 {
+          range "-100000000..100000000";
+        }
+        description
+          "redundant equipment instance 1 cable-delay in ns";
+      }
+      leaf value2 {
+        type int32 {
+          range "-100000000..100000000";
+        }
+        description
+          "redundant equipment instance 2 cable-delay in ns";
+      }
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+    /*
+    time-probe
+    */
+    container time-probe {
+      presence "";
+      description
+        "time-probe method";
+      uses cfg_sync_tod_input_time-probe_time-difference_threshold-grp;
+    }
+  }
+
+  grouping cfg_sync_tod_input_time-probe_time-difference_threshold-grp {
+    description
+      "sync tod input time-probe time-difference threshold
+       configuration";
+    /*
+    time-difference threshold (threshold_value)
+    */
+    container time-difference {
+      description
+        "set time difference threshold value in ns";
+      leaf threshold {
+        type uint32 {
+          range "1..100000";
+        }
+        description
+          "Specify time difference threshold value in ns";
+      }
+    }
+  }
+
+  grouping tod_output_protocol-grp {
+    description
+      "Enable sync tod output cmd";
+    /*
+    protocol hptsi
+    */
+    leaf protocol-hptsi {
+      type empty;
+      description
+        "hptsi protocol";
+    }
+    /*
+    squelch shutdown clock-class (class-value)
+    */
+    container squelch-shutdown-clock-class {
+      presence "";
+      description
+        "Set the squelch threshold clock-class number";
+      leaf class-value {
+        type uint8 {
+          range "1..255";
+        }
+        description
+          "clock-class value";
+      }
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+  }
+
+  grouping v1588v2_profile-grp {
+    description
+      "1588v2 clock profile";
+    /*
+    domain (domain-id)
+    */
+    leaf domain {
+      type uint8 {
+        range "0..127";
+      }
+      default "0";
+      description
+        "Set domainNumber for defaultDS";
+    }
+    /*
+    priority1 (priority1-id)
+    */
+    leaf priority1 {
+      type uint8 {
+        range "0..255";
+      }
+      default "128";
+      description
+        "Set priority1 for defaultDS";
+    }
+    /*
+    priority2 (priority2-id)
+    */
+    leaf priority2 {
+      type uint8 {
+        range "0..255";
+      }
+      default "128";
+      description
+        "Set priority2 for defaultDS";
+    }
+    /*
+    ptp-port (port-id)
+    */
+    list ptp-port {
+      key "ptp-port";
+      description
+        "Create or configure a PTP port";
+      leaf ptp-port {
+        type uint16 {
+          range "1..384";
+        }
+        description
+          "PTP port number";
+      }
+      uses cfg_1588v2_ptp_port-grp;
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Disable this PTP Clock";
+    }
+  }
+
+  grouping cfg_1588v2_ptp_port-grp {
+    description
+      "1588v2 ptp port configuration";
+    /*
+    delay asymmetry (delay_ns)
+    */
+    container delay {
+      description
+        "Set delay parameters";
+      leaf asymmetry {
+        type int32 {
+          range "-100000..100000";
+        }
+        default "0";
+        description
+          "Specify delay asymmetry";
+      }
+    }
+    /*
+    description (des_str)
+    */
+    leaf description {
+      type string;
+      description
+        "Set descriptive text for this PTP port";
+    }
+    /*
+    receive timeout announce (time_value)
+    */
+    container receive-timeout-announce {
+      description
+        "Specify announceReceiptTimeout for portDS";
+      leaf time_value {
+        type uint8 {
+          range "2..255";
+        }
+        default "3";
+        description
+          "portDS.announceReceiptTimeout value";
+      }
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+    /*
+    transmit interval { announce (announce_value) | delay-req
+     (delay_req_value) | sync (sync_value)}
+    */
+    container transmit-interval {
+      description
+        "Specify transmit interval";
+      leaf announce {
+        type int8 {
+          range "-4..4";
+        }
+        default "-3";
+        description
+          "Specify Announce inter-message transmit interval";
+      }
+      leaf delay-req {
+        type int8 {
+          range "-6..4";
+        }
+        default "-4";
+        description
+          "Specify Delay_Req inter-message transmit interval";
+      }
+      leaf sync {
+        type int8 {
+          range "-6..4";
+        }
+        default "-4";
+        description
+          "pecify Sync inter-message transmit interval";
+      }
+    }
+    /*
+    transport ethernet multicast
+    */
+    container transport-ethernet-multicast {
+      presence "";
+      description
+        "Specify Ethernet multicast transport";
+      uses cfg_1588v2_ptp_port_transport-grp;
+    }
+  }
+
+  grouping cfg_1588v2_ptp_port_transport-grp {
+    description
+      "1588v2 ptp port transport configuration";
+    /*
+    circuit (slot_port) [vlan-id (out_vlan_id) [cfg_colon
+     (innner_vlan_id)]]
+    */
+    container circuit {
+      description
+        "Attach an Ethernet circuit";
+      leaf slot_port {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Specify slot/port";
+      }
+      container vlan-id {
+        description
+          "Specify vlan tag information";
+        leaf out_vlan_id {
+          type uint16 {
+            range "1..4095";
+          }
+          description
+            "vlan id";
+        }
+        leaf cfg_colon {
+          type uint16 {
+            range "1..4095";
+          }
+          description
+            "Specify inner vlan";
+        }
+      }
+    }
+    /*
+    mac-address {forwardable | non-forwardable}
+    */
+    leaf mac-address {
+      type enumeration {
+        enum forwardable {
+          value 0;
+          description
+            "Use forwardable MAC address 01-1B-19-00-00-00";
+        }
+        enum non-forwardable {
+          value 1;
+          description
+            "Use non-forwardable MAC address 01-80-C2-00-00-0E";
+        }
+      }
+      status obsolete;
+      description
+        "Set transmit destination multicast MAC address";
+    }
+    /*
+    mac-address-conf {forwardable | non-forwardable}
+    */
+    container mac-address-conf {
+      description
+        "Set transmit destination multicast MAC address";
+      choice mac-address-conf {
+        case forwardable {
+          leaf forwardable {
+            type empty;
+            description
+              "Use forwardable MAC address 01-1B-19-00-00-00";
+          }
+        }
+        case non-forwardable {
+          leaf non-forwardable {
+            type empty;
+            description
+              "Use non-forwardable MAC address
+               01-80-C2-00-00-0E";
+          }
+        }
+      }
+    }
+    /*
+    priority {dot1ad outer (outer_priority) inner
+     (inner_priority)| dot1q (priority_id)}
+    */
+    container priority {
+      description
+        "Set VLAN priority bits";
+      choice priority {
+        case dot1ad-outer {
+          container dot1ad-outer {
+            description
+              "Specify 802.1p prioirity for outer tag";
+            leaf outer_priority {
+              type uint8 {
+                range "0..7";
+              }
+              default "7";
+              description
+                "802.1p priority for outer tag";
+            }
+            leaf inner {
+              type empty;
+              description
+                "Specify 802.1p priority for inner (or only)
+                 tag";
+            }
+            leaf inner_priority {
+              type uint8 {
+                range "0..7";
+              }
+              default "7";
+              description
+                "802.1p priority for inner (or only) tag";
+            }
+          }
+        }
+        case dot1q {
+          leaf dot1q {
+            type uint8 {
+              range "0..7";
+            }
+            default "7";
+            description
+              "Specify priority for attached 802.1q circuit";
+          }
+        }
+      }
+    }
+  }
+
+  grouping g8265_1_profile-grp {
+    description
+      "g8265.1 clock profile";
+    /*
+    slave-instance (instance_id) {ipv4 | ipv6} master
+     {(ipv4_addr)|(ipv6_addr)}
+    */
+    list slave-instance {
+      key "instance_id";
+      description
+        "Specify slave instance as input source";
+      leaf instance_id {
+        type uint8 {
+          range "1..2";
+        }
+        description
+          "Slave instance ID";
+      }
+      choice slave-instance-choice {
+        case ipv4 {
+          leaf ipv4 {
+            type string;
+            description
+              "Specify IPv4 transport type";
+          }
+        }
+        case ipv6 {
+          leaf ipv6 {
+            type string;
+            description
+              "Specify IPv6 transport type";
+          }
+        }
+      }
+      leaf master {
+        type string;
+        description
+          "Specify the master tranport address";
+      }
+      leaf slave-instance-choice1 {
+        type union {
+          type inet:ipv4-address;
+          type inet:ipv6-address;
+        }
+        description
+          "leaf slave-instance-choice1.";
+      }
+      uses slave_instance_chain-grp;
+    }
+    /*
+    input-source_slave-instance (instance_id)
+    */
+    list input-source_slave-instance {
+      key "input-source_slave-instance";
+      description
+        "Specify slave instance as input source";
+      leaf input-source_slave-instance {
+        type uint8 {
+          range "1..2";
+        }
+        description
+          "Slave instance ID";
+      }
+      uses input_source_chain-grp;
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Disable this PTP Clock";
+    }
+    /*
+    wait-to-restore (time)
+    */
+    leaf wait-to-restore {
+      type uint8 {
+        range "0..12";
+      }
+      default "5";
+      description
+        "Set wait-to-restore timeout period";
+    }
+  }
+
+  grouping slave_instance_chain-grp {
+    description
+      "slave instance configuration";
+    /*
+    domain (domain-id)
+    */
+    leaf domain {
+      type uint8 {
+        range "0..255";
+      }
+      default "4";
+      description
+        "Set the slave-instance domain number";
+    }
+    /*
+    dscp (dscp_value)
+    */
+    leaf dscp {
+      type uint8 {
+        range "0..63";
+      }
+      default "54";
+      description
+        "Set DSCP (Differential Service Code Point)";
+    }
+    /*
+    interface (interface_name) (context)
+    */
+    container interface {
+      description
+        "Attach an IPOS interface to the slave instance";
+      leaf interface_name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface name";
+      }
+      leaf context {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        description
+          "Context name";
+      }
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+    /*
+    unicast-request {duration (ds) | interval {announce
+     (announce_value) [timeout (time_value)]| delay-resp
+     (delay_resp_value)| sync (sync_value)}}
+    */
+    container unicast-request {
+      description
+        "Set unicast request timing parameters";
+      leaf duration {
+        type uint16 {
+          range "60..1000";
+        }
+        default "300";
+        description
+          "Set unicast request contract duration";
+      }
+      container interval {
+        description
+          "Set unicast request timing intervals";
+        container announce {
+          description
+            "Set Announce inter-message interval";
+          leaf announce_value {
+            type int8 {
+              range "-3..4";
+            }
+            default "1";
+            description
+              "Specify the value. Inter-message time is 2^value
+               seconds";
+          }
+          leaf timeout {
+            type uint8 {
+              range "2..255";
+            }
+            default "3";
+            description
+              "Set the Announce receipt timeout";
+          }
+        }
+        leaf delay-resp {
+          type int8 {
+            range "-7..4";
+          }
+          default "-4";
+          description
+            "Set Delay_Resp inter-message interval";
+        }
+        leaf sync {
+          type int8 {
+            range "-7..4";
+          }
+          default "-6";
+          description
+            "Set Sync inter-message interval";
+        }
+      }
+    }
+  }
+
+  grouping input_source_chain-grp {
+    description
+      "input source configuration";
+    /*
+    lockout
+    */
+    leaf lockout {
+      type empty;
+      description
+        "Prevent the input source from being considered";
+    }
+    /*
+    priority (priority_value)
+    */
+    leaf priority {
+      type uint8 {
+        range "1..255";
+      }
+      default "255";
+      description
+        "Set the clock selector input source priority";
+    }
+  }
+
+  grouping g8275_1_profile-grp {
+    description
+      "g8275.1 clock profile";
+    /*
+    acquiring-state announce {default-ds | grandmaster}
+    */
+    container acquiring-state {
+      description
+        "Set Acquiring state parameters";
+      leaf announce {
+        type enumeration {
+          enum default-ds {
+            value 0;
+            description
+              "Advertise defaultDS while in Acquiring state";
+          }
+          enum grandmaster {
+            value 1;
+            description
+              "Advertise grandmaster while in Acquiring state";
+          }
+        }
+        description
+          "Specify Announce message content in Acquiring state";
+      }
+    }
+    /*
+    domain (domain-id)
+    */
+    leaf domain {
+      type uint8 {
+        range "0..63";
+      }
+      default "24";
+      description
+        "Set domainNumber for defaultDS";
+    }
+    /*
+    local-priority (local_pri)
+    */
+    leaf local-priority {
+      type uint8 {
+        range "1..255";
+      }
+      default "128";
+      description
+        "Set localPriority for defaultDS";
+    }
+    /*
+    priority2 (priority2-id)
+    */
+    leaf priority2 {
+      type uint8 {
+        range "0..255";
+      }
+      default "128";
+      description
+        "Set priority2 for defaultDS";
+    }
+    /*
+    ptp-port (port-id) [virtual]
+    */
+    list ptp-port {
+      key "port-id";
+      description
+        "Create or configure a PTP port";
+      leaf port-id {
+        type uint16 {
+          range "1..384";
+        }
+        description
+          "PTP port number";
+      }
+      container virtual {
+        presence "";
+        description
+          "Set a virtual PTP port";
+        uses cfg_g8275_1_virtual_ptp_port-grp;
+      }
+      uses cfg_g8275_1_ptp_port-grp;
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Disable this PTP Clock";
+    }
+    /*
+    holdover-time-error-budget (budget_value)
+    */
+    leaf holdover-time-error-budget {
+      type uint16 {
+        range "0..10000";
+      }
+      default "400";
+      description
+        "Set holdover time error budget";
+    }
+  }
+
+  grouping cfg_g8275_1_ptp_port-grp {
+    description
+      "g 8275.1 ptp port configuration";
+    /*
+    delay asymmetry (delay_ns)
+    */
+    container delay {
+      description
+        "Set delay parameters";
+      leaf asymmetry {
+        type int32 {
+          range "-100000..100000";
+        }
+        default "0";
+        description
+          "Specify delay asymmetry";
+      }
+    }
+    /*
+    description (des_str)
+    */
+    leaf description {
+      type string;
+      description
+        "Set descriptive text for this PTP port";
+    }
+    /*
+    export-link-delay
+    */
+    container export-link-delay {
+      presence "";
+      description
+        "enable export_link_delay function for this PTP port";
+      uses cfg_g8275_1_ptp_port_export-grp;
+    }
+    /*
+    local-priority (local_pri)
+    */
+    leaf local-priority {
+      type uint8 {
+        range "1..255";
+      }
+      default "128";
+      description
+        "Set localPriority for portDS";
+    }
+    /*
+    not-master
+    */
+    leaf not-master {
+      type empty;
+      description
+        "Set not master of this PTP port";
+    }
+    /*
+    receive timeout announce (time_value)
+    */
+    container receive-timeout-announce {
+      description
+        "Specify announceReceiptTimeout for portDS";
+      leaf time_value {
+        type uint8 {
+          range "2..255";
+        }
+        default "3";
+        description
+          "portDS.announceReceiptTimeout value";
+      }
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+    /*
+    slave-candidate
+    */
+    leaf slave-candidate {
+      type empty;
+      description
+        "Set slave candidacy of this PTP port:
+         portDS.notSlave=FALSE";
+    }
+    /*
+    measurement {monitoring | reference}
+    */
+    container measurement {
+      description
+        "enable measurement function for this PTP port";
+      choice measurement {
+        case monitoring {
+          container monitoring {
+            presence "";
+            description
+              "Specify measurement monitoring";
+            uses cfg_g8275_1_ptp_port_monitoring-grp;
+          }
+        }
+        case reference {
+          leaf reference {
+            type empty;
+            description
+              "Specify measurement reference";
+          }
+        }
+      }
+    }
+    /*
+    transmit interval {announce (announce_value)| delay-req
+     (delay_req_value)| sync (sync_value)}
+    */
+    container transmit-interval {
+      description
+        "Specify transmit interval";
+      leaf announce {
+        type int8 {
+          range "-4..4";
+        }
+        default "-3";
+        description
+          "Specify Announce inter-message transmit interval";
+      }
+      leaf delay-req {
+        type int8 {
+          range "-6..4";
+        }
+        default "-4";
+        description
+          "Specify Delay_Req inter-message transmit interval";
+      }
+      leaf sync {
+        type int8 {
+          range "-6..4";
+        }
+        default "-4";
+        description
+          "pecify Sync inter-message transmit interval";
+      }
+    }
+    /*
+    transport ethernet multicast
+    */
+    container transport-ethernet-multicast {
+      presence "";
+      description
+        "Specify Ethernet multicast transport";
+      uses cfg_g8275_1_ptp_port_transport-grp;
+    }
+  }
+
+  grouping cfg_g8275_1_ptp_port_export-grp {
+    description
+      "g 8275.1 export link delay configuration";
+    /*
+    update-threshold (threshold_value)
+    */
+    leaf update-threshold {
+      type uint32 {
+        range "100..100000";
+      }
+      default "100";
+      description
+        "set update threshold value";
+    }
+  }
+
+  grouping cfg_g8275_1_ptp_port_monitoring-grp {
+    description
+      "g 8275.1 measurement monitoring configuration";
+    /*
+    time-difference threshold (threshold_value)
+    */
+    container time-difference {
+      description
+        "set time difference threshold value";
+      leaf threshold {
+        type uint32 {
+          range "1..100000";
+        }
+        description
+          "Specify time difference threshold value";
+      }
+    }
+  }
+
+  grouping cfg_g8275_1_ptp_port_transport-grp {
+    description
+      "g8275.1 ptp port transport configuration";
+    /*
+    circuit (slot_port) [vlan-id (out_vlan_id) [cfg_colon
+     (innner_vlan_id)]]
+    */
+    container circuit {
+      description
+        "Attach an Ethernet circuit";
+      leaf slot_port {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Specify slot/port";
+      }
+      container vlan-id {
+        description
+          "Specify vlan tag information";
+        leaf out_vlan_id {
+          type uint16 {
+            range "1..4095";
+          }
+          description
+            "vlan id";
+        }
+        leaf cfg_colon {
+          type uint16 {
+            range "1..4095";
+          }
+          description
+            "Specify inner vlan";
+        }
+      }
+    }
+    /*
+    mac-address {forwardable | non-forwardable}
+    */
+    container mac-address {
+      description
+        "Set transmit destination multicast MAC address";
+      choice mac-address {
+        case forwardable {
+          leaf forwardable {
+            type empty;
+            description
+              "Use forwardable MAC address 01-1B-19-00-00-00";
+          }
+        }
+        case non-forwardable {
+          leaf non-forwardable {
+            type empty;
+            description
+              "Use non-forwardable MAC address
+               01-80-C2-00-00-0E";
+          }
+        }
+      }
+    }
+    /*
+    priority {dot1ad outer (outer_priority) inner
+     (inner_priority)| dot1q (priority_id)}
+    */
+    container priority {
+      description
+        "Set VLAN priority bits";
+      choice priority {
+        case dot1ad-outer {
+          container dot1ad-outer {
+            description
+              "Specify 802.1p prioirity for outer tag";
+            leaf outer_priority {
+              type uint8 {
+                range "0..7";
+              }
+              default "7";
+              description
+                "802.1p priority for outer tag";
+            }
+            leaf inner {
+              type empty;
+              description
+                "Specify 802.1p priority for inner (or only)
+                 tag";
+            }
+            leaf inner_priority {
+              type uint8 {
+                range "0..7";
+              }
+              default "7";
+              description
+                "802.1p priority for inner (or only) tag";
+            }
+          }
+        }
+        case dot1q {
+          leaf dot1q {
+            type uint8 {
+              range "0..7";
+            }
+            default "7";
+            description
+              "Specify priority for attached 802.1q circuit";
+          }
+        }
+      }
+    }
+  }
+
+  grouping cfg_g8275_1_virtual_ptp_port-grp {
+    description
+      "g 8275.1 virtual ptp port configuration";
+    /*
+    attach tod-a
+    */
+    leaf attach-tod-a {
+      type empty;
+      description
+        "Set attachement of tod-a to this virtual PTP port";
+    }
+    /*
+    description (des_str)
+    */
+    leaf description {
+      type string;
+      description
+        "Set descriptive text for this PTP port";
+    }
+    /*
+    local-priority (local_pri)
+    */
+    leaf local-priority {
+      type uint8 {
+        range "1..255";
+      }
+      default "128";
+      description
+        "Set localPriority for portDS";
+    }
+    /*
+    measurement reference
+    */
+    leaf measurement-reference {
+      type empty;
+      description
+        "Specify measurement reference";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+  }
+
+  grouping g8275_2_profile-grp {
+    description
+      "g8275.2 clock profile";
+    /*
+    acquiring-state announce {default-ds | grandmaster}
+    */
+    container acquiring-state {
+      description
+        "Set Acquiring state parameters";
+      leaf announce {
+        type enumeration {
+          enum default-ds {
+            value 0;
+            description
+              "Advertise defaultDS while in Acquiring state";
+          }
+          enum grandmaster {
+            value 1;
+            description
+              "Advertise grandmaster while in Acquiring state";
+          }
+        }
+        description
+          "Specify Announce message content in Acquiring state";
+      }
+    }
+    /*
+    clock-recovery-algorithm {robust | standard}
+    */
+    leaf clock-recovery-algorithm {
+      type enumeration {
+        enum robust {
+          value 0;
+          description
+            "The algorithm is used for G.8261 network condition";
+        }
+        enum standard {
+          value 1;
+          description
+            "The algorithm is used for G.8271.2 network
+             condition";
+        }
+      }
+      description
+        "Set clock recovery algorithm";
+    }
+    /*
+    domain (domain-id)
+    */
+    leaf domain {
+      type uint8 {
+        range "1..255";
+      }
+      default "44";
+      description
+        "Set domainNumber for defaultDS";
+    }
+    /*
+    local-priority (local_pri)
+    */
+    leaf local-priority {
+      type uint8 {
+        range "1..255";
+      }
+      default "128";
+      description
+        "Set localPriority for defaultDS";
+    }
+    /*
+    priority2 (priority2-id)
+    */
+    leaf priority2 {
+      type uint8 {
+        range "0..255";
+      }
+      default "128";
+      description
+        "Set priority2 for defaultDS";
+    }
+    /*
+    ptp-port (port-id) [virtual]
+    */
+    list ptp-port {
+      key "port-id";
+      description
+        "Create or configure a PTP port";
+      leaf port-id {
+        type uint16 {
+          range "1..384";
+        }
+        description
+          "PTP port number";
+      }
+      container virtual {
+        presence "";
+        description
+          "Set a virtual PTP port";
+        uses cfg_g8275_2_virtual_ptp_port-grp;
+      }
+      uses cfg_g8275_2_ptp_port-grp;
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Disable this PTP Clock";
+    }
+    /*
+    squelch
+    */
+    leaf squelch {
+      type empty;
+      description
+        "Enable Squelch";
+    }
+    /*
+    holdover-time-error-budget (budget_value)
+    */
+    leaf holdover-time-error-budget {
+      type uint16 {
+        range "0..10000";
+      }
+      default "400";
+      description
+        "Set holdover time error budget";
+    }
+  }
+
+  grouping cfg_g8275_2_ptp_port-grp {
+    description
+      "g 8275.2 ptp port configuration";
+    /*
+    master-only
+    */
+    leaf master-only {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable master-only";
+    }
+    /*
+    description (des_str)
+    */
+    leaf description {
+      type string;
+      description
+        "Set descriptive text for this PTP port";
+    }
+    /*
+    grantor
+    */
+    leaf grantor {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable grantor";
+    }
+    /*
+    local-priority (local_pri)
+    */
+    leaf local-priority {
+      type uint8 {
+        range "1..255";
+      }
+      default "128";
+      description
+        "Set localPriority for portDS";
+    }
+    /*
+    receive timeout announce (time_value)
+    */
+    container receive-timeout-announce {
+      status obsolete;
+      description
+        "Specify announceReceiptTimeout for portDS";
+      leaf time_value {
+        type uint8 {
+          range "2..255";
+        }
+        default "3";
+        status obsolete;
+        description
+          "portDS.announceReceiptTimeout value";
+      }
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+    /*
+    transport interface (interface_name) (context)
+    */
+    container transport-interface {
+      presence "";
+      description
+        "Attach an IPOS interface to the slave instance";
+      leaf interface_name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Specify a named interface to configure";
+      }
+      leaf context {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        description
+          "Specify a named context to configure";
+      }
+    }
+    /*
+    unicast-request-entry (entry_id) {ipv4 (ipv4_addr) | ipv6
+     (ipv6_addr)}
+    */
+    list unicast-request-entry {
+      key "entry_id";
+      description
+        "Create or configure master type and addr";
+      leaf entry_id {
+        type uint8 {
+          range "1..4";
+        }
+        description
+          "to indicate the master peer index";
+      }
+      choice unicast-request-entry-choice {
+        case ipv4 {
+          leaf ipv4 {
+            type string;
+            must "(/ctxsr6k:contexts/syncr6000:synchronization/s"
+            + "yncr6000:ptp-clock/syncr6000:g8275-1-t-bc/syncr6000:"
+            + "g8275-2-t-bc-p/syncr6000:ptp-port/syncr6000:master-"
+            + "only = 'false')" {
+              error-message "The configuration is invalid for "
+              + "master-only port.";
+              description
+                "The configuration is invalid for master-only
+                 port";
+            }
+            description
+              "Specify transport ipv4";
+          }
+        }
+        case ipv6 {
+          leaf ipv6 {
+            type string;
+            must "(/ctxsr6k:contexts/syncr6000:synchronization/s"
+            + "yncr6000:ptp-clock/syncr6000:g8275-1-t-bc/syncr6000:"
+            + "g8275-2-t-bc-p/syncr6000:ptp-port/syncr6000:master-"
+            + "only = 'false')" {
+              error-message "The configuration is invalid for "
+              + "master-only port.";
+              description
+                "The configuration is invalid for master-only
+                 port";
+            }
+            description
+              "Specify transport ipv6";
+          }
+        }
+      }
+      uses cfg_g8275_2_ptp_port_unicast-grp;
+    }
+  }
+
+  grouping cfg_g8275_2_ptp_port_unicast-grp {
+    description
+      "g8275.2 ptp port unicast configuration";
+    /*
+    apts
+    */
+    leaf apts {
+      type empty;
+      description
+        "Enable the APTS from the upstream network";
+    }
+    /*
+    asymmetry-delay-compensation
+    */
+    container asymmetry-delay-compensation {
+      presence "";
+      description
+        "Enable the asymmetry delay compensation from the
+         upstream network";
+      uses cfg_g8275_2_unicast_asymmetry-grp;
+    }
+    /*
+    delay asymmetry (delay_ns)
+    */
+    container delay {
+      description
+        "Set delay parameters";
+      leaf asymmetry {
+        type int32 {
+          range "-1000000000..1000000000";
+        }
+        default "0";
+        description
+          "Specify delay asymmetry";
+      }
+    }
+    /*
+    dscp (dscp_value)
+    */
+    leaf dscp {
+      type uint8 {
+        range "0..63";
+      }
+      default "54";
+      description
+        "Set DSCP";
+    }
+    /*
+    measurement monitoring
+    */
+    container measurement-monitoring {
+      presence "";
+      description
+        "Specify measurement monitoring";
+      uses cfg_g8275_2_unicast_monitoring-grp;
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+    /*
+    unicast-request {duration (ds) | interval {announce
+     (announce_value) | delay-resp (delay_resp_value)| sync
+     (sync_value)}}
+    */
+    container unicast-request {
+      description
+        "Set unicast request timing parameters";
+      leaf duration {
+        type uint16 {
+          range "60..1000";
+        }
+        default "300";
+        description
+          "Set unicast request contract duration";
+      }
+      container interval {
+        description
+          "Set unicast request timing intervals";
+        leaf announce {
+          type int8 {
+            range "-3..0";
+          }
+          default "0";
+          description
+            "Set Announce inter-message interval";
+        }
+        leaf delay-resp {
+          type int8 {
+            range "-7..0";
+          }
+          default "-4";
+          description
+            "Set Delay_Resp inter-message interval";
+        }
+        leaf sync {
+          type int8 {
+            range "-7..0";
+          }
+          default "-6";
+          description
+            "Set Sync inter-message interval";
+        }
+      }
+    }
+    /*
+    receive timeout announce (time_value)
+    */
+    container receive-timeout-announce {
+      presence "";
+      description
+        "Specify announceReceiptTimeout for PTP unicast request
+         entry";
+      leaf time_value {
+        type uint8 {
+          range "2..255";
+        }
+        default "3";
+        description
+          "PTP unicast request entry announceReceiptTimeout
+           value";
+      }
+    }
+  }
+
+  grouping cfg_g8275_2_unicast_asymmetry-grp {
+    description
+      "asymmetry delay compensation";
+    /*
+    threshold {critical (critical_value) | minor (minor_value)}
+    */
+    container threshold {
+      description
+        "Enable asymmetry delay alarm and set threshold";
+      leaf critical {
+        type uint32 {
+          range "1001..100000";
+        }
+        description
+          "Set critical alarm threshold";
+      }
+      leaf minor {
+        type uint16 {
+          range "50..1000";
+        }
+        description
+          "Set minor alarm threshold";
+      }
+    }
+  }
+
+  grouping cfg_g8275_2_unicast_monitoring-grp {
+    description
+      "g 8275.2 unicast measurement monitoring configuration";
+    /*
+    time-difference threshold (threshold_value)
+    */
+    container time-difference {
+      description
+        "set time difference threshold value";
+      leaf threshold {
+        type uint32 {
+          range "1..100000";
+        }
+        description
+          "Specify time difference threshold value";
+      }
+    }
+  }
+
+  grouping cfg_g8275_2_virtual_ptp_port-grp {
+    description
+      "g 8275.2 virtual ptp port configuration";
+    /*
+    attach tod-a
+    */
+    leaf attach-tod-a {
+      type empty;
+      description
+        "Set attachement of tod-a to this virtual PTP port";
+    }
+    /*
+    description (des_str)
+    */
+    leaf description {
+      type string;
+      description
+        "Set descriptive text for this PTP port";
+    }
+    /*
+    local-priority (local_pri)
+    */
+    leaf local-priority {
+      type uint8 {
+        range "1..255";
+      }
+      default "128";
+      description
+        "Set localPriority for portDS";
+    }
+    /*
+    measurement reference
+    */
+    leaf measurement-reference {
+      type empty;
+      description
+        "Specify measurement reference";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+  }
+
+  grouping equipment-clock-grp {
+    description
+      "equipment-clock mode";
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Shutdown clock";
+    }
+    /*
+    ql-enabled
+    */
+    leaf ql-enabled {
+      type empty;
+      description
+        "Configure ql-enabled mode";
+    }
+    /*
+    revertive
+    */
+    leaf revertive {
+      type empty;
+      description
+        "Configure revertive mode";
+    }
+    /*
+    freerun
+    */
+    leaf freerun {
+      type empty;
+      description
+        "Configure freerun mode";
+    }
+    /*
+    internal clock-quality {stratum-3 | stratum-3e | pass-thru |
+     eeec | (3-stratum) | (3e-stratum)}
+    */
+    container internal {
+      description
+        "Configure internal oscillator options";
+      leaf clock-quality {
+        type enumeration {
+          enum stratum-3 {
+            value 0;
+            status obsolete;
+            description
+              "Stratum-3 (with Stratum-3E holdover)";
+          }
+          enum stratum-3e {
+            value 1;
+            status obsolete;
+            description
+              "Stratum-3E";
+          }
+          enum pass-thru {
+            value 2;
+            description
+              "pass-thru mode";
+          }
+          enum eeec {
+            value 3;
+            description
+              "eEEC(G.8262.1)";
+          }
+          enum 3-stratum {
+            value 4;
+            description
+              "Stratum-3 (with Stratum-3E holdover)";
+          }
+          enum 3e-stratum {
+            value 5;
+            description
+              "Stratum-3E";
+          }
+        }
+        description
+          "Configure internal oscillator quality";
+      }
+    }
+    /*
+    wait-to-restore (minutes)
+    */
+    leaf wait-to-restore {
+      type uint8 {
+        range "0..12";
+      }
+      default "5";
+      description
+        "Configure wait-to-restore timeout";
+    }
+    /*
+    minimum quality-level {internal | ql-dus | ql-eec2 | ql-prov
+     | ql-prs | ql-smc | ql-st2 | ql-st3 | ql-st3e | ql-stu | ql-
+     tnc | ql-dnu | ql-eec1 | ql-prc | ql-sec | ql-ssu-a | ql-
+     ssu-b | ql-unkn | ql-prtc | ql-eprtc | ql-eeec | ql-eprc}
+    */
+    container minimum {
+      description
+        "Configure minimum quality-level";
+      leaf quality-level {
+        type enumeration {
+          enum internal {
+            value 0;
+            description
+              "Set the internal quality level (S3/S3E)";
+          }
+          enum ql-dus {
+            value 1;
+            description
+              "Set Do Not Use For Sync level";
+          }
+          enum ql-eec2 {
+            value 2;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+          enum ql-prov {
+            value 3;
+            description
+              "Set the QL Provisionable level";
+          }
+          enum ql-prs {
+            value 4;
+            description
+              "Set the (PRS) Traceable level";
+          }
+          enum ql-smc {
+            value 5;
+            description
+              "Set the SMC Traceable level";
+          }
+          enum ql-st2 {
+            value 6;
+            description
+              "Set the Stratum-2 Traceable level";
+          }
+          enum ql-st3 {
+            value 7;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+          enum ql-st3e {
+            value 8;
+            description
+              "Set the Stratum-3E Traceable level";
+          }
+          enum ql-stu {
+            value 9;
+            description
+              "Set the Sync Traceability Unknown level";
+          }
+          enum ql-tnc {
+            value 10;
+            description
+              "Set the Transit Node Clock (TNC) Traceable level";
+          }
+          enum ql-dnu {
+            value 11;
+            description
+              "Set the Do Not Use level";
+          }
+          enum ql-eec1 {
+            value 12;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+          enum ql-prc {
+            value 13;
+            description
+              "Set the PRC Traceable level";
+          }
+          enum ql-sec {
+            value 14;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+          enum ql-ssu-a {
+            value 15;
+            description
+              "Set the SSU-A Traceable level";
+          }
+          enum ql-ssu-b {
+            value 16;
+            description
+              "Set the SSU-B Traceable level";
+          }
+          enum ql-unkn {
+            value 17;
+            description
+              "Set the Unknown level";
+          }
+          enum ql-prtc {
+            value 18;
+            description
+              "Set the PRTC Traceable level";
+          }
+          enum ql-eprtc {
+            value 19;
+            description
+              "Set the EPRTC Traceable level";
+          }
+          enum ql-eeec {
+            value 20;
+            description
+              "Set the EEEC Traceable level";
+          }
+          enum ql-eprc {
+            value 21;
+            description
+              "Set the EPRC Traceable level";
+          }
+        }
+        description
+          "Configure minimum quality-level";
+      }
+    }
+    /*
+    loop-prevention master-side
+    */
+    leaf loop-prevention-master-side {
+      type empty;
+      description
+        "master side option";
+    }
+    /*
+    input-source (input-source-num) { external-bits-a |
+     external-bits-b | external-tod-a | line (slot-port) | ptp-
+     clock }
+    */
+    list input-source {
+      key "input-source-num";
+      description
+        "Select input source for equipment clock";
+      leaf input-source-num {
+        type uint8 {
+          range "1..4";
+        }
+        description
+          "Input Source Selection";
+      }
+      choice input-source-choice {
+        case external-bits-a {
+          leaf external-bits-a {
+            type empty;
+            description
+              "External Input Source bits-a selection";
+          }
+        }
+        case external-bits-b {
+          leaf external-bits-b {
+            type empty;
+            description
+              "External Input Source bits-b selection";
+          }
+        }
+        case external-tod-a {
+          leaf external-tod-a {
+            type empty;
+            description
+              "External Input Source tod-a selection";
+          }
+        }
+        case line {
+          leaf line {
+            type string;
+            description
+              "Line Input Source";
+          }
+        }
+        case ptp-clock {
+          leaf ptp-clock {
+            type empty;
+            description
+              "PTP-clock Input Source";
+          }
+        }
+      }
+      uses input-src-grp;
+    }
+    /*
+    force-switch { external { bits-a | bits-b | tod-a} | line {
+     (slot-port) } | ptp-clock }
+    */
+    container force-switch {
+      description
+        "Configure forced switch";
+      choice force-switch {
+        case external {
+          container external {
+            description
+              "Select External Reference";
+            choice external {
+              case bits-a {
+                leaf bits-a {
+                  type empty;
+                  description
+                    "Force bits-a as external reference";
+                }
+              }
+              case bits-b {
+                leaf bits-b {
+                  type empty;
+                  description
+                    "Force bits-b as external reference";
+                }
+              }
+              case tod-a {
+                leaf tod-a {
+                  type empty;
+                  description
+                    "Force tod-a as external reference";
+                }
+              }
+            }
+          }
+        }
+        case line {
+          leaf line {
+            type string;
+            description
+              "Force source/port as external reference";
+          }
+        }
+        case ptp-clock {
+          leaf ptp-clock {
+            type empty;
+            description
+              "Force PTP-clock as external reference";
+          }
+        }
+      }
+    }
+  }
+
+  grouping input-src-grp {
+    description
+      "configure input-source";
+    /*
+    force quality-level {ql-dus | ql-eec2 | ql-prov | ql-prs |
+     ql-smc | ql-st2 | ql-st3 | ql-st3e | ql-stu | ql-tnc | ql-
+     dnu | ql-eec1 | ql-prc | ql-sec | ql-ssu-a | ql-ssu-b | ql-
+     unkn | ql-prtc | ql-eprtc | ql-eeec | ql-eprc }
+    */
+    container force {
+      description
+        "Force Rx quality-level";
+      leaf quality-level {
+        type enumeration {
+          enum ql-dus {
+            value 0;
+            description
+              "Set Do Not Use For Sync level";
+          }
+          enum ql-eec2 {
+            value 1;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+          enum ql-prov {
+            value 2;
+            description
+              "Set the QL Provisionable level";
+          }
+          enum ql-prs {
+            value 3;
+            description
+              "Set the (PRS) Traceable level";
+          }
+          enum ql-smc {
+            value 4;
+            description
+              "Set the SMC Traceable level";
+          }
+          enum ql-st2 {
+            value 5;
+            description
+              "Set the Stratum-2 Traceable level";
+          }
+          enum ql-st3 {
+            value 6;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+          enum ql-st3e {
+            value 7;
+            description
+              "Set the Stratum-3E Traceable level";
+          }
+          enum ql-stu {
+            value 8;
+            description
+              "Set the Sync Traceability Unknown level";
+          }
+          enum ql-tnc {
+            value 9;
+            description
+              "Set the Transit Node Clock (TNC) Traceable level";
+          }
+          enum ql-dnu {
+            value 10;
+            description
+              "Set the Do Not Use level";
+          }
+          enum ql-eec1 {
+            value 11;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+          enum ql-prc {
+            value 12;
+            description
+              "Set the PRC Traceable level";
+          }
+          enum ql-sec {
+            value 13;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+          enum ql-ssu-a {
+            value 14;
+            description
+              "Set the SSU-A Traceable level";
+          }
+          enum ql-ssu-b {
+            value 15;
+            description
+              "Set the SSU-B Traceable level";
+          }
+          enum ql-unkn {
+            value 16;
+            description
+              "Set the Unknown level";
+          }
+          enum ql-prtc {
+            value 17;
+            description
+              "Set the PRTC Traceable level";
+          }
+          enum ql-eprtc {
+            value 18;
+            description
+              "Set the EPRTC Traceable level";
+          }
+          enum ql-eeec {
+            value 19;
+            description
+              "Set the EEEC Traceable level";
+          }
+          enum ql-eprc {
+            value 20;
+            description
+              "Set the EPRC Traceable level";
+          }
+        }
+        description
+          "Force Rx quality-level";
+      }
+    }
+    /*
+    lockout
+    */
+    leaf lockout {
+      type empty;
+      description
+        "Remove input source as reference candidate";
+    }
+    /*
+    priority (priority-num)
+    */
+    leaf priority {
+      type uint8 {
+        range "1..255";
+      }
+      default "255";
+      description
+        "Set the reference priority";
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-synchronization-router6000";
+    /*
+    synchronization
+    */
+    container synchronization {
+      description
+        "Synchronization configuration mode";
+      uses sync_conf-grp;
+    }
+    /*
+    global synchronization option { s1 | s2 | (1) | (2) }
+    */
+    container global-synchronization-option {
+      presence "";
+      description
+        "Configure synchronization option for the system in
+         whole";
+      leaf global-synchronization-option-choice {
+        type enumeration {
+          enum s1 {
+            value 0;
+            status obsolete;
+            description
+              "G.781 Option s1";
+          }
+          enum s2 {
+            value 1;
+            status obsolete;
+            description
+              "G.781 Option 2 Gen s2";
+          }
+          enum 1 {
+            value 2;
+            description
+              "G.781 Option 1";
+          }
+          enum 2 {
+            value 3;
+            description
+              "G.781 Option 2 Gen 2";
+          }
+        }
+        mandatory true;
+        description
+          "leaf global-synchronization-option-choice.";
+      }
+    }
+  }
+
+}

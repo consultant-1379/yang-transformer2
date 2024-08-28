@@ -1,0 +1,116 @@
+module ericsson-arp-qos-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-arp-qos-router6000";
+
+  prefix "arpqosrouter6000";
+
+  import ericsson-qos-router6000 {
+    prefix "qosrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-arp-qos-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-07-08" {
+    description
+      "Add a feature name for arp rate";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature arp {
+    description
+      "This feature indicates that the device supports protocol
+       rate limit.";
+  }
+
+  feature qos-protocol-rate-limit {
+    description
+      "This feature indicates that the device supports
+       protocol-rate-limit in QoS.";
+  }
+
+  augment "/qosrouter6000:qos/qosrouter6000:policy/qosrouter6000"
+  + ":policy-choice/qosrouter6000:protocol-rate-limit/qosrouter6000"
+  + ":protocol-rate-limit" {
+    if-feature qos-protocol-rate-limit;
+    description
+      "ericsson-arp-qos";
+    /*
+    arp rate [ (rate-num) burst (burst-num) ]
+    */
+    container arp-rate {
+      if-feature arp;
+      presence "";
+      description
+        "Maximum rate of protocol rate-limit";
+      container arp-rate {
+        description
+          "container arp-rate.";
+        leaf rate-num {
+          type uint32 {
+            range "1..2500000";
+          }
+          mandatory true;
+          description
+            "Rate in packets per second";
+        }
+        leaf burst {
+          type empty;
+          mandatory true;
+          description
+            "Burst size in packets";
+        }
+        leaf burst-num {
+          type uint32 {
+            range "1..25000000";
+          }
+          mandatory true;
+          description
+            "Burst size in packets";
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,231 @@
+module ericsson-vpls-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-vpls-router6000";
+
+  prefix "vplsrouter6000";
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-vpws-router6000 {
+    prefix "vpwsrouter6000";
+  }
+
+  import ericsson-bridge-router6000 {
+    prefix "bridgerouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-vpls-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-07-14" {
+    description
+      "Adding new commands for igmp snooping feature";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-05-24" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-03-29" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping vpls-grp {
+    description
+      "VPLS configuration mode";
+    /*
+    pseudowire { vlan ( vlan-val ) | { instance (instance-id) [
+     spoke ] } }
+    */
+    container pseudowire {
+      description
+        "Configure pseudowire";
+      leaf vlan {
+        type string {
+          pattern '(untagged|\d{1,4}|\d{1,4}\-\d{1,4})(,\d{1,4}|'
+          + ',\d{1,4}\-\d{1,4}){0,4}';
+        }
+        description
+          "Configure";
+      }
+      list instance {
+        key "instance-id";
+        description
+          "Set PW instance id";
+        leaf instance-id {
+          type leafref {
+            path "/ctxsr6k:contexts/vpwsrouter6000:pseudowire/vp"
+            + "wsrouter6000:instance/vpwsrouter6000:instance";
+          }
+          description
+            "PW Instance ID";
+        }
+        leaf spoke {
+          type empty;
+          description
+            "Configure this PW as spoke";
+        }
+        uses pw-instance-grp;
+      }
+    }
+  }
+
+  grouping pw-instance-grp {
+    description
+      "VPLS PW instance configuration mode";
+    /*
+    split-horizon-group (shg-name)
+    */
+    list split-horizon-group {
+      key "split-horizon-group";
+      description
+        "Add pseudowire to split horizon group";
+      leaf split-horizon-group {
+        type string;
+        description
+          "Split horizon group name";
+      }
+    }
+    /*
+    profile (profile-name)
+    */
+    leaf profile {
+      type leafref {
+        path "/bridgerouter6000:bridge/bridgerouter6000:profile/"
+        + "bridgerouter6000:profile";
+      }
+      description
+        "Configure VPLS profile";
+    }
+    /*
+    mac-entry static < vlan (vlan-id) > < mac (mac-val) >
+    */
+    list mac-entry-static {
+      key "mac vlan";
+      description
+        "entry";
+      leaf mac {
+        type yang:mac-address;
+        description
+          "Mac";
+      }
+      leaf vlan {
+        type uint16 {
+          range "1..4095";
+        }
+        description
+          "VLAN-ID, vlan-id for 4095 is invalid.";
+      }
+    }
+    /*
+    neighbor mac-flush
+    */
+    leaf neighbor-mac-flush {
+      type empty;
+      description
+        "Send MAC flush message at the hub node";
+    }
+    /*
+    native vlan (vlan-val)
+    */
+    container native {
+      description
+        "Configure native";
+      leaf vlan {
+        type uint16 {
+          range "1..4094";
+        }
+        description
+          "Configure native";
+      }
+    }
+    /*
+    igmp-snooping
+    */
+    container igmp-snooping {
+      description
+        "Configure IGMP attributes on CCT";
+      list static-group {
+        key "grp-addr";
+        description
+          "Specify multicast group address";
+        leaf grp-addr {
+          type typesrouter6000:ipv4-muticast-address;
+          description
+            "Multicast group IP address, should be in the range
+             224.0.1.0 to 239.255.255.255";
+        }
+        leaf source {
+          type inet:ipv4-address;
+          description
+            "Specify multicast source ip address";
+        }
+      }
+      leaf mrouting {
+        type empty;
+        description
+          "Configure IGMP snooping Mrouting";
+      }
+    }
+  }
+
+  augment "/bridgerouter6000:bridge/bridgerouter6000:bridge-"
+  + "instance" {
+    description
+      "ericsson-vpls";
+    /*
+    vpls
+    */
+    container vpls {
+      presence "";
+      description
+        "Configure VPLS attributes";
+      uses vpls-grp;
+    }
+  }
+
+}

@@ -1,0 +1,159 @@
+module mandatory-immutable-sensitive-handling {
+
+	namespace "urn?test?mandatory-immutable-sensitive-handling";
+	prefix this;
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	import _3gpp-common-yang-extensions {
+		prefix yext3gpp;
+	}
+	import iana-crypt-hash {
+		prefix ianach;
+	}
+
+	revision "2021-03-07";
+
+	list list1 {
+
+		key leaf11;
+
+		leaf leaf11 {			// key = MANDATORY / IMMUTABLE
+			type string;
+		}
+
+		leaf leaf12 {
+			type string;
+			mandatory true;		// mandatory attr = MANDATORY, NOT_IMMUTABLE
+		}
+
+		leaf leaf13 {
+			type string;
+			mandatory true;		// will be deviated to mandatory false = NOT_MANDATORY, NOT_IMMUTABLE
+		}
+
+		leaf leaf14 {
+			type string;
+			mandatory false;	// normal attr = NOT_MANDATORY, NOT_IMMUTABLE
+		}
+
+		leaf leaf15 {
+			type string;		// will be deviated to mandatory true = MANDATORY, NOT_IMMUTABLE
+		}
+
+		leaf-list leaflist16 {
+			type string;
+			min-elements 0;
+		}
+
+		leaf-list leaflist17 {
+			type string;
+			min-elements 2;
+		}
+	}
+
+	list list2 {
+
+		config false;
+		notife:notifiable-state-data true;
+
+		key leaf21;
+
+		leaf leaf21 {			// key = MANDATORY / IMMUTABLE
+			type string;
+		}
+
+		leaf leaf22 {
+			type string;
+			mandatory true;		// can't have mandatory in config false = NOT_MANDATORY, NOT_IMMUTABLE
+		}
+
+		leaf leaf23 {
+			type string;
+			mandatory false;	// will be deviated to mandatory true, but can't have mandatory in config false = NOT_MANDATORY, NOT_IMMUTABLE
+		}
+	}
+
+	container cont4 {
+	
+		leaf leaf41 {
+			type string;
+			yexte:restricted;	// restricted = NOT_MANDATORY / IMMUTABLE
+		}
+	
+		leaf leaf42 {
+			type string;
+			yexte:restricted;	// will be deviated-out = NOT_MANDATORY / NOT_IMMUTABLE
+		}
+
+		leaf leaf43 {
+			type string;
+			mandatory true;
+			yexte:restricted;	// mandatory and restricted = MANDATORY / IMMUTABLE
+		}
+	}
+
+	container cont5 {
+
+		leaf leaf51 {
+			type string;
+			yext3gpp:inVariant;	// 3GPP in-variant = NOT_MANDATORY / IMMUTABLE
+		}
+
+		leaf leaf52 {
+			type string;
+			yext3gpp:inVariant;	// will be deviated-out = NOT_MANDATORY / NOT_IMMUTABLE
+		}
+
+		leaf leaf53 {
+			type string;
+			mandatory true;
+			yext3gpp:inVariant;	// mandatory and 3GPP in-variant = MANDATORY / IMMUTABLE
+		}
+	}
+
+	typedef typedef66 {
+		type ianach:crypt-hash;
+	}
+
+	container cont6 {
+
+		leaf leaf61 {
+			type string;				// normal attribute = NOT_SENSITIVE
+		}
+
+		leaf leaf62 {
+			type string;
+			yexte:is-passphrase;		// SENSITIVE
+		}
+
+		leaf leaf63 {
+			type string;
+			mandatory true;
+			yexte:personal-data 123;	// SENSITIVE
+		}
+
+		leaf leaf64 {
+			type string;				// will be deviated-in = SENSITIVE
+		}
+
+		leaf leaf65 {
+			type ianach:crypt-hash;		// SENSITIVE
+		}
+
+		leaf leaf66 {
+			type typedef66;				// SENSITIVE
+		}
+
+		leaf-list leaflist67 {
+			type union {				// SENSITIVE
+				type ianach:crypt-hash;
+				type string;
+			}
+		}
+	}
+}

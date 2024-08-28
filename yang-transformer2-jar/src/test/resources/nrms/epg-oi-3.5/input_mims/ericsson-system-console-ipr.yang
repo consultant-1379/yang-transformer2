@@ -1,0 +1,81 @@
+module ericsson-system-console-ipr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-system-console-ipr";
+
+  prefix "sysconsoleipr";
+
+  import ietf-system {
+    prefix "sys";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-system-console-ipr
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-05" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-09-01" {
+    description
+      "Modify the system console ipr.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-09-01" {
+    description
+      "Add the system console.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/sys:system" {
+    description
+      "ericsson-system-console-ipr";
+    /*
+    console { port | root-user }
+    */
+    container console {
+      description
+        "Set system level console options";
+      leaf port {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable port";
+      }
+      leaf root-user {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable root-user";
+      }
+    }
+  }
+
+}

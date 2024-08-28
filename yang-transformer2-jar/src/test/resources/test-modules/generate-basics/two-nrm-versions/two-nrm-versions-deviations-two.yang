@@ -1,0 +1,31 @@
+module two-nrm-versions-deviations-two {
+
+    namespace "urn:test:two-nrm-versions-deviations-two";
+    prefix this;
+
+    revision "2021-12-15";
+
+	import two-nrm-versions-base {
+		prefix base;
+	}
+
+	import two-nrm-versions-augmentations {
+		prefix augmentations;
+	}
+	
+	deviation /base:cont1/augmentations:leaf15 {
+		deviate replace {
+			type boolean;
+		}
+	}
+
+	deviation /base:cont1/augmentations:leaf16 {
+		deviate replace {
+			type bits {
+				bit RED;
+				bit YELLOW;
+			}
+		}
+	}
+
+}

@@ -1,0 +1,80 @@
+module ericsson-dscp-remark-interface-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-dscp-remark-interface-router6000";
+
+  prefix "dscpremarkintfR6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-dscp-remark-router6000 {
+    prefix "dscpremarkR6000";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-dscp-remark-interface-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-09-27" {
+    description
+      "changing namespace for the model";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-05" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment
+  "/if:interfaces/if:interface/ifxrouter6000:l3-interface" {
+    description
+      "ericsson-dscp-remark-interface-router6000";
+    /*
+    dscp profile (profile-name)
+    */
+    container dscp {
+      description
+        "Configure dscp profile";
+      leaf profile {
+        type leafref {
+          path "/ctxsr6k:contexts/dscpremarkR6000:dscp/dscpremar"
+          + "kR6000:profile/dscpremarkR6000:profile";
+        }
+        description
+          "Configure dscp profile for dscp remarking";
+      }
+    }
+  }
+
+}

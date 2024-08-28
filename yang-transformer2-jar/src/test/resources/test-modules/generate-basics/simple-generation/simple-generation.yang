@@ -1,0 +1,21 @@
+module simple-generation {
+
+	namespace "urn:test:simple-generation";
+	prefix this;
+
+	revision "2021-10-11";
+
+	container cont1 {
+
+		description "This is cont1";
+
+		container cont2 {
+			presence "";
+
+			leaf leaf3 {
+				type string;
+			}
+		}
+	}
+
+}

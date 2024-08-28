@@ -1,0 +1,24 @@
+module moc-naming-weird-one {
+
+    namespace "urn*test*moc-naming-weird-one";
+    prefix this;
+
+    revision "2021-03-07";
+
+	container cont1 {
+		leaf leafXx { type string; }
+	}
+
+	container cont6 {
+		leaf leafXx { type string; }
+		
+		container cont7 {
+			leaf leafXx { type string; }
+		}
+	}
+
+	container cont7 {
+		leaf leafXx { type string; }
+	}
+
+}

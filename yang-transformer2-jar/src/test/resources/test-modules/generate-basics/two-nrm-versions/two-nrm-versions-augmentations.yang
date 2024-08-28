@@ -1,0 +1,22 @@
+module two-nrm-versions-augmentations {
+
+    namespace "urn:test:two-nrm-versions-augmentations";
+    prefix this;
+
+    revision "2021-10-24";
+
+	import two-nrm-versions-base {
+		prefix base;
+	}
+
+	augment /base:cont1 {
+	
+		leaf leaf15 {
+			type string;
+		}
+	
+		leaf leaf16 {
+			type int32;
+		}
+	}
+}

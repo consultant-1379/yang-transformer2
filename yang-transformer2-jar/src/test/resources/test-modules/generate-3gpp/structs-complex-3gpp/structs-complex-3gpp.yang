@@ -1,0 +1,65 @@
+module structs-complex-3gpp {
+
+	namespace "urn:test:structs-complex-3gpp";
+	prefix this;
+
+	revision "2021-12-07";
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	container Cont1 {
+		presence "";
+
+		container attributes {
+
+			container struct11 {
+				leaf member12 {
+					type string;
+				}
+
+				// member13 will be deviated-out, and a member with the same
+				// name (and different data type) will be augmented-in. Expectation
+				// is that the member exists in the struct, but with a different
+				// namespace and data type.
+
+				leaf member13 {
+					type boolean;
+				}
+			}
+
+			// - - - - - - - - - - - - 
+
+			container struct21 {
+
+				// the description of member22 will be updated by a deviation.
+
+				leaf member22 {
+					description "description leaf22";
+					type string;
+				}
+				leaf member23 {
+					description "description leaf23";
+					type boolean;
+				}
+			}
+
+			// - - - - - - - - - - - - 
+
+			container struct31 {
+				leaf member32 {
+					mandatory true;
+					type string;
+				}
+
+				// the mandatory flag of member33 will flip to 'false'
+
+				leaf member33 {
+					mandatory true;
+					type boolean;
+				}
+			}
+		}
+	}
+}

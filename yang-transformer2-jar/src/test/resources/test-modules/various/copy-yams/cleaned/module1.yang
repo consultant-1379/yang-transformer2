@@ -1,0 +1,12 @@
+module module1 {
+	prefix this;
+	namespace "urn:test:module1";
+
+	revision 2023-03-24;
+
+	container cont1 {
+		leaf leaf01 {
+			type int32;		// we pretend a wrong default value has been removed by workaround here.
+		}
+	}
+}

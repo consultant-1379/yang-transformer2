@@ -1,0 +1,118 @@
+module choice-handling {
+
+    namespace "urn~test~choice-handling";
+    prefix this;
+	
+    revision "2021-11-07";
+
+	container cont1 {
+
+		choice choice10 {		// empty, should not be generated
+		}
+
+		choice choice11 {
+		}
+
+		choice choice12 {
+		
+			case case121 {
+				leaf leaf121 { type string; }
+				leaf leaf122 { type string; }
+			}
+		}
+
+		choice choice13 {
+		
+			case case131 {
+				leaf leaf131 { type string; }
+			}
+			case case132 {
+				leaf leaf132 { type string; }
+			}
+		}
+	}
+
+	// -----------------------------------------------------
+	// -----------------------------------------------------
+
+	container cont2 {
+
+		choice choice21 {
+		
+			case case211 {
+				leaf leaf211 { type string; }
+			}
+		}
+
+		choice choice22 {
+		
+			case case221 {
+				leaf leaf221 { type string; }
+			}
+		}
+
+		choice choice23 {
+		
+			case case231 {
+				leaf leaf231 { type string; }
+			}
+		}
+
+		choice choice24 {
+		
+			case case241 {
+				leaf leaf241 { type string; }
+			}
+		}
+
+		choice choice25 {
+		
+			case case251 {
+				leaf leaf251 { type string; }
+			}
+		}
+	}
+
+	// -----------------------------------------------------
+	// -----------------------------------------------------
+
+	container cont3 {
+	
+		choice choice31 {
+		
+			case case311 {
+				container cont312;
+				container cont313;
+			}
+			case case314 {
+				leaf leaf315 { type string; }
+				leaf leaf316 { type string; }
+			}
+		}
+	
+		choice choice32 {
+		
+			case case321 {
+				container cont322;
+				container cont323;
+			}
+			case case324 {
+				leaf leaf325 { type string; }
+				leaf leaf326 { type string; }
+			}
+		}
+
+		choice choice33 {
+		
+			case case331 {
+				container cont332;
+				container cont333;
+			}
+			case case334 {
+				leaf leaf335 { type string; }
+				leaf leaf336 { type string; }
+			}
+		}
+	}
+
+}

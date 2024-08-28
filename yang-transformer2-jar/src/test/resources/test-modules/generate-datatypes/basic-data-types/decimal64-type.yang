@@ -1,0 +1,37 @@
+module decimal64-type {
+
+    namespace "urn<test>decimal64-type";
+    prefix this;
+
+    revision "2021-01-31";
+	
+	container cont1 {
+	
+		leaf leaf11 {
+			type decimal64 {
+				fraction-digits 2;
+			}
+		}
+	
+		leaf leaf12 {
+			type decimal64 {
+				fraction-digits 4;
+				range "50 .. 300";
+			}
+		}
+
+		leaf leaf13 {
+			type decimal64 {
+				fraction-digits 10;
+				range "50.1 .. 300.2 | 400.4 .. 750.7";
+			}
+		}
+
+		leaf leaf14 {
+			type decimal64 {
+				fraction-digits -200;
+				range "ten .. twenty";		// provoke error
+			}
+		}
+	}	
+}

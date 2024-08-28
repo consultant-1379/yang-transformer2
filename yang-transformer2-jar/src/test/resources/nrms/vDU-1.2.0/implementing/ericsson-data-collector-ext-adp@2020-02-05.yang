@@ -1,0 +1,67 @@
+module ericsson-data-collector-ext-adp {
+    yang-version 1.1;
+    namespace urn:rdns:com:ericsson:oammodel:ericsson-data-collector-ext-adp;
+    prefix dcxadp;
+
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ericsson-data-collector-adp {
+        prefix dcadp;
+    }
+
+    organization "Ericsson AB";
+    contact "Ericsson first line support via email";
+    description "The module extends and deviates ericsson-data-collector-adp.
+
+     Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+    revision 2020-02-05 {
+        description "First version";
+        yexte:version 1;
+        yexte:release 0;
+        yexte:correction 0;
+    }
+
+    deviation "/dcadp:diagnostic-data-collection/dcadp:sftp-server/dcadp:endpoints/dcadp:endpoint/dcadp:server-authentication/dcadp:ca-certs" {
+        description "A set of certificate authority (CA) certificates used by
+         the SSH client to authenticate SSH servers not supported.";
+        deviate not-supported;
+    }
+
+    deviation "/dcadp:diagnostic-data-collection/dcadp:sftp-server/dcadp:endpoints/dcadp:endpoint/dcadp:server-authentication/dcadp:server-certs" {
+        description "A set of certificate authority (CA) certificates used by
+         the SSH client to authenticate SSH servers not supported.";
+        deviate not-supported;
+    }
+
+    deviation "/dcadp:diagnostic-data-collection/dcadp:sftp-server/dcadp:endpoints/dcadp:endpoint/dcadp:transport-params" {
+        description
+        "Configurable parameters of the SSH transport layer not supported.";
+        deviate not-supported;
+    }
+
+    deviation "/dcadp:diagnostic-data-collection/dcadp:sftp-server/dcadp:endpoints/dcadp:endpoint/dcadp:keepalives" {
+        description
+        "Configurable parameters of the SSH transport layer not supported.";
+        deviate not-supported;
+    }
+
+    deviation "/dcadp:diagnostic-data-collection/dcadp:sftp-server/dcadp:endpoints/dcadp:endpoint/dcadp:client-identity/dcadp:auth-type/dcadp:certificate" {
+        description
+        "Configurable parameters of the SSH transport layer not supported.";
+        deviate not-supported;
+    }
+
+    deviation "/dcadp:diagnostic-data-collection/dcadp:sftp-server/dcadp:endpoints/dcadp:endpoint/dcadp:client-identity/dcadp:auth-type/dcadp:public-key/dcadp:public-key/dcadp:local-or-keystore/dcadp:keystore" {
+        description
+        "A reference to an asymmetric key that exists in the keystore is not supported.";
+        deviate not-supported;
+    }
+
+    deviation "/dcadp:diagnostic-data-collection/dcadp:sftp-server/dcadp:endpoints/dcadp:endpoint/dcadp:server-authentication/dcadp:ssh-host-keys/dcadp:local-or-truststore/dcadp:truststore" {
+        description
+        "A reference to a set of host keys that exist in the truststore is not supported.";
+        deviate not-supported;
+    }
+}

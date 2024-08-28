@@ -1,0 +1,145 @@
+module boundaries {
+
+    namespace "urn::test::boundaries";
+    prefix this;
+	
+    revision "2021-04-21";
+
+	container cont1 {
+	
+		leaf leaf11 {
+			type string {
+				length "min .. 20";
+			}
+		}
+
+		leaf leaf12 {
+			type string {
+				length "10 .. max";
+			}
+		}
+	
+		leaf leaf13 {
+			type string {
+				length "10 .. 20";
+			}
+		}
+
+		leaf leaf14 {
+			type string {
+				pattern "ab*c";
+			}
+		}
+	}
+
+// ----------------------------------------------------------
+	
+	container cont2 {
+
+		leaf leaf21 {
+			type int32 {
+				range "min .. 20";
+			}
+		}
+
+		leaf leaf22 {
+			type int32 {
+				range "10 .. max";
+			}
+		}
+
+		leaf leaf23 {
+			type int32 {
+				range "10 .. 20";
+			}
+		}
+
+		leaf leaf24 {
+			type uint64;
+		}
+
+		leaf leaf27 {
+			type uint64 {
+				range "200000 .. 300000";
+			}
+		}
+	}
+
+// ----------------------------------------------------------
+
+	container cont3 {
+
+		leaf-list leaflist31 {
+			ordered-by system;
+			type int32;
+		}
+
+		leaf-list leaflist32 {
+			ordered-by user;
+			type int32;
+		}
+
+		leaf-list leaflist33 {
+			type enumeration {
+				enum RED;
+				enum YELLOW;
+			}
+		}
+	}
+
+// ----------------------------------------------------------
+
+	container cont4 {
+	
+		leaf leaf41 {
+			type decimal64 {
+				fraction-digits 3;
+				range "min .. 20.2";
+			}
+		}
+
+		leaf leaf42 {
+			type decimal64 {
+				fraction-digits 3;
+				range "10.1 .. max";
+			}
+		}
+	
+		leaf leaf43 {
+			type decimal64 {
+				fraction-digits 3;
+				range "10.1 .. 20.2";
+			}
+		}
+	}
+
+// ----------------------------------------------------------
+
+	container cont5 {
+	
+		leaf-list leaflist51 {
+			type int32;
+			max-elements 5;
+		}
+	
+		leaf-list leaflist52 {
+			type int32;
+			min-elements 2;
+		}
+
+		leaf-list leaflist53 {
+			type int32;
+			min-elements 2;
+			max-elements 5;
+		}
+
+		leaf-list leaflist56 {
+			type int32;
+		}
+
+		leaf-list leaflist57 {
+			type int32;
+			max-elements 5;
+		}
+	}
+}

@@ -1,0 +1,34 @@
+module non-generated-complex-dev {
+
+	namespace "urn:test:non-generated-complex-dev";
+	prefix this;
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	import non-generated-complex {
+		prefix complex;
+	}
+
+	revision "2022-06-30";
+
+	container cont31 {
+		config true;
+		presence "";
+	}
+
+	deviation /complex:cont7/cont9 {
+		deviate delete {
+			yexte:static-data false;
+		}
+	}
+
+	deviation /complex:cont1/list4 {
+		deviate replace {
+			config false;
+		}
+	}
+}

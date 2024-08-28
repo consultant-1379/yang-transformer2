@@ -1,0 +1,11 @@
+submodule submodule2 {
+
+	belongs-to module1 {
+		prefix mod1;
+	}
+
+	revision "2022-09-24";
+
+	feature feature23;
+	feature feature24;
+}

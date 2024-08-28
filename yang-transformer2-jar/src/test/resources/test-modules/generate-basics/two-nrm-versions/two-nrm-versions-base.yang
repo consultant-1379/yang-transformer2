@@ -1,0 +1,16 @@
+module two-nrm-versions-base {
+
+    namespace "urn:test:two-nrm-versions-base";
+    prefix this;
+
+    revision "2021-10-11";
+
+	container cont1 {
+		presence "";
+	
+		leaf leaf11 {
+			type string;
+		}
+	}
+
+}

@@ -1,0 +1,83 @@
+module ericsson-arp-state-router6000 {
+  yang-version "1";
+
+namespace "urn:rdns:com:ericsson:oammodel:ericsson-arp-state-router6000";
+
+prefix "arpstrouter6000";
+
+import ericsson-context-state-router6000 {
+  prefix "ctxstrouter6000";
+}
+
+import ericsson-contexts-router6000 {
+  prefix "ctxsr6k";
+}
+
+import ericsson-yang-extensions {
+  prefix "yexte";
+}
+
+organization "Ericsson AB";
+contact "iposcli@ericsson.com";
+
+description
+"ericsson-arp-state-router6000
+Copyright (c) 2016 Ericsson AB.
+All rights reserved";
+
+revision "2018-05-24" {
+  description   "Change model namespace";
+  reference "rfc6020.txt.";
+  yexte:version "2";
+  yexte:release "0";
+  yexte:correction "0";
+}
+
+revision "2016-03-24" {
+  description   "initial revision";
+  reference "rfc6020.txt.";
+  yexte:version "1";
+  yexte:release "0";
+  yexte:correction "0";
+}
+
+augment   "/ctxsr6k:contexts-state/ctxstrouter6000:context"
+{
+  description "arp-state-model";
+  container arp-state {
+    config "false";
+    description "Arp runstate model";
+    container arp-statistics {
+      description "show arp statistics";
+      container stats {
+        config false;
+        description "show arp statistics";
+        leaf received_request{
+          type uint32;
+          description "Number of requests received";
+        }
+        leaf received_replies {
+          type uint32;
+          description "Replies received";
+        }
+        leaf received_other {
+          type uint32;
+          description "Received other";
+        }
+        leaf received_bad {
+          type uint32;
+          description "Received bad";
+        }
+        leaf requests_sent {
+          type uint32;
+          description "Requests sent";
+        }
+        leaf replies_sent {
+          type uint32;
+          description "Replies sent";
+        }
+      }
+    }
+  }
+}
+}

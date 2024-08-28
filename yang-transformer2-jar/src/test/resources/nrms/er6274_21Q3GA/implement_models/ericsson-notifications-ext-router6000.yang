@@ -1,0 +1,188 @@
+module ericsson-notifications-ext-router6000 {
+   yang-version "1";
+   namespace
+     "urn:rdns:com:ericsson:oammodel:ericsson-notifications-ext-router6000";
+
+   prefix ncnxrouter6000;
+
+   import ietf-netconf-notifications { prefix ncn; }
+   import ericsson-yang-extensions {
+     prefix "yexte";
+   }
+
+   organization "Ericsson";
+   contact "router6000cli@ericsson.com";
+
+   description
+     "This model is defined to:
+	 1. Augment the RFC6470 Add the value tag for 
+        '/ncn:netconf-config-change/ncn:edit' to report the configuration changes.
+     2. Refer to RFC5277 Add the CMSynchronizationRecommended notification.";
+revision 2018-07-11 {
+    description
+      "Add notification for state data change.";
+    reference
+      "RFC 6470: NETCONF Base Notifications
+       RFC 5277: NETCONF Event Notifications";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+   revision "2018-06-05" {
+     description
+       "Modify prefix for Router6000.";
+     reference
+       "RFC 6470: NETCONF Base Notifications
+        RFC 5277: NETCONF Event Notifications";
+     yexte:version "2";
+     yexte:release "0";
+     yexte:correction "0";
+   }
+
+   revision "2017-10-19" {
+     description
+       "Modify prefix.";
+     reference
+       "RFC 6470: NETCONF Base Notifications
+        RFC 5277: NETCONF Event Notifications";
+     yexte:version "1";
+     yexte:release "0";
+     yexte:correction "0";
+   }
+
+   revision "2015-12-14" {
+     description
+       "Initial version.";
+     reference
+       "RFC 6470: NETCONF Base Notifications
+        RFC 5277: NETCONF Event Notifications";
+   }
+  identity origin {
+    description
+      "Abstract base identity for the origin annotation.";
+  }
+
+  identity dynamic {
+    base origin;
+    description
+      "Denotes state data from a dynamic generation.";
+  }
+
+  identity system {
+    base origin;
+    description
+      "Denotes state data originated by the system itself.";
+  }
+
+  identity learned {
+    base origin;
+    description
+      "Denotes state data learned from protocol interactions with
+       other devices.
+       
+       Examples of protocols that provide learned configuration
+       include link-layer negotiations, routing protocols, and
+       DHCP.";
+  }
+
+  identity unknown {
+    base origin;
+    description
+      "Denotes configuration for which the system cannot identify the
+       origin.";
+  }
+
+  typedef origin-ref {
+    type identityref {
+      base origin;
+    }
+    description
+      "An origin identity reference.";
+  }
+   augment "/ncn:netconf-config-change/ncn:edit" {
+     description "augment the edit list to report configuration changes";
+	 leaf value {
+	   type string;
+	   description " What has been changed.";
+	 }
+   }
+
+   notification CMSynchronizationRecommended {
+     description
+        "This notification is sent to signal the procedure of replay was 
+         interrupt by internal error and the replay notification is incommplete.";
+    } 
+  notification netconf-state-change {
+    description
+      "Generated when server receives operational data change
+       from system";
+
+    list change {
+      description
+        "A change entry SHALL be present for each distinct
+         state change that the server has detected.
+         
+         Containers and list entries are reported as created or 
+         deleted but never as setted.
+         
+         At the creation of containers or list entries notifications 
+         MUST include separate change entries for this data node and 
+         any changed child data nodes 
+         (e.g. leafs, leaf-lists, contained lists, etc.).\t       \t
+         
+         At the deletion of a container or list entry a single change 
+         entry will be sent for this data node, that also implies the 
+         deletion of all contained child data nodes 
+         (e.g. container, list, leaf and leaf-list).
+         
+         Leafs, leaf-list entries are reported as merged or deleted,
+         but never as created.";
+      leaf target {
+        type instance-identifier;
+        mandatory true;
+        description
+          "Top-most data node within
+           the datastore associated with the change.";
+      }
+
+	  leaf origin {
+        type origin-ref;
+        description
+          "Specify the origin of changed data node.";
+      }
+
+      leaf operation {
+        type enumeration {
+          enum "create" {
+            value 0;
+            description
+              "The target data node is created using the supplied
+               value.  The 'target' leaf identifies the data node 
+               to be created, not the parent data node.";
+          }
+          enum "delete" {
+            value 1;
+            description
+              "The target data node is deleted.";
+          }
+          enum "merged" {
+            value 2;
+            description
+              "The target data node is updated.";
+          }
+        }
+        mandatory true;
+        description
+          "Type of operation / change detected.";
+      }
+      leaf value {
+        type string;
+        description
+          "Value used in the change. It contains the leaf, leaf-list, 
+                    anydata or anyxml pointed out by the 'target' leaf.
+                    For containers, list entries, and leafs/leaf-lists of 
+                    type empty the value MUST NOT be present for any operation.";
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+module ericsson-interfaces-ext-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interfaces-ext-dev-ssr";
+
+  prefix "interfacesxdevssr";
+
+  import ericsson-interfaces-ext-ipos {
+    prefix "ifxipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interfaces-ext-dev-ipos
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+   revision "2018-07-02" {
+    description
+      "Modify the dev model namespace";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-12" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/if:interfaces/if:interface/ifxipos:l3-interface/ifxipos:ip/ifxipos:verify-unicast-source-reachable-via/"
+  + "ifxipos:verify-unicast-source-reachable-via-choice/ifxipos:any/ifxipos:any/ifxipos:rpf-count" {
+      deviate not-supported;
+  }
+
+}

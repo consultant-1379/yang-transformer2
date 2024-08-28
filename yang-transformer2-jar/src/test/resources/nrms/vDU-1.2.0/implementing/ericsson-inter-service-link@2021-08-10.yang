@@ -1,0 +1,183 @@
+module ericsson-inter-service-link {
+    yang-version 1.1;
+    namespace "urn:rdns:com:ericsson:oammodel:ericsson-inter-service-link";
+    prefix "interservicelink";
+
+    import _3gpp-common-managed-function {
+        prefix mf3gpp;
+    }
+    import _3gpp-common-managed-element {
+        prefix me3gpp;
+    }
+    import _3gpp-nr-nrm-gnbdufunction {
+        prefix gnbdu3gpp;
+    }
+    import _3gpp-common-yang-types {
+        prefix types3gpp;
+    }
+    import _3gpp-common-top {
+        prefix top3gpp;
+    }
+    import ietf-yang-types {
+        prefix yang;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ietf-inet-types {
+        prefix "inet";
+    }    
+    import ericsson-notifications {
+        prefix notife;
+    }
+    
+    organization
+      "Ericsson AB";
+    contact
+      "Ericsson first line support via email";
+    description
+      "Defines the YANG mapping of the InterServiceLink.
+       
+       Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+    revision 2021-08-10 {
+        description
+            "Small fix of prefix again, same fix as before, that fault was re-introduced";
+        yexte:version 1;
+        yexte:release 1;
+        yexte:correction 1;
+    }
+
+    revision 2021-07-27 {
+        description
+            "Bug Fix, leaf-list state notifiable compatibility issue. Adds extension notife:notifiable-state-data false to availabilityStatus.";
+        yexte:version 1;
+        yexte:release 1;
+        yexte:correction 0;
+        reference
+            "RFC 7950: The YANG 1.1 Data Modeling Language";
+    }
+  
+    revision 2021-07-08 {
+        description
+          "Align InterServiceLink-endpoint to comply with the 3GPP standard outlined in 32.160 6.2.12";
+        yexte:version 0;
+        yexte:release 2;
+        yexte:correction 0;
+    }
+    
+    revision 2021-06-11 {
+        description
+          "Small fix of prefix";
+        yexte:version 0;
+        yexte:release 1;
+        yexte:correction 1;
+    }
+
+    revision 2020-12-21 {
+        description
+          "Preliminar revision.";
+        yexte:version 0;
+        yexte:release 1;
+        yexte:correction 0;
+    }
+
+    yexte:module-status preliminary;
+    grouping InterServiceLinkGrp {
+        description
+          "Represents the InterServiceLink IOC.";
+
+        list endpoint {
+            description
+              "Endpoints for the inter service link.";
+            config false;
+            min-elements 1;
+            max-elements 2;
+            key id;
+            leaf endpointDescription {
+                description
+                  "Description of the endpoint.";
+                mandatory false;
+                config false;
+                type string;
+            }
+            leaf hostingMeRef {
+                description
+                  "Reference to the managed element hosting this service endpoint.";
+                mandatory false;
+                config false;
+                type types3gpp:DistinguishedName;
+            }
+            leaf ipAddress {
+                type inet:ip-address;
+                description
+                  "Endpoint Ip address.";
+                mandatory false;
+                config false;
+            }
+            leaf macAddress {
+                description
+                  "Endpoint Mac address.";
+                mandatory false;
+                config false;
+                type yang:mac-address;
+            }
+            leaf vlanId {
+                description
+                  "Vlan id.";
+                mandatory false;
+                config false;
+                type uint16;
+            }
+            uses top3gpp:Top_Grp;
+        }
+
+        leaf serviceLinkDescripton {
+            description
+              "Description of the service link.";
+            config false;
+            type string;
+        }
+
+        leaf-list availabilityStatus {
+            description
+              "The availability status.
+               It contains details about operational state.";
+            config false;
+            notife:notifiable-state-data false;
+            type types3gpp:AvailabilityStatus;
+            reference
+              "ITU-T Rec. X.731";
+        }
+        leaf operationalState {
+            description
+              "Operational state of the InterServiceLink instance. Indicates
+               whether the resource is installed and partially or fully operable
+               (ENABLED) or the resource is not installed or not operable
+               (DISABLED).";
+            config false;
+            type types3gpp:OperationalState;
+            reference
+              "ITU-T Rec. X.731";
+        }
+    }
+
+    grouping InterServiceLinkWrapper {
+        list InterServiceLink {
+            description
+              "Represents the InterServiceLink IOC, base for link observability.";
+            config false;
+            key id;
+            uses top3gpp:Top_Grp;
+            container attributes {
+                uses InterServiceLinkGrp;
+            }
+        }
+    }
+
+    augment "/me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction" {
+        description
+          "Adds Ericsson IOC InterServiceLink to 3gpp DU function.";
+        uses InterServiceLinkWrapper;
+    }
+}

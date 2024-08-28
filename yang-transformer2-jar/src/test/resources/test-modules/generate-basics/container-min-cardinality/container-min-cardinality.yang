@@ -1,0 +1,86 @@
+module container-min-cardinality {
+
+    namespace "urn:test:container-min-cardinality";
+    prefix this;
+
+    revision "2021-10-11";
+
+	container cont1 {
+	
+		container contXx {
+
+			leaf leafYy {
+				type string;
+				mandatory true;
+			}
+		}
+	}
+
+	container cont2 {
+	
+		container contXx {
+
+			leaf-list leaflistYy {
+				type string;
+				min-elements 2;
+			}
+		}
+	}
+
+	container cont3 {
+	
+		container contXx {
+
+			leaf leafYy {
+				type string;
+			}
+		}
+	}
+
+	container cont4 {
+	
+		container contXx {
+
+			leaf-list leafYy {
+				type string;
+			}
+		}
+	}
+
+	container cont5 {
+	
+		container contXx {
+			presence "";
+			
+			leaf-list leaflistYy {
+				type string;
+			}
+		}
+	}
+
+	container cont6 {
+	
+		list listXx {
+			min-elements 3;
+			key leafYy;
+			
+			leaf leafYy {
+				type string;
+			}
+		}
+	}
+
+	container cont7 {
+		presence "";
+		
+		list listXx {
+			key leafYy;
+			
+			leaf leafYy {
+				type string;
+			}
+		}
+	}
+
+
+}

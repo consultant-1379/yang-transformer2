@@ -1,0 +1,669 @@
+module ericsson-tunnel-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-tunnel-ipos";
+
+  prefix "tunnelipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-pbr-ipos {
+    prefix "pbripos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-tunnel-ipos
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-01-08" {
+    description
+      "gre tunnel key 0 support 'clear-df' config";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "8";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-06-20" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-03-21" {
+    description
+      "changed the leaf type intf-name and intf-ctx from string
+       to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-03-06" {
+    description
+      "changed the leaf type context from string to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-02-02" {
+    description
+      "changed the leaf type fwd-name from string to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-01-11" {
+    description
+      "changed the leaf type intf-name and intf-ctx from string
+       to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-03-24" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping tunnel-grp {
+    description
+      "Tunnel configuration mode";
+    /*
+    bind interface (intf-name) (intf-ctx)
+    */
+    container bind-interface {
+      presence "";
+      description
+        "Bind to an interface";
+      leaf intf-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Interface to bind to";
+      }
+      leaf intf-ctx {
+        type leafref {
+          path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+          + "context-name";
+        }
+        mandatory true;
+        description
+          "Context name to be bound under";
+      }
+    }
+    /*
+    clear-df
+    */
+    leaf clear-df {
+      when "(../tunnel-choice='ipip') or (../tunnel-choice='gre')" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Clear the DF bit (in GRE and IP-in-IP tunnels)";
+    }
+    /*
+    description (descr-string)
+    */
+    leaf description {
+      type string {
+        length "1..256";
+      }
+      description
+        "Textual description for the tunnel";
+    }
+    /*
+    forward policy (fwd-name) inbound [ <forward-policy-opt { ip
+     | ip_and_ipv6 | ipv6 } acl-counters> ]
+    */
+    container forward-policy {
+      when "../tunnel-choice='gre'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "container forward-policy.";
+      leaf fwd-name {
+        type leafref {
+          path "/ctxsipos:contexts/pbripos:forward/pbripos:"
+          + "fwd-polname";
+        }
+        mandatory true;
+        description
+          "Policy name";
+      }
+      leaf inbound {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound policy";
+      }
+      container forward-policy-opt {
+        presence "";
+        description
+          "Forward policy option";
+        choice forward-policy-opt-choice {
+          mandatory true;
+          description
+            "";
+          case ip {
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+          }
+          case ip_and_ipv6 {
+            leaf ip_and_ipv6 {
+              type empty;
+              mandatory true;
+              description
+                "Configure both IPv4 and IPV6 attributes";
+            }
+          }
+          case ipv6 {
+            leaf ipv6 {
+              type empty;
+              mandatory true;
+              description
+                "Configure IPv6";
+            }
+          }
+        }
+        leaf acl-counters {
+          type empty;
+          mandatory true;
+          description
+            "Enable ACL counters";
+        }
+      }
+    }
+    /*
+    peer-end-point local (local-ipaddr) [ remote (remote-ipaddr)
+     [ context (context-name) ] ]
+    */
+    container peer-end-point-local {
+      presence "";
+      description
+        "Local address for the tunnel";
+      leaf local-ipaddr {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "Local IPv4 address";
+      }
+      container remote {
+        presence "";
+        description
+          "Remote address for the tunnel";
+        leaf remote-ipaddr {
+          type inet:ipv4-address;
+          mandatory true;
+          description
+            "Remote IPv4 address";
+        }
+        leaf context {
+          type leafref {
+            path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+            + "context-name";
+          }
+          description
+            "Context where the local address of the tunnel is
+             configured";
+        }
+      }
+    }
+    /*
+    mirror destination (output-name)
+    */
+    container mirror {
+      description
+        "Configure mirror destination";
+      leaf destination {
+        type string {
+          length "1..40";
+        }
+        description
+          "Configure mirror destination";
+      }
+    }
+    /*
+    gre [ key (key-id) ]
+    */
+    list gre {
+      when "../tunnel-choice='gre'" {
+        description
+          "";
+      }
+      key "key";
+      description
+        "GRE specific parameters";
+      leaf key {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Key ID for GRE tunnel (used for key ID based
+           sub-channels)";
+      }
+      uses tunnel-key-grp;
+    }
+    /*
+    keepalive [ (keepalive-value) (keepalive-retries) ]
+    */
+    container keepalive {
+      when "../tunnel-choice='gre'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Tunnel Keepalive";
+      container keepalive-opt {
+        description
+          "Configure keepalive";
+        leaf keepalive-value {
+          type uint8 {
+            range "5..40";
+          }
+          mandatory true;
+          description
+            "Keepalive interval (in seconds)";
+        }
+        leaf keepalive-retries {
+          type uint8 {
+            range "2..255";
+          }
+          mandatory true;
+          description
+            "Keepalive retries";
+        }
+      }
+    }
+    /*
+    log-state-changes
+    */
+    leaf log-state-changes {
+      type empty;
+      description
+        "Log state changes for this tunnel";
+    }
+    /*
+    mtu (mtu-value)
+    */
+    leaf mtu {
+      type uint16 {
+        range "256..16384";
+      }
+      description
+        "Set the tunnel MTU";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Shutdown the tunnel";
+    }
+  }
+
+  grouping tunnel-key-grp {
+    description
+      "Tunnel GRE key based sub-channel configuration mode";
+    /*
+    bind interface (intf-name) (intf-ctx)
+    */
+    container bind-interface {
+      presence "";
+      description
+        "Bind to an interface";
+      leaf intf-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Interface to bind to";
+      }
+      leaf intf-ctx {
+        type leafref {
+          path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+          + "context-name";
+        }
+        mandatory true;
+        description
+          "Context name to be bound under";
+      }
+    }
+    /*
+    clear-df
+    */
+    leaf clear-df {
+      type empty;
+      description
+        "Clear the DF bit (in GRE and IP-in-IP tunnels)";
+    }
+    /*
+    description (descr-string)
+    */
+    leaf description {
+      type string {
+        length "1..256";
+      }
+      description
+        "Textual description for the tunnel";
+    }
+    /*
+    mirror destination (output-name)
+    */
+    container mirror {
+      description
+        "Configure mirror destination";
+      leaf destination {
+        type string {
+          length "1..40";
+        }
+        description
+          "Configure mirror destination";
+      }
+    }
+    /*
+    keepalive [ (keepalive-value) (keepalive-retries) ]
+    */
+    container keepalive {
+      presence "";
+      description
+        "Tunnel Keepalive";
+      container keepalive-opt {
+        description
+          "Configure keepalive";
+        leaf keepalive-value {
+          type uint8 {
+            range "5..40";
+          }
+          mandatory true;
+          description
+            "Keepalive interval (in seconds)";
+        }
+        leaf keepalive-retries {
+          type uint8 {
+            range "2..255";
+          }
+          mandatory true;
+          description
+            "Keepalive retries";
+        }
+      }
+    }
+    /*
+    log-state-changes
+    */
+    leaf log-state-changes {
+      type empty;
+      description
+        "Log state changes for this tunnel";
+    }
+    /*
+    mtu (mtu-value)
+    */
+    leaf mtu {
+      type uint16 {
+        range "256..16384";
+      }
+      description
+        "Set the tunnel MTU";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Shutdown the tunnel";
+    }
+  }
+
+  grouping tunnel-ipsec-grp {
+    description
+      "Tunnel configuration mode";
+    /*
+    bind interface (intf-name) (intf-ctx)
+    */
+    container bind-interface {
+      presence "";
+      description
+        "Bind to an interface";
+      leaf intf-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Interface to bind to";
+      }
+      leaf intf-ctx {
+        type leafref {
+          path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+          + "context-name";
+        }
+        mandatory true;
+        description
+          "Context name to be bound under";
+      }
+    }
+    /*
+    description (descr-string)
+    */
+    leaf description {
+      type string {
+        length "1..256";
+      }
+      description
+        "Textual description for the tunnel";
+    }
+    /*
+    peer-end-point local (local-ipaddr) [ remote (remote-ipaddr)
+     ] [ context (context-name) ]
+    */
+    container peer-end-point-local {
+      presence "";
+      description
+        "Local address for the tunnel";
+      leaf local-ipaddr {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "Local IPv4 address";
+      }
+      leaf remote {
+        when "../../tunnel-choice!='on-demand-economical'" {
+          description
+            "";
+        }
+        type inet:ipv4-address;
+        description
+          "Remote address for the tunnel";
+      }
+      leaf context {
+        type leafref {
+          path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+          + "context-name";
+        }
+        description
+          "Context where the local address of the tunnel is
+           configured";
+      }
+    }
+    /*
+    mtu (mtu-value)
+    */
+    leaf mtu {
+      type uint16 {
+        range "256..16384";
+      }
+      description
+        "Set the tunnel MTU";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Shutdown the tunnel";
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-tunnel";
+    /*
+    tunnel { gre | ipip | ipv6v4-manual } (tunnel-name)
+    */
+    list tunnel {
+      key "tunnel-choice tunnel-name";
+      description
+        "Create and configure tunnels";
+      leaf tunnel-choice {
+        type enumeration {
+          enum gre {
+            value 0;
+            description
+              "Create a GRE tunnel";
+          }
+          enum ipip {
+            value 1;
+            description
+              "Create an IP-in-IP tunnel.";
+          }
+          enum ipv6v4-manual {
+            value 2;
+            description
+              "Create an IPv6-over-v4 manual tunnel.";
+          }
+        }
+        description
+          "Create tunnel";
+      }
+      leaf tunnel-name {
+        type string {
+          length "1..50";
+        }
+        description
+          "Name of the tunnel";
+      }
+      uses tunnel-grp;
+    }
+    /*
+    tunnel-ipsec (tunnel-name) <tunnel-choice { on-demand-
+     economical | manual-economical | economical }>
+    */
+    list tunnel-ipsec {
+      key "tunnel-name tunnel-choice";
+      description
+        "Create an IPSec tunnel";
+      leaf tunnel-name {
+        type string;
+        description
+          "Name of the tunnel";
+      }
+      leaf tunnel-choice {
+        type enumeration {
+          enum on-demand-economical {
+            value 0;
+            description
+              "Create an on demand economical IPsec tunnel";
+          }
+          enum manual-economical {
+            value 1;
+            description
+              "Create a manual economical IPsec tunnel";
+          }
+          enum economical {
+            value 2;
+            description
+              "Create an economical IPsec tunnel";
+          }
+        }
+        description
+          "Select tunnel IPsec type";
+      }
+      uses tunnel-ipsec-grp;
+    }
+  }
+
+}

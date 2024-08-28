@@ -1,0 +1,128 @@
+module ericsson-context-state-router6000 {
+
+  yang-version  1;
+
+  /*** NAMESPACE / PREFIX DEFINITION ***/
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-context-state-router6000";
+  prefix "ctxstrouter6000";
+    import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-notifications {
+   prefix notife;
+  }
+
+  /*** META INFORMATION ***/
+
+  organization "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "IPOS CONTEXT model, based on yang file from IPOS exec_cli,
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved.";
+
+  revision "2018-08-27" {
+    description "Adding notification statements";
+    reference
+      "Ericsson IPOS CONTEXT state data model.";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description "Change model namespace";
+    reference
+      "Ericsson IPOS CONTEXT state data model.";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2015-12-07" {
+    description "Initial revision";
+    reference
+      "Ericsson IPOS CONTEXT state data model.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /*** TYPE DEFINITIONS ***/
+
+	typedef contextType {
+		type enumeration {
+			enum CONTEXT_TYPE_LOCAL {
+				value 1;
+				description "Context type: local.";
+			}
+
+			enum CONTEXT_TYPE_VPN {
+				value 2;
+				description "Context type: VPN.";
+			}
+		}
+		description "Define context type.";
+	}
+
+  /*** GROUPING DEFINITIONS ***/
+
+	grouping router-group {
+		description
+		"Router state data.";
+  }
+
+	grouping context-group {
+		description
+		"Context state data.";
+		leaf context-name {
+			type string;
+			description "Context name.";
+		}
+
+		leaf context-id {
+			type uint32;
+			description "Context ID.";
+		}
+
+		leaf context-vpn-rd {
+			type string;
+			description "Context VPN information.";
+		}
+
+		leaf context-type {
+			type "ctxstrouter6000:contextType";
+			description "Context Type.";
+		}
+
+		leaf context-desc {
+			type string;
+			description "Context Description.";
+		}
+  }
+
+  augment   "/ctxsr6k:contexts-state" {
+	  description "All state data for the route.";
+    list context{
+	  	key context-name;
+	    description "All state data for the route.";
+                notife:notifiable-state-data false;
+	  	uses "ctxstrouter6000:context-group";
+	  	container router {
+	      description "All state data for the route.";
+	  	  uses "ctxstrouter6000:router-group";
+	        }
+	  	container ippm {
+	      description "All state data for IPPM";
+	        }
+	  }
+	}
+}

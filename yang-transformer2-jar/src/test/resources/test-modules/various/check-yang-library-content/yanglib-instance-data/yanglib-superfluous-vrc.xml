@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rpc-reply message-id="101" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <data>
+    <modules-state xmlns="urn:ietf:params:xml:ns:yang:ietf-yang-library">
+      <module-set-id>10446</module-set-id>
+      <module>
+        <name>module1</name>
+        <revision>2022-09-23</revision>
+        <namespace>urn:test:module1</namespace>
+        <conformance-type>implement</conformance-type>
+        <feature>feature11</feature>
+        <feature>feature12</feature>
+        <feature>feature23</feature>
+        <feature>feature24</feature>
+        <yanglibxe:version xmlns:yanglibxe="urn:rdns:com:ericsson:oammodel:ericsson-yang-library-ext">1</yanglibxe:version>
+        <yanglibxe:release xmlns:yanglibxe="urn:rdns:com:ericsson:oammodel:ericsson-yang-library-ext">2</yanglibxe:release>
+        <yanglibxe:correction xmlns:yanglibxe="urn:rdns:com:ericsson:oammodel:ericsson-yang-library-ext">3</yanglibxe:correction>
+        <submodule>
+          <name>submodule2</name>
+          <revision>2022-09-24</revision>
+        </submodule>
+      </module>
+      <module>
+        <name>module3</name>
+        <namespace>urn:test:module3</namespace>
+        <revision>2022-09-25</revision>
+        <conformance-type>implement</conformance-type>
+        <feature>feature35</feature>
+        <feature>feature36</feature>
+      </module>
+      <module>
+        <name>module4</name>
+        <namespace>urn:test:module4</namespace>
+        <revision>2022-09-26</revision>
+        <conformance-type>implement</conformance-type>
+        <feature>feature47</feature>
+        <feature>feature48</feature>
+        <yanglibxe:version xmlns:yanglibxe="urn:rdns:com:ericsson:oammodel:ericsson-yang-library-ext">2</yanglibxe:version>
+        <yanglibxe:release xmlns:yanglibxe="urn:rdns:com:ericsson:oammodel:ericsson-yang-library-ext">4</yanglibxe:release>
+        <yanglibxe:correction xmlns:yanglibxe="urn:rdns:com:ericsson:oammodel:ericsson-yang-library-ext">6</yanglibxe:correction>
+      </module>
+      <module>
+        <name>ericsson-yang-extensions</name>
+        <namespace>urn:rdns:com:ericsson:oammodel:ericsson-yang-extensions</namespace>
+        <revision>2023-03-29</revision>
+        <conformance-type>implement</conformance-type>
+        <yanglibxe:version xmlns:yanglibxe="urn:rdns:com:ericsson:oammodel:ericsson-yang-library-ext">5</yanglibxe:version>
+        <yanglibxe:release xmlns:yanglibxe="urn:rdns:com:ericsson:oammodel:ericsson-yang-library-ext">1</yanglibxe:release>
+        <yanglibxe:correction xmlns:yanglibxe="urn:rdns:com:ericsson:oammodel:ericsson-yang-library-ext">2</yanglibxe:correction>
+      </module>
+    </modules-state>
+  </data>
+</rpc-reply>

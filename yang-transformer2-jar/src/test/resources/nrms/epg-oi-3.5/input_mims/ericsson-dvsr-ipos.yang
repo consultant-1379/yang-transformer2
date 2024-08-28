@@ -1,0 +1,202 @@
+module ericsson-dvsr-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-dvsr-ipos";
+
+  prefix "dvsripos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-dvsr-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-07-10" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-10-26" {
+    description
+      "SSR-6561 DVSR Enhancement feature; Remove
+       verify-set-choice";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-02-20" {
+    description
+      "Initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping dvsr-profile-grp {
+    description
+      "DVSR profile configuration mode";
+    /*
+    verify-set (verify-intv)  [ timeout-multiplier (timeout-val)
+     ] [ min-success (minup-val) ] [timeout-interval (timeout-
+     intv)]
+    */
+    container verify-set {
+      presence "";
+      description
+        "DVSR verification parameters";
+      leaf verify-intv {
+        type uint16 {
+          range "1..7200";
+        }
+        default "20";
+        description
+          "DVSR verification interval (in seconds)";
+      }
+      leaf timeout-multiplier {
+        type uint8 {
+          range "1..10";
+        }
+        default "3";
+        description
+          "DVSR verification timeout value";
+      }
+      leaf min-success {
+        type uint8 {
+          range "1..10";
+        }
+        default "2";
+        description
+          "DVSR verification minimum success value";
+      }
+      leaf timeout-interval {
+        type uint8 {
+          range "1..4";
+        }
+        description
+          "DVSR verification timeout interval value";
+      }
+    }
+    /*
+    tag (tag-val)
+    */
+    leaf tag {
+      type uint32 {
+        range "0..4294967295";
+      }
+      default "0";
+      description
+        "DVSR tag value";
+    }
+    /*
+    distance (dist-val)
+    */
+    leaf distance {
+      type uint8 {
+        range "1..255";
+      }
+      default "1";
+      description
+        "DVSR distance value";
+    }
+    /*
+    source-address { ipv4 (srcaddr-ipv4) | ipv6 (srcaddr-ipv6) }
+    */
+    container source-address {
+      description
+        "DVSR source address value";
+      leaf ipv4 {
+        type inet:ipv4-address;
+        description
+          "IPv4 source address";
+      }
+      leaf ipv6 {
+        type inet:ipv6-address;
+        description
+          "IPv6 source address";
+      }
+    }
+    /*
+    ttl (ttl-val)
+    */
+    leaf ttl {
+      type uint8 {
+        range "1..255";
+      }
+      default "5";
+      description
+        "DVSR verify TTL value";
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:dvsr" {
+    description
+      "ericsson-dvsr";
+    /*
+    dvsr-profile (dvsr-profile)
+    */
+    list dvsr-profile {
+      key "dvsr-profile";
+      description
+        "Configure DVSR profile";
+      leaf dvsr-profile {
+        type string;
+        description
+          "DVSR profile name";
+      }
+      uses dvsr-profile-grp;
+    }
+  }
+
+}

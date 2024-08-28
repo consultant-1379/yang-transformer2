@@ -1,0 +1,48 @@
+module data-type-compatibility-dev {
+
+    namespace "urn::test::data-type-compatibility-dev";
+    
+    prefix this;
+	
+    revision "2021-09-24";
+
+	import data-type-compatibility {
+		prefix dtc;
+	}
+
+	deviation /dtc:cont1/dtc:leaf11 {
+		deviate replace {
+			type boolean;
+		}
+	}
+
+	deviation /dtc:cont1/dtc:leaf12 {
+		deviate replace {
+			type int32;
+		}
+	}
+
+	deviation /dtc:cont1/dtc:leaf13 {
+		deviate replace {
+			type uint16;
+		}
+	}
+
+	deviation /dtc:cont1/dtc:leaf14 {
+		deviate replace {
+			type boolean;
+		}
+	}
+
+	deviation /dtc:cont1/dtc:leaf15 {
+		deviate replace {
+			type string;
+		}
+	}
+
+	deviation /dtc:cont1/dtc:leaf16 {
+		deviate replace {
+			type int32;
+		}
+	}
+}

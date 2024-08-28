@@ -1,0 +1,38 @@
+module moc-naming-two {
+
+    namespace "urn.test.moc-naming-two";
+    prefix this;
+
+    revision "2021-05-27";
+
+	import moc-naming-one {
+		prefix one;
+	}
+
+	container cont1 {								// unique (different namespace to cont1 in one)
+	
+		container cont18 {							// unique (different namespace to cont1 in one)
+			leaf leafXx { type string; }
+		}
+	}
+
+	augment /one:cont3/one:cont31 {
+	
+		container cont41 {							// unique
+		
+			container cont42 {						// not unique
+				leaf leafXx { type string; }
+			}
+		}
+	}
+
+	augment /one:cont3/one:cont32 {
+	
+		container cont42 {							// not unique
+		
+			container cont43 {						// unique
+				leaf leafXx { type string; }
+			}
+		}
+	}
+}

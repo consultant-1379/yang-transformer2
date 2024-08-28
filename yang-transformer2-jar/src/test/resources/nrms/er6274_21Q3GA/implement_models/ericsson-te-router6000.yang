@@ -1,0 +1,233 @@
+module ericsson-te-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-te-router6000";
+
+  prefix "terouter6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-te-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-12-11" {
+    description
+      "Added srlg command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-02-01" {
+    description
+      "Can't get the configuration of admin-group that bind to
+       interface under traffic-eng view";
+    reference
+      "rfc 6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-01" {
+    description
+      "JIRA: IPOS-18424 [Segment Routing] Yang model for Traffic
+       Engineering";
+    reference
+      "rfc 6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping traffic-eng-grp {
+    description
+      "traffic-eng configuration mode";
+    /*
+    interface (intf-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "Configure Traffic-eng interface";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface name";
+      }
+      uses traffic-eng-if-grp;
+    }
+    /*
+    admin-group (attr-name) (attr-value)
+    */
+    list admin-group {
+      key "attr-name";
+      description
+        "Configure admin group";
+      leaf attr-name {
+        type string;
+        description
+          "Attribute name";
+      }
+      leaf attr-value {
+        type uint8 {
+          range "0..31";
+        }
+        mandatory true;
+        description
+          "Attribute value";
+      }
+    }
+  }
+
+  grouping traffic-eng-if-grp {
+    description
+      "traffic-eng interface configuration mode";
+    /*
+    bandwidth (bandwidth-value) [ kbps | mbps | gbps ]
+    */
+    container bandwidth {
+      presence "";
+      description
+        "Configure interface bandwidth";
+      leaf bandwidth-value {
+        type uint32 {
+          range "1..4294967295";
+        }
+        mandatory true;
+        description
+          "Reservable bandwidth";
+      }
+      choice bandwidth-opt {
+        case kbps {
+          leaf kbps {
+            type empty;
+            description
+              "Bandwidth value in Kbps";
+          }
+        }
+        case mbps {
+          leaf mbps {
+            type empty;
+            description
+              "Bandwidth value in Mbps";
+          }
+        }
+        case gbps {
+          leaf gbps {
+            type empty;
+            description
+              "Bandwidth value in Gbps";
+          }
+        }
+      }
+    }
+    /*
+    admin-group < group-value (group-value-fake)>
+    */
+    container admin-group {
+      description
+        "Associate the interface with admin groups";
+      leaf-list group-value {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/t"
+          + "erouter6000:traffic-eng/terouter6000:admin-"
+          + "group/terouter6000:attr-name";
+        }
+        description
+          "Associate the interface with admin groups";
+      }
+    }
+    /*
+    te-metric (metric-val)
+    */
+    leaf te-metric {
+      type uint8 {
+        range "1..128";
+      }
+      description
+        "Configure interface TE metric";
+    }
+    /*
+    over-subscription-factor (factor-value)
+    */
+    leaf over-subscription-factor {
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "Reservable subscription factor";
+    }
+    /*
+    srlg (value-val)
+    */
+    leaf-list srlg {
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "Configure interface TE srlg value";
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router" {
+    description
+      "ericsson-te";
+    /*
+    traffic-eng
+    */
+    container traffic-eng {
+      presence "";
+      description
+        "Traffic Engineer (TE)";
+      uses traffic-eng-grp;
+    }
+  }
+
+}

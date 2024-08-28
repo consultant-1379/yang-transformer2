@@ -1,0 +1,499 @@
+module ericsson-twamp-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-twamp-ipos";
+
+  prefix "twampipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-twamp-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-06-21" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-09-13" {
+    description
+      "SSR-5833 removed the 'unique' section in twamp yang model
+       file";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-03" {
+    description
+      "Update the description of source-port and dscp";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-26" {
+    description
+      "add support of pkt-loss-timout, stateful reflector and
+       continuous sender";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-22" {
+    description
+      "JIRA: IPOS-3350 Modify the side-effect/when/must point
+       for model Twamp.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  grouping twamp-sender-grp {
+    description
+      "TWAMP sender configuration mode";
+    /*
+    session (session-id) <session-network-parameter { source-ip
+     { (addr-v4) | (addr-v6) } } { source-port (port-val) } {
+     reflector-ip { (addr-v4) | (addr-v6) } | stateful-reflector-
+     ip { (addr-v4) | (addr-v6) } } { reflector-port (port-val)
+     }> [ padding (padding-val) ] [ count (count-val) ] [
+     interval (interval-val) ] [ timeout (timeout-val) ] [ dscp
+     (dscp-value) ] [ pkt-timeout (pkt-timeout-value) ]
+    */
+    list session {
+      key "session-id";
+      description
+        "TWAMP sender session";
+      leaf session-id {
+        type uint16 {
+          range "1..65535";
+        }
+        description
+          "Session ID";
+      }
+      container session-network-parameter {
+        description
+          "Specify network parameters";
+        leaf source-ip {
+          type union {
+            type inet:ipv4-address;
+            type inet:ipv6-address;
+          }
+          mandatory true;
+          description
+            "Source IP address";
+        }
+        leaf source-port {
+          type uint16 {
+            range "49152..65535";
+          }
+          mandatory true;
+          description
+            "Source UDP port";
+        }
+        choice session-network-parameter-choice {
+          mandatory true;
+          description
+            "Stateless or stateful reflector IP choice";
+          case reflector-ip {
+            leaf reflector-ip {
+              type union {
+                type inet:ipv4-address;
+                type inet:ipv6-address;
+              }
+              description
+                "Reflector IP address";
+            }
+          }
+          case stateful-reflector-ip {
+            leaf stateful-reflector-ip {
+              type union {
+                type inet:ipv4-address;
+                type inet:ipv6-address;
+              }
+              description
+                "Stateful reflector IP address";
+            }
+          }
+        }
+        leaf reflector-port {
+          type uint16 {
+            range "49152..65535";
+          }
+          mandatory true;
+          description
+            "Reflector port";
+        }
+      }
+      leaf padding {
+        type uint8 {
+          range "0..123";
+        }
+        default "0";
+        description
+          "Packet padding size (Default: 0 bytes)";
+      }
+      leaf count {
+        type uint16 {
+          range "1..1000";
+        }
+        default "10";
+        description
+          "Packet count (Default: 10)";
+      }
+      leaf interval {
+        type uint32 {
+          range "10..600000";
+        }
+        default "1000";
+        description
+          "Specify packet interval (Default: 1000 milliseconds)";
+      }
+      leaf timeout {
+        type uint32 {
+          range "1..86400";
+        }
+        default "900";
+        description
+          "Specify timeout value (Default: 900 seconds)";
+      }
+      leaf dscp {
+        type typesipos:dscp-value;
+        default "df";
+        description
+          "Specify DSCP value (Default: df)";
+      }
+      leaf pkt-timeout {
+        type uint8 {
+          range "1..30";
+        }
+        default "4";
+        description
+          "Specify packet loss timeout value (Default: 4
+           seconds)";
+      }
+    }
+  }
+
+  grouping twamp-reflector-grp {
+    description
+      "TWAMP reflector configuration mode";
+    /*
+    session (session-id) <session-network-parameter { source-ip
+     { (addr-v4) | (addr-v6) } } { source-port (port-val) } {
+     sender-ip { (addr-v4) | (addr-v6) } } { sender-port (port-
+     val) }> [ padding (padding-val) ] [ dscp (dscp-value) ]
+     [stateful]
+    */
+    list session {
+      key "session-id";
+      unique "session-network-parameter/sender-ip "
+      + "session-network-parameter/sender-port "
+      + "session-network-parameter/source-ip "
+      + "session-network-parameter/source-port";
+      description
+        "TWAMP reflector session";
+      leaf session-id {
+        type uint16 {
+          range "1..65535";
+        }
+        description
+          "Session ID";
+      }
+      container session-network-parameter {
+        description
+          "Specify network parameters";
+        leaf source-ip {
+          type union {
+            type inet:ipv4-address;
+            type inet:ipv6-address;
+          }
+          mandatory true;
+          description
+            "Source IP address";
+        }
+        leaf source-port {
+          type uint16 {
+            range "49152..65535";
+          }
+          mandatory true;
+          description
+            "Source UDP port";
+        }
+        leaf sender-ip {
+          type union {
+            type inet:ipv4-address;
+            type inet:ipv6-address;
+          }
+          mandatory true;
+          description
+            "Sender IP address";
+        }
+        leaf sender-port {
+          type uint16 {
+            range "49152..65535";
+          }
+          mandatory true;
+          description
+            "Sender port";
+        }
+      }
+      leaf padding {
+        type uint8 {
+          range "0..123";
+        }
+        default "0";
+        description
+          "Packet padding size (Default: 0 bytes)";
+      }
+      leaf dscp {
+        type typesipos:dscp-value;
+        default "df";
+        description
+          "Specify DSCP value (Default: df)";
+      }
+      leaf stateful {
+        type empty;
+        description
+          "Stateful reflector";
+      }
+    }
+  }
+
+  grouping twamp-cont-sender-grp {
+    description
+      "";
+    /*
+    session (session-id) <session-network-parameter { source-ip
+     { (addr-v4) | (addr-v6) } } { source-port (port-val) } {
+     reflector-ip { (addr-v4) | (addr-v6) } | stateful-reflector-
+     ip { (addr-v4) | (addr-v6) } } { reflector-port (port-val)
+     }> [ padding (padding-val) ] [ count (count-val) ] [
+     interval (interval-val) ] [ timeout (timeout-val) ] [ dscp
+     (dscp-value) ] [ pkt-timeout (pkt-timeout-value) ]
+    */
+    list session {
+      key "session-id";
+      unique "session-network-parameter/"
+      + "session-network-parameter-choice/reflector-ip/"
+      + "reflector-ip session-network-parameter/"
+      + "session-network-parameter-choice/stateful-reflector-ip/"
+      + "stateful-reflector-ip session-network-parameter/"
+      + "reflector-port session-network-parameter/source-ip "
+      + "session-network-parameter/source-port";
+      description
+        "TWAMP sender session";
+      leaf session-id {
+        type uint16 {
+          range "1..65535";
+        }
+        description
+          "Session ID";
+      }
+      container session-network-parameter {
+        description
+          "Specify network parameters";
+        leaf source-ip {
+          type union {
+            type inet:ipv4-address;
+            type inet:ipv6-address;
+          }
+          mandatory true;
+          description
+            "Source IP address";
+        }
+        leaf source-port {
+          type uint16 {
+            range "49152..65535";
+          }
+          mandatory true;
+          description
+            "Source port";
+        }
+        choice session-network-parameter-choice {
+          mandatory true;
+          description
+            "Stateless or stateful reflector IP choice";
+          case reflector-ip {
+            leaf reflector-ip {
+              type union {
+                type inet:ipv4-address;
+                type inet:ipv6-address;
+              }
+              description
+                "Reflector IP address";
+            }
+          }
+          case stateful-reflector-ip {
+            leaf stateful-reflector-ip {
+              type union {
+                type inet:ipv4-address;
+                type inet:ipv6-address;
+              }
+              description
+                "Stateful reflector IP address";
+            }
+          }
+        }
+        leaf reflector-port {
+          type uint16 {
+            range "49152..65535";
+          }
+          mandatory true;
+          description
+            "Reflector port";
+        }
+      }
+      leaf padding {
+        type uint8 {
+          range "0..123";
+        }
+        default "0";
+        description
+          "Packet padding size (Default: 0 bytes)";
+      }
+      leaf count {
+        type uint16 {
+          range "1..1000";
+        }
+        default "10";
+        description
+          "Packet count (Default: 10)";
+      }
+      leaf interval {
+        type uint32 {
+          range "10..600000";
+        }
+        default "1000";
+        description
+          "Specify packet interval (Default: 1000 milliseconds)";
+      }
+      leaf timeout {
+        type uint32 {
+          range "1..86400";
+        }
+        default "900";
+        description
+          "Specify timeout value (Default: 900 seconds)";
+      }
+      leaf dscp {
+        type typesipos:dscp-value;
+        default "df";
+        description
+          "Specify DSCP value (Default: 0)";
+      }
+      leaf pkt-timeout {
+        type uint8 {
+          range "1..30";
+        }
+        default "4";
+        description
+          "Specify packet loss timeout value (Default: 4
+           seconds)";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:ippm/"
+  + "ctxipos:twamp-light" {
+    description
+      "ericsson-twamp";
+    /*
+    sender
+    */
+    container sender {
+      presence "";
+      description
+        "Configure TWAMP sender";
+      uses twamp-sender-grp;
+    }
+    /*
+    reflector
+    */
+    container reflector {
+      description
+        "Configure TWAMP reflector";
+      uses twamp-reflector-grp;
+    }
+    /*
+    cont-sender
+    */
+    container cont-sender {
+      presence "";
+      description
+        "Configure TWAMP continuous sender";
+      uses twamp-cont-sender-grp;
+    }
+  }
+
+}

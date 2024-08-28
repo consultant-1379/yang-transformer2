@@ -1,0 +1,25 @@
+module simple-module-ext {
+
+	namespace "urn:test:simple-module-ext";
+	prefix this;
+
+	revision "2023-07-12";
+
+	import simple-module {
+		prefix other;
+	}
+
+	augment /other:cont1 {
+
+		leaf leaf12 {
+			type enumeration {
+				enum MONDAY;
+				enum TUESDAY;
+			}
+		}
+	}
+
+	deviation /other:cont3/leaf32 {
+		deviate not-supported;
+	}
+}

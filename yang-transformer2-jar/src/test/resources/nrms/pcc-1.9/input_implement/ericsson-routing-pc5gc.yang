@@ -1,0 +1,67 @@
+module ericsson-routing-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-routing-pc5gc";
+  prefix rtpc5gc;
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ietf-network-instance {
+    prefix ni;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model is for cloud routing engine.
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision 2019-07-08 {
+    description
+      "initial revision";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ni:network-instances/ni:network-instance" {
+    description
+      "Routing locates on network instance.";
+    container routing {
+
+      status current {
+        yexte:preliminary;
+      }
+
+      description
+        "Cloud routing engine.";
+    }
+    /*
+    ip
+     */
+    container ip {
+
+      status current {
+        yexte:preliminary;
+      }
+      description
+        "IP configuration command";
+    }
+    /*
+    ipv6
+     */
+    container ipv6 {
+
+      status current {
+        yexte:preliminary;
+      }
+      description
+        "IPv6 configuration command";
+    }
+  }
+}

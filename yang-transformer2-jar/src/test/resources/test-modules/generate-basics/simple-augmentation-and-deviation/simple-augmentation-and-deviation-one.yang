@@ -1,0 +1,36 @@
+module simple-augmentation-and-deviation-one {
+
+    namespace "urn:test:simple-augmentation-and-deviation-one";
+    prefix this;
+
+    revision "2021-10-14";
+
+	container cont1 {
+	
+		leaf leaf11 {
+			type string;
+		}
+
+		leaf leaf12 {			// will be deviated out
+			type string;
+		}
+	}
+	
+	container cont2 {
+	
+		container cont3 {
+		
+			leaf leaf35 {
+				type string;
+			}
+		}
+	
+		leaf leaf21 {
+			type string;
+		}
+	}
+	
+	
+	
+	
+}

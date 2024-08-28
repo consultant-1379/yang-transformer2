@@ -1,0 +1,55 @@
+/*
+    This is written manually.
+*/
+module ericsson-bfd-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:ietf:params:xml:ns:yang:ericsson-bfd-dev-router6274";
+
+  prefix "bfddevrouter6274";
+
+  import ericsson-bfd-router6000 {
+    prefix "bfdr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-qos-dev-router6672
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-04-26" {
+    description
+      "deviation for ericsson-bfd-ipos.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/ctxsr6k:contexts/ctxsr6k:router/bfdr6k:s-bfd/bfdr6k:local-discriminator" {
+    deviate replace {
+      type string {
+        pattern "0(x|X)([1]{1})([0]{1})([01]{1}[0-7]{1})";
+      }
+    }
+  }
+}

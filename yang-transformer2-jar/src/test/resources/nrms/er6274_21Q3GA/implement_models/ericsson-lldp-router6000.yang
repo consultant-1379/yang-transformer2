@@ -1,0 +1,254 @@
+module ericsson-lldp-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-lldp-router6000";
+
+  prefix "lldprouter6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-lldp-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "1";
+  }
+
+  revision "2018-10-12" {
+    description
+      "Added port-id-type";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2018-08-21" {
+    description
+      "corrected port-delay to link-delay";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2018-07-16" {
+    description
+      "Added snmp traps enable/disable";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-07-01" {
+    description
+      "Added node-delay, link-delay, port-speed optional tlvs";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-03-08" {
+    description
+      "Added optional tlvs";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-03" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping lldp-protocol-grp {
+    description
+      "LLDP config mode";
+    /*
+    hold-time-multiplier (holdtime-seconds)
+    */
+    leaf hold-time-multiplier {
+      type uint8 {
+        range "2..10";
+      }
+      default "3";
+      description
+        "Configure hold time multiplier for LLDP updates";
+    }
+    /*
+    interval (timer-seconds)
+    */
+    leaf interval {
+      type uint16 {
+        range "5..6000";
+      }
+      default "30";
+      description
+        "Configure transmission frequency for LLDP
+         advertisement";
+    }
+    /*
+    port-id-type { mac-address | locally-assigned }
+    */
+    container port-id-type {
+      description
+        "configure port-id subtype";
+      choice port-id-type {
+        default mac-address;
+        case mac-address {
+          leaf mac-address {
+            type empty;
+            description
+              "Port id is of type MAC address";
+          }
+        }
+        case locally-assigned {
+          leaf locally-assigned {
+            type empty;
+            description
+              "Port id is of type slot/port";
+          }
+        }
+      }
+    }
+    /*
+    enable [ snmp traps | tlv { management-address | port-
+     description | system-capabilities | system-description |
+     system-name | end-of-lldp | node-delay | link-delay | port-
+     speed } | lldp-enable ]
+    */
+    container enable {
+      presence "";
+      description
+        "Enable lldp protocol globally";
+      leaf snmp-traps {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable snmp-traps";
+      }
+      container tlv {
+        description
+          "Enable lldp optional tlvs globally";
+        leaf management-address {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable management-address";
+        }
+        leaf port-description {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable port-description";
+        }
+        leaf system-capabilities {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable system-capabilities";
+        }
+        leaf system-description {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable system-description";
+        }
+        leaf system-name {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable system-name";
+        }
+        leaf end-of-lldp {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable end-of-lldp";
+        }
+        leaf node-delay {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable node-delay";
+        }
+        leaf link-delay {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable link-delay";
+        }
+        leaf port-speed {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable port-speed";
+        }
+      }
+      leaf lldp-enable {
+        type boolean;
+        default "false";
+        description
+          "Enable/Disable lldp-enable";
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-lldp";
+    /*
+    lldp
+    */
+    container lldp {
+      presence "";
+      description
+        "LLDP protocol";
+      uses lldp-protocol-grp;
+    }
+  }
+
+}

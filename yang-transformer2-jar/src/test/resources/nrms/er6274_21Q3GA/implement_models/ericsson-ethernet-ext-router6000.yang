@@ -1,0 +1,1523 @@
+module ericsson-ethernet-ext-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ethernet-ext-router6000";
+
+  prefix "ethxrouter6000";
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-mirror-policy-router6000 {
+    prefix "mirrorpolrouter6000";
+  }
+
+  import ericsson-qos-config-router6000 {
+    prefix "qoscfgr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-ethernet-ext-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-27" {
+    description
+      "fix 3.4.0 duplicated revision issue";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "5";
+    yexte:correction "0";
+  }
+
+  revision "2020-03-18" {
+    description
+      "enable evpn es syncup function";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "4";
+    yexte:correction "1";
+  }
+
+  revision "2020-02-28" {
+    description
+      "add 2.5ge port type";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2019-07-04" {
+    description
+      "enable evpn command for port";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "4";
+  }
+
+  revision "2019-06-20" {
+    description
+      "hide evpn command for port";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "3";
+  }
+
+  revision "2019-05-05" {
+    description
+      "add default value for port-esi evpn command";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "2";
+  }
+
+  revision "2019-04-12" {
+    description
+      "add new evpn command for port";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "1";
+  }
+
+  revision "2019-04-02" {
+    description
+      "modify for new port-type 25ge-qsa";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2019-02-14" {
+    description
+      "New command forward-error-correction for port-type 100GE";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2019-01-08" {
+    description
+      "modify description for command forward-error-correction";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-12-24" {
+    description
+      "New command forward-error-correction for port-type 25GE";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-10-31" {
+    description
+      "New command 25GE for port-type";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "6";
+  }
+
+  revision "2018-10-29" {
+    description
+      "add command transceiver";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "5";
+  }
+
+  revision "2018-10-22" {
+    description
+      "remove ip host feature";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "4";
+  }
+
+  revision "2018-09-27" {
+    description
+      "QoS MWBW feature commands modified";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision "2018-08-16" {
+    description
+      "Change Ethernet MO from presence to non-presence";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-08-06" {
+    description
+      "Support rmon under port";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-07-26" {
+    description
+      "Set ethernet port link-delay";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-25" {
+    description
+      "Support 40GE";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-04-30" {
+    description
+      "obsolete profile and admission-control-choice, add new
+       choice bidirectional and unidirectional";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "8";
+  }
+
+  revision "2018-03-30" {
+    description
+      "Move the if-feature loopback";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-03-12" {
+    description
+      "Add leafref for apply flows profile.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-01-25" {
+    description
+      "set status obsolete for subscribe micro-bfd";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-01-10" {
+    description
+      "Move the if-feature auto-negotiate-duplex to
+       auto-negotiate model.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-01-05" {
+    description
+      "set mandatory for choice
+       ipv6-multicast-maximum-bandwidth-choice";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-10-31" {
+    description
+      "Move auto-negotiate to independent model";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-08-16" {
+    description
+      "New command 100GE for port-type";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-20" {
+    description
+      "IPOS 9349 Route-prefix and host-addr can be configured
+       together and 'host-addr' can be configured multiple times";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-06" {
+    description
+      "IPOS 11281 add mirror policy in port ethernet";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-05" {
+    description
+      "IPOS 8033 [interface]The model ip access-group in
+       interface have some issue.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-05" {
+    description
+      "IPOS-8625 deviate percent and gre-interface from
+       ericsson-ethernet-ext-ipos model.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-11" {
+    description
+      "For default value of auto-negotiate changed.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-30" {
+    description
+      "For Side Effect difference modification.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-16" {
+    description
+      "support management port";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature ipfix-apply {
+    description
+      "This feature indicates that the device supports
+       ipfix-apply in ethernet.";
+  }
+
+  feature ip-host {
+    description
+      "This feature indicates that the device supports ip-host
+       in ethernet.";
+  }
+
+  feature igmp {
+    description
+      "This feature indicates that the device supports igmp in
+       ethernet.";
+  }
+
+  feature gre-interafce {
+    description
+      "This feature indicates that the device supports
+       gre-interafce in ethernet.";
+  }
+
+  feature clips {
+    description
+      "This feature indicates that the device supports clips in
+       ethernet.";
+  }
+
+  feature flow-apply {
+    description
+      "This feature indicates that the device supports
+       flow-apply in ethernet.";
+  }
+
+  feature multicast {
+    description
+      "This feature indicates that the device supports multicast
+       in ethernet.";
+  }
+
+
+     typedef my_decimal64 {
+       type decimal64 {
+         fraction-digits 6;
+         range "191.350000..196.100000";
+       }
+       description
+         "redef decimal64 for transceiver";
+     }
+
+  grouping port-grp {
+    description
+      "Port configuration mode";
+    /*
+    ipfix apply { { ipv4 | ipv6 } { monitor (monitor-name) } {
+     sampler (sampler-name) } { in | out } | mpls monitor }
+    */
+    container ipfix-apply {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      if-feature ipfix-apply;
+      presence "";
+      description
+        "Apply a monitor and sampler to a circuit";
+      choice ipfix-apply {
+        case ipos-choice {
+          container ipos-choice {
+            description
+              "container ipos-choice.";
+            leaf ipos-choice-choice {
+              type enumeration {
+                enum ipv4 {
+                  value 0;
+                  description
+                    "IPV4 packets to sample";
+                }
+                enum ipv6 {
+                  value 1;
+                  description
+                    "IPV6 packets to sample";
+                }
+              }
+              mandatory true;
+              description
+                "leaf ipos-choice-choice.";
+            }
+            leaf monitor {
+              type string;
+              mandatory true;
+              description
+                "Name of the monitor configuration";
+            }
+            leaf sampler {
+              type string;
+              mandatory true;
+              description
+                "Name of the sampler configuration";
+            }
+            leaf ipos-choice-choice1 {
+              type enumeration {
+                enum in {
+                  value 0;
+                  description
+                    "Ingress direction, Sample Incoming packets";
+                }
+                enum out {
+                  value 1;
+                  description
+                    "Egress direction, Sample outgoing packets";
+                }
+              }
+              mandatory true;
+              description
+                "leaf ipos-choice-choice1.";
+            }
+          }
+        }
+        case mpls-monitor {
+          leaf mpls-monitor {
+            type empty;
+            description
+              "Name of the monitor configuration";
+          }
+        }
+      }
+    }
+    /*
+    link-group (lg-name)
+    */
+    leaf link-group {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      type leafref {
+        path "/if:interfaces/if:interface/if:name";
+      }
+      description
+        "Specify the link-group";
+    }
+    /*
+    lacp priority (priority-val)
+    */
+    container lacp {
+      description
+        "Configure LACP parameters";
+      leaf priority {
+        type uint16 {
+          range "0..65535";
+        }
+        default "32767";
+        description
+          "Configure LACP port priority";
+      }
+    }
+    /*
+    bind interface (intf-name) (intf-ctx)
+    */
+    container bind-interface {
+      presence "";
+      description
+        "Bind to an interface";
+      leaf intf-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Interface to bind to";
+      }
+      leaf intf-ctx {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        mandatory true;
+        description
+          "Context name to be bound";
+      }
+    }
+    /*
+    ip host { (route-prefix) | (host-addr) } [ (host-mac) ]
+    */
+    list ip-host {
+      key "ip-host-choice";
+      description
+        "Configure IP Host on this circuit";
+      leaf ip-host-choice {
+        type union {
+          type inet:ipv4-prefix;
+          type inet:ipv4-address;
+        }
+        description
+          "leaf ip-host-choice.";
+      }
+      leaf host-mac {
+        type yang:mac-address;
+        description
+          "MAC-Address of the host on this circuit didn't
+           support ipv4-prefix";
+      }
+    }
+    /*
+    flow apply { < admission-control { < bidirectional < profile
+     (prof-name) > bidirectional > | < unidirectional < profile
+     (prof-name)> {in | out}>} { profile (prof-name) } { in | out
+     | bidirectional } > | < ip { profile (profile-name) } { in |
+     out | both } >}
+    */
+    container flow-apply {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      if-feature flow-apply;
+      description
+        "Apply Flows on this circuit";
+      container admission-control {
+        description
+          "Apply Flow Admission-Control on this circuit";
+        choice admission-control-choice1 {
+          case bidirectional {
+            list bidirectional {
+              key "profile";
+              max-elements 1;
+              description
+                "Apply FAC profile for bidirectional traffic";
+              leaf profile {
+                type leafref {
+                  path "/ctxsr6k:contexts/qoscfgr6k:flow-"
+                  + "admission-control-profile/qoscfgr6k:prof-name";
+                }
+                description
+                  "Apply a Flow AC profile to this circuit";
+              }
+              leaf bidirectional {
+                type empty;
+                mandatory true;
+                description
+                  "Apply FAC profile for bidirectional traffic";
+              }
+            }
+          }
+          case unidirectional {
+            list unidirectional {
+              key "profile";
+              unique "unidirectional-choice";
+              max-elements 2;
+              description
+                "list unidirectional.";
+              leaf profile {
+                type leafref {
+                  path "/ctxsr6k:contexts/qoscfgr6k:flow-"
+                  + "admission-control-profile/qoscfgr6k:prof-name";
+                }
+                description
+                  "Apply a Flow AC profile to this circuit";
+              }
+              leaf unidirectional-choice {
+                type enumeration {
+                  enum in {
+                    value 0;
+                    description
+                      "Apply FAC profile for ingress traffic";
+                  }
+                  enum out {
+                    value 1;
+                    description
+                      "Apply FAC profile for egress traffic";
+                  }
+                }
+                mandatory true;
+                description
+                  "Apply FAC profile for ingress/egress traffic";
+              }
+            }
+          }
+        }
+        leaf profile {
+          type leafref {
+            path "/ctxsr6k:contexts/qoscfgr6k:flow-admission-"
+            + "control-profile/qoscfgr6k:prof-name";
+          }
+          status obsolete;
+          description
+            "Apply a Flow AC profile to this circuit";
+        }
+        leaf admission-control-choice {
+          type enumeration {
+            enum in {
+              value 0;
+              status obsolete;
+              description
+                "Apply FAC profile for ingress traffic";
+            }
+            enum out {
+              value 1;
+              status obsolete;
+              description
+                "Apply FAC profile for egress traffic";
+            }
+            enum bidirectional {
+              value 2;
+              status obsolete;
+              description
+                "Apply FAC profile for bidirectional traffic";
+            }
+          }
+          description
+            "leaf admission-control-choice.";
+        }
+      }
+      container ip {
+        description
+          "IP flow configuration";
+        leaf profile {
+          type leafref {
+            path "/ctxsr6k:contexts/qoscfgr6k:flow-ip-"
+            + "profile/qoscfgr6k:prof-name";
+          }
+          description
+            "IP flow profile configuration";
+        }
+        leaf ip-choice {
+          type enumeration {
+            enum in {
+              value 0;
+              description
+                "Apply profile in ingress direction only";
+            }
+            enum out {
+              value 1;
+              description
+                "Apply profile in egress direction only";
+            }
+            enum both {
+              value 2;
+              description
+                "Apply profile in ingress and egress directions";
+            }
+          }
+          description
+            "leaf ip-choice.";
+        }
+      }
+    }
+    /*
+    clips pvc (source-cnt) [ through (source-erange) ]
+    */
+    container clips-pvc {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      if-feature clips;
+      presence "";
+      description
+        "Create static CLIPs pvcs";
+      leaf source-cnt {
+        type uint32 {
+          range "1..131072";
+        }
+        mandatory true;
+        description
+          "Session id ( Max Sessions : 48000 )";
+      }
+      leaf through {
+        type uint32 {
+          range "3..131072";
+        }
+        description
+          "Specify a range of session ids ( Max Sessions : 48000
+           )";
+      }
+    }
+    /*
+    subscribe micro-bfd
+    */
+    leaf subscribe-micro-bfd {
+      type empty;
+      status obsolete;
+      description
+        "Micro-bfd events for the link group";
+    }
+    /*
+    mtu (mtu-number)
+    */
+    leaf mtu {
+      type uint16 {
+        range "256..9600";
+      }
+      default "1500";
+      description
+        "Change media mtu size";
+    }
+    /*
+    encapsulation dot1q
+    */
+    leaf encapsulation-dot1q {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      type empty;
+      description
+        "dot1q";
+    }
+    /*
+    link-dampening [ {up (up-delay)} {down (down-delay)} [
+     restart (restart-delay) ] ]
+    */
+    container link-dampening {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      presence "";
+      description
+        "Dampen the line state detection to reduce port flaps";
+      container link-dampening-opt {
+        presence "";
+        description
+          "container link-dampening-opt.";
+        leaf up {
+          type uint16 {
+            range "0..65535";
+          }
+          must "((number(../down)!=0) or (number(.)!=0))" {
+            error-message "the value of up-delay and down-delay "
+            + "both can not be zero.";
+            description
+              "the value of up-delay and down-delay both can not
+               be 0";
+          }
+          default "10000";
+          description
+            "Set link-up dampening delay";
+        }
+        leaf down {
+          type uint16 {
+            range "0..65535";
+          }
+          must "((number(../up)!=0) or (number(.)!=0))" {
+            error-message "the value of up-delay and down-delay "
+            + "both can not be zero.";
+            description
+              "the value of up-delay and down-delay both can not
+               be 0";
+          }
+          default "2500";
+          description
+            "Set link-down dampening delay";
+        }
+        leaf restart {
+          type uint16 {
+            range "0..65535";
+          }
+          default "0";
+          description
+            "Set link-up dampening delay on system restart";
+        }
+      }
+    }
+    /*
+    duplex { full | half }
+    */
+    leaf duplex {
+      type enumeration {
+        enum full {
+          value 0;
+          description
+            "Set port duplex mode to full duplex";
+        }
+        enum half {
+          value 1;
+          description
+            "Set port duplex mode to half duplex";
+        }
+      }
+      description
+        "Set port duplex mode";
+    }
+    /*
+    speed { 1000 | 100  }
+    */
+    leaf speed {
+      type enumeration {
+        enum 1000 {
+          value 0;
+          description
+            "Set port speed to 1000 Mbps";
+        }
+        enum 100 {
+          value 1;
+          description
+            "Set port speed to 100 Mbps";
+        }
+      }
+      description
+        "Set port speed";
+    }
+    /*
+    loopback
+    */
+    leaf loopback {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      type empty;
+      description
+        "Enable loopback";
+    }
+    /*
+    mirror { <policy (mirror-name) { in | out } [ source-tag {
+     dot1q (tag-id) | dot1ad (tag-id)}  ]> | <destination (dest-
+     name)> }
+    */
+    container mirror {
+      description
+        "Configure mirror policy or destination";
+      choice mirror {
+        case policy {
+          list policy {
+            key "policy-choice";
+            max-elements 2;
+            description
+              "Configure mirror policy";
+            leaf policy-choice {
+              type enumeration {
+                enum in {
+                  value 0;
+                  description
+                    "Configure inbound mirror policy";
+                }
+                enum out {
+                  value 1;
+                  description
+                    "Configure outbound mirror policy";
+                }
+              }
+              description
+                "leaf policy-choice.";
+            }
+            leaf mirror-name {
+              type leafref {
+                path "/ctxsr6k:contexts/mirrorpolrouter6000"
+                + ":mirror-policy/mirrorpolrouter6000:mirror-"
+                + "polname";
+              }
+              mandatory true;
+              description
+                "Mirror policy name";
+            }
+            container source-tag {
+              description
+                "Configure mirror source tag";
+              choice source-tag {
+                case dot1q {
+                  leaf dot1q {
+                    type uint16 {
+                      range "1..4094";
+                    }
+                    description
+                      "Configure dot1q Ethernet type";
+                  }
+                }
+                case dot1ad {
+                  leaf dot1ad {
+                    type uint16 {
+                      range "1..4094";
+                    }
+                    description
+                      "Configure dot1ad Ethernet type";
+                  }
+                }
+              }
+            }
+          }
+        }
+        case destination {
+          leaf destination {
+            type string {
+              length "1..39";
+            }
+            description
+              "Configure mirror destination";
+          }
+        }
+      }
+    }
+    /*
+    igmp maximum-bandwidth (bandwidth-rate) [ percent ]
+    */
+    container igmp-maximum-bandwidth {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      presence "";
+      description
+        "Specify maximum bandwidth for a port";
+      leaf bandwidth-rate {
+        type uint16 {
+          range "1..65535";
+        }
+        mandatory true;
+        description
+          "Rate in kbps";
+      }
+      leaf percent {
+        type empty;
+        description
+          "Specfied rate is percentage of port bandwidth";
+      }
+    }
+    /*
+    ipv6 multicast maximum-bandwidth (bandwidth-rate) { kbps |
+     mbps | gbps }
+    */
+    container ipv6-multicast-maximum-bandwidth {
+      presence "";
+      description
+        "Specify maximum bandwidth for a port";
+      leaf bandwidth-rate {
+        type uint16 {
+          range "1..65535";
+        }
+        mandatory true;
+        description
+          "assign bw in kbps | Mbps | Gbps";
+      }
+      choice ipv6-multicast-maximum-bandwidth-choice {
+        mandatory true;
+        case kbps {
+          leaf kbps {
+            type empty;
+            description
+              "Kilo bits per sec";
+          }
+        }
+        case mbps {
+          leaf mbps {
+            type empty;
+            description
+              "Mega bits per sec";
+          }
+        }
+        case gbps {
+          leaf gbps {
+            type empty;
+            description
+              "Giga bits per sec";
+          }
+        }
+      }
+    }
+    /*
+    rmon collection
+    */
+    container rmon-collection {
+      description
+        "Configure RMON collection";
+      list entry {
+        key "etherstats-index";
+        description
+          "Configure RMON entry";
+        leaf etherstats-index {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Index to the RMON EtherStats Entry Table";
+        }
+        leaf owner {
+          type string;
+          description
+            "RMON EtherStats Owner";
+        }
+      }
+      list history-entry {
+        key "historyctrl-index";
+        description
+          "Configure RMON historyctrl entry";
+        leaf historyctrl-index {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Index to the RMON HistroyCtrl Table";
+        }
+        leaf owner {
+          type string;
+          description
+            "RMON Event Owner";
+        }
+        leaf buckets {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Configure RMON historyctrl buckets";
+        }
+        leaf interval {
+          type uint32;
+          must " (number(.) = 1) or (number(.) = 15) or "
+          + "(number(.) = 30) or (number(.) = 60) or (number(.) = "
+          + "720) or (number(.) = 1440) " {
+            error-message "interval-time is not correct";
+            description
+              "interval-time only support 1,15,30,60,720,1440";
+          }
+          description
+            "Configure RMON historyctrl interval";
+        }
+      }
+    }
+    /*
+    ethernet-segment
+    */
+    container ethernet-segment {
+      presence "";
+      description
+        "Configure an ethernet segment group";
+      uses esi-grp;
+    }
+    /*
+    forward-error-correction { cl74-fc-fec | cl108-rs-fec | cl91
+     -rs-fec | auto-config | disable-fec }
+    */
+    container forward-error-correction {
+      description
+        "Configure forward error correction for the port";
+      choice forward-error-correction {
+        case cl74-fc-fec {
+          leaf cl74-fc-fec {
+            when "((../../../ethernet/ethxrouter6000:port-type = "
+            + "'25ge') or (../../../ethernet/ethxrouter6000:port-"
+            + "type = '25ge-qsa'))" {
+              description
+                "just applicable under 25ge or 25ge-qsa port";
+            }
+            type empty;
+            description
+              "Enable clause 74 for the port";
+          }
+        }
+        case cl108-rs-fec {
+          leaf cl108-rs-fec {
+            when "((../../../ethernet/ethxrouter6000:port-type = "
+            + "'25ge') or (../../../ethernet/ethxrouter6000:port-"
+            + "type = '25ge-qsa'))" {
+              description
+                "just applicable under 25ge or 25ge-qsa port";
+            }
+            type empty;
+            description
+              "Enable clause 108 for the port";
+          }
+        }
+        case cl91-rs-fec {
+          leaf cl91-rs-fec {
+            when "(../../../ethernet/ethxrouter6000:port-type = "
+            + "'100ge')" {
+              description
+                "just applicable under 100ge port";
+            }
+            type empty;
+            description
+              "Enable clause 91 for the port";
+          }
+        }
+        case auto-config {
+          leaf auto-config {
+            when "(../../../ethernet/ethxrouter6000:port-type = "
+            + "'100ge')" {
+              description
+                "just applicable under 100ge port";
+            }
+            type empty;
+            description
+              "Set default FEC with transceiver type for the
+               port";
+          }
+        }
+        case disable-fec {
+          leaf disable-fec {
+            type empty;
+            description
+              "Disable FEC for the port";
+          }
+        }
+      }
+    }
+    /*
+    storm-control { pps | kbps }
+    */
+    container storm-control {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      description
+        "Configure storm-control parameters";
+      choice storm-control {
+        case pps {
+          container pps {
+            presence "";
+            description
+              "Packets-per-second";
+            uses port-storm-ctrl-pps-grp;
+          }
+        }
+        case kbps {
+          container kbps {
+            presence "";
+            description
+              "Kilobits-per-second";
+            uses port-storm-ctrl-kbps-grp;
+          }
+        }
+      }
+    }
+    /*
+    port-type { wan-phy | 1ge | 10ge | 40ge | 100ge | 25ge |
+     25ge-qsa | 2.5ge }
+    */
+    leaf port-type {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      type enumeration {
+        enum wan-phy {
+          value 0;
+          description
+            "Select WAN-PHY as port physical layer type";
+        }
+        enum 1ge {
+          value 1;
+          description
+            "Select 1GE port type";
+        }
+        enum 10ge {
+          value 2;
+          description
+            "Select 10GE port type";
+        }
+        enum 40ge {
+          value 4;
+          description
+            "Select 40GE port type";
+        }
+        enum 100ge {
+          value 3;
+          description
+            "Select 100GE port type";
+        }
+        enum 25ge {
+          value 5;
+          description
+            "Select 25GE port type";
+        }
+        enum 25ge-qsa {
+          value 6;
+          description
+            "Select 25GE-QSA port type";
+        }
+        enum 2.5ge {
+          value 7;
+          description
+            "Select 2.5GE port type";
+        }
+      }
+      description
+        "The physical type of the port";
+    }
+    /*
+    link-delay (delay-time)
+    */
+    leaf link-delay {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      type uint64 {
+        range "100000..500000";
+      }
+      description
+        "Set link delay time";
+    }
+    /*
+    transceiver-dwdm-frequency (frequency-num)
+    */
+    leaf transceiver-dwdm-frequency {
+      type my_decimal64;
+      description
+        "Configure transceiver parameters";
+    }
+  }
+
+  grouping port-storm-ctrl-kbps-grp {
+    description
+      "storm control configuration parameters of kbps";
+    /*
+    unknown-dest { rate (rate-range) burst (size-range) }
+    */
+    container unknown-dest {
+      presence "";
+      description
+        "Unknown destination frame storm-control parameters";
+      leaf rate {
+        type uint32 {
+          range "122..1000000";
+        }
+        mandatory true;
+        description
+          "Rate limit in kbps";
+      }
+      leaf burst {
+        type uint32 {
+          range "10000..4000000";
+        }
+        mandatory true;
+        description
+          "Burst size limit in byte";
+      }
+    }
+    /*
+    multicast { rate (rate-range) burst (size-range) }
+    */
+    container multicast {
+      presence "";
+      description
+        "Multicast frame storm-control parameters";
+      leaf rate {
+        type uint32 {
+          range "122..1000000";
+        }
+        mandatory true;
+        description
+          "Rate limit in kbps";
+      }
+      leaf burst {
+        type uint32 {
+          range "10000..4000000";
+        }
+        mandatory true;
+        description
+          "Burst size limit in byte";
+      }
+    }
+    /*
+    broadcast { rate (rate-range) burst (size-range) }
+    */
+    container broadcast {
+      presence "";
+      description
+        "Broadcast frame storm-control parameters";
+      leaf rate {
+        type uint32 {
+          range "122..1000000";
+        }
+        mandatory true;
+        description
+          "Rate limit in kbps";
+      }
+      leaf burst {
+        type uint32 {
+          range "10000..4000000";
+        }
+        mandatory true;
+        description
+          "Burst size limit in byte";
+      }
+    }
+  }
+
+  grouping port-storm-ctrl-pps-grp {
+    description
+      "storm control configuration parameters of pps";
+    /*
+    unknown-dest-rate (rate-range)
+    */
+    leaf unknown-dest-rate {
+      type uint32 {
+        range "238..2000000";
+      }
+      description
+        "Unknown destination frame storm-control parameter, rate
+         limit in pps";
+    }
+    /*
+    multicast-rate (rate-range)
+    */
+    leaf multicast-rate {
+      type uint32 {
+        range "238..2000000";
+      }
+      description
+        "Multicast frame storm-control parameter, rate limit in
+         pps";
+    }
+    /*
+    broadcast-rate (rate-range)
+    */
+    leaf broadcast-rate {
+      type uint32 {
+        range "238..2000000";
+      }
+      description
+        "Broadcast frame storm-control parameter, rate limit in
+         pps";
+    }
+  }
+
+  grouping esi-grp {
+    description
+      "Ethernet Segment configuration mode";
+    /*
+    df-election-wait-time (timer-minute)
+    */
+    leaf df-election-wait-time {
+      type uint8 {
+        range "1..240";
+      }
+      default "3";
+      description
+        "Designated Forwarder election wait time";
+    }
+    /*
+    syncup (timer-second)
+    */
+    leaf syncup {
+      type uint16 {
+        range "250..900";
+      }
+      description
+        "Configure ethernet segment syncup time(s)";
+    }
+    /*
+    evpn identifier manual (manual-addr)
+    */
+    container evpn-identifier-manual {
+      presence "";
+      description
+        "Configure ESI value manually";
+      leaf manual-addr {
+        type typesrouter6000:formated_hex_len;
+        mandatory true;
+        description
+          "leaf manual-addr.";
+      }
+    }
+    /*
+    evpn mode { all-active | single-active }
+    */
+    container evpn-mode {
+      presence "";
+      description
+        "Configure evpn redundancy mode";
+      choice evpn-mode {
+        default "all-active";
+        case all-active {
+          leaf all-active {
+            type empty;
+            description
+              "Configure redundancy mode as all-active";
+          }
+        }
+        case single-active {
+          leaf single-active {
+            type empty;
+            description
+              "Configure redundancy mode as single-active";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    description
+      "ericsson-ethernet";
+    /*
+    ethernet
+    */
+    container ethernet {
+      when "../if:type = 'ianaift:ethernetCsmacd'" {
+        description
+          "";
+      }
+      description
+        "Select port to configure";
+      uses port-grp;
+    }
+  }
+
+}

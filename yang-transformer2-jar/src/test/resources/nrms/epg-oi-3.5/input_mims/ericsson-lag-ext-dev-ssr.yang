@@ -1,0 +1,98 @@
+module ericsson-lag-ext-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-lag-ext-dev-ssr";
+
+  prefix "lagxdevssr";
+
+  import ericsson-yang-extensions {
+      prefix yexte;
+  }
+
+  import ericsson-lag-ext-ipos {
+    prefix "lagxipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-lag-ext-dev_ipos
+     Copyright (c) 2017-2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-09-09" {
+    description
+      "fix incorrect release No.";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-03-27" {
+    description
+      "deviate pos, economical, link-pinning under link-group.
+       fix IPOS-21361 Data type should not be deviated.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-28" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/if:interfaces/if:interface/lagxipos:link-group/lagxipos:maximum-links" {
+      deviate replace {
+      type uint8 {
+            range "1..16";
+          }
+    }
+  }
+  deviation "/if:interfaces/if:interface/lagxipos:link-group/lagxipos:link-group-opt" {
+    deviate not-supported;
+  }
+}

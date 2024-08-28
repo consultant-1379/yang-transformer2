@@ -1,0 +1,56 @@
+submodule submodule {
+
+	belongs-to module {
+		prefix this;
+	}
+
+	revision '2021-12-20';
+
+	identity id-1;
+
+	identity id-2 {
+		base id-1;
+	}
+
+	identity id-3 {
+		base id-1;
+	}
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string;
+		}
+		leaf leaf12 {
+			type enumeration {
+				enum RED;
+				enum YELLOW;
+			}
+		}
+		choice choice13 {
+			case case14 {
+				leaf leaf14 {
+					type boolean;
+				}
+			}
+			case case15 {
+				leaf leaf15 {
+					type uint64;
+				}
+			}
+		}
+	}
+
+	list list2 {
+		key leaf21;
+
+		leaf leaf21 {
+			type identityref {
+				base this:id-1;
+			}
+		}
+		leaf leaf22 {
+			type int32;
+		}
+	}
+}

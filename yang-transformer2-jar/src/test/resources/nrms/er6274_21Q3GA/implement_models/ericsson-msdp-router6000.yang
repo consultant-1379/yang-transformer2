@@ -1,0 +1,245 @@
+module ericsson-msdp-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-msdp-router6000";
+
+  prefix "msdprouter6000";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-msdp-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-02-27" {
+    description
+      "modify meshgrp-addr's type from ipv4-address to leafref.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2016-12-20" {
+    description
+      "add leafref for default peer";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-04-20" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+
+   typedef msdp-peer {
+     type union {
+       type uint16 {
+         range "1..65535";
+       }
+       type string;
+     }
+     description
+           "MSDP peer AS number or number in nn:nn format";
+   }
+
+  grouping msdp-grp {
+    description
+      "MSDP configuration mode";
+    /*
+    peer (peer-addr) local-tcp-source (peer-intf)
+    */
+    list peer {
+      key "peer";
+      description
+        "MSDP peer";
+      leaf peer {
+        type inet:ipv4-address;
+        description
+          "IP Address of peer";
+      }
+      container local-tcp-source {
+        description
+          "TCP source for MSDP connection";
+        leaf local-tcp-source {
+          type string;
+          mandatory true;
+          description
+            "Interface name";
+        }
+      }
+      uses msdp-peer-grp;
+    }
+    /*
+    originating-rp
+    */
+    container originating-rp {
+      description
+        "Configure originating-rp address/SA filter";
+      leaf sa-filter {
+        type string;
+        description
+          "Filter SA's from RP";
+      }
+      leaf org-intf {
+        type string;
+        description
+          "Interface name to use as originating RP";
+      }
+    }
+    /*
+    default-peer (def-addr) [ (def-prefix) ]
+    */
+    list default-peer {
+      key "def-addr";
+      description
+        "Configure MSDP default-peer";
+      leaf def-addr {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/m"
+          + "sdprouter6000:msdp/msdprouter6000:peer/msdprouter6000:"
+          + "peer";
+        }
+        description
+          "IP Address of default-peer to accept SA message from";
+      }
+      leaf def-prefix {
+        type string;
+        description
+          "Prefix list name for RP";
+      }
+    }
+    /*
+    mesh-group (meshgrp-name) (meshgrp-addr)
+    */
+    list mesh-group {
+      key "meshgrp-addr";
+      description
+        "Configure MSDP mesh group";
+      leaf meshgrp-addr {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/m"
+          + "sdprouter6000:msdp/msdprouter6000:peer/msdprouter6000:"
+          + "peer";
+        }
+        description
+          "IP Address of meshgrp-addr to accept SA message from";
+      }
+      leaf meshgrp-name {
+        type string;
+        mandatory true;
+        description
+          "Mesh group name";
+      }
+    }
+  }
+
+  grouping msdp-peer-grp {
+    description
+      "MSDP peer configuration mode";
+    /*
+    description (set-desc)
+    */
+    leaf description {
+      type string;
+      description
+        "Description of MSDP peer";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Shutdown MSDP peer";
+    }
+    /*
+    data-ttl-threshold (datattl-ttl)
+    */
+    leaf data-ttl-threshold {
+      type uint8 {
+        range "1..255";
+      }
+      description
+        "TTL threshold when forwarding data packet";
+    }
+    /*
+    sa-filter
+    */
+    container sa-filter {
+      description
+        "MSDP message filter";
+      leaf in {
+        type string;
+        description
+          "Incoming messages";
+      }
+      leaf out {
+        type string;
+        description
+          "Outgoing messages";
+      }
+    }
+    /*
+    peer-as (as-num-or-aann)
+    */
+    leaf peer-as {
+      type msdp-peer;
+      description
+        "MSDP peer AS number";
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router" {
+    description
+      "ericsson-msdp";
+    /*
+    msdp
+    */
+    container msdp {
+      presence "";
+      description
+        "Multicast Source Discovery Protocol (MSDP)";
+      uses msdp-grp;
+    }
+  }
+
+}

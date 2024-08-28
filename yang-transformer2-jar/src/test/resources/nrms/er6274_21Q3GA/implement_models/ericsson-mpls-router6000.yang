@@ -1,0 +1,371 @@
+module ericsson-mpls-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-mpls-router6000";
+
+  prefix "mplsr6k";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-mpls-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-03-10" {
+    description
+      "Updated IN label range value type to uint32";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2020-02-20" {
+    description
+      "Updated IN/OUT label range values under mpls-static";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2019-09-06" {
+    description
+      "Add new ttl cli under mpls";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-07-12" {
+    description
+      "Modify imported module xxx not used, IPOS-12445";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-06" {
+    description
+      "Modify descriptions";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-02-16" {
+    description
+      "propagate ttl.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-15" {
+    description
+      "Fix mandatory issues.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  grouping mpls-static-lsp-grp {
+    description
+      "MPLS static LSP configuration mode";
+    /*
+    egress (attr-egress)
+    */
+    leaf egress {
+      type inet:ipv4-address-no-zone;
+      description
+        "LSP egress node IP address";
+    }
+    /*
+    next-hop (nhop-addr)
+    */
+    leaf next-hop {
+      type inet:ipv4-address-no-zone;
+      description
+        "LSP nhop node IP address";
+    }
+    /*
+    out-label { (val-3) | (outlbl-val) }
+    */
+    leaf out-label {
+      type union {
+        type uint8 {
+          range "3";
+        }
+        type uint32 {
+          range "16..1048575";
+        }
+      }
+      description
+        "Configure outgoing label";
+    }
+    /*
+    description (description-str)
+    */
+    leaf description {
+      type string;
+      description
+        "Set LSP description string";
+    }
+  }
+
+  grouping mpls-static-if-grp {
+    description
+      "MPLS static interface configuration mode";
+    /*
+    label-action (label) { pop | swap (outlbl-val) (nhop-addr) |
+     php (nhop-addr) }
+    */
+    list label-action {
+      key "label";
+      description
+        "Configure a static MPLS label-action mapping";
+      leaf label {
+        type uint32 {
+          range "16..15999";
+        }
+        description
+          "Incoming label";
+      }
+      choice label-action-choice {
+        mandatory true;
+        case pop {
+          leaf pop {
+            type empty;
+            mandatory true;
+            description
+              "Pop the specified label";
+          }
+        }
+        case swap {
+          container swap {
+            description
+              "Swap the specified label";
+            leaf outlbl-val {
+              type uint32 {
+                range "16..1048575";
+              }
+              mandatory true;
+              description
+                "Outgoing label";
+            }
+            leaf nhop-addr {
+              type inet:ipv4-address-no-zone;
+              mandatory true;
+              description
+                "Nhop node IP Address";
+            }
+          }
+        }
+        case php {
+          leaf php {
+            type inet:ipv4-address-no-zone;
+            description
+              "Penultimate hop pop of the specified label";
+          }
+        }
+      }
+    }
+  }
+
+  grouping mpls-grp {
+    description
+      "MPLS configuration mode";
+    /*
+    interface (intf-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "Configure MPLS interface";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface name";
+      }
+    }
+    /*
+    propagate
+    */
+    container propagate {
+      description
+        "Transfer settings for forwarded packets";
+      container ttl {
+        description
+          "Configure TTL bits propagation";
+        leaf ip-to-mpls {
+          status obsolete;
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable ip-to-mpls";
+        }
+        leaf ip-to-mpls-conf {
+          type empty;
+          description
+            "Propagate IP TTL bits to MPLS TTL";
+        }
+        leaf mpls-to-ip {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable mpls-to-ip";
+        }
+      }
+    }
+    /*
+    egress prefer dscp-qos
+    */
+    leaf egress-prefer-dscp-qos {
+      type empty;
+      description
+        "Use DSCP bits for QoS";
+    }
+    /*
+    decrement ttl
+    */
+    leaf decrement-ttl {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable decrement-ttl";
+    }
+  }
+
+  grouping mpls-static-grp {
+    description
+      "MPLS static configuration mode";
+    /*
+    interface (intf-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "Configure MPLS-STATIC interface";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface name";
+      }
+      uses mpls-static-if-grp;
+    }
+    /*
+    lsp (lsp-string)
+    */
+    list lsp {
+      key "lsp";
+      description
+        "Configure MPLS static LSP";
+      leaf lsp {
+        type string {
+          length "1..40";
+        }
+        description
+          "LSP name";
+      }
+      uses mpls-static-lsp-grp;
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router" {
+    description
+      "ericsson-mpls";
+    /*
+    mpls
+    */
+    container mpls {
+      when "../../ctxr6k:context-name='local'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Multi-Protocol Label Switching (MPLS)";
+      uses mpls-grp;
+    }
+    /*
+    mpls-static
+    */
+    container mpls-static {
+      when "../../ctxr6k:context-name='local'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Static Multi-Protocol Label Switching (MPLS-STATIC)";
+      uses mpls-static-grp;
+    }
+  }
+
+}

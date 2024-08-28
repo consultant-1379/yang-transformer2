@@ -1,0 +1,64 @@
+module ericsson-mld-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-mld-dev-router6000";
+
+  prefix "mldrouter6000";
+
+  import ericsson-mld-router6000 {
+   prefix "mldr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+   prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+   prefix "ctxr6k";
+  }
+  
+   import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-mld-dev-router6000
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-01" {
+    description
+      "deviation for ericsson-mld-ipos.yang file";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "0";
+  }
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/mldr6k:mld/mldr6k:service-profile/mldr6k:adjust-qos-rate" {
+    deviate not-supported;
+  }
+   deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/mldr6k:mld/mldr6k:service-profile/mldr6k:bulkstats" {
+    deviate not-supported;
+  }
+   deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/mldr6k:mld/mldr6k:service-profile/mldr6k:remote-replication" {
+    deviate not-supported;
+  }
+  }

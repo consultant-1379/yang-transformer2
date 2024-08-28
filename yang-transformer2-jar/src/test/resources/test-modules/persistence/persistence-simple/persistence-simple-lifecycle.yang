@@ -1,0 +1,63 @@
+module persistence-simple-lifecycle {
+
+    namespace "urn:test:persistence-simple-lifecycle";
+    prefix this;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	
+    revision "2021-03-11";
+
+	container cont1 {			// regular 'current' NP container, should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+	
+		leaf leaf11 {			// regular leaf, 'deprecated', should be generated as FROM_DELEGATE / DELEGATE
+			status deprecated;
+			type string;
+		}
+
+		leaf leaf12 {			// 'config false' and 'current' and not notified leaf in 'config true' container, should be generated as FROM_DELEGATE / NOT_ALLOWED
+			config false;
+			type string;
+		}
+
+		leaf leaf13 {			// 'config false' and 'deprecated' and not notified leaf in 'config true' container, should be generated as FROM_DELEGATE / NOT_ALLOWED
+			status deprecated;
+			config false;
+			type string;
+		}
+
+		leaf leaf14 {			// regular leaf, 'preliminary', should be generated as FROM_DELEGATE / DELEGATE
+			status current {
+				yexte:preliminary;
+				yexte:status-information "preliminary, innit?";
+			}
+			type string;
+		}
+	}
+
+	container cont2 {			// regular NP container, 'preliminary', should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+		status current {
+			yexte:preliminary;
+		}
+
+		leaf leaf21 {			// 'config true' and 'preliminary', should be generated as FROM_DELEGATE / DELEGATE
+			type string;
+		}
+
+		leaf leaf22 {			// cannot have 'current' under 'preliminary', will be treated as preliminary, so FROM_DELEGATE / DELEGATE
+			status current;
+			type string;
+		}
+	}
+
+	list list3 {				// 'config true' list, MOC should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+		key leaf31;
+		
+		leaf leaf31 {			// key leaf, should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE (lifecycle ignored here)
+			status deprecated;
+			type string;
+		}
+	}
+	
+}

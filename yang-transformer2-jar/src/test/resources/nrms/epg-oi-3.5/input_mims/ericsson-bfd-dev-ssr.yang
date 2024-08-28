@@ -1,0 +1,2187 @@
+  module ericsson-bfd-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bfd-dev-ssr";
+
+  prefix "bfddevssr";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-bfd-ipos {
+    prefix "bfdipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bfd-dev-ipos
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+	 
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-10-16" {
+    description
+      "SSR-7495 Yound Model has warnings";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+  revision "2017-03-20" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:router/bfdipos:bfd/bfdipos:neighbor/bfdipos:minimum/bfdipos:transmit-interval" {
+      deviate replace {
+      type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 30 {
+            value 3;
+            description
+              "30 ms interval";
+          }
+          enum 50 {
+            value 4;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 5;
+            description
+              "100 ms interval";
+          }
+          enum 200 {
+            value 6;
+            description
+              "200 ms interval";
+          }
+          enum 300 {
+            value 7;
+            description
+              "300 ms interval";
+          }
+          enum 500 {
+            value 8;
+            description
+              "500 ms interval";
+          }
+          enum 1000 {
+            value 9;
+            description
+              "1000 ms interval";
+          }
+          enum 2000 {
+            value 10;
+            description
+              "2000 ms inerval";
+          }
+          enum 3000 {
+            value 11;
+            description
+              "3000 ms inerval";
+          }
+          enum 4000 {
+            value 12;
+            description
+              "4000 ms inerval";
+          }
+          enum 5000 {
+            value 13;
+            description
+              "5000 ms inerval";
+          }
+          enum 6000 {
+            value 14;
+            description
+              "6000 ms inerval";
+          }
+          enum 7000 {
+            value 15;
+            description
+              "7000 ms inerval";
+          }
+          enum 8000 {
+            value 16;
+            description
+              "8000 ms inerval";
+          }
+          enum 9000 {
+            value 17;
+            description
+              "9000 ms inerval";
+          }
+          enum 10000 {
+            value 18;
+            description
+              "10000 ms inerval";
+          }
+          enum 11000 {
+            value 19;
+            description
+              "11000 ms inerval";
+          }
+          enum 12000 {
+            value 20;
+            description
+              "12000 ms inerval";
+          }
+          enum 13000 {
+            value 21;
+            description
+              "13000 ms inerval";
+          }
+          enum 14000 {
+            value 22;
+            description
+              "14000 ms inerval";
+          }
+          enum 15000 {
+            value 23;
+            description
+              "15000 ms inerval";
+          }
+          enum 16000 {
+            value 24;
+            description
+              "16000 ms inerval";
+          }
+          enum 17000 {
+            value 25;
+            description
+              "17000 ms inerval";
+          }
+          enum 18000 {
+            value 26;
+            description
+              "18000 ms inerval";
+          }
+          enum 19000 {
+            value 27;
+            description
+              "19000 ms inerval";
+          }
+          enum 20000 {
+            value 28;
+            description
+              "20000 ms inerval";
+          }
+          enum 21000 {
+            value 29;
+            description
+              "21000 ms inerval";
+          }
+          enum 22000 {
+            value 30;
+            description
+              "22000 ms inerval";
+          }
+          enum 23000 {
+            value 31;
+            description
+              "23000 ms inerval";
+          }
+          enum 24000 {
+            value 32;
+            description
+              "24000 ms inerval";
+          }
+          enum 25000 {
+            value 33;
+            description
+              "25000 ms inerval";
+          }
+          enum 26000 {
+            value 34;
+            description
+              "26000 ms inerval";
+          }
+          enum 27000 {
+            value 35;
+            description
+              "27000 ms inerval";
+          }
+          enum 28000 {
+            value 36;
+            description
+              "28000 ms inerval";
+          }
+          enum 29000 {
+            value 37;
+            description
+              "29000 ms inerval";
+          }
+          enum 30000 {
+            value 38;
+            description
+              "30000 ms inerval";
+          }
+          enum 31000 {
+            value 39;
+            description
+              "31000 ms inerval";
+          }
+          enum 32000 {
+            value 40;
+            description
+              "32000 ms inerval";
+          }
+          enum 33000 {
+            value 41;
+            description
+              "33000 ms inerval";
+          }
+          enum 34000 {
+            value 42;
+            description
+              "34000 ms inerval";
+          }
+          enum 35000 {
+            value 43;
+            description
+              "35000 ms inerval";
+          }
+          enum 36000 {
+            value 44;
+            description
+              "36000 ms inerval";
+          }
+          enum 37000 {
+            value 45;
+            description
+              "37000 ms inerval";
+          }
+          enum 38000 {
+            value 46;
+            description
+              "38000 ms inerval";
+          }
+          enum 39000 {
+            value 47;
+            description
+              "39000 ms inerval";
+          }
+          enum 40000 {
+            value 48;
+            description
+              "40000 ms inerval";
+          }
+          enum 41000 {
+            value 49;
+            description
+              "41000 ms inerval";
+          }
+          enum 42000 {
+            value 50;
+            description
+              "42000 ms inerval";
+          }
+          enum 43000 {
+            value 51;
+            description
+              "43000 ms inerval";
+          }
+          enum 44000 {
+            value 52;
+            description
+              "44000 ms inerval";
+          }
+          enum 45000 {
+            value 53;
+            description
+              "45000 ms inerval";
+          }
+          enum 46000 {
+            value 54;
+            description
+              "46000 ms inerval";
+          }
+          enum 47000 {
+            value 55;
+            description
+              "47000 ms inerval";
+          }
+          enum 48000 {
+            value 56;
+            description
+              "48000 ms inerval";
+          }
+          enum 49000 {
+            value 57;
+            description
+              "49000 ms inerval";
+          }
+          enum 50000 {
+            value 58;
+            description
+              "50000 ms inerval";
+          }
+          enum 51000 {
+            value 59;
+            description
+              "51000 ms inerval";
+          }
+          enum 52000 {
+            value 60;
+            description
+              "52000 ms inerval";
+          }
+          enum 53000 {
+            value 61;
+            description
+              "53000 ms inerval";
+          }
+          enum 54000 {
+            value 62;
+            description
+              "54000 ms inerval";
+          }
+          enum 55000 {
+            value 63;
+            description
+              "55000 ms inerval";
+          }
+          enum 56000 {
+            value 64;
+            description
+              "56000 ms inerval";
+          }
+          enum 57000 {
+            value 65;
+            description
+              "57000 ms inerval";
+          }
+          enum 58000 {
+            value 66;
+            description
+              "58000 ms inerval";
+          }
+          enum 59000 {
+            value 67;
+            description
+              "59000 ms inerval";
+          }
+          enum 60000 {
+            value 68;
+            description
+              "60000 ms inerval";
+          }
+      }
+      default "1000";
+     }
+  }
+  deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:router/bfdipos:bfd/bfdipos:neighbor/bfdipos:minimum/bfdipos:receive-interval" {
+      deviate replace {
+      type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 30 {
+            value 3;
+            description
+              "30 ms interval";
+          }
+          enum 50 {
+            value 4;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 5;
+            description
+              "100 ms interval";
+          }
+          enum 200 {
+            value 6;
+            description
+              "200 ms interval";
+          }
+          enum 300 {
+            value 7;
+            description
+              "300 ms interval";
+          }
+          enum 500 {
+            value 8;
+            description
+              "500 ms interval";
+          }
+          enum 1000 {
+            value 9;
+            description
+              "1000 ms interval";
+          }
+          enum 2000 {
+            value 10;
+            description
+              "2000 ms inerval";
+          }
+          enum 3000 {
+            value 11;
+            description
+              "3000 ms inerval";
+          }
+          enum 4000 {
+            value 12;
+            description
+              "4000 ms inerval";
+          }
+          enum 5000 {
+            value 13;
+            description
+              "5000 ms inerval";
+          }
+          enum 6000 {
+            value 14;
+            description
+              "6000 ms inerval";
+          }
+          enum 7000 {
+            value 15;
+            description
+              "7000 ms inerval";
+          }
+          enum 8000 {
+            value 16;
+            description
+              "8000 ms inerval";
+          }
+          enum 9000 {
+            value 17;
+            description
+              "9000 ms inerval";
+          }
+          enum 10000 {
+            value 18;
+            description
+              "10000 ms inerval";
+          }
+          enum 11000 {
+            value 19;
+            description
+              "11000 ms inerval";
+          }
+          enum 12000 {
+            value 20;
+            description
+              "12000 ms inerval";
+          }
+          enum 13000 {
+            value 21;
+            description
+              "13000 ms inerval";
+          }
+          enum 14000 {
+            value 22;
+            description
+              "14000 ms inerval";
+          }
+          enum 15000 {
+            value 23;
+            description
+              "15000 ms inerval";
+          }
+          enum 16000 {
+            value 24;
+            description
+              "16000 ms inerval";
+          }
+          enum 17000 {
+            value 25;
+            description
+              "17000 ms inerval";
+          }
+          enum 18000 {
+            value 26;
+            description
+              "18000 ms inerval";
+          }
+          enum 19000 {
+            value 27;
+            description
+              "19000 ms inerval";
+          }
+          enum 20000 {
+            value 28;
+            description
+              "20000 ms inerval";
+          }
+          enum 21000 {
+            value 29;
+            description
+              "21000 ms inerval";
+          }
+          enum 22000 {
+            value 30;
+            description
+              "22000 ms inerval";
+          }
+          enum 23000 {
+            value 31;
+            description
+              "23000 ms inerval";
+          }
+          enum 24000 {
+            value 32;
+            description
+              "24000 ms inerval";
+          }
+          enum 25000 {
+            value 33;
+            description
+              "25000 ms inerval";
+          }
+          enum 26000 {
+            value 34;
+            description
+              "26000 ms inerval";
+          }
+          enum 27000 {
+            value 35;
+            description
+              "27000 ms inerval";
+          }
+          enum 28000 {
+            value 36;
+            description
+              "28000 ms inerval";
+          }
+          enum 29000 {
+            value 37;
+            description
+              "29000 ms inerval";
+          }
+          enum 30000 {
+            value 38;
+            description
+              "30000 ms inerval";
+          }
+          enum 31000 {
+            value 39;
+            description
+              "31000 ms inerval";
+          }
+          enum 32000 {
+            value 40;
+            description
+              "32000 ms inerval";
+          }
+          enum 33000 {
+            value 41;
+            description
+              "33000 ms inerval";
+          }
+          enum 34000 {
+            value 42;
+            description
+              "34000 ms inerval";
+          }
+          enum 35000 {
+            value 43;
+            description
+              "35000 ms inerval";
+          }
+          enum 36000 {
+            value 44;
+            description
+              "36000 ms inerval";
+          }
+          enum 37000 {
+            value 45;
+            description
+              "37000 ms inerval";
+          }
+          enum 38000 {
+            value 46;
+            description
+              "38000 ms inerval";
+          }
+          enum 39000 {
+            value 47;
+            description
+              "39000 ms inerval";
+          }
+          enum 40000 {
+            value 48;
+            description
+              "40000 ms inerval";
+          }
+          enum 41000 {
+            value 49;
+            description
+              "41000 ms inerval";
+          }
+          enum 42000 {
+            value 50;
+            description
+              "42000 ms inerval";
+          }
+          enum 43000 {
+            value 51;
+            description
+              "43000 ms inerval";
+          }
+          enum 44000 {
+            value 52;
+            description
+              "44000 ms inerval";
+          }
+          enum 45000 {
+            value 53;
+            description
+              "45000 ms inerval";
+          }
+          enum 46000 {
+            value 54;
+            description
+              "46000 ms inerval";
+          }
+          enum 47000 {
+            value 55;
+            description
+              "47000 ms inerval";
+          }
+          enum 48000 {
+            value 56;
+            description
+              "48000 ms inerval";
+          }
+          enum 49000 {
+            value 57;
+            description
+              "49000 ms inerval";
+          }
+          enum 50000 {
+            value 58;
+            description
+              "50000 ms inerval";
+          }
+          enum 51000 {
+            value 59;
+            description
+              "51000 ms inerval";
+          }
+          enum 52000 {
+            value 60;
+            description
+              "52000 ms inerval";
+          }
+          enum 53000 {
+            value 61;
+            description
+              "53000 ms inerval";
+          }
+          enum 54000 {
+            value 62;
+            description
+              "54000 ms inerval";
+          }
+          enum 55000 {
+            value 63;
+            description
+              "55000 ms inerval";
+          }
+          enum 56000 {
+            value 64;
+            description
+              "56000 ms inerval";
+          }
+          enum 57000 {
+            value 65;
+            description
+              "57000 ms inerval";
+          }
+          enum 58000 {
+            value 66;
+            description
+              "58000 ms inerval";
+          }
+          enum 59000 {
+            value 67;
+            description
+              "59000 ms inerval";
+          }
+          enum 60000 {
+            value 68;
+            description
+              "60000 ms inerval";
+          }
+      }
+      default "1000";
+     }
+  }
+  deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:router/bfdipos:bfd/bfdipos:interface/bfdipos:minimum/bfdipos:transmit-interval" {
+      deviate replace {
+      type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 30 {
+            value 3;
+            description
+              "30 ms interval";
+          }
+          enum 50 {
+            value 4;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 5;
+            description
+              "100 ms interval";
+          }
+          enum 200 {
+            value 6;
+            description
+              "200 ms interval";
+          }
+          enum 300 {
+            value 7;
+            description
+              "300 ms interval";
+          }
+          enum 500 {
+            value 8;
+            description
+              "500 ms interval";
+          }
+          enum 1000 {
+            value 9;
+            description
+              "1000 ms interval";
+          }
+          enum 2000 {
+            value 10;
+            description
+              "2000 ms inerval";
+          }
+          enum 3000 {
+            value 11;
+            description
+              "3000 ms inerval";
+          }
+          enum 4000 {
+            value 12;
+            description
+              "4000 ms inerval";
+          }
+          enum 5000 {
+            value 13;
+            description
+              "5000 ms inerval";
+          }
+          enum 6000 {
+            value 14;
+            description
+              "6000 ms inerval";
+          }
+          enum 7000 {
+            value 15;
+            description
+              "7000 ms inerval";
+          }
+          enum 8000 {
+            value 16;
+            description
+              "8000 ms inerval";
+          }
+          enum 9000 {
+            value 17;
+            description
+              "9000 ms inerval";
+          }
+          enum 10000 {
+            value 18;
+            description
+              "10000 ms inerval";
+          }
+          enum 11000 {
+            value 19;
+            description
+              "11000 ms inerval";
+          }
+          enum 12000 {
+            value 20;
+            description
+              "12000 ms inerval";
+          }
+          enum 13000 {
+            value 21;
+            description
+              "13000 ms inerval";
+          }
+          enum 14000 {
+            value 22;
+            description
+              "14000 ms inerval";
+          }
+          enum 15000 {
+            value 23;
+            description
+              "15000 ms inerval";
+          }
+          enum 16000 {
+            value 24;
+            description
+              "16000 ms inerval";
+          }
+          enum 17000 {
+            value 25;
+            description
+              "17000 ms inerval";
+          }
+          enum 18000 {
+            value 26;
+            description
+              "18000 ms inerval";
+          }
+          enum 19000 {
+            value 27;
+            description
+              "19000 ms inerval";
+          }
+          enum 20000 {
+            value 28;
+            description
+              "20000 ms inerval";
+          }
+          enum 21000 {
+            value 29;
+            description
+              "21000 ms inerval";
+          }
+          enum 22000 {
+            value 30;
+            description
+              "22000 ms inerval";
+          }
+          enum 23000 {
+            value 31;
+            description
+              "23000 ms inerval";
+          }
+          enum 24000 {
+            value 32;
+            description
+              "24000 ms inerval";
+          }
+          enum 25000 {
+            value 33;
+            description
+              "25000 ms inerval";
+          }
+          enum 26000 {
+            value 34;
+            description
+              "26000 ms inerval";
+          }
+          enum 27000 {
+            value 35;
+            description
+              "27000 ms inerval";
+          }
+          enum 28000 {
+            value 36;
+            description
+              "28000 ms inerval";
+          }
+          enum 29000 {
+            value 37;
+            description
+              "29000 ms inerval";
+          }
+          enum 30000 {
+            value 38;
+            description
+              "30000 ms inerval";
+          }
+          enum 31000 {
+            value 39;
+            description
+              "31000 ms inerval";
+          }
+          enum 32000 {
+            value 40;
+            description
+              "32000 ms inerval";
+          }
+          enum 33000 {
+            value 41;
+            description
+              "33000 ms inerval";
+          }
+          enum 34000 {
+            value 42;
+            description
+              "34000 ms inerval";
+          }
+          enum 35000 {
+            value 43;
+            description
+              "35000 ms inerval";
+          }
+          enum 36000 {
+            value 44;
+            description
+              "36000 ms inerval";
+          }
+          enum 37000 {
+            value 45;
+            description
+              "37000 ms inerval";
+          }
+          enum 38000 {
+            value 46;
+            description
+              "38000 ms inerval";
+          }
+          enum 39000 {
+            value 47;
+            description
+              "39000 ms inerval";
+          }
+          enum 40000 {
+            value 48;
+            description
+              "40000 ms inerval";
+          }
+          enum 41000 {
+            value 49;
+            description
+              "41000 ms inerval";
+          }
+          enum 42000 {
+            value 50;
+            description
+              "42000 ms inerval";
+          }
+          enum 43000 {
+            value 51;
+            description
+              "43000 ms inerval";
+          }
+          enum 44000 {
+            value 52;
+            description
+              "44000 ms inerval";
+          }
+          enum 45000 {
+            value 53;
+            description
+              "45000 ms inerval";
+          }
+          enum 46000 {
+            value 54;
+            description
+              "46000 ms inerval";
+          }
+          enum 47000 {
+            value 55;
+            description
+              "47000 ms inerval";
+          }
+          enum 48000 {
+            value 56;
+            description
+              "48000 ms inerval";
+          }
+          enum 49000 {
+            value 57;
+            description
+              "49000 ms inerval";
+          }
+          enum 50000 {
+            value 58;
+            description
+              "50000 ms inerval";
+          }
+          enum 51000 {
+            value 59;
+            description
+              "51000 ms inerval";
+          }
+          enum 52000 {
+            value 60;
+            description
+              "52000 ms inerval";
+          }
+          enum 53000 {
+            value 61;
+            description
+              "53000 ms inerval";
+          }
+          enum 54000 {
+            value 62;
+            description
+              "54000 ms inerval";
+          }
+          enum 55000 {
+            value 63;
+            description
+              "55000 ms inerval";
+          }
+          enum 56000 {
+            value 64;
+            description
+              "56000 ms inerval";
+          }
+          enum 57000 {
+            value 65;
+            description
+              "57000 ms inerval";
+          }
+          enum 58000 {
+            value 66;
+            description
+              "58000 ms inerval";
+          }
+          enum 59000 {
+            value 67;
+            description
+              "59000 ms inerval";
+          }
+          enum 60000 {
+            value 68;
+            description
+              "60000 ms inerval";
+          }
+      }
+      default "1000";
+     }
+  }
+  deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:router/bfdipos:bfd/bfdipos:interface/bfdipos:minimum/bfdipos:receive-interval" {
+      deviate replace {
+      type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 30 {
+            value 3;
+            description
+              "30 ms interval";
+          }
+          enum 50 {
+            value 4;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 5;
+            description
+              "100 ms interval";
+          }
+          enum 200 {
+            value 6;
+            description
+              "200 ms interval";
+          }
+          enum 300 {
+            value 7;
+            description
+              "300 ms interval";
+          }
+          enum 500 {
+            value 8;
+            description
+              "500 ms interval";
+          }
+          enum 1000 {
+            value 9;
+            description
+              "1000 ms interval";
+          }
+          enum 2000 {
+            value 10;
+            description
+              "2000 ms inerval";
+          }
+          enum 3000 {
+            value 11;
+            description
+              "3000 ms inerval";
+          }
+          enum 4000 {
+            value 12;
+            description
+              "4000 ms inerval";
+          }
+          enum 5000 {
+            value 13;
+            description
+              "5000 ms inerval";
+          }
+          enum 6000 {
+            value 14;
+            description
+              "6000 ms inerval";
+          }
+          enum 7000 {
+            value 15;
+            description
+              "7000 ms inerval";
+          }
+          enum 8000 {
+            value 16;
+            description
+              "8000 ms inerval";
+          }
+          enum 9000 {
+            value 17;
+            description
+              "9000 ms inerval";
+          }
+          enum 10000 {
+            value 18;
+            description
+              "10000 ms inerval";
+          }
+          enum 11000 {
+            value 19;
+            description
+              "11000 ms inerval";
+          }
+          enum 12000 {
+            value 20;
+            description
+              "12000 ms inerval";
+          }
+          enum 13000 {
+            value 21;
+            description
+              "13000 ms inerval";
+          }
+          enum 14000 {
+            value 22;
+            description
+              "14000 ms inerval";
+          }
+          enum 15000 {
+            value 23;
+            description
+              "15000 ms inerval";
+          }
+          enum 16000 {
+            value 24;
+            description
+              "16000 ms inerval";
+          }
+          enum 17000 {
+            value 25;
+            description
+              "17000 ms inerval";
+          }
+          enum 18000 {
+            value 26;
+            description
+              "18000 ms inerval";
+          }
+          enum 19000 {
+            value 27;
+            description
+              "19000 ms inerval";
+          }
+          enum 20000 {
+            value 28;
+            description
+              "20000 ms inerval";
+          }
+          enum 21000 {
+            value 29;
+            description
+              "21000 ms inerval";
+          }
+          enum 22000 {
+            value 30;
+            description
+              "22000 ms inerval";
+          }
+          enum 23000 {
+            value 31;
+            description
+              "23000 ms inerval";
+          }
+          enum 24000 {
+            value 32;
+            description
+              "24000 ms inerval";
+          }
+          enum 25000 {
+            value 33;
+            description
+              "25000 ms inerval";
+          }
+          enum 26000 {
+            value 34;
+            description
+              "26000 ms inerval";
+          }
+          enum 27000 {
+            value 35;
+            description
+              "27000 ms inerval";
+          }
+          enum 28000 {
+            value 36;
+            description
+              "28000 ms inerval";
+          }
+          enum 29000 {
+            value 37;
+            description
+              "29000 ms inerval";
+          }
+          enum 30000 {
+            value 38;
+            description
+              "30000 ms inerval";
+          }
+          enum 31000 {
+            value 39;
+            description
+              "31000 ms inerval";
+          }
+          enum 32000 {
+            value 40;
+            description
+              "32000 ms inerval";
+          }
+          enum 33000 {
+            value 41;
+            description
+              "33000 ms inerval";
+          }
+          enum 34000 {
+            value 42;
+            description
+              "34000 ms inerval";
+          }
+          enum 35000 {
+            value 43;
+            description
+              "35000 ms inerval";
+          }
+          enum 36000 {
+            value 44;
+            description
+              "36000 ms inerval";
+          }
+          enum 37000 {
+            value 45;
+            description
+              "37000 ms inerval";
+          }
+          enum 38000 {
+            value 46;
+            description
+              "38000 ms inerval";
+          }
+          enum 39000 {
+            value 47;
+            description
+              "39000 ms inerval";
+          }
+          enum 40000 {
+            value 48;
+            description
+              "40000 ms inerval";
+          }
+          enum 41000 {
+            value 49;
+            description
+              "41000 ms inerval";
+          }
+          enum 42000 {
+            value 50;
+            description
+              "42000 ms inerval";
+          }
+          enum 43000 {
+            value 51;
+            description
+              "43000 ms inerval";
+          }
+          enum 44000 {
+            value 52;
+            description
+              "44000 ms inerval";
+          }
+          enum 45000 {
+            value 53;
+            description
+              "45000 ms inerval";
+          }
+          enum 46000 {
+            value 54;
+            description
+              "46000 ms inerval";
+          }
+          enum 47000 {
+            value 55;
+            description
+              "47000 ms inerval";
+          }
+          enum 48000 {
+            value 56;
+            description
+              "48000 ms inerval";
+          }
+          enum 49000 {
+            value 57;
+            description
+              "49000 ms inerval";
+          }
+          enum 50000 {
+            value 58;
+            description
+              "50000 ms inerval";
+          }
+          enum 51000 {
+            value 59;
+            description
+              "51000 ms inerval";
+          }
+          enum 52000 {
+            value 60;
+            description
+              "52000 ms inerval";
+          }
+          enum 53000 {
+            value 61;
+            description
+              "53000 ms inerval";
+          }
+          enum 54000 {
+            value 62;
+            description
+              "54000 ms inerval";
+          }
+          enum 55000 {
+            value 63;
+            description
+              "55000 ms inerval";
+          }
+          enum 56000 {
+            value 64;
+            description
+              "56000 ms inerval";
+          }
+          enum 57000 {
+            value 65;
+            description
+              "57000 ms inerval";
+          }
+          enum 58000 {
+            value 66;
+            description
+              "58000 ms inerval";
+          }
+          enum 59000 {
+            value 67;
+            description
+              "59000 ms inerval";
+          }
+          enum 60000 {
+            value 68;
+            description
+              "60000 ms inerval";
+          }
+      }
+      default "1000";
+     }
+  }
+  deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:router/bfdipos:bfd/bfdipos:micro-neighbor/bfdipos:minimum/bfdipos:transmit-interval" {
+      deviate replace {
+      type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 30 {
+            value 3;
+            description
+              "30 ms interval";
+          }
+          enum 50 {
+            value 4;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 5;
+            description
+              "100 ms interval";
+          }
+          enum 200 {
+            value 6;
+            description
+              "200 ms interval";
+          }
+          enum 300 {
+            value 7;
+            description
+              "300 ms interval";
+          }
+          enum 500 {
+            value 8;
+            description
+              "500 ms interval";
+          }
+          enum 1000 {
+            value 9;
+            description
+              "1000 ms interval";
+          }
+          enum 2000 {
+            value 10;
+            description
+              "2000 ms inerval";
+          }
+          enum 3000 {
+            value 11;
+            description
+              "3000 ms inerval";
+          }
+          enum 4000 {
+            value 12;
+            description
+              "4000 ms inerval";
+          }
+          enum 5000 {
+            value 13;
+            description
+              "5000 ms inerval";
+          }
+          enum 6000 {
+            value 14;
+            description
+              "6000 ms inerval";
+          }
+          enum 7000 {
+            value 15;
+            description
+              "7000 ms inerval";
+          }
+          enum 8000 {
+            value 16;
+            description
+              "8000 ms inerval";
+          }
+          enum 9000 {
+            value 17;
+            description
+              "9000 ms inerval";
+          }
+          enum 10000 {
+            value 18;
+            description
+              "10000 ms inerval";
+          }
+          enum 11000 {
+            value 19;
+            description
+              "11000 ms inerval";
+          }
+          enum 12000 {
+            value 20;
+            description
+              "12000 ms inerval";
+          }
+          enum 13000 {
+            value 21;
+            description
+              "13000 ms inerval";
+          }
+          enum 14000 {
+            value 22;
+            description
+              "14000 ms inerval";
+          }
+          enum 15000 {
+            value 23;
+            description
+              "15000 ms inerval";
+          }
+          enum 16000 {
+            value 24;
+            description
+              "16000 ms inerval";
+          }
+          enum 17000 {
+            value 25;
+            description
+              "17000 ms inerval";
+          }
+          enum 18000 {
+            value 26;
+            description
+              "18000 ms inerval";
+          }
+          enum 19000 {
+            value 27;
+            description
+              "19000 ms inerval";
+          }
+          enum 20000 {
+            value 28;
+            description
+              "20000 ms inerval";
+          }
+          enum 21000 {
+            value 29;
+            description
+              "21000 ms inerval";
+          }
+          enum 22000 {
+            value 30;
+            description
+              "22000 ms inerval";
+          }
+          enum 23000 {
+            value 31;
+            description
+              "23000 ms inerval";
+          }
+          enum 24000 {
+            value 32;
+            description
+              "24000 ms inerval";
+          }
+          enum 25000 {
+            value 33;
+            description
+              "25000 ms inerval";
+          }
+          enum 26000 {
+            value 34;
+            description
+              "26000 ms inerval";
+          }
+          enum 27000 {
+            value 35;
+            description
+              "27000 ms inerval";
+          }
+          enum 28000 {
+            value 36;
+            description
+              "28000 ms inerval";
+          }
+          enum 29000 {
+            value 37;
+            description
+              "29000 ms inerval";
+          }
+          enum 30000 {
+            value 38;
+            description
+              "30000 ms inerval";
+          }
+          enum 31000 {
+            value 39;
+            description
+              "31000 ms inerval";
+          }
+          enum 32000 {
+            value 40;
+            description
+              "32000 ms inerval";
+          }
+          enum 33000 {
+            value 41;
+            description
+              "33000 ms inerval";
+          }
+          enum 34000 {
+            value 42;
+            description
+              "34000 ms inerval";
+          }
+          enum 35000 {
+            value 43;
+            description
+              "35000 ms inerval";
+          }
+          enum 36000 {
+            value 44;
+            description
+              "36000 ms inerval";
+          }
+          enum 37000 {
+            value 45;
+            description
+              "37000 ms inerval";
+          }
+          enum 38000 {
+            value 46;
+            description
+              "38000 ms inerval";
+          }
+          enum 39000 {
+            value 47;
+            description
+              "39000 ms inerval";
+          }
+          enum 40000 {
+            value 48;
+            description
+              "40000 ms inerval";
+          }
+          enum 41000 {
+            value 49;
+            description
+              "41000 ms inerval";
+          }
+          enum 42000 {
+            value 50;
+            description
+              "42000 ms inerval";
+          }
+          enum 43000 {
+            value 51;
+            description
+              "43000 ms inerval";
+          }
+          enum 44000 {
+            value 52;
+            description
+              "44000 ms inerval";
+          }
+          enum 45000 {
+            value 53;
+            description
+              "45000 ms inerval";
+          }
+          enum 46000 {
+            value 54;
+            description
+              "46000 ms inerval";
+          }
+          enum 47000 {
+            value 55;
+            description
+              "47000 ms inerval";
+          }
+          enum 48000 {
+            value 56;
+            description
+              "48000 ms inerval";
+          }
+          enum 49000 {
+            value 57;
+            description
+              "49000 ms inerval";
+          }
+          enum 50000 {
+            value 58;
+            description
+              "50000 ms inerval";
+          }
+          enum 51000 {
+            value 59;
+            description
+              "51000 ms inerval";
+          }
+          enum 52000 {
+            value 60;
+            description
+              "52000 ms inerval";
+          }
+          enum 53000 {
+            value 61;
+            description
+              "53000 ms inerval";
+          }
+          enum 54000 {
+            value 62;
+            description
+              "54000 ms inerval";
+          }
+          enum 55000 {
+            value 63;
+            description
+              "55000 ms inerval";
+          }
+          enum 56000 {
+            value 64;
+            description
+              "56000 ms inerval";
+          }
+          enum 57000 {
+            value 65;
+            description
+              "57000 ms inerval";
+          }
+          enum 58000 {
+            value 66;
+            description
+              "58000 ms inerval";
+          }
+          enum 59000 {
+            value 67;
+            description
+              "59000 ms inerval";
+          }
+          enum 60000 {
+            value 68;
+            description
+              "60000 ms inerval";
+          }
+      }
+      default "1000";
+     }
+  }
+  deviation "/ctxsipos:contexts/ctxipos:context/ctxipos:router/bfdipos:bfd/bfdipos:micro-neighbor/bfdipos:minimum/bfdipos:receive-interval" {
+      deviate replace {
+      type enumeration {
+          enum 3dot3 {
+            value 0;
+            description
+              "3.3 ms interval";
+          }
+          enum 10 {
+            value 1;
+            description
+              "10 ms interval";
+          }
+          enum 20 {
+            value 2;
+            description
+              "20 ms interval";
+          }
+          enum 30 {
+            value 3;
+            description
+              "30 ms interval";
+          }
+          enum 50 {
+            value 4;
+            description
+              "50 ms interval";
+          }
+          enum 100 {
+            value 5;
+            description
+              "100 ms interval";
+          }
+          enum 200 {
+            value 6;
+            description
+              "200 ms interval";
+          }
+          enum 300 {
+            value 7;
+            description
+              "300 ms interval";
+          }
+          enum 500 {
+            value 8;
+            description
+              "500 ms interval";
+          }
+          enum 1000 {
+            value 9;
+            description
+              "1000 ms interval";
+          }
+          enum 2000 {
+            value 10;
+            description
+              "2000 ms inerval";
+          }
+          enum 3000 {
+            value 11;
+            description
+              "3000 ms inerval";
+          }
+          enum 4000 {
+            value 12;
+            description
+              "4000 ms inerval";
+          }
+          enum 5000 {
+            value 13;
+            description
+              "5000 ms inerval";
+          }
+          enum 6000 {
+            value 14;
+            description
+              "6000 ms inerval";
+          }
+          enum 7000 {
+            value 15;
+            description
+              "7000 ms inerval";
+          }
+          enum 8000 {
+            value 16;
+            description
+              "8000 ms inerval";
+          }
+          enum 9000 {
+            value 17;
+            description
+              "9000 ms inerval";
+          }
+          enum 10000 {
+            value 18;
+            description
+              "10000 ms inerval";
+          }
+          enum 11000 {
+            value 19;
+            description
+              "11000 ms inerval";
+          }
+          enum 12000 {
+            value 20;
+            description
+              "12000 ms inerval";
+          }
+          enum 13000 {
+            value 21;
+            description
+              "13000 ms inerval";
+          }
+          enum 14000 {
+            value 22;
+            description
+              "14000 ms inerval";
+          }
+          enum 15000 {
+            value 23;
+            description
+              "15000 ms inerval";
+          }
+          enum 16000 {
+            value 24;
+            description
+              "16000 ms inerval";
+          }
+          enum 17000 {
+            value 25;
+            description
+              "17000 ms inerval";
+          }
+          enum 18000 {
+            value 26;
+            description
+              "18000 ms inerval";
+          }
+          enum 19000 {
+            value 27;
+            description
+              "19000 ms inerval";
+          }
+          enum 20000 {
+            value 28;
+            description
+              "20000 ms inerval";
+          }
+          enum 21000 {
+            value 29;
+            description
+              "21000 ms inerval";
+          }
+          enum 22000 {
+            value 30;
+            description
+              "22000 ms inerval";
+          }
+          enum 23000 {
+            value 31;
+            description
+              "23000 ms inerval";
+          }
+          enum 24000 {
+            value 32;
+            description
+              "24000 ms inerval";
+          }
+          enum 25000 {
+            value 33;
+            description
+              "25000 ms inerval";
+          }
+          enum 26000 {
+            value 34;
+            description
+              "26000 ms inerval";
+          }
+          enum 27000 {
+            value 35;
+            description
+              "27000 ms inerval";
+          }
+          enum 28000 {
+            value 36;
+            description
+              "28000 ms inerval";
+          }
+          enum 29000 {
+            value 37;
+            description
+              "29000 ms inerval";
+          }
+          enum 30000 {
+            value 38;
+            description
+              "30000 ms inerval";
+          }
+          enum 31000 {
+            value 39;
+            description
+              "31000 ms inerval";
+          }
+          enum 32000 {
+            value 40;
+            description
+              "32000 ms inerval";
+          }
+          enum 33000 {
+            value 41;
+            description
+              "33000 ms inerval";
+          }
+          enum 34000 {
+            value 42;
+            description
+              "34000 ms inerval";
+          }
+          enum 35000 {
+            value 43;
+            description
+              "35000 ms inerval";
+          }
+          enum 36000 {
+            value 44;
+            description
+              "36000 ms inerval";
+          }
+          enum 37000 {
+            value 45;
+            description
+              "37000 ms inerval";
+          }
+          enum 38000 {
+            value 46;
+            description
+              "38000 ms inerval";
+          }
+          enum 39000 {
+            value 47;
+            description
+              "39000 ms inerval";
+          }
+          enum 40000 {
+            value 48;
+            description
+              "40000 ms inerval";
+          }
+          enum 41000 {
+            value 49;
+            description
+              "41000 ms inerval";
+          }
+          enum 42000 {
+            value 50;
+            description
+              "42000 ms inerval";
+          }
+          enum 43000 {
+            value 51;
+            description
+              "43000 ms inerval";
+          }
+          enum 44000 {
+            value 52;
+            description
+              "44000 ms inerval";
+          }
+          enum 45000 {
+            value 53;
+            description
+              "45000 ms inerval";
+          }
+          enum 46000 {
+            value 54;
+            description
+              "46000 ms inerval";
+          }
+          enum 47000 {
+            value 55;
+            description
+              "47000 ms inerval";
+          }
+          enum 48000 {
+            value 56;
+            description
+              "48000 ms inerval";
+          }
+          enum 49000 {
+            value 57;
+            description
+              "49000 ms inerval";
+          }
+          enum 50000 {
+            value 58;
+            description
+              "50000 ms inerval";
+          }
+          enum 51000 {
+            value 59;
+            description
+              "51000 ms inerval";
+          }
+          enum 52000 {
+            value 60;
+            description
+              "52000 ms inerval";
+          }
+          enum 53000 {
+            value 61;
+            description
+              "53000 ms inerval";
+          }
+          enum 54000 {
+            value 62;
+            description
+              "54000 ms inerval";
+          }
+          enum 55000 {
+            value 63;
+            description
+              "55000 ms inerval";
+          }
+          enum 56000 {
+            value 64;
+            description
+              "56000 ms inerval";
+          }
+          enum 57000 {
+            value 65;
+            description
+              "57000 ms inerval";
+          }
+          enum 58000 {
+            value 66;
+            description
+              "58000 ms inerval";
+          }
+          enum 59000 {
+            value 67;
+            description
+              "59000 ms inerval";
+          }
+          enum 60000 {
+            value 68;
+            description
+              "60000 ms inerval";
+          }
+      }
+      default "1000";
+     }
+  }
+}

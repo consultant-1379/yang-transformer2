@@ -1,0 +1,1903 @@
+module ericsson-ospf-state-router6000 {
+
+  /*** NAMESPACE / PREFIX DEFINITION ***/
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ospf-state-router6000";
+  prefix "ospfstrouter6000";
+
+  /*** LINKAGE (IMPORTS / INCLUDES) ***/
+
+  import ietf-inet-types { prefix "inet"; }
+  import ietf-yang-types { prefix "yang"; }
+  import ericsson-context-state-router6000 { prefix "ctxstrouter6000"; }
+  import ericsson-contexts-router6000 { prefix "ctxsr6k"; }
+  import ericsson-yang-extensions { prefix "yexte"; }
+
+  /*** META INFORMATION ***/
+
+  organization "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "IPOS OSPF model, based on yang file from IPOS exec_cli,
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved.";
+
+  revision "2018-06-05" {
+    description "Change model namespace";
+    reference "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2015-12-07" {
+    description "Initial revision";
+    reference
+      "Ericsson IPOS OSPF state data model.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  /*** TYPE DEFINITIONS ***/
+
+  typedef InterfaceIndexOrZero {
+    type int32 {
+      range "0..2147483647";
+    }
+    description
+     "This textual convention is an extension of the
+      InterfaceIndex convention.  The latter defines a greater
+      than zero value used to identify an interface or interface
+      sub-layer in the managed system.  This extension permits the
+      additional value of zero.  the value zero is object-specific
+      and must therefore be defined as part of the description of
+      any object which uses this syntax.  Examples of the usage of
+      zero might include situations where interface was unknown,
+      or when none or all interfaces need to be referenced.";
+  }
+
+  typedef TruthValue {
+    type enumeration {
+      enum true  { value 1;
+      description
+            "Boolean value is true.";    }
+      enum false { value 2;
+      description
+            "Boolean value is fasle.";   }
+    }
+    description
+     "Represents a boolean value.";
+  }
+
+  typedef AreaID {
+    type inet:ipv4-address;
+    description
+     "An OSPF Area Identifier.
+      Note that the Area ID, in OSPF, has the same format
+      as an IP address, but has the function of defining
+      a summarization point for link state advertisements.";
+  }
+
+  typedef RouterID {
+    type inet:ipv4-address;
+    description
+     "A OSPF Router Identifier.
+      Note that the Router ID, in OSPF, has the same format
+      as an IP address, but identifies the router independent
+      of its IP address.";
+  }
+
+  typedef Metric {
+    type int32 {
+      range "0..65535";
+    }
+    description
+     "The OSPF internal metric.
+      Note that the OSPF metric is defined as an unsigned value
+      in the range.";
+  }
+
+  typedef BigMetric {
+    type int32 {
+      range "0..16777215";
+    }
+    description
+     "The OSPF external metric.";
+  }
+
+  typedef Status {
+    type enumeration {
+      enum enabled  {
+        value 1;
+        description
+            "The function is enable.";
+      }
+
+      enum disabled {
+        value 2;
+        description
+            "The function is disable.";
+        }
+    }
+    description
+     "An indication of the operability of an OSPF
+      function or feature.  For example, the status
+      of an interface: 'enabled' indicates that
+      it is willing to communicate with other OSPF routers,
+      and 'disabled' indicates that it is not.";
+  }
+
+  typedef PositiveInteger {
+    type int32 {
+      range "0..2147483647";
+    }
+    description
+     "A positive integer.  Values in excess are precluded as
+      unnecessary and prone to interoperability issues.";
+  }
+
+  typedef HelloRange {
+    type int32 {
+      range "1..65535";
+    }
+    description
+     "The range of intervals in seconds on which Hello messages
+      are exchanged.";
+  }
+
+  typedef UpToMaxAge {
+    type int32 {
+      range "0..3600";
+    }
+    description
+     "The values in seconds that one might find or configure
+      for variables bounded by the maximum age of an LSA.";
+  }
+
+  typedef DesignatedRouterPriority {
+    type int32 {
+      range "0..255";
+    }
+    description
+     "The range of values defined for the priority of a system
+      for becoming the designated router.";
+  }
+
+  typedef TOSType {
+    type int32 {
+      range "0..30";
+    }
+    description
+     "Type of Service (TOS) is defined as a mapping to the IP
+      Type of Service Flags as defined in the IP Forwarding
+      Table MIB
+
+          +-----+-----+-----+-----+-----+-----+-----+-----+
+          |                 |                       |     |
+          |   PRECEDENCE    |    TYPE OF SERVICE    |  0  |
+          |                 |                       |     |
+          +-----+-----+-----+-----+-----+-----+-----+-----+
+
+                   IP TOS                IP TOS
+              Field     Policy      Field     Policy
+
+              Contents    Code      Contents    Code
+              0 0 0 0  ==>   0      0 0 0 1  ==>   2
+              0 0 1 0  ==>   4      0 0 1 1  ==>   6
+              0 1 0 0  ==>   8      0 1 0 1  ==>  10
+              0 1 1 0  ==>  12      0 1 1 1  ==>  14
+              1 0 0 0  ==>  16      1 0 0 1  ==>  18
+              1 0 1 0  ==>  20      1 0 1 1  ==>  22
+              1 1 0 0  ==>  24      1 1 0 1  ==>  26
+              1 1 1 0  ==>  28      1 1 1 1  ==>  30
+
+       The remaining values are left for future definition.";
+  }
+
+  typedef OspfAuthenticationType {
+    type enumeration {
+      enum none           { value 0;
+            description
+            "Authentication type is none.";   }
+      enum simplePassword { value 1;
+            description
+            "Authentication type is simple passqord.";   }
+      enum md5            { value 2;
+            description
+            "Authentication type is md5.";}
+    }
+    description
+     "The authentication type.";
+  }
+
+  augment "/ctxsr6k:contexts-state/ctxstrouter6000:context/ctxstrouter6000:router"
+  {
+      description "Augment router to include ospf.";
+      list ospf {
+      key "ospf-state-instance-id";
+      description "List all ospf instance.";
+
+      leaf ospf-state-instance-id{
+        type uint32;
+         description "Ospf instance Id.";
+      }
+
+      list ospf-area-entry {
+        key "ospf-area-id";
+        description
+        "Information describing the configured parameters and
+         cumulative statistics of one of the router's attached areas.
+         The interfaces and virtual links are configured as part of
+         these areas.  Area 0.0.0.0, by definition, is the backbone
+         area.
+
+         Information in this table is persistent and when this object
+         is written the entity SHOULD save the change to non-volatile
+         storage.";
+
+        leaf ospf-area-id {
+          type ospfstrouter6000:AreaID;
+
+          description
+           "A 32-bit integer uniquely identifying an area.
+            Area ID 0.0.0.0 is used for the OSPF backbone.";
+          reference
+           "OSPF Version 2, Appendix C.2 Area parameters";
+        }
+
+        leaf ospf-spf-runs {
+          type yang:counter32;
+
+          description
+          "The number of times that the intra-area route
+           table has been calculated using this area's
+           link state database.  This is typically done
+           using Dijkstra's algorithm.
+
+           Discontinuities in the value of this counter can occur
+           at re-initialization of the management system, and at
+           other times as indicated by the value of
+           ospfDiscontinuityTime.";
+        }
+
+        leaf ospf-area-bdr-rtr-count {
+          type yang:gauge32;
+
+          description
+           "The total number of Area Border Routers reachable
+            within this area.  This is initially zero and is
+            calculated in each Shortest Path First (SPF) pass.";
+        }
+
+        leaf ospf-as-bdr-rtr-count {
+          type yang:gauge32;
+
+          description
+          "The total number of Autonomous System Border
+           Routers reachable within this area.  This is
+           initially zero and is calculated in each SPF
+           pass.";
+        }
+
+        leaf ospf-area-lsa-count {
+          type yang:gauge32;
+
+          description
+           "The total number of link state advertisements
+            in this area's link state database, excluding
+            AS-external LSAs.";
+        }
+
+        leaf ospf-area-lsa-cksum-sum {
+          type int32;
+
+          description
+          "The 32-bit sum of the link state
+           advertisements' LS checksums contained in this
+           area's link state database.  This sum excludes
+           external (LS type-5) link state advertisements.
+           The sum can be used to determine if there has
+           been a change in a router's link state
+           database, and to compare the link state database of
+           two routers.  The value should be treated as
+           unsigned when comparing two sums of checksums.";
+        }
+
+
+
+
+        leaf ospf-area-nssa-translator-state {
+          type enumeration {
+            enum enabled  { value 1;
+            description
+            "NSSA translator state is enabled.";}
+            enum elected  { value 2;
+            description
+            "NSSA translator state is elected.";}
+            enum disabled { value 3;
+            description
+            "NSSA translator state is disabled.";}
+          }
+
+          description
+          "Indicates if and how an NSSA border router is
+           performing NSSA translation of type-7 LSAs into type-5
+           LSAs. When this object is set to enabled, the NSSA Border
+           router's OspfAreaNssaExtTranslatorRole has been set to
+           always. When this object is set to elected, a candidate
+           NSSA Border router is Translating type-7 LSAs into type-5.
+           When this object is set to disabled, a candidate NSSA
+           border router is NOT translating type-7 LSAs into
+           type-5.";
+        }
+
+
+        leaf ospf-area-nssa-translator-events {
+          type yang:counter32;
+
+          description
+           "Indicates the number of translator state changes
+            that have occurred since the last boot-up.
+
+            Discontinuities in the value of this counter can occur
+            at re-initialization of the management system, and at
+            other times as indicated by the value of
+            ospfDiscontinuityTime.";
+        }
+      }
+
+      /* XXX table comments here XXX */
+      list ospf-stub-area-entry {
+
+
+        key "ospf-stub-area-id ospf-stub-tos";
+        description
+        "The metric for a given Type of Service that
+         will be advertised by a default Area Border
+         Router into a stub area.
+
+         Information in this table is persistent and when this object
+         is written the entity SHOULD save the change to non-volatile
+         storage.";
+        reference
+         "OSPF Version 2, Appendix C.2, Area Parameters";
+
+        leaf ospf-stub-area-id {
+          type ospfstrouter6000:AreaID;
+
+          description
+           "The 32-bit identifier for the stub area.  On
+            creation, this can be derived from the
+            instance.";
+        }
+
+        leaf ospf-stub-tos {
+          type ospfstrouter6000:TOSType;
+
+          description
+           "The Type of Service associated with the
+            metric.  On creation, this can be derived from
+            the instance.";
+        }
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-lsdb-entry {
+
+
+        key "ospf-lsdb-area-id ospf-lsdb-type ospf-lsdb-lsid ospf-lsdb-router-id";
+        description
+         "A single link state advertisement.";
+
+
+        leaf ospf-lsdb-area-id {
+          type ospfstrouter6000:AreaID;
+
+          description
+           "The 32-bit identifier of the area from which
+            the LSA was received.";
+          reference
+           "OSPF Version 2, Appendix C.2 Area parameters";
+        }
+
+        leaf ospf-lsdb-type {
+          type enumeration {
+            enum routerLink       { value 1;
+            description
+            "OSPF link state type is routerLink.";}
+            enum networkLink      { value 2;
+            description
+            "OSPF link state type is networkLink.";}
+            enum summaryLink      { value 3;
+            description
+            "OSPF link state type is summaryLink.";}
+            enum asSummaryLink    { value 4;
+            description
+            "OSPF link state type is asSummaryLink.";}
+            enum asExternalLink   { value 5;
+            description
+            "OSPF link state type is asExternalLink.";}
+            enum multicastLink    { value 6;
+            description
+            "OSPF link state type is multicastLink.";}
+            enum nssaExternalLink { value 7;
+            description
+            "OSPF link state type is nssaExternalLink.";}
+            enum areaOpaqueLink   { value 10;
+            description
+            "OSPF link state type is areaOpaqueLink.";}
+          }
+
+          description
+           "The type of the link state advertisement.
+            Each link state type has a separate advertisement
+            format.
+
+            Note: External link state advertisements are permitted
+            for backward compatibility, but should be displayed
+            in the ospfAsLsdbTable rather than here.";
+          reference
+           "OSPF Version 2, Appendix A.4.1 The Link State
+            Advertisement header";
+        }
+
+        leaf ospf-lsdb-lsid {
+          type inet:ipv4-address;
+
+          description
+           "The Link State ID is an LS Type Specific field
+            containing either a Router ID or an IP address;
+            it identifies the piece of the routing domain
+            that is being described by the advertisement.";
+          reference
+           "OSPF Version 2, Section 12.1.4 Link State ID";
+        }
+
+        leaf ospf-lsdb-router-id {
+          type ospfstrouter6000:RouterID;
+
+          description
+           "The 32-bit number that uniquely identifies the
+            originating router in the Autonomous System.";
+          reference
+           "OSPF Version 2, Appendix C.1 Global parameters";
+        }
+
+        leaf ospf-lsdb-sequence {
+          type int32;
+
+          description
+          "The sequence number field is a signed 32-bit
+           integer.  It starts with the value '80000001'h,
+           or -'7FFFFFFF'h, and increments until '7FFFFFFF'h.
+           Thus, a typical sequence number will be very negative.
+           It is used to detect old and duplicate Link State
+           Advertisements.  The space of sequence numbers is linearly
+           ordered.  The larger the sequence number, the more recent
+           the advertisement.";
+          reference
+           "OSPF Version 2, Section 12.1.6 LS sequence
+            number";
+        }
+
+        leaf ospf-lsdb-age {
+          type int32;
+          units "seconds";
+
+          description
+           "This field is the age of the link state advertisement
+            in seconds.";
+          reference
+           "OSPF Version 2, Section 12.1.1 LS age";
+        }
+
+        leaf ospf-lsdb-checksum {
+          type int32;
+
+          description
+          "This field is the checksum of the complete contents of
+           the advertisement, excepting the age field.  The age field
+           is excepted so that an advertisement's age can be
+           incremented without updating the checksum.  The checksum
+           used is the same that is used for ISO connectionless
+           datagrams; it is commonly referred to as the
+           Fletcher checksum.";
+          reference
+           "OSPF Version 2, Section 12.1.7 LS checksum";
+        }
+
+        leaf ospf-lsdb-advertisement {
+          type binary {
+            length "1..65535";
+          }
+
+          description
+           "The entire link state advertisement, including
+            its header.
+
+            Note that for variable length LSAs, SNMP agents
+            may not be able to return the largest string size.";
+          reference
+           "OSPF Version 2, Section 12 Link State Advertisements";
+        }
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-host-entry {
+
+
+        key "ospf-host-ip-address ospf-host-tos";
+        description
+        "A metric to be advertised, for a given type of
+         service, when a given host is reachable.
+
+         Information in this table is persistent and when this object
+         is written the entity SHOULD save the change to non-volatile
+         storage.";
+
+
+        leaf ospf-host-ip-address {
+          type inet:ipv4-address;
+
+          description
+           "The IP address of the host.";
+          reference
+           "OSPF Version 2, Appendix C.7 Host route parameters";
+        }
+
+        leaf ospf-host-tos {
+          type ospfstrouter6000:TOSType;
+
+          description
+           "The Type of Service of the route being configured.";
+          reference
+           "OSPF Version 2, Appendix C.7 Host route parameters";
+        }
+
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-if-entry {
+
+
+        key "ospf-if-ip-address ospf-address-less-if";
+        description
+        "The OSPF interface entry describes one interface
+         from the viewpoint of OSPF.
+
+         Information in this table is persistent and when this object
+         is written the entity SHOULD save the change to non-volatile
+         storage.";
+
+
+        leaf ospf-if-ip-address {
+          type inet:ipv4-address;
+
+          description
+           "The IP address of this OSPF interface.";
+        }
+
+        leaf ospf-address-less-if {
+          type ospfstrouter6000:InterfaceIndexOrZero;
+
+          description
+           "For the purpose of easing the instancing of
+            addressed and addressless interfaces; this
+            variable takes the value 0 on interfaces with
+            IP addresses and the corresponding value of
+            ifIndex for interfaces having no IP address.";
+        }
+
+        leaf ospf-if-state {
+          type enumeration {
+            enum down                   { value 1;
+            description
+            "";}
+            enum loopback               { value 2;
+            description
+            "";}
+            enum waiting                { value 3;
+            description
+            "";}
+            enum pointToPoint           { value 4;
+            description
+            "";}
+            enum designatedRouter       { value 5;
+            description
+            "";}
+            enum backupDesignatedRouter { value 6;
+            description
+            "";}
+            enum otherDesignatedRouter  { value 7;
+            description
+            "";}
+          }
+
+          description
+           "The OSPF Interface State.";
+        }
+
+        leaf ospf-if-designated-router {
+          type inet:ipv4-address;
+
+          description
+           "The IP address of the designated router.";
+        }
+
+        leaf ospf-if-backup-designated-router {
+          type inet:ipv4-address;
+
+          description
+           "The IP address of the backup designated
+            router.";
+        }
+
+        leaf ospf-if-events {
+          type yang:counter32;
+
+          description
+          "The number of times this OSPF interface has
+           changed its state or an error has occurred.
+
+           Discontinuities in the value of this counter can occur
+           at re-initialization of the management system, and at
+           other times as indicated by the value of
+           ospfDiscontinuityTime.";
+        }
+
+
+        leaf ospf-if-lsa-count {
+          type yang:gauge32;
+
+          description
+          "The total number of link-local link state advertisements
+           in this interface's link-local link state database.";
+        }
+
+        leaf ospf-if-lsa-cksum-sum {
+          type uint32;
+
+          description
+           "The 32-bit unsigned sum of the Link State
+            Advertisements' LS checksums contained in this
+            interface's link-local link state database.
+            The sum can be used to determine if there has
+            been a change in the interface's link state
+            database and to compare the interface link state
+            database of routers attached to the same subnet.";
+        }
+
+        leaf ospf-if-designated-router-id {
+          type ospfstrouter6000:RouterID;
+
+          description
+           "The Router ID of the designated router.";
+        }
+
+        leaf ospf-if-backup-designated-router-id {
+          type ospfstrouter6000:RouterID;
+
+          description
+           "The Router ID of the backup designated router.";
+        }
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-if-metric-entry {
+
+
+        key "ospf-if-metric-ip-address ospf-if-metric-address-less-if ospf-if-metric-tos";
+        description
+         "A particular TOS metric for a non-virtual interface
+          identified by the interface index.
+
+          Information in this table is persistent and when this
+          object is written the entity SHOULD save the change to
+          non-volatile storage.";
+        reference
+         "OSPF Version 2, Appendix C.3 Router interface
+          parameters";
+
+
+        leaf ospf-if-metric-ip-address {
+          type inet:ipv4-address;
+
+          description
+           "The IP address of this OSPF interface.  On row
+            creation, this can be derived from the instance.";
+        }
+
+        leaf ospf-if-metric-address-less-if {
+          type ospfstrouter6000:InterfaceIndexOrZero;
+
+          description
+           "For the purpose of easing the instancing of
+            addressed and addressless interfaces; this
+            variable takes the value 0 on interfaces with
+            IP addresses and the value of ifIndex for
+            interfaces having no IP address.  On row
+            creation, this can be derived from the instance.";
+        }
+
+        leaf ospf-if-metric-tos {
+          type ospfstrouter6000:TOSType;
+
+          description
+           "The Type of Service metric being referenced.
+            On row creation, this can be derived from the
+            instance.";
+        }
+
+
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-virt-if-entry {
+
+
+        key "ospf-virt-if-area-id ospf-virt-if-neighbor";
+        description
+        "Information about a single virtual interface.
+
+         Information in this table is persistent and when this object
+         is written the entity SHOULD save the change to non-volatile
+         storage.";
+
+
+        leaf ospf-virt-if-area-id {
+          type ospfstrouter6000:AreaID;
+
+          description
+           "The transit area that the virtual link
+            traverses.  By definition, this is not 0.0.0.0.";
+        }
+
+        leaf ospf-virt-if-neighbor {
+          type ospfstrouter6000:RouterID;
+
+          description
+           "The Router ID of the virtual neighbor.";
+        }
+
+
+
+
+
+        leaf ospf-virt-if-state {
+          type enumeration {
+            enum down         { value 1;
+            description
+            "";}
+            enum pointToPoint { value 4;
+            description
+            "";}
+          }
+
+          description
+           "OSPF virtual interface states.";
+        }
+
+        leaf ospf-virt-if-events {
+          type yang:counter32;
+
+          description
+          "The number of state changes or error events on
+           this virtual link.
+
+           Discontinuities in the value of this counter can occur
+           at re-initialization of the management system, and at
+           other times as indicated by the value of
+           ospfDiscontinuityTime.";
+        }
+
+
+
+
+        leaf ospf-virt-if-lsa-count {
+          type yang:gauge32;
+
+          description
+          "The total number of link-local link state advertisements
+           in this virtual interface's link-local link state
+           database.";
+        }
+
+        leaf ospf-virt-if-lsa-cksum-sum {
+          type uint32;
+
+          description
+          "The 32-bit unsigned sum of the link state
+           advertisements' LS checksums contained in this
+           virtual interface's link-local link state database.
+           The sum can be used to determine if there has
+           been a change in the virtual interface's link state
+           database, and to compare the virtual interface
+           link state database of the virtual neighbors.";
+        }
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-nbr-entry {
+
+
+        key "ospf-nbr-ip-addr ospf-nbr-address-less-index";
+        description
+        "The information regarding a single neighbor.
+
+         Information in this table is persistent and when this object
+         is written the entity SHOULD save the change to non-volatile
+         storage.";
+        reference
+         "OSPF Version 2, Section 10 The Neighbor Data
+          Structure";
+
+
+        leaf ospf-nbr-ip-addr {
+          type inet:ipv4-address;
+
+          description
+           "The IP address this neighbor is using in its
+            IP source address.  Note that, on addressless
+            links, this will not be 0.0.0.0 but the
+            address of another of the neighbor's interfaces.";
+        }
+
+        leaf ospf-nbr-address-less-index {
+          type ospfstrouter6000:InterfaceIndexOrZero;
+
+          description
+           "On an interface having an IP address, zero.
+            On addressless interfaces, the corresponding
+            value of ifIndex in the Internet Standard MIB.
+            On row creation, this can be derived from the
+            instance.";
+        }
+
+        leaf ospf-nbr-rtr-id {
+          type ospfstrouter6000:RouterID;
+
+          description
+           "A 32-bit integer (represented as a type
+            IpAddress) uniquely identifying the neighboring
+            router in the Autonomous System.";
+        }
+
+        leaf ospf-nbr-options {
+          type int32;
+
+          description
+           "A bit mask corresponding to the neighbor's
+            options field.
+
+            Bit 0, if set, indicates that the system will
+            operate on Type of Service metrics other than
+            TOS 0.  If zero, the neighbor will ignore all
+            metrics except the TOS 0 metric.
+
+            Bit 1, if set, indicates that the associated
+            area accepts and operates on external
+            information; if zero, it is a stub area.
+
+            Bit 2, if set, indicates that the system is
+            capable of routing IP multicast datagrams, that is
+            that it implements the multicast extensions to
+            OSPF.
+
+            Bit 3, if set, indicates that the associated
+            area is an NSSA.  These areas are capable of
+            carrying type-7 external advertisements, which
+            are translated into type-5 external advertisements
+            at NSSA borders.";
+          reference
+           "OSPF Version 2, Section 12.1.2 Options";
+        }
+
+
+        leaf ospf-nbr-state {
+          type enumeration {
+            enum down          { value 1;
+            description
+            "";}
+            enum attempt       { value 2;
+            description
+            "";}
+            enum init          { value 3;
+            description
+            "";}
+            enum twoWay        { value 4;
+            description
+            "";}
+            enum exchangeStart { value 5;
+            description
+            "";}
+            enum exchange      { value 6;
+            description
+            "";}
+            enum loading       { value 7;
+            description
+            "";}
+            enum full          { value 8;
+            description
+            "";}
+          }
+
+          description
+           "The state of the relationship with this neighbor.";
+          reference
+           "OSPF Version 2, Section 10.1 Neighbor States";
+        }
+
+        leaf ospf-nbr-events {
+          type yang:counter32;
+
+          description
+          "The number of times this neighbor relationship
+           has changed state or an error has occurred.
+
+           Discontinuities in the value of this counter can occur
+           at re-initialization of the management system, and at
+           other times as indicated by the value of
+           ospfDiscontinuityTime.";
+        }
+
+        leaf ospf-nbr-ls-retrans-qlen {
+          type yang:gauge32;
+
+          description
+           "The current length of the retransmission
+            queue.";
+        }
+
+
+        leaf ospf-nbma-nbr-permanence {
+          type enumeration {
+            enum dynamic   { value 1;
+            description
+            "";}
+            enum permanent { value 2;
+            description
+            "";}
+          }
+
+          description
+           "This variable displays the status of the entry;
+            'dynamic' and 'permanent' refer to how the neighbor
+            became known.";
+        }
+
+        leaf ospf-nbr-hello-suppressed {
+          type ospfstrouter6000:TruthValue;
+
+          description
+           "Indicates whether Hellos are being suppressed
+            to the neighbor.";
+        }
+
+        leaf ospf-nbr-restart-helper-status {
+          type enumeration {
+            enum notHelping { value 1;
+            description
+            "";}
+            enum helping    { value 2;
+            description
+            "";}
+          }
+
+          description
+           "Indicates whether the router is acting
+            as a graceful restart helper for the neighbor.";
+        }
+
+        leaf ospf-nbr-restart-helper-age {
+          type uint32;
+          units "seconds";
+
+          description
+           "Remaining time in current OSPF graceful restart
+            interval, if the router is acting as a restart
+            helper for the neighbor.";
+        }
+
+        leaf ospf-nbr-restart-helper-exit-reason {
+          type enumeration {
+            enum none            { value 1;
+            description
+            "";}
+            enum inProgress      { value 2;
+            description
+            "";}
+            enum completed       { value 3;
+            description
+            "";}
+            enum timedOut        { value 4;
+            description
+            "";}
+            enum topologyChanged { value 5;
+            description
+            "";}
+          }
+
+          description
+           "Describes the outcome of the last attempt at acting
+            as a graceful restart helper for the neighbor.";
+        }
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-virt-nbr-entry {
+
+
+        key "ospf-virt-nbr-area ospf-virt-nbr-rtr-id";
+        description
+         "Virtual neighbor information.";
+
+
+        leaf ospf-virt-nbr-area {
+          type ospfstrouter6000:AreaID;
+
+          description
+           "The Transit Area Identifier.";
+        }
+
+        leaf ospf-virt-nbr-rtr-id {
+          type ospfstrouter6000:RouterID;
+
+          description
+           "A 32-bit integer uniquely identifying the
+            neighboring router in the Autonomous System.";
+        }
+
+        leaf ospf-virt-nbr-ip-addr {
+          type inet:ipv4-address;
+
+          description
+           "The IP address this virtual neighbor is using.";
+        }
+
+        leaf ospf-virt-nbr-options {
+          type int32;
+
+          description
+           "A bit mask corresponding to the neighbor's
+            options field.
+
+            Bit 1, if set, indicates that the system will
+            operate on Type of Service metrics other than
+            TOS 0.  If zero, the neighbor will ignore all
+            metrics except the TOS 0 metric.
+
+            Bit 2, if set, indicates that the system is
+            network multicast capable, i.e., that it
+            implements OSPF multicast routing.";
+        }
+
+        leaf ospf-virt-nbr-state {
+          type enumeration {
+            enum down          { value 1;
+            description
+            "";}
+            enum attempt       { value 2;
+            description
+            "";}
+            enum init          { value 3;
+            description
+            "";}
+            enum twoWay        { value 4;
+            description
+            "";}
+            enum exchangeStart { value 5;
+            description
+            "";}
+            enum exchange      { value 6;
+            description
+            "";}
+            enum loading       { value 7;
+            description
+            "";}
+            enum full          { value 8;
+            description
+            "";}
+          }
+
+          description
+           "The state of the virtual neighbor relationship.";
+        }
+
+        leaf ospf-virt-nbr-events {
+          type yang:counter32;
+
+          description
+          "The number of times this virtual link has
+           changed its state or an error has occurred.
+
+           Discontinuities in the value of this counter can occur
+           at re-initialization of the management system, and at
+           other times as indicated by the value of
+           ospfDiscontinuityTime.";
+        }
+
+        leaf ospf-virt-nbr-ls-retrans-qlen {
+          type yang:gauge32;
+
+          description
+           "The current length of the retransmission
+            queue.";
+        }
+
+        leaf ospf-virt-nbr-hello-suppressed {
+          type ospfstrouter6000:TruthValue;
+
+          description
+           "Indicates whether Hellos are being suppressed
+            to the neighbor.";
+        }
+
+        leaf ospf-virt-nbr-restart-helper-status {
+          type enumeration {
+            enum notHelping { value 1;
+            description
+            "";}
+            enum helping    { value 2;
+            description
+            "";}
+          }
+
+          description
+           "Indicates whether the router is acting
+            as a graceful restart helper for the neighbor.";
+        }
+
+        leaf ospf-virt-nbr-restart-helper-age {
+          type uint32;
+          units "seconds";
+
+          description
+           "Remaining time in current OSPF graceful restart
+            interval, if the router is acting as a restart
+            helper for the neighbor.";
+        }
+
+        leaf ospf-virt-nbr-restart-helper-exit-reason {
+          type enumeration {
+            enum none            { value 1;
+            description
+            "";}
+            enum inProgress      { value 2;
+            description
+            "";}
+            enum completed       { value 3;
+            description
+            "";}
+            enum timedOut        { value 4;
+            description
+            "";}
+            enum topologyChanged { value 5;
+            description
+            "";}
+          }
+
+          description
+           "Describes the outcome of the last attempt at acting
+            as a graceful restart helper for the neighbor.";
+        }
+      }
+
+      /* XXX table comments here XXX */
+
+      list ospf-area-aggregate-entry {
+
+
+        key "ospf-area-aggregate-area-id ospf-area-aggregate-lsdb-type ospf-area-aggregate-net ospf-area-aggregate-mask";
+        description
+         "A single area aggregate entry.
+
+          Information in this table is persistent and when this
+          object is written the entity SHOULD save the change to
+          non-volatile storage.";
+        reference
+         "OSPF Version 2, Appendix C.2  Area parameters";
+
+
+        leaf ospf-area-aggregate-area-id {
+          type ospfstrouter6000:AreaID;
+
+          description
+           "The area within which the address aggregate is to be
+            found.";
+          reference
+           "OSPF Version 2, Appendix C.2 Area parameters";
+        }
+
+        leaf ospf-area-aggregate-lsdb-type {
+          type enumeration {
+            enum summaryLink      { value 3;
+            description
+            "";}
+            enum nssaExternalLink { value 7;
+            description
+            "";}
+          }
+
+          description
+           "The type of the address aggregate.  This field
+            specifies the Lsdb type that this address
+            aggregate applies to.";
+          reference
+           "OSPF Version 2, Appendix A.4.1 The Link State
+            Advertisement header";
+        }
+
+        leaf ospf-area-aggregate-net {
+          type inet:ipv4-address;
+
+          description
+           "The IP address of the net or subnet indicated
+            by the range.";
+          reference
+           "OSPF Version 2, Appendix C.2 Area parameters";
+        }
+
+        leaf ospf-area-aggregate-mask {
+          type inet:ipv4-address;
+
+          description
+           "The subnet mask that pertains to the net or
+            subnet.";
+          reference
+           "OSPF Version 2, Appendix C.2 Area parameters";
+        }
+
+
+
+      }
+
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-local-lsdb-entry {
+
+
+        key "ospf-local-lsdb-ip-address ospf-local-lsdb-address-less-if ospf-local-lsdb-type ospf-local-lsdb-lsid ospf-local-lsdb-router-id";
+        description
+         "A single link state advertisement.";
+
+
+        leaf ospf-local-lsdb-ip-address {
+          type inet:ipv4-address;
+
+          description
+           "The IP address of the interface from
+            which the LSA was received if the interface is
+            numbered.";
+          reference
+           "OSPF Version 2, Appendix C.3 Interface parameters";
+        }
+
+        leaf ospf-local-lsdb-address-less-if {
+          type ospfstrouter6000:InterfaceIndexOrZero;
+
+          description
+           "The interface index of the interface from
+            which the LSA was received if the interface is
+            unnumbered.";
+          reference
+           "OSPF Version 2, Appendix C.3 Interface parameters";
+        }
+
+        leaf ospf-local-lsdb-type {
+          type enumeration {
+            enum localOpaqueLink { value 9;
+            description
+            "";}
+          }
+
+          description
+           "The type of the link state advertisement.
+            Each link state type has a separate
+            advertisement format.";
+          reference
+           "OSPF Version 2, Appendix A.4.1 The Link State
+            Advertisement header";
+        }
+
+        leaf ospf-local-lsdb-lsid {
+          type inet:ipv4-address;
+
+          description
+           "The Link State ID is an LS Type Specific field
+            containing a 32-bit identifier in IP address format;
+            it identifies the piece of the routing domain
+            that is being described by the advertisement.";
+          reference
+           "OSPF Version 2, Section 12.1.4 Link State ID";
+        }
+
+        leaf ospf-local-lsdb-router-id {
+          type ospfstrouter6000:RouterID;
+
+          description
+           "The 32-bit number that uniquely identifies the
+            originating router in the Autonomous System.";
+          reference
+           "OSPF Version 2, Appendix C.1 Global parameters";
+        }
+
+        leaf ospf-local-lsdb-sequence {
+          type int32;
+
+          description
+           "The sequence number field is a signed 32-bit
+            integer.  It starts with the value '80000001'h,
+            or -'7FFFFFFF'h, and increments until '7FFFFFFF'h.
+            Thus, a typical sequence number will be very negative.
+            It is used to detect old and duplicate link state
+            advertisements.  The space of sequence numbers is
+            linearly ordered.  The larger the sequence number,
+            the more recent the advertisement.";
+          reference
+           "OSPF Version 2, Section 12.1.6 LS sequence
+            number";
+        }
+
+        leaf ospf-local-lsdb-age {
+          type int32;
+          units "seconds";
+
+          description
+           "This field is the age of the link state
+            advertisement in seconds.";
+          reference
+           "OSPF Version 2, Section 12.1.1 LS age";
+        }
+
+        leaf ospf-local-lsdb-checksum {
+          type int32;
+
+          description
+           "This field is the checksum of the complete
+            contents of the advertisement, excepting the
+            age field.  The age field is excepted so that
+            an advertisement's age can be incremented
+            without updating the checksum.  The checksum
+            used is the same that is used for ISO
+            connectionless datagrams; it is commonly referred
+            to as the Fletcher checksum.";
+          reference
+           "OSPF Version 2, Section 12.1.7 LS checksum";
+        }
+
+        leaf ospf-local-lsdb-advertisement {
+          type binary {
+            length "1..65535";
+          }
+
+          description
+           "The entire link state advertisement, including
+            its header.
+
+            Note that for variable length LSAs, SNMP agents
+            may not be able to return the largest string size.";
+          reference
+           "OSPF Version 2, Section 12 Link State
+            Advertisements";
+        }
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-virt-local-lsdb-entry {
+
+
+        key "ospf-virt-local-lsdb-transit-area ospf-virt-local-lsdb-neighbor ospf-virt-local-lsdb-type ospf-virt-local-lsdb-lsid ospf-virt-local-lsdb-router-id";
+        description
+         "A single link state advertisement.";
+
+
+        leaf ospf-virt-local-lsdb-transit-area {
+          type ospfstrouter6000:AreaID;
+
+          description
+           "The transit area that the virtual link
+            traverses.  By definition, this is not 0.0.0.0.";
+          reference
+           "OSPF Version 2, Appendix C.3 Interface parameters";
+        }
+
+        leaf ospf-virt-local-lsdb-neighbor {
+          type ospfstrouter6000:RouterID;
+
+          description
+           "The Router ID of the virtual neighbor.";
+          reference
+           "OSPF Version 2, Appendix C.3 Interface parameters";
+        }
+
+        leaf ospf-virt-local-lsdb-type {
+          type enumeration {
+            enum localOpaqueLink { value 9;
+            description
+            "";}
+          }
+
+          description
+           "The type of the link state advertisement.
+            Each link state type has a separate
+            advertisement format.";
+          reference
+           "OSPF Version 2, Appendix A.4.1 The Link State
+            Advertisement header";
+        }
+
+        leaf ospf-virt-local-lsdb-lsid {
+          type inet:ipv4-address;
+
+          description
+           "The Link State ID is an LS Type Specific field
+            containing a 32-bit identifier in IP address format;
+            it identifies the piece of the routing domain
+            that is being described by the advertisement.";
+          reference
+           "OSPF Version 2, Section 12.1.4 Link State ID";
+        }
+
+        leaf ospf-virt-local-lsdb-router-id {
+          type ospfstrouter6000:RouterID;
+
+          description
+           "The 32-bit number that uniquely identifies the
+            originating router in the Autonomous System.";
+          reference
+           "OSPF Version 2, Appendix C.1 Global parameters";
+        }
+
+        leaf ospf-virt-local-lsdb-sequence {
+          type int32;
+
+          description
+           "The sequence number field is a signed 32-bit
+            integer.  It starts with the value '80000001'h,
+            or -'7FFFFFFF'h, and increments until '7FFFFFFF'h.
+            Thus, a typical sequence number will be very negative.
+            It is used to detect old and duplicate link state
+            advertisements.  The space of sequence numbers is
+            linearly ordered.  The larger the sequence number,
+            the more recent the advertisement.";
+          reference
+           "OSPF Version 2, Section 12.1.6 LS sequence
+            number";
+        }
+
+        leaf ospf-virt-local-lsdb-age {
+          type int32;
+          units "seconds";
+
+          description
+           "This field is the age of the link state
+            advertisement in seconds.";
+          reference
+           "OSPF Version 2, Section 12.1.1 LS age";
+        }
+
+        leaf ospf-virt-local-lsdb-checksum {
+          type int32;
+
+          description
+           "This field is the checksum of the complete
+            contents of the advertisement, excepting the
+            age field.  The age field is excepted so that
+            an advertisement's age can be incremented
+            without updating the checksum.  The checksum
+            used is the same that is used for ISO
+            connectionless datagrams; it is commonly
+            referred to as the Fletcher checksum.";
+          reference
+           "OSPF Version 2, Section 12.1.7 LS checksum";
+        }
+
+        leaf ospf-virt-local-lsdb-advertisement {
+          type binary {
+            length "1..65535";
+          }
+
+          description
+           "The entire link state advertisement, including
+            its header.";
+          reference
+           "OSPF Version 2, Section 12 Link State
+            Advertisements.
+
+            Note that for variable length LSAs, SNMP agents
+            may not be able to return the largest string size.";
+        }
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-as-lsdb-entry {
+
+
+        key "ospf-as-lsdb-type ospf-as-lsdb-lsid ospf-as-lsdb-router-id";
+        description
+         "A single link state advertisement.";
+
+
+        leaf ospf-as-lsdb-type {
+          type enumeration {
+            enum asExternalLink { value 5;
+            description
+            "";}
+            enum asOpaqueLink   { value 11;
+            description
+            "";}
+          }
+
+          description
+           "The type of the link state advertisement.
+            Each link state type has a separate
+            advertisement format.";
+          reference
+           "OSPF Version 2, Appendix A.4.1 The Link State
+            Advertisement header";
+        }
+
+        leaf ospf-as-lsdb-lsid {
+          type inet:ipv4-address;
+
+          description
+           "The Link State ID is an LS Type Specific field
+            containing either a Router ID or an IP address;
+            it identifies the piece of the routing domain
+            that is being described by the advertisement.";
+          reference
+           "OSPF Version 2, Section 12.1.4 Link State ID";
+        }
+
+        leaf ospf-as-lsdb-router-id {
+          type ospfstrouter6000:RouterID;
+
+          description
+           "The 32-bit number that uniquely identifies the
+            originating router in the Autonomous System.";
+          reference
+           "OSPF Version 2, Appendix C.1 Global parameters";
+        }
+
+        leaf ospf-as-lsdb-sequence {
+          type int32;
+
+          description
+           "The sequence number field is a signed 32-bit
+            integer.  It starts with the value '80000001'h,
+            or -'7FFFFFFF'h, and increments until '7FFFFFFF'h.
+            Thus, a typical sequence number will be very negative.
+            It is used to detect old and duplicate link state
+            advertisements.  The space of sequence numbers is
+            linearly ordered.  The larger the sequence number,
+            the more recent the advertisement.";
+          reference
+           "OSPF Version  2,  Section  12.1.6  LS  sequence
+            number";
+        }
+
+        leaf ospf-as-lsdb-age {
+          type int32;
+          units "seconds";
+
+          description
+           "This field is the age of the link state
+            advertisement in seconds.";
+          reference
+           "OSPF Version 2, Section 12.1.1 LS age";
+        }
+
+        leaf ospf-as-lsdb-checksum {
+          type int32;
+
+          description
+           "This field is the checksum of the complete
+            contents of the advertisement, excepting the
+            age field.  The age field is excepted so that
+            an advertisement's age can be incremented
+            without updating the checksum.  The checksum
+            used is the same that is used for ISO
+            connectionless datagrams; it is commonly referred
+            to as the Fletcher checksum.";
+          reference
+           "OSPF Version 2, Section 12.1.7 LS checksum";
+        }
+
+        leaf ospf-as-lsdb-advertisement {
+          type binary {
+            length "1..65535";
+          }
+
+          description
+           "The entire link state advertisement, including
+            its header.";
+          reference
+           "OSPF Version 2, Section 12 Link State
+            Advertisements.
+
+            Note that for variable length LSAs, SNMP agents
+            may not be able to return the largest string size.";
+        }
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list ospf-area-lsa-count-entry {
+
+
+        key "ospf-area-lsa-count-area-id ospf-area-lsa-count-lsa-type";
+        description
+         "An entry with a number of link advertisements
+          of a given type for a given area.";
+
+
+        leaf ospf-area-lsa-count-area-id {
+          type ospfstrouter6000:AreaID;
+
+          description
+           "This entry Area ID.";
+        }
+
+        leaf ospf-area-lsa-count-lsa-type {
+          type enumeration {
+            enum routerLink       { value 1;
+            description
+            "";}
+            enum networkLink      { value 2;
+            description
+            "";}
+            enum summaryLink      { value 3;
+            description
+            "";}
+            enum asSummaryLink    { value 4;
+            description
+            "";}
+            enum multicastLink    { value 6;
+            description
+            "";}
+            enum nssaExternalLink { value 7;
+            description
+            "";}
+            enum areaOpaqueLink   { value 10;
+            description
+            "";}
+          }
+
+          description
+           "This entry LSA type.";
+        }
+
+        leaf ospf-area-lsa-count-number {
+          type yang:gauge32;
+
+          description
+           "Number of LSAs of a given type for a given area.";
+        }
+      }
+
+    container ospf-general-group {
+
+          description
+           "Ospf general group information.";
+
+        leaf ospf-version-number {
+          type enumeration {
+            enum version2 { value 2;
+            description
+              "";}
+          }
+
+          description
+           "The current version number of the OSPF protocol is 2.";
+          reference
+           "OSPF Version 2, Title";
+        }
+
+        leaf ospf-area-bdr-rtr-status {
+          type ospfstrouter6000:TruthValue;
+
+          description
+           "A flag to note whether this router is an Area
+            Border Router.";
+          reference
+           "OSPF Version 2, Section 3 Splitting the AS into
+            Areas";
+        }
+
+
+        leaf ospf-extern-lsa-count {
+          type yang:gauge32;
+
+          description
+           "The number of external (LS type-5) link state
+            advertisements in the link state database.";
+          reference
+           "OSPF Version 2, Appendix A.4.5 AS external link
+            advertisements";
+        }
+
+        leaf ospf-extern-lsa-cksum-sum {
+          type int32;
+
+          description
+           "The 32-bit sum of the LS checksums of
+            the external link state advertisements
+            contained in the link state database.  This sum
+            can be used to determine if there has been a
+            change in a router's link state database and
+            to compare the link state database of two
+            routers.  The value should be treated as unsigned
+            when comparing two sums of checksums.";
+        }
+
+
+        leaf ospf-originate-new-lsas {
+          type yang:counter32;
+
+          description
+           "The number of new link state advertisements
+            that have been originated.  This number is
+            incremented each time the router originates a new
+            LSA.
+
+            Discontinuities in the value of this counter can
+            occur at re-initialization of the management system,
+            and at other times as indicated by the value of
+            ospfDiscontinuityTime.";
+        }
+
+        leaf ospf-rx-new-lsas {
+          type yang:counter32;
+
+          description
+           "The number of link state advertisements received
+            that are determined to be new instantiations.
+            This number does not include newer instantiations
+            of self-originated link state advertisements.
+
+            Discontinuities in the value of this counter can
+            occur at re-initialization of the management system,
+            and at other times as indicated by the value of
+            ospfDiscontinuityTime.";
+        }
+
+
+
+
+
+
+        leaf ospf-opaque-lsa-support {
+          type ospfstrouter6000:TruthValue;
+
+          description
+           "The router's support for Opaque LSA types.";
+          reference
+           "The OSPF Opaque LSA Option";
+        }
+
+
+
+
+
+        leaf ospf-restart-status {
+          type enumeration {
+            enum notRestarting    { value 1;
+            description
+              "";}
+            enum plannedRestart   { value 2;
+            description
+              "";}
+            enum unplannedRestart { value 3;
+            description
+              "";}
+          }
+
+          description
+           "Current status of OSPF graceful restart.";
+        }
+
+        leaf ospf-restart-age {
+          type uint32;
+          units "seconds";
+
+          description
+           "Remaining time in current OSPF graceful restart
+            interval.";
+        }
+
+        leaf ospf-restart-exit-reason {
+          type enumeration {
+            enum none            { value 1;
+            description
+              "";}
+            enum inProgress      { value 2;
+            description
+              "";}
+            enum completed       { value 3;
+            description
+              "";}
+            enum timedOut        { value 4;
+            description
+              "";}
+            enum topologyChanged { value 5;
+            description
+              "";}
+          }
+
+          description
+           "Describes the outcome of the last attempt at a
+            graceful restart.  If the value is 'none', no restart
+            has yet been attempted.  If the value is 'inProgress',
+            a restart attempt is currently underway.";
+        }
+
+        leaf ospf-as-lsa-count {
+          type yang:gauge32;
+
+          description
+           "The number of AS-scope link state
+            advertisements in the AS-scope link state database.";
+        }
+
+        leaf ospf-as-lsa-cksum-sum {
+          type uint32;
+
+          description
+           "The 32-bit unsigned sum of the LS checksums of
+            the AS link state advertisements contained in the AS-scope
+            link state database.  This sum can be used to determine
+            if there has been a change in a router's AS-scope link
+            state database, and to compare the AS-scope link state
+            database of two routers.";
+        }
+
+        leaf ospf-stub-router-support {
+          type ospfstrouter6000:TruthValue;
+
+          description
+           "The router's support for stub router functionality.";
+          reference
+           "OSPF Stub Router Advertisement";
+        }
+
+
+        leaf ospf-discontinuity-time {
+          type yang:timestamp;
+
+          description
+           "The value of sysUpTime on the most recent occasion
+            at which any one of this MIB's counters suffered
+            a discontinuity.
+
+            If no such discontinuities have occurred since the last
+            re-initialization of the local management subsystem,
+            then this object contains a zero value.";
+        }
+      }
+    }
+  }
+} /* end of module OSPF-MIB */

@@ -1,0 +1,288 @@
+module ericsson-asp-ipr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-asp-ipr";
+
+  prefix "aspipr";
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-card-ipr {
+    prefix "cardipr";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-asp-ipr
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-05" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2019-05-10" {
+    description
+      "VRE-6984 increasing maximum asp number";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-04-17" {
+    description
+      "adding binding condition between asp and card";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-04" {
+    description
+      "VRE-162 32-VM Support";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-04-25" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+
+
+   typedef aspid {
+     type union {
+       type uint8 {
+         range "1..7";
+       }
+       type string;
+     }
+   }
+   typedef aspslot {
+     type union {
+       type string {
+         pattern '[1-9]/[1]|1[0-9]/[1]|2[0-9]/[1]|3[0]/[1]';
+       }
+       type enumeration {
+          enum management/1 {
+            description
+              "RP slot";
+          }
+          enum management/2 {
+            description
+              "RP slot";
+          }
+          enum management/3 {
+            description
+              "RP slot";
+          }
+          enum management/4 {
+            description
+              "RP slot";
+          }
+          enum management/5 {
+            description
+              "RP slot";
+          }
+          enum management/6 {
+            description
+              "RP slot";
+          }
+       }
+     }
+   }
+
+  grouping asp-pool-grp {
+    description
+      "asp pool mode";
+    /*
+    asp (asp-slot)
+    */
+    leaf-list asp {
+      type aspslot;
+      description
+        "Specify the ASP that belong to this ASP pool";
+    }
+  }
+
+  grouping asp-group-grp {
+    description
+      "asp group mode";
+    /*
+    pool (pool-name)
+    */
+    leaf pool {
+      type string;
+      description
+        "Specify the ASP pool to use";
+    }
+    /*
+    asp-count (count-value)
+    */
+    leaf asp-count {
+      type uint8 {
+        range "1..19";
+      }
+      description
+        "Specify The Number of ASPs";
+    }
+    /*
+    priority (priority-value)
+    */
+    leaf priority {
+      type uint8 {
+        range "1..22";
+      }
+      description
+        "Specify the priority of this ASP group";
+    }
+  }
+
+  grouping asp-grp {
+    description
+      "asp mode";
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable shutdown";
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context" {
+    description
+      "ericsson-asp";
+    /*
+    asp-group { (group-name) [service [security] ]}
+    */
+    list asp-group {
+      key "group-name";
+      max-elements 1;
+      description
+        "Configure The ASP Group for a specific service";
+      leaf group-name {
+        type aspid;
+        description
+          "Specify an asp group id/name";
+      }
+      container service {
+        description
+          "Specify ASE service";
+        leaf security {
+          type empty;
+          description
+            "service type";
+        }
+      }
+    }
+  }
+
+  /*
+  asp
+  */
+  container asp {
+    description
+      "Enter the asp configuration mode";
+    list default_asp_attr {
+      key "default_asp_attr";
+      description
+        "asp attribute profile name";
+      leaf default_asp_attr {
+        type aspslot;
+        must "(/cardipr:card[cardipr:card-slot="
+        + "number(substring-before(current(), '/'))]) or "
+        + "((substring-before(current(), '/'))='management')" {
+          error-message "dependant card or asp name not "
+          + "configured or unconfigured";
+          description
+            "add binding condition check between asp and card";
+        }
+        description
+          "Slot Identifier";
+      }
+      uses asp-grp;
+    }
+    list pool {
+      key "pool-name";
+      description
+        "Enter the asp pool configuration mode";
+      leaf pool-name {
+        type string;
+        description
+          "Specify an asp pool name";
+      }
+      leaf service {
+        type string;
+        description
+          "Enter the service specific configuration mode";
+      }
+      uses asp-pool-grp;
+    }
+    list group {
+      key "group-type";
+      description
+        "List for asp group id/name";
+      leaf group-type {
+        type aspid;
+        description
+          "Specify a asp group id/name";
+      }
+      leaf description {
+        type string;
+        description
+          "Enter the description for this group";
+      }
+      uses asp-group-grp;
+    }
+  }
+
+}

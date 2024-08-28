@@ -1,0 +1,38 @@
+module top-level-data-nodes-handling {
+
+    namespace "urn:test:top-level-data-nodes-handling";
+    prefix this;
+
+    revision "2021-10-11";
+
+	container cont1 {
+	
+		leaf leaf11 {
+			type string;
+		}
+	
+		container cont2 {
+		
+			leaf leaf21 {
+				type string;
+			}
+		}
+	}
+
+	container cont3 {
+		presence "";
+		
+		leaf leaf31 {
+			type string;
+		}
+	
+		container cont4 {
+			presence "";
+		
+			leaf leaf41 {
+				type string;
+			}
+		}
+	}
+
+}

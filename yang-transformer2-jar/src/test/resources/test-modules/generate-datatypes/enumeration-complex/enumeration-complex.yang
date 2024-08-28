@@ -1,0 +1,69 @@
+module enumeration-complex {
+
+    namespace "urn#test#enumeration-complex";
+    prefix this;
+
+    revision "2021-10-30";
+	
+	container cont1 {
+	
+		leaf leaf11 {
+			type enumeration {
+				enum RED { value 567; }
+				enum YELLOW { value 678; }
+				enum GREEN { value 789; }
+			}
+		}
+
+		leaf leaf12 {
+			type enumeration {
+				enum RED { value 567; }
+				enum YELLOW { value 678; }
+				enum GREEN { value 789; }
+			}
+		}
+
+		leaf leaf13 {
+			type enumeration {
+				enum RED { value 567; }
+				enum YELLOW { value 678; }
+				enum GREEN { value 789; }
+			}
+		}
+
+		leaf leaf14 {
+			type enumeration {
+				enum RED { value 567; }
+				enum YELLOW { value 678; }
+				enum GREEN { value 789; }
+			}
+		}
+
+		leaf leaf15 {
+			type enumeration {
+				enum RED { value 567; }
+				enum YELLOW { value 678; }
+				enum GREEN { value 789; }
+			}
+		}
+	}
+	
+	container cont6 {
+
+		leaf leaf61 {
+			type string;
+		}
+	}
+
+	container cont7 {
+
+		leaf leaf71 {
+			type enumeration {
+				enum RED { value 567; }
+				enum YELLOW { value 678; }
+				enum GREEN { value 789; }
+			}
+		}
+	}
+	
+}

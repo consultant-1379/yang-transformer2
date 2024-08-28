@@ -1,0 +1,117 @@
+module persistence-simple-nsd {
+
+	namespace "urn:test:persistence-simple-nsd";
+	prefix this;
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision "2021-10-18";
+
+	container cont1 {			// regular NP container, should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+
+		leaf leaf11 {			// regular leaf, should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+			type string;
+		}
+
+		leaf leaf12 {			// 'config false' and not notified leaf in 'config true' container, should be generated as FROM_DELEGATE / NOT_ALLOWED
+			config false;
+			type string;
+		}
+
+		container cont2 {		// 'config false' and not notified, MOC should not be generated.
+			config false;
+
+			leaf leaf21 {		// not generated as the MOC is not generated.
+				type string;
+			}
+		}
+	}
+
+	container cont3 {			// regular NP container, should be generated as FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+
+		container cont4 {		// 'config false' and notified, MOC should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+			config false;
+			notife:notifiable-state-data true;
+
+			leaf leaf41 {		// 'config false' and notified, should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+				type string;
+			}
+
+			container cont5 {		// 'config false' and notified, MOC should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+
+				leaf leaf51 {		// 'config false' and not notified, should be generated as FROM_DELEGATE / NOT_ALLOWED
+					type string;
+					notife:notifiable-state-data false;
+				}
+			}
+		}
+	}
+
+	container cont6 {			// 'config false' container, should not be generated.
+		config false;
+
+		leaf leaf61 {			// not generated as the MOC is not generated.
+			type string;
+		}
+	}
+
+	container cont7 {			// 'config false' NP-container, but leaf is notified, MOC should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+		config false;
+
+		leaf leaf71 {			// 'config false' and notified, should be generated as FROM_PERSISTENCE / NOT_ALLOWED
+			type string;
+			notife:notifiable-state-data true;
+		}
+	}
+
+	list list8 {				// 'config false' list, not marked as NSD true so will not be generated
+		config false;
+		key leaf81;
+
+		leaf leaf81 { type string; }
+
+		leaf leaf82 { type string; }
+
+		leaf leaf83 {			// The 'NSD true' makes no difference here
+			type string;
+			notife:notifiable-state-data true;
+		}
+	}
+
+	list list9 {			// Normal MO: FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+		key leaf91;
+
+		leaf leaf91 { type string; }		// Normal key attr: FROM_PERSISTENCE / PERSIST_AND_DELEGATE
+
+		container cont10 {		// Since there is a notifiable leaf, this state NP container will be FROM_PERSISTENCE / NOT_ALLOWED
+			config false;
+
+			choice c1 {
+				case case1 {
+					leaf leaf101 { type string; }		// Not notified, so FROM_DELEGATE / NOT_ALLOWED
+				}
+				case case2 {
+					leaf leaf102 {
+						type string;
+						notife:notifiable-state-data true;	// Notified, so FROM_PERSISTENCE / NOT_ALLOWED
+					}
+				}
+			}
+		}
+
+		container cont11 {				// Not generated, as it is NP and not notified.
+			config false;
+			presence "";
+
+			leaf leaf111 {
+				type string;
+				notife:notifiable-state-data true;
+			}
+		}
+	}
+}

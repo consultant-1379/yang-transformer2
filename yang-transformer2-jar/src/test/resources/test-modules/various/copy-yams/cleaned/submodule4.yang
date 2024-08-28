@@ -1,0 +1,6 @@
+submodule submodule4 {
+
+	belongs-to module3 {
+		prefix this;
+	}
+}

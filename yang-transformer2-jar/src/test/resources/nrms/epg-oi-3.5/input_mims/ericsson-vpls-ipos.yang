@@ -1,0 +1,215 @@
+module ericsson-vpls-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-vpls-ipos";
+
+  prefix "vplsipos";
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-vpws-ipos {
+    prefix "vpwsipos";
+  }
+
+  import ericsson-bridge-ipos {
+    prefix "bridgeipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-vpls-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2019-03-27" {
+    description
+      "changed the type of instance id from leafref to string";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-20" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-03-29" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping vpls-grp {
+    description
+      "VPLS configuration mode";
+    /*
+    pseudowire { vlan ( vlan-val ) | { instance (instance-id) [
+     spoke ] } }
+    */
+    container pseudowire {
+      description
+        "Configure pseudowire";
+      leaf vlan {
+        type string {
+          pattern '(untagged|\d{1,4}|\d{1,4}\-\d{1,4})(,\d{1,4}'
+          + '|,\d{1,4}\-\d{1,4}){0,4}';
+        }
+        description
+          "Specifies the VLAN ID value";
+      }
+      list instance {
+        key "instance-id";
+        description
+          "Set PW instance ID";
+        leaf instance-id {
+          type string {
+            pattern '\d{1,10}|\d{1,10}\s*\-\s*\d{1,10}';
+          }
+          description
+            "PW Instance ID";
+        }
+        leaf spoke {
+          type empty;
+          description
+            "Configure this PW as spoke";
+        }
+        uses pw-instance-grp;
+      }
+    }
+  }
+
+  grouping pw-instance-grp {
+    description
+      "VPLS PW instance configuration mode";
+    /*
+    split-horizon-group (shg-name)
+    */
+    list split-horizon-group {
+      key "split-horizon-group";
+      description
+        "Add pseudowire to split horizon group";
+      leaf split-horizon-group {
+        type string;
+        description
+          "Split horizon group name";
+      }
+    }
+    /*
+    profile (profile-name)
+    */
+    leaf profile {
+      type leafref {
+        path "/bridgeipos:bridge/bridgeipos:profile/bridgeipos:"
+        + "profile";
+      }
+      description
+        "Configure VPLS profile";
+    }
+    /*
+    mac-entry static < vlan (vlan-id) > < mac (mac-val) >
+    */
+    list mac-entry-static {
+      key "mac vlan";
+      description
+        "Creates a static MAC address and VLAN ID database entry
+         for the service instance";
+      leaf mac {
+        type yang:mac-address;
+        description
+          "MAC address";
+      }
+      leaf vlan {
+        type uint16 {
+          range "1..4095";
+        }
+        description
+          "VLAN-ID, VLAN ID for 4095 is invalid";
+      }
+    }
+    /*
+    neighbor mac-flush
+    */
+    leaf neighbor-mac-flush {
+      type empty;
+      description
+        "Send MAC flush message at the hub node";
+    }
+    /*
+    native vlan (vlan-val)
+    */
+    container native {
+      description
+        "Configure native";
+      leaf vlan {
+        type uint16 {
+          range "1..4094";
+        }
+        description
+          "Configure native";
+      }
+    }
+  }
+
+  augment "/bridgeipos:bridge/bridgeipos:bridge-instance" {
+    description
+      "ericsson-vpls";
+    /*
+    vpls
+    */
+    container vpls {
+      presence "";
+      description
+        "Configure VPLS attributes";
+      uses vpls-grp;
+    }
+  }
+
+}

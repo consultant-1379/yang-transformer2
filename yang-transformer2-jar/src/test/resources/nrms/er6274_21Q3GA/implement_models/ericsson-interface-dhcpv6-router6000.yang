@@ -1,0 +1,210 @@
+module ericsson-interface-dhcpv6-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-dhcpv6-router6000";
+
+  prefix "ifdhcpv6router6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-dhcpv6-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-07-20" {
+    description
+      "Description interface dhcpv6  ";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  grouping dhcpv6-relay-grp {
+    description
+      "dhcpv6 interface relay mode";
+    /*
+    link-address (link-addr)
+    */
+    leaf link-address {
+      type inet:ipv6-address;
+      description
+        "Configure the link-address";
+    }
+    /*
+    user-class-id (class-id) { link-address (link-addr) | offset
+     (offset-value) link-address (link-addr) }
+    */
+    list user-class-id {
+      key "class-id";
+      description
+        "Configure User-Class-Id";
+      leaf class-id {
+        type string;
+        description
+          "user class Id";
+      }
+      container user-class-id-choice {
+        description
+          "container user-class-id-choice.";
+        leaf link-address {
+          type inet:ipv6-address;
+          description
+            "Configure the link-address";
+        }
+        container offset {
+          presence "";
+          description
+            "container offset.";
+          leaf offset {
+            type int16 {
+              range "-255..255";
+            }
+            mandatory true;
+            description
+              "Set Offset Value";
+          }
+          leaf link-address {
+            type inet:ipv6-address;
+            mandatory true;
+            description
+              "Configure the link-address";
+          }
+        }
+      }
+    }
+    /*
+    vendor-class-id (class-id) { link-address (link-addr) |
+     offset (offset-value) link-address (link-addr) }
+    */
+    list vendor-class-id {
+      key "class-id";
+      description
+        "Configure vendor-Class-Id";
+      leaf class-id {
+        type string;
+        description
+          "user class Id";
+      }
+      container vendor-class-id-choice {
+        description
+          "container vendor-class-id-choice.";
+        leaf link-address {
+          type inet:ipv6-address;
+          description
+            "Configure the link-address";
+        }
+        container offset {
+          presence "";
+          description
+            "container offset.";
+          leaf offset {
+            type int16 {
+              range "-255..255";
+            }
+            mandatory true;
+            description
+              "Set Offset Value";
+          }
+          leaf link-address {
+            type inet:ipv6-address;
+            mandatory true;
+            description
+              "Configure the link-address";
+          }
+        }
+      }
+    }
+  }
+
+  augment
+  "/if:interfaces/if:interface/ifxrouter6000:l3-interface" {
+    description
+      "ericsson-dhcpv6-interface";
+    /*
+    dhcpv6 { relay [ server-group (server-group-id) | stateless
+     [ server-group (server-group-id) ] ] | server { interface |
+     (server-ip) } }
+    */
+    container dhcpv6 {
+      description
+        "DHCPv6 Configuration for the interface";
+      choice dhcpv6 {
+        case relay {
+          container relay {
+            presence "";
+            description
+              "Enable DHCPv6 Relay on the interface";
+            leaf server-group {
+              type string;
+              description
+                "Assign a dhcpv6 server group for the interface";
+            }
+            container stateless {
+              presence "";
+              description
+                "Enable DHCPv6 Stateless Relay on the interface";
+              leaf server-group {
+                type string;
+                description
+                  "Assign a dhcpv6 server group for the
+                   interface";
+              }
+            }
+            uses dhcpv6-relay-grp;
+          }
+        }
+        case server {
+          container server {
+            description
+              "Enable DHCPv6 Server on the interface";
+            leaf interface {
+              type empty;
+              description
+                "Use interface primary IP address as DHCPv6
+                 server's IP address";
+            }
+            leaf server-ip {
+              type inet:ipv6-address;
+              description
+                "DHCPv6 Server's IP address";
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

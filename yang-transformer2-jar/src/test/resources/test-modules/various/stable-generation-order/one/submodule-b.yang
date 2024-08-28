@@ -1,0 +1,37 @@
+submodule submodule-b {
+
+	belongs-to module-a {
+		prefix this;
+	}
+
+    revision "2021-12-02";
+
+	list list3 {
+		key leaf31;
+	
+		leaf leaf31 {
+			type int16;
+		}
+	
+		leaf leaf32 {
+			type int32;
+		}
+
+		container cont33 {
+			presence "";
+		}
+		
+		leaf leaf34 {
+			type identityref {
+				base id-11;
+			}
+		}
+
+		leaf leaf35 {
+			type identityref {
+				base id-12;
+			}
+		}
+	}
+
+}

@@ -1,0 +1,1583 @@
+module ericsson-types-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-types-ipos";
+  prefix "typesipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization "Ericsson AB";
+  contact "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-types-ipos
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+     description
+      "Update yang version 1.0 to 1.1";
+     reference
+      "rfc7950";
+     yexte:version "2";
+     yexte:release "0";
+     yexte:correction "3";
+   }
+
+  revision "2019-07-03"{
+    description
+      "add new type pol-acl-seq-number";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-06-21" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-05-28" {
+    description
+      "replace type definition icmp-subtype-ipv6 with
+       icmp-subtype-ipv6-value";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-05-11" {
+    description
+      "add enum in slot-num and delete acl-seq-enumeration";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-05-08" {
+    description
+      "rollback bgp-ext-community-type";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+  revision "2017-10-26" {
+    description
+      "Update the description of summer-day and summer-month";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+  revision "2017-08-16" {
+    description
+      "Change special character in the description";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-14" {
+    description
+      "Add slot num";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-10-20" {
+    description
+      "Add the ipv4/v6 type to fix the ipv4 and v6 addresses
+       can't be set successfully.";
+    reference
+      "rfc6020";
+  }
+
+  revision 2016-06-01 {
+    description   "Add some types to support L2 ACL, RSVP, PIM, IGMP etc.";
+    reference "rfc6020.txt.";
+  }
+
+
+  revision 2015-12-07 {
+    description   "initial revision";
+    reference "rfc6020.txt.";
+  }
+
+  typedef slot-number {
+      type union {
+          type uint16 {
+              range "1..20";
+          }
+          type enumeration {
+            enum alsw1{
+            value 0;
+            description "Alarm Switch (ALSW) card 1";
+            }
+            enum alsw2{
+            value 1;
+            description "Alarm Switch (ALSW) card 2";
+            }
+            enum rpsw1{
+            value 2;
+            description "Route Processor Switch (RPSW) card 1";
+            }
+            enum rpsw2{
+            value 3;
+            description "Route Processor Switch (RPSW) card 2";
+            }
+            enum sw1{
+            value 4;
+            description "Switch (SW) card 1";
+            }
+            enum sw2{
+            value 5;
+            description "Switch (SW) card 2";
+            }
+            enum sw3{
+            value 6;
+            description "Switch (SW) card 3";
+            }
+            enum sw4{
+            value 7;
+            description "Switch (SW) card 4";
+            }
+            enum vrp1{
+            value 8;
+            description "Virtual Route Processor 1";
+            }
+            enum vrp2{
+            value 9;
+            description "Virtual Route Processor 2";
+            }
+          }
+      }
+      description
+         "Slot number";
+  }
+
+  /*** collection of types related to protocol fields ***/
+
+  typedef ipv4-prefix-netmask {
+    type string {
+      pattern
+         '(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}'
+       +  '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+       + '\s+'
+       + '(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}'
+       +  '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])';
+    }
+    description
+     "The type represents an IPv4 address prefix. The prefix
+     netmask is given by the ip address after multiple space";
+  }
+
+typedef ipv4-address-mask {
+    type string {
+      pattern
+         '(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}'
+       +  '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+       + '/(([0-9])|([1-2][0-9])|(3[0-2]))';
+    }
+    description
+     "The ipv4-address-prefix type represents an IPv4 address prefix.
+      The prefix length is given by the number following the
+      slash character and must be less than or equal to 32.
+
+      A prefix length value of n corresponds to an IP address
+      mask that has n contiguous 1-bits from the most
+      significant bit (MSB) and all other bits set to 0.
+
+      The canonical format of an IPv4 prefix has all bits of
+      the IPv4 address set to zero that are not part of the
+      IPv4 prefix";
+  }
+
+  typedef ipos-ip-prefix {
+    type union {
+      type ipv4-address-mask;
+      type ipv4-prefix-netmask;
+    }
+    description
+     "The ipos-ip-prefix type represents an IPv4 address
+     prefix in ipos";
+  }
+
+  typedef dscp-value {
+    type union {
+        type uint8 {
+            range "0..63";
+        }
+        type enumeration {
+            enum df{
+            description "Default Forwarding, same as cs0";
+            }
+            enum ef{
+            description "Expedited Forwarding";
+            }
+            enum cs0{
+            description "Class Selector 0, DSCP value 0";
+            }
+            enum cs1{
+            description "Class Selector 1, DSCP value 8";
+            }
+            enum cs2{
+            description "Class Selector 2, DSCP value 16";
+            }
+            enum cs3{
+            description "Class Selector 3, DSCP value 24";
+            }
+            enum cs4{
+            description "Class Selector 4, DSCP value 32";
+            }
+            enum cs5{
+            description "Class Selector 5, DSCP value 40";
+            }
+            enum cs6{
+            description "Class Selector 6, DSCP value 48";
+            }
+            enum cs7{
+            description "Class Selector 7, DSCP value 56";
+            }
+            enum af11{
+            description "Assured Forwarding - Class 1/Drop precedence 1, DSCP value 10";
+            }
+            enum af12{
+            description "Assured Forwarding - Class 1/Drop precedence 3, DSCP value 12";
+            }
+            enum af13{
+            description "Assured Forwarding - Class 1/Drop precedence 3, DSCP value 14";
+            }
+            enum af21{
+            description "Assured Forwarding - Class 2/Drop precedence 1, DSCP value 18";
+            }
+            enum af22{
+            description "Assured Forwarding - Class 2/Drop precedence 2, DSCP value 20";
+            }
+            enum af23{
+            description "Assured Forwarding - Class 2/Drop precedence 3, DSCP value 22";
+            }
+            enum af31{
+            description "Assured Forwarding - Class 3/Drop precedence 1, DSCP value 26";
+            }
+            enum af32{
+            description "Assured Forwarding - Class 3/Drop precedence 2, DSCP value 28";
+            }
+            enum af33{
+            description "Assured Forwarding - Class 3/Drop precedence 3, DSCP value 30";
+            }
+            enum af41{
+            description "Assured Forwarding - Class 4/Drop precedence 1, DSCP value 34";
+            }
+            enum af42{
+            description "Assured Forwarding - Class 4/Drop precedence 2, DSCP value 36";
+            }
+            enum af43{
+            description "Assured Forwarding - Class 4/Drop precedence 3, DSCP value 38";
+            }
+        }
+	}
+    description
+     "Dscp value common type";
+  }
+
+  typedef tag_value_type {
+		type enumeration {
+       enum all{
+       description "All tag";
+       }
+       enum range{
+       description "A range tag";
+       }
+       enum spec{
+       description "One specific tag";
+       }
+		}
+    description
+     "C-S tag value";
+  }
+
+  typedef tag_map_type {
+		type enumeration {
+       enum all{
+       description "All tag";
+       }
+       enum range{
+       description "A range tag";
+       }
+       enum spec{
+       description "One specific tag";
+       }
+       enum null{
+       description "No tag";
+       }
+		}
+    description
+     "C-S tag value";
+  }
+
+  typedef l2_encap_type {
+		type enumeration {
+       enum ipv4oe{
+       description "IPV4oE encapsulation";
+       }
+       enum ipv6oe{
+       description "IPV6oE encapsulation";
+       }
+       enum pppoe{
+       description "PPPoE encapsulation";
+       }
+		}
+    description
+     "L2 encapsulation type";
+  }
+
+  typedef acl-seq-number {
+      type union {
+          type uint32 {
+            range "1..4294967295";
+          }
+      }
+      description
+         "ICMP type value";
+  }
+
+    typedef pol-acl-seq-number {
+      type union {
+          type uint32 {
+            range "1..4294967295";
+          }
+      }
+  }
+
+  typedef acl-ipv4-protocol-keywords{
+      type enumeration {
+          enum ahp{
+          description "Authentication Header Protocol";
+          }
+          enum esp{
+          description "Encapsulation Security Payload";
+          }
+          enum gre{
+          description "Generic Routing Encapsulation";
+          }
+          enum icmp{
+          description "Internet Control Message Protocol";
+          }
+          enum igmp{
+          description "Internet Group Management Protocol";
+          }
+          enum ip{
+          description "Any IP protocol";
+          }
+          enum ipinip{
+          description "IP in IP tunneling";
+          }
+          enum ospf{
+          description "Open Shortest Path First";
+          }
+          enum pcp{
+          description "Payload Compression Protocol";
+          }
+          enum pim{
+          description "Protocol Independent Multicast";
+          }
+          enum tcp{
+          description "Transmission Control Protocol";
+          }
+          enum udp{
+          description "User Datagram Protocol";
+          }
+        }
+        description "ACL ipv4 protocol name supported ";
+  }
+  typedef acl-ipv4-protocol {
+      type union {
+          type acl-ipv4-protocol-keywords;
+          type uint8 {
+              range "0..255";
+          }
+      }
+      description
+         "ACL ipv4 supported protocol name or number";
+  }
+
+  typedef acl-ipv6-protocol-keywords{
+      type enumeration {
+          enum icmp{
+          description "ICMP version 6";
+          }
+          enum ipv6{
+          description "Any ipv6 protocol";
+          }
+          enum ospf{
+          description "Open Shortest Path First";
+          }
+          enum pcp{
+          description "Payload Compression Protocol";
+          }
+          enum pim{
+          description "Protocol Independent Multicast";
+          }
+          enum tcp{
+          description "Transmission Control Protocol";
+          }
+          enum udp{
+          description "User Datagram Protocol";
+          }
+        }
+        description "ACL ipv6 protocol name supported";
+  }
+  typedef acl-ipv6-protocol {
+      type union {
+          type acl-ipv6-protocol-keywords;
+          type uint8 {
+              range "0..255";
+          }
+      }
+      description
+         "ACL ipv6 supported protocol name or number";
+  }
+
+  typedef icmp-type-keyword {
+	  type enumeration {
+          enum administratively-prohibited{
+          description "Administratively prohibited";
+          }
+          enum alternate-address{
+          description "Alternate address";
+          }
+          enum conversion-error{
+          description "Datagram conversion";
+          }
+          enum dod-host-prohibited{
+          description "Host prohibited";
+          }
+          enum dod-net-prohibited{
+          description "Net prohibited";
+          }
+          enum echo{
+          description "Echo (ping)";
+          }
+          enum echo-reply{
+          description "Echo reply";
+          }
+          enum general-parameter-problem{
+          description "General parameter problem";
+          }
+          enum host-isolated{
+          description "Host isolated";
+          }
+          enum host-precedence-unreachable{
+          description "Host unreachable for precedence";
+          }
+          enum host-redirect{
+          description "Host redirect";
+          }
+          enum host-tos-redirect{
+          description "Host redirect for TOS";
+          }
+          enum host-tos-unreachable{
+          description "Host unreachable for TOS";
+          }
+          enum host-unknown{
+          description "Host unknown";
+          }
+          enum host-unreachable{
+          description "Host unreachable";
+          }
+          enum information-reply{
+          description "Information replys";
+          }
+          enum information-request{
+          description "Information requests";
+          }
+          enum mask-reply{
+          description "Mask replies";
+          }
+          enum mask-request{
+          description "Mask requests";
+          }
+          enum mobile-redirect{
+          description "Mobile host redirects";
+          }
+          enum net-redirect{
+          description "Network redirect";
+          }
+          enum net-tos-redirect{
+          description "Network redirect for TOS";
+          }
+          enum net-tos-unreachable{
+          description "Network unreachable for TOS";
+          }
+          enum net-unreachable{
+          description "Network unreachable";
+          }
+          enum network-unknown{
+          description "Network unknown";
+          }
+          enum no-room-for-option{
+          description "Parameter required but no room";
+          }
+          enum option-missing{
+          description "Parameter required but not present";
+          }
+          enum packet-too-big{
+          description "Fragmentation needed and DF set";
+          }
+          enum parameter-problem{
+          description "All parameter problems";
+          }
+          enum port-unreachable{
+          description "Port unreachable";
+          }
+          enum precedence-unreachable{
+          description "Precedence cutoff";
+          }
+          enum protocol-unreachable{
+          description "Protocol unreachable";
+          }
+          enum reassembly-timeout{
+          description "Reassembly time exceeded";
+          }
+          enum redirect{
+          description "All redirects";
+          }
+          enum router-advertisement{
+          description "Router discovery advertisement";
+          }
+          enum router-solicitation{
+          description "Router discovery solicitation";
+          }
+          enum source-quench{
+          description "Source quenches";
+          }
+          enum source-route-failed{
+          description "Source route failed";
+          }
+          enum time-exceeded{
+          description "All time exceeded messages";
+          }
+          enum timestamp-reply{
+          description "Timestamp replies";
+          }
+          enum timestamp-request{
+          description "Timestamp requests";
+          }
+          enum traceroute{
+          description "Traceroute";
+          }
+          enum ttl-exceeded{
+          description "TTL Exceeded";
+          }
+          enum unreachable{
+          description "All unreachables";
+          }
+	  }
+      description
+         "ICMP type keywords";
+  }
+
+  typedef icmp-type-value {
+      type union {
+          type icmp-type-keyword;
+          type uint8 {
+              range "0..255";
+          }
+      }
+      description
+         "ICMP type value";
+  }
+
+  typedef icmp-type-ipv6-keyword {
+	  type enumeration {
+          enum destination-unreachable{
+          description "Destination Unreachable Message";
+          }
+          enum echo-reply{
+          description "Echo Reply Message";
+          }
+          enum echo-request{
+          description "Echo Request Message";
+          }
+          enum mipv6{
+          description "Mobile IPv6 Messages";
+          }
+          enum mld{
+          description "Multicast Listener Discovery";
+          }
+          enum nd{
+          description "Neighbor Discovery Messages";
+          }
+          enum packet-too-big{
+          description "Packet Too Big Message";
+          }
+          enum parameter-problem{
+          description "Parameter Problem Message";
+          }
+          enum renumbering{
+          description "Router Renumbering";
+          }
+          enum send{
+          description "Secure Neighbor Discovery Messages";
+          }
+          enum time-exceeded{
+          description "Time Exceeded Message";
+          }
+      }
+      description
+         "ICMP Version 6 type keywords";
+  }
+
+  typedef icmp-type-ipv6-value{
+      type union {
+          type icmp-type-ipv6-keyword;
+          type uint8 {
+              range "0..255";
+          }
+      }
+      description
+         "ICMP Version 6 type value";
+  }
+
+ typedef icmp-subtype-ipv6{
+      type union {
+          type icmp-subtype-mipv6;
+          type icmp-subtype-mld;
+          type icmp-subtype-nd;
+          type icmp-subtype-send;
+      }
+      description
+         "ICMP Version 6 sub-type value";
+  }
+
+ typedef icmp-subtype-mipv6{
+          type enumeration {
+          enum ha-address-reply{
+          description "Home Agent Address Reply";
+          }
+          enum ha-address-request{
+          description "Home Agent Address Request";
+          }
+          enum prefix-advertisement{
+          description "Mobile Prefix Advertisement";
+          }
+          enum prefix-solicitation{
+          description "Mobile Prefix Solicitation";
+          }
+      }
+      description
+         "ICMP sub-type for mipv6 message";
+  }
+
+  typedef icmp-subtype-mld{
+          type enumeration {
+          enum done{
+          description "MLD Done Message";
+          }
+          enum query{
+          description "MLD Query Message";
+          }
+          enum report{
+          description "MLD  Report Message";
+          }
+          enum v2-report{
+          description "MLD Version 2 Report Message";
+          }
+      }
+      description
+         "ICMP sub-type for Multicast Listener Discovery";
+  }
+
+ typedef icmp-subtype-nd{
+          type enumeration {
+          enum neighbor-advertisement{
+          description "ND Neighbor Advertisement Message";
+          }
+          enum neighbor-solicitation {
+          description "ND Neighbor Solicitation Message";
+          }
+          enum redirect {
+          description "ND Redirect Message";
+          }
+          enum router-advertisement {
+          description "ND Router Advertisement Message";
+          }
+          enum router-solicitation {
+          description "ND Router Solicitation Message";
+          }
+      }
+      description
+         "ICMP sub-type for Neighbor Discovery message";
+  }
+
+  typedef icmp-subtype-send{
+          type enumeration {
+          enum path-advertisement{
+          description "Certification Path Advertisement";
+          }
+          enum path-solicitation{
+          description "Certification Path Solicitation";
+          }
+      }
+      description
+         "ICMP sub-type for Secure Neighbor Discovery message";
+  }
+
+  typedef icmp-subtype-ipv6-value{
+	  type enumeration {
+          enum ha-address-reply{
+          description "MIPV6 Home Agent Address Reply";
+          }
+          enum ha-address-request{
+          description "MIPV6 Home Agent Address Request";
+          }
+          enum prefix-advertisement{
+          description "MIPV6 Mobile Prefix Advertisement";
+          }
+          enum prefix-solicitation{
+          description "MIPV6 Mobile Prefix Solicitation";
+          }
+
+          enum done{
+          description "MLD Done Message";
+          }
+          enum query{
+          description "MLD Query Message";
+          }
+          enum report{
+          description "MLD  Report Message";
+          }
+          enum v2-report{
+          description "MLD Version 2 Report Message";
+          }
+
+          enum neighbor-advertisement{
+          description "ND Neighbor Advertisement Message";
+          }
+          enum neighbor-solicitation {
+          description "ND Neighbor Solicitation Message";
+          }
+          enum redirect {
+          description "ND Redirect Message";
+          }
+          enum router-advertisement {
+          description "ND Router Advertisement Message";
+          }
+          enum router-solicitation {
+          description "ND Router Solicitation Message";
+          }
+
+          enum path-advertisement{
+          description "Send Certification Path Advertisement";
+          }
+          enum path-solicitation{
+          description "Send Certification Path Solicitation";
+          }
+      }
+      description
+         "ICMP Version 6 sub-type value";
+  }
+
+  typedef igmp-type-value {
+	  type enumeration {
+		  enum dvmrp{
+		  description "Distance Vector Multicast Protocol, IGMP type value 3";
+		  }
+		  enum host-query{
+		  description "Host query, IGMP type value 1";
+		  }
+		  enum host-report{
+		  description "Host report, IGMP type value 2";
+		  }
+		  enum pim{
+		  description "Protocol Independent Multicast, IGMP type value 4";
+		  }
+		  enum 0{
+		  description "IGMP type value 0";
+		  }
+		  enum 5{
+		  description "IGMP type value 5";
+		  }
+		  enum 6{
+		  description "IGMP type value 6";
+		  }
+		  enum 7{
+		  description "IGMP type value 7";
+		  }
+		  enum 8{
+		  description "IGMP type value 8";
+		  }
+		  enum 9{
+		  description "IGMP type value 9";
+		  }
+		  enum 10{
+		  description "IGMP type value 10";
+		  }
+		  enum 11{
+		  description "IGMP type value 11";
+		  }
+		  enum 12{
+		  description "IGMP type value 12";
+		  }
+		  enum 13{
+		  description "IGMP type value 13";
+		  }
+		  enum 14{
+		  description "IGMP type value 14";
+		  }
+		  enum 15{
+		  description "IGMP type value 15";
+		  }
+		}
+    description
+     "IGMP type value";
+  }
+
+  typedef precedence-value {
+	  type enumeration {
+		  enum critical{
+		  description "Match packets with critical precedence (5)";
+		  }
+		  enum flash{
+		  description "Match packets with flash precedence (3)";
+		  }
+		  enum flash-override{
+		  description "Match packets with flash override precedence (4)";
+		  }
+		  enum immediate{
+		  description "Match packets with immediate precedence (2)";
+		  }
+		  enum internet{
+		  description "Match packets with internetwork control precedence (6)";
+		  }
+		  enum network{
+		  description "Match packets with network control precedence (7)";
+		  }
+		  enum priority{
+		  description "Match packets with priority precedence (1)";
+		  }
+		  enum routine{
+		  description "Match packets with routine precedence (0)";
+		  }
+		}
+    description
+     "Precedence value";
+  }
+
+  typedef tos-value {
+      type enumeration {
+	      enum max-reliability{
+	      description "Match packets with max reliable TOS (2)";
+	      }
+	      enum max-throughput{
+	      description "Match packets with max throughput TOS (4)";
+	      }
+	      enum min-delay{
+	      description "Match packets with min delay TOS (8)";
+	      }
+	      enum min-monetary-cost{
+	      description "Match packets with min monetary cost TOS (1)";
+	      }
+	      enum normal{
+	      description "Match packets with normal TOS (0)";
+	      }
+		  enum 3{
+		  description "TOS value 3";
+		  }
+		  enum 5{
+		  description "TOS value 5";
+		  }
+		  enum 6{
+		  description "TOS value 6";
+		  }
+		  enum 7{
+		  description "TOS value 7";
+		  }
+		  enum 9{
+		  description "TOS value 9";
+		  }
+		  enum 10{
+		  description "TOS value 10";
+		  }
+		  enum 11{
+		  description "TOS value 11";
+		  }
+		  enum 12{
+		  description "TOS value 12";
+		  }
+		  enum 13{
+		  description "TOS value 13";
+		  }
+		  enum 14{
+		  description "TOS value 14";
+		  }
+		  enum 15{
+		  description "TOS value 15";
+		  }
+	  }
+      description
+         "TOS value";
+  }
+
+  typedef tcp-port-name {
+	  type enumeration {
+		  enum bgp{
+		  value 179;
+		  description "Border Gateway Protocol (179)";
+		  }
+		  enum chargen{
+		  value 19;
+		  description "Charactor generator (19)";
+		  }
+		  enum cmd{
+		  value 5140;
+		  description "Remote commands (rcmd, 514)";
+		  }
+		  enum daytime{
+		  value 13;
+		  description "Daytime (13)";
+		  }
+		  enum discard{
+		  value 9;
+		  description "Discard (9)";
+		  }
+		  enum domain{
+		  value 53;
+		  description "Domain (53)";
+		  }
+		  enum echo{
+		  value 7;
+		  description "Echo (7)";
+		  }
+		  enum exec{
+		  value 512;
+		  description "Exec (rsh, 512)";
+		  }
+		  enum finger{
+		  value 79;
+		  description "Finger (79)";
+		  }
+		  enum ftp{
+		  value 21;
+		  description "File Transfer Protocol (21)";
+		  }
+		  enum ftp-data{
+		  value 20;
+		  description "FTP data connections (used infrequently, 20)";
+		  }
+		  enum gopher{
+		  value 70;
+		  description "Gopher (70)";
+		  }
+		  enum hostname{
+		  value 101;
+		  description "NIC hostname server (101)";
+		  }
+		  enum ident{
+		  value 113;
+		  description "Ident Protocol (113)";
+		  }
+		  enum irc{
+		  value 194;
+		  description "Internet Relay Chat (194)";
+		  }
+		  enum klogin{
+		  value 543;
+		  description "Kerberos loign (543)";
+		  }
+		  enum kshell{
+		  value 544;
+		  description "Kerberos shell (544)";
+		  }
+		  enum login{
+		  value 513;
+		  description "Login (rlogin, 513)";
+		  }
+		  enum lpd{
+		  value 515;
+		  description "Printer service (515)";
+		  }
+		  enum nntp{
+		  value 119;
+		  description "Network News Transport Protocol (119)";
+		  }
+          enum pim-auto-rp{
+		  value 496;
+          description "PIM Auto-RP (496)";
+          }
+          enum pop2{
+		  value 109;
+          description "Post Office Protocol V2 (109)";
+          }
+          enum pop3{
+		  value 110;
+          description "Post Office Protocol V3 (110)";
+          }
+          enum shell{
+		  value 5141;
+          description "Remote Command Shell (514)";
+          }
+          enum smtp{
+		  value 25;
+          description "Simple Mail Transport Protocol (25)";
+          }
+          enum ssh{
+		  value 22;
+          description "Secure Shell (22)";
+          }
+          enum sunrpc{
+		  value 111;
+          description "Sun Remote Procedure Call (111)";
+          }
+          enum syslog{
+		  value 514;
+          description "Syslog (514)";
+          }
+          enum tacacs{
+		  value 49;
+          description "TAC Access Control System (49)";
+          }
+          enum talk{
+		  value 517;
+          description "Talk (517)";
+          }
+          enum telnet{
+		  value 23;
+          description "Telnet (23)";
+          }
+          enum time{
+		  value 37;
+          description "Time (37)";
+          }
+          enum uucp{
+		  value 540;
+          description "Unix-to-Unix Copy Program (540)";
+          }
+          enum whois{
+		  value 43;
+          description "Nickname (43)";
+          }
+          enum www{
+		  value 80;
+          description "World Wide Web (HTTP, 80)";
+          }
+	  }
+      description
+         "TCP port number";
+  }
+
+  typedef udp-port-name {
+	  type enumeration {
+          enum biff{
+		  value 512;
+          description "Biff (mail notification, comsat, 512)";
+          }
+          enum bootpc{
+		  value 68;
+          description "Bootstrap Protocol (BOOTP) client (68)";
+          }
+          enum bootps{
+		  value 67;
+          description "Bootstrap Protocol (BOOTP) server (67)";
+          }
+          enum discard{
+		  value 9;
+          description "Discard (9)";
+          }
+          enum dnsix{
+		  value 195;
+          description "DNSIX security protocol auditing (195)";
+          }
+          enum domain{
+		  value 53;
+          description "Domain Name Service (DNS, 53)";
+          }
+          enum echo{
+		  value 7;
+          description "Echo (7)";
+          }
+          enum isakmp{
+		  value 500;
+          description "Internet Security Association and Key Management Protocol (500)";
+          }
+          enum nameserver{
+		  value 42;
+          description "IEN116 name service (obsolete, 42)";
+          }
+          enum netbios-dgm{
+		  value 138;
+          description "Netbios datagram service (138)";
+          }
+          enum netbios-ns{
+		  value 137;
+          description "Netbios name service (137)";
+          }
+          enum netbios-ss{
+		  value 139;
+          description "Netbios session service (139)";
+          }
+          enum ntp{
+		  value 123;
+          description "Network time protocol (123)";
+          }
+          enum pim-auto-rp{
+		  value 496;
+          description "PIM Auto-RP (496)";
+          }
+          enum rip{
+		  value 520;
+          description "Router Information Protocol (router, in.routed, 520)";
+          }
+          enum snmp{
+		  value 161;
+          description "Simple Network Management Protocol (161)";
+          }
+          enum snmptrap{
+		  value 162;
+          description "SNMP Traps (162)";
+          }
+          enum sunrpc{
+		  value 111;
+          description "Sun Remote Procedure Call (111)";
+          }
+          enum syslog{
+		  value 514;
+          description "System Logger (514)";
+          }
+          enum tacacs{
+		  value 49;
+          description "TAC Access Control System (49)";
+          }
+          enum talk{
+		  value 517;
+          description "Talk (517)";
+          }
+          enum tftp{
+		  value 69;
+          description "Trivial File Transfer Protocol (69)";
+          }
+          enum time{
+		  value 37;
+          description "Time (37)";
+          }
+          enum who{
+		  value 513;
+          description "Who service (rwho, 513)";
+          }
+          enum xdmcp{
+		  value 177;
+          description "X Display Manager Control Protocol (177)";
+          }
+	  }
+      description
+         "UDP port number";
+  }
+
+  typedef acl-port-value {
+      type union {
+          type tcp-port-name;
+          type udp-port-name;
+          type uint16 {
+              range "1..65535";
+          }
+      }
+      description
+         "TCP/UDP port value, could be name or number";
+  }
+
+  typedef acl-port-value-gt {
+      type union {
+          type tcp-port-name;
+          type udp-port-name;
+          type uint16 {
+              range "1..65534";
+          }
+      }
+      description
+         "TCP/UDP port value in gt case, could be name or number";
+  }
+
+  typedef acl-port-value-lt {
+      type union {
+          type tcp-port-name;
+          type udp-port-name;
+          type uint16 {
+              range "2..65535";
+          }
+      }
+      description
+         "TCP port value in lt case, could be name or number";
+  }
+
+  typedef acl-date {
+      type string {
+        pattern '\d{4}:\d{2}:\d{2}:\d{2}:\d{2}';
+      }
+      description
+         "The date format: yyyy:mm:dd:hh:mm";
+  }
+
+  typedef acl-date-range {
+      type string {
+        pattern '(monday |tuesday |wednesday |thursday |friday |saturday |sunday |weekdays |weekend )+(\s)*\d{2}:\d{2}'
+              + '(\s)+to(\s)*((\s)*|(monday|tuesday|wednesday|thursday|friday|saturday|sunday)+)(\s)+\d{2}:\d{2}(\s)*';
+      }
+      description
+         "Express time range in ACL condition 'periodic' configuration: start-day(days) hh:mm to end-day hh:mm.
+          start-day(days) states one or more days of the week, it could be , weekend, weekdays, monday, tuesday,
+          wednesday, thursday, friday, saturday, sunday and any combination of them but without overlap day. E.g,
+          the combination could be 'monday tuesday', 'weekdays, saturday', 'weekend monday thursday', could not be
+          'weekdays monday', 'weekend sunday'. The end-day is optional, only when start-day is a single day(just
+          one monday, tuesday, ..., sunday), it may exist and it's also a single day. Here are some examples:
+          monday 00:00 to 00:10
+          tuesday 00:00 to friday 00:10
+          monday tuesday wednesday thursday friday saturday sunday 00:00 to 00:10
+          weekend monday 00:00 to 00:10
+          weekend weekday 00:00 to 00:10";
+  }
+
+  typedef access_group_dir {
+    type enumeration {
+       enum in{
+       description  "Inbound packets";
+       }
+       enum out{
+       description  "outbound packets";
+       }
+    }
+    description
+     "The direction which admin access group applied on";
+  }
+
+  typedef event_track_type {
+    type enumeration {
+       enum data-plane{
+       description  "Object will be tracked solely in data-plane";
+       }
+    }
+    description
+     "Event track type";
+  }
+
+  typedef default_enum_type {
+    type enumeration {
+      enum default {
+        description
+          "Specify redirect to default";
+      }
+    }
+    description
+     "Enumeration which include default keyword";
+  }
+
+  typedef nexthop_ipv4_addr {
+    type union {
+      type inet:ipv4-address;
+      type default_enum_type;
+    }
+    description
+     "Specify next hop IPv4 addresses";
+  }
+
+  typedef nexthop_ipv6_addr {
+    type union {
+      type inet:ipv6-address;
+      type default_enum_type;
+    }
+    description
+     "Specify next hop IPv6 addresses";
+  }
+
+  typedef nssa_type {
+    type enumeration {
+      enum type-1 {
+        description
+          "OSPF NSSA type 1 routes only";
+      }
+      enum type-2 {
+        description
+          "OSPF NSSA type 2 routes only";
+      }
+    }
+    description
+     "NSSA route type";
+  }
+
+  typedef ospf_externel_type {
+     type enumeration {
+       enum type-1 {
+         description
+           "OSPF external type 1 routes only";
+       }
+       enum type-2 {
+         description
+           "OSPF external type 2 routes only";
+       }
+     }
+    description
+     "OSPF external type";
+  }
+
+  typedef bgp_as_number {
+    type union {
+      type uint32 {
+        range "1..4294967295";
+      }
+      type string;
+    }
+    description
+     "Bgp AS number";
+  }
+
+  typedef EtherType {
+    type string {
+      pattern '0[xX][0-9A-Fa-f]{4}';
+    }
+    description
+      "A two-octet field starting from 0x0001 to 0xffff, not including 0x0000";
+  }
+
+  typedef l2-acl-ethertype-keyword {
+    type enumeration {
+      enum arp{
+        description "Address Resolution Protocol";
+      }
+      enum cfm{
+        description "CFM Protocol";
+      }
+      enum clnp{
+        description "CLNP Protocol";
+      }
+      enum extended-frame{
+        description "Extended Ethernet Frame";
+      }
+      enum ip{
+        description "IP Protocol";
+      }
+      enum ipv6{
+        description "IPV6 Protocol";
+      }
+      enum loopback{
+        description "Ethernet Configuration Testing Protocol";
+      }
+      enum mpls-multicast{
+        description "MPLS Multicast";
+      }
+      enum mpls-unicast{
+        description "MPLS Unicast";
+      }
+      enum pppoe-discovery{
+        description "PPP Over Ethernet Discovery Stage";
+      }
+      enum pppoe-session{
+        description "PPP Over Ethernet Session Stage";
+      }
+      enum pup{
+        description "PUP Protocol";
+      }
+      enum rarp{
+        description "Reverse Address Resolution Protocol";
+      }
+      enum slow{
+        description "Slow Protocols";
+      }
+      enum snap{
+        description "SNAP Protocol";
+      }
+      enum vlan{
+        description "VLAN-tagged Frame";
+      }
+      enum vman{
+        description "Dot1Q tunneling VMAN";
+      }
+      enum vman-1{
+        description "Dot1Q tunneling VMAN-1";
+      }
+      enum vman-2{
+        description "Dot1Q tunneling VMAN-2";
+      }
+    }
+    description
+     "Well known ethertype";
+  }
+
+  typedef l2-acl-ethertype {
+    type union {
+      type EtherType;
+      type l2-acl-ethertype-keyword;
+    }
+    description
+     "Ethertype for l2 acl";
+  }
+
+  typedef bandwidth_value_type{
+    type enumeration {
+      enum kbps {
+        description
+          "Bandwidth value in Kbps";
+      }
+      enum mbps {
+        description
+          "Bandwidth value in Mbps";
+      }
+      enum gbps {
+        description
+          "Bandwidth value in Gbps";
+      }
+    }
+    description
+     "Bandwidth value type";
+  }
+
+  typedef ipv4-muticast-address {
+    type string {
+      pattern
+      '((2[2-3][4-9])\.)'
+      +  '(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){2}'
+      +  '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])';
+    }
+    description
+      "The ipv4-multicast-address type represents an IPv4 multicast address in
+       dotted-quad notation.224.0.0.0-239.255.255.255";
+  }
+
+
+typedef ipv6-address-mask {
+    type string {
+      pattern '((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}'
+            + '((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|'
+            + '(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}'
+            + '(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))'
+            + '(/(([0-9])|([0-9]{2})|(1[0-1][0-9])|(12[0-8])))';
+      pattern '(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|'
+            + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'
+            + '(/.+)';
+    }
+
+
+    description
+     "The ipv6-prefix type represents an IPv6 address prefix.
+      The prefix length is given by the number following the
+      slash character and must be less than or equal to 128.
+
+      A prefix length value of n corresponds to an IP address
+      mask that has n contiguous 1-bits from the most
+      significant bit (MSB) and all other bits set to 0.
+
+      The IPv6 address should have all bits that do not belong
+      to the prefix set to zero.
+
+      The canonical format of an IPv6 prefix has all bits of
+      the IPv6 address set to zero that are not part of the
+      IPv6 prefix.  Furthermore, the IPv6 address is represented
+      as defined in Section 4 of RFC 5952";
+    reference
+     "RFC 5952: A Recommendation for IPv6 Address Text
+                Representation";
+  }
+
+typedef system_week_day_type {
+                type enumeration {
+       enum Monday{
+       description "Monday";
+       }
+       enum Tuesday{
+       description "Tuesday";
+       }
+       enum Wednesday{
+       description "Wednesday";
+       }
+       enum Thursday{
+       description "Thursday";
+       }
+       enum Friday{
+       description "Friday";
+       }
+       enum Saturday{
+       description "Saturday";
+       }
+       enum Sunday{
+       description "Sunday";
+       }
+                }
+    description
+     "Week day type:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday";
+  }
+
+typedef system_month_type {
+                type enumeration {
+       enum January{
+       description "January";
+       }
+       enum February{
+       description "February";
+       }
+       enum March{
+       description "March";
+       }
+       enum April{
+       description "April";
+       }
+       enum May{
+       description "May";
+       }
+       enum June{
+       description "June";
+       }
+       enum July{
+       description "July";
+       }
+       enum August{
+       description "August";
+       }
+       enum September{
+       description "September";
+       }
+       enum October{
+       description "October";
+       }
+       enum November{
+       description "November";
+       }
+       enum December{
+       description "December";
+       }
+                }
+    description
+     "System month type:January,February,March,April,May,June,July,Augest,September,October,November,December";
+  }
+
+    typedef system-date {
+      type string {
+        pattern '[1-2][0-9][0-9][0-9]:([1][0-2]|0?[1-9]):([12][0-9]|3[01]|0?[1-9]):([01]?[0-9]|[2][0-3]):[0-5]?[0-9]:?[0-5]?[0-9]?';
+      }
+      description
+         "The date format: yyyy:mm:dd:hh:mm[:ss]";
+  }
+
+}

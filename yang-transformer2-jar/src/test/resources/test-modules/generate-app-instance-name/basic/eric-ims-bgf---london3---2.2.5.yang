@@ -1,0 +1,47 @@
+module eric-ims-bgf---london3---2.2.5 {
+
+	namespace "urn:ericsson:eric-ims-bgf---london3---2.2.5";
+	prefix this;
+
+	revision "2021-11-18" {
+		yexte:version 1;
+		yexte:release 2;
+		yexte:correction 3;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	container eric-ims-bgf---london3---2.2.5 {
+
+		leaf id {
+			type string;
+			config false;
+			description 'Identifier for the configuration.';
+			mandatory true;
+			yexte:static-data true;
+		}
+
+		container cont2 {
+			presence "";
+
+			leaf leaf3 {
+				type string;
+			}
+		}
+	}
+
+	container eric-ims-bgf---newyork12---1.7.8 {
+		// missing id attribute, so not renamed.
+	}
+
+	list eric-ims-bgf---paris7---3.2.6 {		// list, name should not be changed. 
+		key id;
+
+		leaf id {
+			type string;
+			yexte:static-data true;
+		}
+	}
+}

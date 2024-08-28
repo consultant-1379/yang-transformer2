@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ns2:EnumDataTypeDefinition
+	xmlns:ns1="urn:com:ericsson:schema:xml:oss:oss_common"
+	xmlns:ns2="urn:com:ericsson:schema:xml:oss:oss_edt"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	ns1:lifeCycle="CURRENT" ns1:name="PlatformType" ns1:ns="OSS_NE_DEF"
+	ns1:version="2.0.0">
+	
+	<ns1:modelCreationInfo>
+		<ns1:designedModel className="com.ericsson.oss.services.model.ned.PlatformType200" componentId="network-element-definition-model-jar" />
+	</ns1:modelCreationInfo>
+
+	<ns1:desc>This represents the types of platform</ns1:desc>
+
+</ns2:EnumDataTypeDefinition>

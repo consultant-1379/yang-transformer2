@@ -1,0 +1,433 @@
+module ericsson-mld-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-mld-router6000";
+
+  prefix "mldr6k";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-mld-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-02-27" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping mld-grp {
+    description
+      "MLD configuration mode";
+    /*
+    interface (interface-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "Configure MLD interface";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "interface name";
+      }
+      uses mld-intf-grp;
+    }
+    /*
+    service-profile (profile-name)
+    */
+    list service-profile {
+      key "service-profile";
+      description
+        "Configure MLD service profile";
+      leaf service-profile {
+        type string;
+        description
+          "Service profile name";
+      }
+      uses mld-profile-grp;
+    }
+    /*
+    group-bandwidth (grp-bw) { gbps | kbps | mbps } { group-list
+     (grp-list) } [ qos-adjust [ average-packet-size (size-bytes)
+     ] ] [ no-oif ]
+    */
+    list group-bandwidth {
+      key "group-list";
+      description
+        "Configure group bandwidth recommendation";
+      leaf group-list {
+        type string;
+        description
+          "Specify access-list for MLD groups ";
+      }
+      leaf grp-bw {
+        type uint16 {
+          range "1..999";
+        }
+        mandatory true;
+        description
+          "Rate";
+      }
+      choice group-bandwidth-choice {
+        mandatory true;
+        case gbps {
+          leaf gbps {
+            type empty;
+            mandatory true;
+            description
+              "Giga bits per sec";
+          }
+        }
+        case kbps {
+          leaf kbps {
+            type empty;
+            mandatory true;
+            description
+              "Kilo bits per sec";
+          }
+        }
+        case mbps {
+          leaf mbps {
+            type empty;
+            mandatory true;
+            description
+              "Mega bits per sec";
+          }
+        }
+      }
+      container qos-adjust {
+        presence "";
+        description
+          "Adjust qos rate for this multicast-group";
+        leaf average-packet-size {
+          type uint16 {
+            range "64..9000";
+          }
+          description
+            "Average multicast packet size in bytes";
+        }
+      }
+      leaf no-oif {
+        type empty;
+        description
+          "no_oif";
+      }
+    }
+  }
+
+  grouping mld-profile-grp {
+    description
+      "MLD profile configuration mode";
+    /*
+    instant-leave
+    */
+    leaf instant-leave {
+      type empty;
+      description
+        "Enable Instant leave";
+    }
+    /*
+    max-groups (max-groups)
+    */
+    leaf max-groups {
+      type uint16 {
+        range "1..65535";
+      }
+      description
+        " Configure Maximum groups";
+    }
+    /*
+    group-list (list-name)
+    */
+    leaf group-list {
+      type string;
+      description
+        "Specify MLD access group list";
+    }
+    /*
+    priority (mld-priority)
+    */
+    leaf priority {
+      type uint8 {
+        range "0..10";
+      }
+      default "0";
+      description
+        "Set the profile priority";
+    }
+    /*
+    static-group (mld-group) (mld-source)
+    */
+    list static-group {
+      key "mld-group mld-source";
+      description
+        "Configure a static group";
+      leaf mld-group {
+        type inet:ipv6-address;
+        description
+          "ipv6 Group address";
+      }
+      leaf mld-source {
+        type inet:ipv6-address;
+        description
+          "ipv6 source address";
+      }
+    }
+    /*
+    ssm-map (map-src) (list-name)
+    */
+    list ssm-map {
+      key "map-src list-name";
+      description
+        "Configure SSM mapping";
+      leaf map-src {
+        type inet:ipv6-address;
+        description
+          "Multicast  source IP address";
+      }
+      leaf list-name {
+        type string;
+        description
+          "Group access list name";
+      }
+    }
+    /*
+    adjust-qos-rate { metering [ minimum-rate (rate-val) ] |
+     queuing [ minimum-rate (rate-val) ] | delay-interval (intvl-
+     val) }
+    */
+    container adjust-qos-rate {
+      description
+        "Modify qos binding rate";
+      container metering {
+        presence "";
+        description
+          "Apply adjusted qos rate on metering binding";
+        leaf minimum-rate {
+          type uint32 {
+            range "64..9999999";
+          }
+          description
+            "Minimum rateset aside (in kbps) for a given binding
+             to avoid starving unicast traffic";
+        }
+      }
+      container queuing {
+        presence "";
+        description
+          "Apply adjusted qos rate on queuing binding";
+        leaf minimum-rate {
+          type uint32 {
+            range "64..9999999";
+          }
+          default "64";
+          description
+            "Minimum rateset aside (in kbps)for a given binding
+             to avoid starving unicast traffic";
+        }
+      }
+      leaf delay-interval {
+        type uint8 {
+          range "1..10";
+        }
+        description
+          "Time interval in seconds after which rate adjustment
+           applies";
+      }
+    }
+    /*
+    bulkstats
+    */
+    leaf bulkstats {
+      type empty;
+      description
+        "Generate statistics for bulkstats";
+    }
+    /*
+    remote-replication <interface (interface-name) <context
+     (context-name)>  [ group-list (list-name) ]>
+    */
+    container remote-replication {
+      description
+        "Configure remote replication command";
+      container interface {
+        presence "";
+        description
+          "Configure multicast RMR interface";
+        leaf interface-name {
+          type leafref {
+            path "/if:interfaces/if:interface/if:name";
+          }
+          mandatory true;
+          description
+            "Multicast destination interface name";
+        }
+        leaf context {
+          type string;
+          mandatory true;
+          description
+            "Configure multicast RMR context";
+        }
+        leaf group-list {
+          type string;
+          description
+            "Specify MLD access group list";
+        }
+      }
+    }
+  }
+
+  grouping mld-intf-grp {
+    description
+      "MLD Interface configuration mode";
+    /*
+    version (intf-version)
+    */
+    leaf version {
+      type uint8 {
+        range "1..2";
+      }
+      description
+        "configure MLD version ";
+    }
+    /*
+    profile (intf-profile)
+    */
+    leaf profile {
+      type leafref {
+        path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/mld"
+        + "r6k:mld/mldr6k:service-profile/mldr6k:service-profile";
+      }
+      description
+        "MLD profile";
+    }
+    /*
+    query { count-last-member (last-member) | interval (query-
+     interval) | interval-last-member (last-member) | maximum-
+     response-time (response-time) }
+    */
+    container query {
+      description
+        "MLD query";
+      leaf count-last-member {
+        type uint8 {
+          range "1..10";
+        }
+        default "2";
+        description
+          "Count of group specific queries";
+      }
+      leaf interval {
+        type uint16 {
+          range "1..65535";
+        }
+        default "125";
+        description
+          "Interval for querying listeners";
+      }
+      leaf interval-last-member {
+        type uint16 {
+          range "1..8340";
+        }
+        default "1";
+        description
+          "Interval for querying last member";
+      }
+      leaf maximum-response-time {
+        type uint8 {
+          range "1..65";
+        }
+        default "10";
+        description
+          "Maximum response time to MLD query";
+      }
+    }
+    /*
+    robust (robust-count)
+    */
+    leaf robust {
+      type uint8 {
+        range "2..7";
+      }
+      default "2";
+      description
+        "Tune for the expected packet loss";
+    }
+    /*
+    disable
+    */
+    leaf disable {
+      type empty;
+      description
+        "Disable MLD on this interface";
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router" {
+    description
+      "ericsson-mld";
+    /*
+    mld
+    */
+    container mld {
+      presence "";
+      description
+        "Multicast Listener Discovery Protocol (MLD)";
+      uses mld-grp;
+    }
+  }
+
+}

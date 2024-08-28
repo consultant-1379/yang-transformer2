@@ -1,0 +1,51 @@
+module simple-deviation-one {
+
+    namespace "urn:test:simple-deviation-one";
+    prefix this;
+
+    revision "2021-10-13";
+
+	container cont1 {		// will be deviated-out
+	
+		leaf leaf11 {
+			type string;
+		}
+
+		leaf leaf12 {
+			type string;
+		}
+	}
+	
+	container cont2 {
+	
+		container cont3 {	// will be deviated-out
+		
+			leaf leaf35 {
+				type string;
+			}
+		}
+
+		container cont4 {
+		
+			leaf leaf48 {
+				type string;
+			}
+		}
+	
+		leaf leaf21 {
+			type string;
+		}
+	}
+	
+	container cont5 {
+	
+		leaf leaf58 {	// will be deviated-out
+			type string;
+		}
+
+		leaf leaf59 {
+			type string;
+		}
+	}
+	
+}

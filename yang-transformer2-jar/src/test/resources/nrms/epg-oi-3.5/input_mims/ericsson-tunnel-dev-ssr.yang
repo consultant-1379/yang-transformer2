@@ -1,0 +1,54 @@
+module ericsson-tunnel-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-tunnel-dev-ssr";
+
+  prefix "tunneldevssr";
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-tunnel-ipos {
+      prefix "tunnelipos";
+  }
+
+  import ericsson-yang-extensions {
+      prefix yexte;
+   }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-tunnel-ipos
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-03" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+deviation "/ctxsipos:contexts/tunnelipos:tunnel-ipsec" {
+    deviate not-supported;
+  }
+
+}

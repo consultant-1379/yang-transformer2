@@ -1,0 +1,1992 @@
+module ericsson-snmp-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-snmp-ipos";
+
+  prefix "snmpipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-snmp-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-11-15" {
+    description
+      "Modify must in user";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "3";
+    yexte:correction "1";
+  }
+
+  revision "2019-10-31" {
+    description
+      "Add ignore-port-admin-state";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2019-10-25" {
+    description
+      "Add must in target";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "3";
+  }
+
+  revision "2019-10-15" {
+    description
+      "Add must in user";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "2";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2019-05-21" {
+    description
+      "Add must for leaf user-name";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-15" {
+    description
+      "Modify the node default value";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-07-10" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "8";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-04-10" {
+    description
+      "Adding new leaf bfd-session-down to enable bfdSessionDown
+       Ericsson alarm notifications";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-01-23" {
+    description
+      "Modify model id range from 4294967294 to 4294967295";
+    reference
+      "none";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-01-02" {
+    description
+      "Add error_message in range and pattern";
+    reference
+      "none";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2017-10-10" {
+    description
+      "SNMP Ericsson alarms enable flags";
+    reference
+      "none";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-08-29" {
+    description
+      "Password encrypted;ietf-yang-types warning delete";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-08-02" {
+    description
+      "Comments modify";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2016-10-21" {
+    description
+      "Initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  feature encaps {
+    description
+      "This feature indicates that the device unsupports encaps
+       in ethernet";
+  }
+
+  grouping snmp-server-grp {
+    description
+      "Group for SNMP server configuration related to
+       notification and query control";
+    /*
+    traps { ifmib { encaps | ip } | l2tpmib | l2vpnmib | {
+     mplsl3vpn [ interval ( interval-value ) ] } | nemib { non-
+     exclusive | exclusive } | vrrpmib }
+    */
+    container traps {
+      description
+        "Enable or disable SNMP notifications for events defined
+         in specific MIB";
+      container ifmib {
+        description
+          "Enable or disable SNMP notifications for events
+           defined in IF-MIB";
+        leaf encaps {
+          if-feature encaps;
+          type empty;
+          description
+            "Enable notifications as described in the IF-MIB for
+             the encapsulation layers";
+        }
+        leaf ip {
+          type empty;
+          description
+            "Enable linkUp and linkDown notifications as
+             described in the IF-MIB for the IP layer";
+        }
+      }
+      leaf l2tpmib {
+        type empty;
+        description
+          "Enable event notifications as described in the L2TP
+           MIB for L2TP tunnels";
+      }
+      leaf l2vpnmib {
+        type empty;
+        description
+          "Enable event notification for pseudowire operational
+           state changes as described in L2VPN MIB";
+      }
+      container mplsl3vpn {
+        description
+          "MPLS-L3VPN-STD-MIB notification control";
+        leaf mplsl3vpn-enable {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable mplsl3vpn-enable";
+        }
+        leaf interval {
+          when "../mplsl3vpn-enable='true'" {
+            description
+              "";
+          }
+          type uint32 {
+            range "0..42949672";
+          }
+          description
+            "The value of mplsL3VpnVrfConfRteMxThrshTime, in
+             seconds";
+        }
+      }
+      leaf nemib {
+        type enumeration {
+          enum non-exclusive {
+            value 0;
+            description
+              "Enables event notifications as described in the
+               ERICSSON-ROUTER-NOTIFY-ENHANCE-MIB and disables
+               the corresponding notifications in all other MIBs";
+          }
+          enum exclusive {
+            value 1;
+            description
+              "Enables event notifications as described in the
+               ERICSSON-ROUTER-NOTIFY-ENHANCE-MIB in addition to
+               the corresponding notifications in all other MIBs";
+          }
+        }
+        description
+          "ERICSSON-NOTIFY-ENHANCE-MIB notification control";
+      }
+      leaf vrrpmib {
+        type empty;
+        description
+          "Enables event notifications as described in the
+           VRRP-MIB in addition to the corresponding
+           notifications in all other MIBs";
+      }
+    }
+    /*
+    context-filter ifmib
+    */
+    leaf context-filter-ifmib {
+      type empty;
+      description
+        "Restricts SNMP responses to circuits bound to the
+         context assigned to the community or group that sends
+         the query";
+    }
+    /*
+    agentx-timeout (agentxtimeout-value)
+    */
+    leaf agentx-timeout {
+      type uint8 {
+        range "0..255";
+      }
+      description
+        "Global default SNMP subagent session timeout, in
+         seconds";
+    }
+    /*
+    cache-counter-query
+    */
+    leaf cache-counter-query {
+      type empty;
+      description
+        "Enable cache counter query to improve performance";
+    }
+    /*
+    alarms { ospf-nbr-state-change | ospfv3-nbr-state-change |
+     bgp-established-notification | mpls-ldp-session-up | bfd-
+     session-down | ignore-port-admin-state }
+    */
+    container alarms {
+      description
+        "Specify the Ericsson alarm notifications to been
+         enabled";
+      leaf ospf-nbr-state-change {
+        type empty;
+        description
+          "Enable the ospfNbrStateChange Ericsson alarm
+           notifications";
+      }
+      leaf ospfv3-nbr-state-change {
+        type empty;
+        description
+          "Enable the ospfv3NbrStateChange Ericsson alarm
+           notifications";
+      }
+      leaf bgp-established-notification {
+        type empty;
+        description
+          "Enable the bgpEstablishedNotification Ericsson alarm
+           notifications";
+      }
+      leaf mpls-ldp-session-up {
+        type empty;
+        description
+          "Enable the mplsLdpSessionUp Ericsson alarm
+           notifications";
+      }
+      leaf bfd-session-down {
+        type empty;
+        description
+          "Enable the bfdSessionDown Ericsson alarm
+           notifications";
+      }
+      leaf ignore-port-admin-state {
+        type empty;
+        description
+          "Raise Link down alarm regardless of port admin state";
+      }
+    }
+  }
+
+  grouping snmp-alarmmodel-grp {
+    description
+      "Group for ALARM-MIB alarm model configuration";
+    /*
+    vb-subtree (subtree-val)
+    */
+    leaf vb-subtree {
+      type string;
+      description
+        "An object identifier (OID) in the notification VAR bind
+         list which, when matched, is used for resource
+         identification. This object can be used with the
+         res-prefix command. If the value is 0.0, the first
+         object after notification OID is used.";
+    }
+    /*
+    notify (notification-val)
+    */
+    leaf notify {
+      type string;
+      description
+        "Object identifier (OID) in words or numbers of the
+         notification to use for the SNMP alarm model";
+    }
+    /*
+    res-prefix (prefix-val)
+    */
+    leaf res-prefix {
+      type string;
+      description
+        "Object Identifier (OID) that becomes a prefix part to
+         the constructed alarm active resource ID. The remaining
+         IDs are obtained from the OID matched by using the
+         VB-subtree command.";
+    }
+    /*
+    sp-pointer (pointer-val)
+    */
+    leaf sp-pointer {
+      type string;
+      description
+        "Identifies, either by OID or by object name, the first
+         accessible object in the corresponding model-specific
+         MIB definition.";
+    }
+    /*
+    vb-index (vbindex-val) vb-value (vbvalue-val)
+    */
+    container vb-index {
+      description
+        "VAR bind list index";
+      leaf vb-index {
+        type uint16 {
+          range "1..512";
+        }
+        must "../vb-value" {
+          error-message "container vb-index must has both vb- "
+          + "index and vb-value leaf";
+          description
+            "";
+        }
+        description
+          "An integer representing the index value in an
+           SNMPV2-TRAP-PDU or InformRequest-PDU varbind list";
+      }
+      leaf vb-value {
+        type uint16 {
+          range "1..512";
+        }
+        must "../vb-index" {
+          error-message "container vb-index must has both vb- "
+          + "index and vb-value leaf";
+          description
+            "";
+        }
+        description
+          "The value of the object indicated by vb-index which
+           corresponds to the specified alarm state";
+      }
+    }
+    /*
+    resource-id (resourceId-val)
+    */
+    leaf resource-id {
+      type uint16 {
+        range "3..512";
+      }
+      description
+        "Resource-id varbind index";
+    }
+    /*
+    description (modeldescr-val)
+    */
+    leaf description {
+      type string {
+        length "1..128";
+      }
+      description
+        "Description of this alarm model";
+    }
+    /*
+    probablecause (probcause-val)
+    */
+    leaf probablecause {
+      type uint16 {
+        range "1..1024";
+      }
+      description
+        "Probable cause of the event as defined by
+         IANAItuProbableCause in IANA-ITU-ALARM-MIB";
+    }
+    /*
+    eventtype { communicationsAlarm | qualityOfServiceAlarm |
+     processingErrorAlarm | equipmentAlarm | environmentalAlarm |
+     integrityViolation | operationalViolation |
+     physicalViolation | securityServiceOrMechanismViolation |
+     timeDomainViolation | other }
+    */
+    leaf eventtype {
+      type enumeration {
+        enum communicationsAlarm {
+          value 0;
+          description
+            "The alarm is related to the communication between
+             systems";
+        }
+        enum qualityOfServiceAlarm {
+          value 1;
+          description
+            "The alarm is a result of a problem with QoS ";
+        }
+        enum processingErrorAlarm {
+          value 2;
+          description
+            "The alarm is a result of a processing error";
+        }
+        enum equipmentAlarm {
+          value 3;
+          description
+            "The alarm is caused by a problem with the equipment
+             or hardware in your network";
+        }
+        enum environmentalAlarm {
+          value 4;
+          description
+            "The alarm is related to the functions of the
+             network environment";
+        }
+        enum integrityViolation {
+          value 5;
+          description
+            "The alarm is a result of a breach in system
+             integrity";
+        }
+        enum operationalViolation {
+          value 6;
+          description
+            "The alarm is a result of a problem with the
+             operation of the system";
+        }
+        enum physicalViolation {
+          value 7;
+          description
+            "The alarm is related to a physical violation of the
+             system";
+        }
+        enum securityServiceOrMechanismViolation {
+          value 8;
+          description
+            "The alarm is a result of a problem with a security
+             service or security mechanism";
+        }
+        enum timeDomainViolation {
+          value 9;
+          description
+            "The alarm is a result of a time domain violation";
+        }
+        enum other {
+          value 10;
+          description
+            "The alarm is related to some other problem that is
+             not a communication, environmental, equipment,
+             integrity, operational, physical, processing error,
+             quality of service (QoS), security service or
+             mechanism, or time ";
+        }
+      }
+      description
+        "ITU event type";
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-snmp";
+    /*
+    snmp
+    */
+    container snmp {
+      description
+        "SNMP configuration";
+      list alarm-model {
+        key "model-id state";
+        description
+          "List of entries in ALARM-MIB alarmModelTable";
+        leaf model-id {
+          type uint32 {
+            range "1..4294967295";
+          }
+          description
+            "Unique ID for the alarm model entry and sets the
+             alarm ActiveIndexValue for the alarm model";
+        }
+        leaf state {
+          type enumeration {
+            enum clear {
+              value 0;
+              description
+                "Clear state";
+            }
+            enum indetermined {
+              value 1;
+              description
+                "Indeterminate state";
+            }
+            enum warning {
+              value 2;
+              description
+                "Warning state";
+            }
+            enum minor {
+              value 3;
+              description
+                "Minor state";
+            }
+            enum major {
+              value 4;
+              description
+                "Major state";
+            }
+            enum critical {
+              value 5;
+              description
+                "Critical state";
+            }
+          }
+          description
+            "The state that the alarm model notification event
+             will use";
+        }
+        uses snmp-alarmmodel-grp;
+      }
+      list view {
+        key "name oid-tree";
+        description
+          "Configuration of SNMP MIB view";
+        leaf name {
+          type string {
+            length "1..32";
+          }
+          description
+            "The name of this VACM MIB view";
+        }
+        leaf oid-tree {
+          type string;
+          description
+            "Object identifier (OID) of the ASN-1 subtree to be
+             included or excluded from the view";
+        }
+        leaf restriction {
+          type enumeration {
+            enum excluded {
+              value 0;
+              description
+                "Exclude the subtree from the view";
+            }
+            enum included {
+              value 1;
+              description
+                "include the subtree in the view";
+            }
+          }
+          mandatory true;
+          description
+            "access control for the specific MIB objects";
+        }
+      }
+      list community {
+        key "name";
+        description
+          "List of communities";
+        leaf name {
+          type string {
+            length "1..64";
+          }
+          description
+            "Community name";
+        }
+        choice context-access {
+          description
+            "The context that the community is allowed to
+             access";
+          case all-contexts {
+            leaf all-contexts {
+              type empty;
+              description
+                "Allows the community access to all contexts";
+            }
+          }
+          case context {
+            leaf context {
+              type leafref {
+                path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+                + "context-name";
+              }
+              description
+                "Name of the context that contains the specific
+                 instances of MIB objects available to the
+                 community";
+            }
+          }
+        }
+        leaf tag {
+          type string;
+          description
+            "Link community to notify-target entry tag";
+        }
+        leaf view {
+          type leafref {
+            path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:view/"
+            + "snmpipos:name";
+          }
+          description
+            "Associate the community with a MIB view name";
+        }
+        leaf access {
+          type enumeration {
+            enum read-only {
+              value 0;
+              description
+                "Allows the community read-only access to MIB
+                 objects";
+            }
+            enum read-write {
+              value 1;
+              description
+                "Allows the community read-write access to MIB
+                 objects";
+            }
+          }
+          description
+            "Type of access";
+        }
+      }
+      container engine-id {
+        description
+          "Unique engine ID for SNMPv3 local or remote systems";
+        leaf local {
+          type string {
+            pattern '[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){4,31}' {
+              error-message "10-64 hex digits, E.g: "
+              + "xx:xx:xx:xx:xx:xx";
+            }
+          }
+          description
+            "Local engine ID";
+        }
+        list remote {
+          key "remote-name";
+          description
+            "List of remote engine IDs";
+          leaf remote-name {
+            type string;
+            description
+              "Remote name";
+          }
+          leaf engine-id {
+            type string {
+              pattern '[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){4,31}' {
+                error-message "10-64 hex digits, E.g: "
+                + "xx:xx:xx:xx:xx:xx";
+              }
+            }
+            mandatory true;
+            description
+              "Engine-id (10-64 hex digits, E.g:
+               xx:xx:xx:xx:xx:xx)";
+          }
+        }
+      }
+      list group {
+        key "group-name";
+        description
+          "Configuration of SNMPv3 groups";
+        leaf group-name {
+          type string {
+            length "1..32";
+          }
+          description
+            "Group name";
+        }
+        container security-model {
+          description
+            "Select SNMP security model";
+          container v1 {
+            presence "";
+            description
+              "Security model based on SNMPv1 community";
+            list context {
+              key "ctx-name";
+              description
+                "List of contexts";
+              leaf ctx-name {
+                type string;
+                description
+                  "A complete or partial context name";
+              }
+              leaf ctx-type {
+                type enumeration {
+                  enum exact {
+                    value 0;
+                    description
+                      "Matches only the context exactly as
+                       specified by the ctx-name";
+                  }
+                  enum prefix {
+                    value 1;
+                    description
+                      "Matches any context that begins with the
+                       CTX name";
+                  }
+                }
+                default "exact";
+                description
+                  "Context name match type";
+              }
+              leaf notify {
+                type leafref {
+                  path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                  + "view/snmpipos:name";
+                }
+                description
+                  "Name of the view from which notifications are
+                   sent to the group";
+              }
+              leaf read {
+                type leafref {
+                  path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                  + "view/snmpipos:name";
+                }
+                description
+                  "Name of the view for which this group has
+                   read access";
+              }
+              leaf write {
+                type leafref {
+                  path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                  + "view/snmpipos:name";
+                }
+                description
+                  "Name of the view to which this group has
+                   write access";
+              }
+            }
+          }
+          container v2c {
+            presence "";
+            description
+              "Security model based on SNMPv2 community";
+            list context {
+              key "ctx-name";
+              description
+                "List of contexts";
+              leaf ctx-name {
+                type string;
+                description
+                  "A complete or partial context name";
+              }
+              leaf ctx-type {
+                type enumeration {
+                  enum exact {
+                    value 0;
+                    description
+                      "Matches only the context exactly as
+                       specified by the CTX name";
+                  }
+                  enum prefix {
+                    value 1;
+                    description
+                      "Matches any context that begins with the
+                       CTX name";
+                  }
+                }
+                default "exact";
+                description
+                  "Context name match type";
+              }
+              leaf notify {
+                type leafref {
+                  path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                  + "view/snmpipos:name";
+                }
+                description
+                  "Name of the view from which notifications are
+                   sent to the group";
+              }
+              leaf read {
+                type leafref {
+                  path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                  + "view/snmpipos:name";
+                }
+                description
+                  "Name of the view for which this group has
+                   read access";
+              }
+              leaf write {
+                type leafref {
+                  path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                  + "view/snmpipos:name";
+                }
+                description
+                  "Name of the view to which this group has
+                   write access";
+              }
+            }
+          }
+          list usm {
+            key "usm-type";
+            description
+              "Security model based on SNMP users(SNMPv3 only)";
+            leaf usm-type {
+              type enumeration {
+                enum auth {
+                  value 0;
+                  description
+                    "Authorizes SNMP users";
+                }
+                enum noauth {
+                  value 1;
+                  description
+                    "Does not authorize SNMP users";
+                }
+                enum priv {
+                  value 2;
+                  description
+                    "Enforces authentication privilege level
+                     support in SNMPv3";
+                }
+              }
+              description
+                "security level";
+            }
+            container usm-context {
+              description
+                "Configuration of context";
+              list context {
+                key "ctx-name";
+                description
+                  "List of contexts";
+                leaf ctx-name {
+                  type string;
+                  description
+                    "A complete or partial context name";
+                }
+                leaf ctx-type {
+                  type enumeration {
+                    enum exact {
+                      value 0;
+                      description
+                        "Matches only the context exactly as
+                         specified by the CTX name";
+                    }
+                    enum prefix {
+                      value 1;
+                      description
+                        "Matches any context that begins with
+                         the CTX name";
+                    }
+                  }
+                  default "exact";
+                  description
+                    "Context name match type";
+                }
+                leaf notify {
+                  type leafref {
+                    path "/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:view/snmpipos:name";
+                  }
+                  description
+                    "Name of the view from which notifications
+                     are sent to the group";
+                }
+                leaf read {
+                  type leafref {
+                    path "/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:view/snmpipos:name";
+                  }
+                  description
+                    "Name of the view for which this group has
+                     read access";
+                }
+                leaf write {
+                  type leafref {
+                    path "/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:view/snmpipos:name";
+                  }
+                  description
+                    "Name of the view to which this group has
+                     write access";
+                }
+              }
+              container all-contexts {
+                presence "";
+                description
+                  "Select all contexts";
+                leaf notify {
+                  type leafref {
+                    path "/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:view/snmpipos:name";
+                  }
+                  description
+                    "Name of the view from which notifications
+                     are sent to the group";
+                }
+                leaf read {
+                  type leafref {
+                    path "/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:view/snmpipos:name";
+                  }
+                  description
+                    "Name of the view for which this group has
+                     read access";
+                }
+                leaf write {
+                  type leafref {
+                    path "/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:view/snmpipos:name";
+                  }
+                  description
+                    "Name of the view to which this group has
+                     write access";
+                }
+              }
+            }
+          }
+        }
+      }
+      container server {
+        presence "";
+        description
+          "Configuration of the SNMP engine";
+        leaf port {
+          type uint16 {
+            range "1..65535";
+          }
+          default "161";
+          description
+            "The UDP port on which the engine listens";
+        }
+        leaf enhance-ifmib {
+          type empty;
+          description
+            "Enables enhancements to the IF-MIB implementation";
+        }
+        leaf enterprise {
+          type enumeration {
+            enum ericsson {
+              value 0;
+              description
+                "Ericsson Router MIB";
+            }
+            enum rbn {
+              value 1;
+              description
+                "Legacy RBN MIB";
+            }
+          }
+          default "ericsson";
+          description
+            "Specify the enterprise MIB to be adopted";
+        }
+        uses snmp-server-grp;
+      }
+      list user {
+        key "user-name";
+        description
+          "Configuration of SNMPv3 user";
+        leaf user-name {
+          type string;
+          description
+            "User name";
+        }
+        container usm {
+          presence "";
+          description
+            "Configuration of the User-based Security Model";
+          container engine-local {
+            presence "";
+            description
+              "Configuration of local engine";
+            leaf group {
+              type leafref {
+                path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                + "group/snmpipos:group-name";
+              }
+              description
+                "Name of the group to which the user belongs";
+            }
+            container security-model-usm {
+              description
+                "Configuration of SNMPv3 USM";
+              choice auth-type {
+                default noauth;
+                description
+                  "Configuration of the user authentication";
+                case noauth {
+                  leaf noauth {
+                    type empty;
+                    must "((not(../../group)) or ((../../group) "
+                    + "and (/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:group[group-name=current()/../../"
+                    + "group]/security-model/usm/usm-type="
+                    + "'noauth')))" {
+                      error-message "The specified user group in "
+                      + "the user doesn't match security "
+                      + "parameters";
+                      description
+                        "";
+                    }
+                    description
+                      "No authentication";
+                  }
+                }
+                case md5 {
+                  container md5 {
+                    must "((not(../../group)) or ((../../group) "
+                    + "and (/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:group[group-name=current()/../../"
+                    + "group]/security-model/usm/usm-type='priv') "
+                    + "and ((./key/des56) or (./password/des56))) "
+                    + "or ((../../group) and (/ctxsipos:contexts/"
+                    + "snmpipos:snmp/snmpipos:group[group-name="
+                    + "current()/../../group]/security-model/usm/"
+                    + "usm-type='auth') and ((not(./key/des56)) "
+                    + "and (not(./password/des56)))))" {
+                      error-message "The specified user group in "
+                      + "the user doesn't match security "
+                      + "parameters";
+                      description
+                        "";
+                    }
+                    description
+                      "Use MD5 authentication protocol";
+                    choice md5-type {
+                      description
+                        "Configuration of md5 type";
+                      case key {
+                        container key {
+                          description
+                            "Key (hex or encoded)";
+                          choice key-choice {
+                            description
+                              "Key type";
+                            case clear-auth-key {
+                              leaf clear-auth-key {
+                                type string {
+                                  pattern '[0-9a-fA-F]{32}' {
+                                    error-message "Incorrect key "
+                                    + "length...md5 key must be 32 "
+                                    + "hexChars.";
+                                  }
+                                }
+                                description
+                                  "Key value (in specified
+                                   format)";
+                              }
+                            }
+                            case encoded {
+                              container encoded {
+                                description
+                                  "Key value is encoded using
+                                   specified algorithm";
+                                leaf base64 {
+                                  type string;
+                                  description
+                                    "Key value encoded using
+                                     base64";
+                                }
+                              }
+                            }
+                          }
+                          leaf des56 {
+                            type string;
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                      case password {
+                        container password {
+                          description
+                            "Authentication Password";
+                          leaf auth-pwd {
+                            type string {
+                              length "8..64";
+                            }
+                            mandatory true;
+                            description
+                              "Password string, 8 characters
+                               minimum";
+                          }
+                          leaf des56 {
+                            type string {
+                              length "8..64";
+                            }
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                case sha {
+                  container sha {
+                    must "((not(../../group)) or ((../../group) "
+                    + "and (/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:group[group-name=current()/../../"
+                    + "group]/security-model/usm/usm-type='priv') "
+                    + "and ((./key/des56) or (./password/des56))) "
+                    + "or ((../../group) and (/ctxsipos:contexts/"
+                    + "snmpipos:snmp/snmpipos:group[group-name="
+                    + "current()/../../group]/security-model/usm/"
+                    + "usm-type='auth') and ((not(./key/des56)) "
+                    + "and (not(./password/des56)))))" {
+                      error-message "The specified user group in "
+                      + "the user doesn't match security "
+                      + "parameters";
+                      description
+                        "";
+                    }
+                    description
+                      "Use SHA authentication protocol";
+                    choice sha-type {
+                      description
+                        "SHA type";
+                      case key {
+                        container key {
+                          description
+                            "Key (hex or encoded)";
+                          choice key-choice {
+                            description
+                              "Key type";
+                            case clear-auth-key {
+                              leaf clear-auth-key {
+                                type string {
+                                  pattern '[0-9a-fA-F]{40}' {
+                                    error-message "Incorrect key "
+                                    + "length...sha key must be 40 "
+                                    + "hexChars.";
+                                  }
+                                }
+                                description
+                                  "Key value (in specified
+                                   format)";
+                              }
+                            }
+                            case encoded {
+                              container encoded {
+                                description
+                                  "Key value is encoded using
+                                   specified algorithm";
+                                leaf base64 {
+                                  type string;
+                                  description
+                                    "Key value encoded using
+                                     base64";
+                                }
+                              }
+                            }
+                          }
+                          leaf des56 {
+                            type string;
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                      case password {
+                        container password {
+                          description
+                            "Authentication Password";
+                          leaf auth-pwd {
+                            type string {
+                              length "8..64";
+                            }
+                            mandatory true;
+                            description
+                              "Password string, 8 characters
+                               minimum";
+                          }
+                          leaf des56 {
+                            type string {
+                              length "8..64";
+                            }
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          list engine-remote {
+            key "engine-name";
+            description
+              "List of remote engines";
+            leaf engine-name {
+              type leafref {
+                path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                + "engine-id/snmpipos:remote/snmpipos:remote-name";
+              }
+              description
+                "Name of the remote engine";
+            }
+            leaf group {
+              type leafref {
+                path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                + "group/snmpipos:group-name";
+              }
+              description
+                "Name of the group to which the user belongs";
+            }
+            container security-model-usm {
+              description
+                "Configuration of SNMPv3 USM";
+              choice auth-type {
+                default noauth;
+                description
+                  "Configuration of the user authentication";
+                case noauth {
+                  leaf noauth {
+                    type empty;
+                    must "((not(../../group)) or ((../../group) "
+                    + "and (/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:group[group-name=current()/../../"
+                    + "group]/security-model/usm/usm-type="
+                    + "'noauth')))" {
+                      error-message "The specified user group in "
+                      + "the user doesn't match security "
+                      + "parameters";
+                      description
+                        "";
+                    }
+                    description
+                      "No authentication";
+                  }
+                }
+                case md5 {
+                  container md5 {
+                    must "((not(../../group)) or ((../../group) "
+                    + "and (/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:group[group-name=current()/../../"
+                    + "group]/security-model/usm/usm-type='priv') "
+                    + "and ((./key/des56) or (./password/des56))) "
+                    + "or ((../../group) and (/ctxsipos:contexts/"
+                    + "snmpipos:snmp/snmpipos:group[group-name="
+                    + "current()/../../group]/security-model/usm/"
+                    + "usm-type='auth') and ((not(./key/des56)) "
+                    + "and (not(./password/des56)))))" {
+                      error-message "The specified user group in "
+                      + "the user doesn't match security "
+                      + "parameters";
+                      description
+                        "";
+                    }
+                    description
+                      "Use MD5 authentication protocol";
+                    choice md5-type {
+                      description
+                        "Configuration of md5 type";
+                      case key {
+                        container key {
+                          description
+                            "Key (hex or encoded)";
+                          choice key-choice {
+                            description
+                              "Key type";
+                            case clear-auth-key {
+                              leaf clear-auth-key {
+                                type string {
+                                  pattern '[0-9a-fA-F]{32}' {
+                                    error-message "Incorrect key "
+                                    + "length...md5 key must be 32 "
+                                    + "hexChars.";
+                                  }
+                                }
+                                description
+                                  "Key value (in specified
+                                   format)";
+                              }
+                            }
+                            case encoded {
+                              container encoded {
+                                description
+                                  "Key value is encoded using
+                                   specified algorithm";
+                                leaf base64 {
+                                  type string;
+                                  description
+                                    "Key value encoded using
+                                     base64";
+                                }
+                              }
+                            }
+                          }
+                          leaf des56 {
+                            type string;
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                      case password {
+                        container password {
+                          description
+                            "Authentication Password";
+                          leaf auth-pwd {
+                            type string {
+                              length "8..64";
+                            }
+                            mandatory true;
+                            description
+                              "Password string, 8 characters
+                               minimum";
+                          }
+                          leaf des56 {
+                            type string {
+                              length "8..64";
+                            }
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                case sha {
+                  container sha {
+                    must "((not(../../group)) or ((../../group) "
+                    + "and (/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:group[group-name=current()/../../"
+                    + "group]/security-model/usm/usm-type='priv') "
+                    + "and ((./key/des56) or (./password/des56))) "
+                    + "or ((../../group) and (/ctxsipos:contexts/"
+                    + "snmpipos:snmp/snmpipos:group[group-name="
+                    + "current()/../../group]/security-model/usm/"
+                    + "usm-type='auth') and ((not(./key/des56)) "
+                    + "and (not(./password/des56)))))" {
+                      error-message "The specified user group in "
+                      + "the user doesn't match security "
+                      + "parameters";
+                      description
+                        "";
+                    }
+                    description
+                      "Use SHA authentication protocol";
+                    choice sha-type {
+                      description
+                        "SHA type";
+                      case key {
+                        container key {
+                          description
+                            "Key (hex or encoded)";
+                          choice key-choice {
+                            description
+                              "Key type";
+                            case clear-auth-key {
+                              leaf clear-auth-key {
+                                type string {
+                                  pattern '[0-9a-fA-F]{40}' {
+                                    error-message "Incorrect key "
+                                    + "length...sha key must be 40 "
+                                    + "hexChars.";
+                                  }
+                                }
+                                description
+                                  "Key value (in specified
+                                   format)";
+                              }
+                            }
+                            case encoded {
+                              container encoded {
+                                description
+                                  "Key value is encoded using
+                                   specified algorithm";
+                                leaf base64 {
+                                  type string;
+                                  description
+                                    "Key value encoded using
+                                     base64";
+                                }
+                              }
+                            }
+                          }
+                          leaf des56 {
+                            type string;
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                      case password {
+                        container password {
+                          description
+                            "Authentication Password";
+                          leaf auth-pwd {
+                            type string {
+                              length "8..64";
+                            }
+                            mandatory true;
+                            description
+                              "Password string, 8 characters
+                               minimum";
+                          }
+                          leaf des56 {
+                            type string {
+                              length "8..64";
+                            }
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      list notify {
+        key "notify-name";
+        description
+          "Associate a notification type with a tag";
+        leaf notify-name {
+          type string {
+            length "1..32";
+          }
+          description
+            "Name of the notification";
+        }
+        leaf notify-tag {
+          type string {
+            length "1..32";
+          }
+          mandatory true;
+          description
+            "Tag name for the notification";
+        }
+        leaf type {
+          type enumeration {
+            enum trap {
+              value 0;
+              description
+                "SNMP message is a trap that does not require a
+                 response from the SNMP target";
+            }
+            enum inform {
+              value 1;
+              description
+                "SNMP message is an information notification
+                 that requires a response from the SNMP target";
+            }
+          }
+          default "trap";
+          description
+            "Defines the notification type to be generated";
+        }
+      }
+      list notify-filter {
+        key "filter-name filter-oid";
+        description
+          "Notification filter profiles";
+        leaf filter-name {
+          type string {
+            length "1..32";
+          }
+          description
+            "Name of the notify filter";
+        }
+        leaf filter-oid {
+          type string;
+          description
+            "OID of the ASN-1 subtree for which notifications
+             are included or excluded";
+        }
+        leaf filter-type {
+          type enumeration {
+            enum included {
+              value 0;
+              description
+                "Include the subtree in the filter";
+            }
+            enum excluded {
+              value 1;
+              description
+                "Exclude the subtree from the filter";
+            }
+          }
+          mandatory true;
+          description
+            "exclude or include the specific OID tree";
+        }
+      }
+      list target {
+        key "name";
+        description
+          "Configuration of SNMP notifications sent to the SNMP
+           target management station";
+        leaf name {
+          type string {
+            length "1..32";
+          }
+          description
+            "Name of the target management station";
+        }
+        container transport {
+          description
+            "Transport address of the target";
+          leaf ip {
+            type union {
+              type inet:ipv4-address;
+              type inet:ipv6-address;
+            }
+            mandatory true;
+            description
+              "IP address of the target management station";
+          }
+          leaf port {
+            type uint16 {
+              range "1..65535";
+            }
+            default "162";
+            description
+              "UDP port of the notification receiver";
+          }
+          leaf address-context {
+            type leafref {
+              path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+              + "context-name";
+            }
+            description
+              "Name of the context from which notifications are
+               sent";
+          }
+          container security-params {
+            description
+              "Configuration of notification related security
+               parameters";
+            container security-name {
+              description
+                "Username or community name for the
+                 notifications. Community name for SNMPv1 or
+                 SNMPv2; Username for SNMPv3";
+              choice security-name {
+                mandatory true;
+                description
+                  "";
+                case user-name {
+                  container user-name {
+                    description
+                      "Configuration of user name";
+                    leaf user-name {
+                      type leafref {
+                        path "/ctxsipos:contexts/snmpipos:snmp/"
+                        + "snmpipos:user/snmpipos:user-name";
+                      }
+                      must "(((not(../../../group)) and (not(../"
+                      + "../../../../../user[user-name=current()]/"
+                      + "usm/engine-remote/group)) and (not(../../"
+                      + "../../../../user[user-name=current()]/"
+                      + "usm/engine-local/group))) or (../../../"
+                      + "../../../user[user-name=current()]/usm/"
+                      + "engine-remote/group) and (../../../group "
+                      + "= ../../../../../../user[user-name="
+                      + "current()]/usm/engine-remote/group)) or "
+                      + "((../../../../../../user[user-name="
+                      + "current()]/usm/engine-local/group) and "
+                      + "(../../../group = ../../../../../../"
+                      + "user[user-name=current()]/usm/"
+                      + "engine-local/group))" {
+                        error-message "The specified user group "
+                        + "in the target doesn't match security "
+                        + "parameters";
+                        description
+                          "";
+                      }
+                      mandatory true;
+                      description
+                        "Configuration of user name";
+                    }
+                    leaf version-3 {
+                      type empty;
+                      mandatory true;
+                      description
+                        "SNMPv3";
+                    }
+                    leaf security-level {
+                      type enumeration {
+                        enum auth {
+                          value 0;
+                          description
+                            "Authentication required";
+                        }
+                        enum noauth {
+                          value 1;
+                          description
+                            "No authentication";
+                        }
+                        enum priv {
+                          value 2;
+                          description
+                            "Privacy required";
+                        }
+                      }
+                      must "((not(../../../group)) or (/ctxsipos:"
+                      + "contexts/snmpipos:snmp/snmpipos:"
+                      + "group[group-name=current()/../../../"
+                      + "group]/security-model/usm/usm-type = "
+                      + "current()))" {
+                        error-message "The specified user group "
+                        + "in the target doesn't match security "
+                        + "parameters";
+                        description
+                          "";
+                      }
+                      default "noauth";
+                      description
+                        "SNMP security level";
+                    }
+                  }
+                }
+                case community-string {
+                  container community-string {
+                    description
+                      "Community name";
+                    leaf community-string {
+                      type leafref {
+                        path "/ctxsipos:contexts/snmpipos:snmp/"
+                        + "snmpipos:community/snmpipos:name";
+                      }
+                      mandatory true;
+                      description
+                        "Community name";
+                    }
+                    container version {
+                      description
+                        "SNMP Protocol version";
+                      choice version {
+                        mandatory true;
+                        description
+                          "SNMP protocol version type";
+                        case v1 {
+                          leaf v1 {
+                            type empty;
+                            mandatory true;
+                            description
+                              "SNMP Protocol version 1";
+                          }
+                        }
+                        case v2c {
+                          leaf v2c {
+                            type empty;
+                            mandatory true;
+                            description
+                              "SNMP Protocol version 2c";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            leaf group {
+              type leafref {
+                path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                + "group/snmpipos:group-name";
+              }
+              description
+                "Group name applied to the notifications sent to
+                 the SNMP target management station";
+            }
+            leaf notification-type {
+              type enumeration {
+                enum inform {
+                  value 0;
+                  description
+                    "Send SNMP INFORM PDU for notification";
+                }
+                enum trap {
+                  value 1;
+                  description
+                    "Send SNMP TRAP PDU for notification";
+                }
+              }
+              description
+                "Notification PDU type";
+            }
+            leaf view {
+              type leafref {
+                path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+                + "view/snmpipos:name";
+              }
+              description
+                "SNMP notify view";
+            }
+          }
+        }
+      }
+      list target-parameters {
+        key "parameter-name";
+        description
+          "Configuration of SNMP notification target";
+        leaf parameter-name {
+          type string;
+          description
+            "Name of the target parameter set";
+        }
+        container security-name {
+          description
+            "Community for SNMPv1 or SNMPv2, or the username for
+             SNMPv3";
+          choice security-name {
+            mandatory true;
+            description
+              "";
+            case user-name {
+              container user-name {
+                description
+                  "container user-name.";
+                leaf user-name {
+                  type leafref {
+                    path "/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:user/snmpipos:user-name";
+                  }
+                  mandatory true;
+                  description
+                    "User name";
+                }
+                leaf version-3 {
+                  type empty;
+                  mandatory true;
+                  description
+                    "SNMPv3";
+                }
+                leaf security-level {
+                  type enumeration {
+                    enum noauth {
+                      value 0;
+                      description
+                        "No authentication";
+                    }
+                    enum auth {
+                      value 1;
+                      description
+                        "Authentication required";
+                    }
+                    enum priv {
+                      value 2;
+                      description
+                        "Privacy required";
+                    }
+                  }
+                  default "noauth";
+                  description
+                    "SNMP security level";
+                }
+              }
+            }
+            case community-string {
+              container community-string {
+                description
+                  "container community-string.";
+                leaf community-string {
+                  type leafref {
+                    path "/ctxsipos:contexts/snmpipos:snmp/"
+                    + "snmpipos:community/snmpipos:name";
+                  }
+                  mandatory true;
+                  description
+                    "Community string";
+                }
+                container version {
+                  description
+                    "SNMP Protocol version";
+                  choice version {
+                    mandatory true;
+                    description
+                      "SNMP protocol version type";
+                    case v1 {
+                      leaf v1 {
+                        type empty;
+                        mandatory true;
+                        description
+                          "SNMP Protocol version 1";
+                      }
+                    }
+                    case v2c {
+                      leaf v2c {
+                        type empty;
+                        mandatory true;
+                        description
+                          "SNMP Protocol version 2c";
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      list notify-target {
+        key "name";
+        description
+          "Configuration of SNMP target management station,
+           which receives SNMP notifications";
+        leaf name {
+          type string;
+          description
+            "A name for identifying the target";
+        }
+        container transport {
+          description
+            "Transport address of the target";
+          leaf ip {
+            type union {
+              type typesipos:ipos-ip-prefix;
+              type typesipos:ipv6-address-mask;
+            }
+            mandatory true;
+            description
+              "IP address and prefix length or subnet mask of
+               the management station to receive the
+               notifications";
+          }
+          leaf port {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "UDP Port used by the notification receiver";
+          }
+          leaf address-context {
+            type leafref {
+              path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+              + "context-name";
+            }
+            description
+              "Name of the context from which notifications are
+               sent";
+          }
+          leaf tag {
+            type string;
+            mandatory true;
+            description
+              "List of notification tag names, separated by
+               commas, no spaces are allowed in the list";
+          }
+          leaf parameters {
+            type leafref {
+              path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+              + "target-parameters/snmpipos:parameter-name";
+            }
+            mandatory true;
+            description
+              "Name of the target parameters for this target,
+               refer to target parameters/parameter name";
+          }
+          leaf filter {
+            type leafref {
+              path "/ctxsipos:contexts/snmpipos:snmp/snmpipos:"
+              + "notify-filter/snmpipos:filter-name";
+            }
+            description
+              "Name of the filter to be applied to the target,
+               refer to notify filter/filter name";
+          }
+          leaf retry {
+            type uint8 {
+              range "0..255";
+            }
+            description
+              "Number of times to retry sending inform
+               notification";
+          }
+          leaf timeout {
+            type uint32 {
+              range "0..21474836";
+            }
+            description
+              "Timeout value waiting for response to inform
+               notification, in seconds";
+          }
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,226 @@
+module ericsson-interface-sync-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-sync-router6000";
+
+  prefix "ifSyncRouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-sync-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-04-12" {
+    description
+      "add eeec command";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-08-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping port-synchronous-grp {
+    description
+      "configure port synchronous";
+    /*
+    enhanced-esmc
+    */
+    leaf enhanced-esmc {
+      type empty;
+      description
+        "Configure enhanced esmc transmission";
+    }
+    /*
+    squelch ql-dnu quality-level {ql-dus | ql-eec2 | ql-prov |
+     ql-prs | ql-smc | ql-st2 | ql-st3 | ql-st3e | ql-stu | ql-
+     tnc | ql-dnu | ql-eec1 | ql-prc | ql-sec | ql-ssu-a | ql-
+     ssu-b | ql-unkn | ql-prtc | ql-eprtc | ql-eeec | ql-eprc}
+    */
+    container squelch-ql-dnu-quality-level {
+      presence "";
+      description
+        "Configure quality level";
+      leaf squelch-ql-dnu-quality-level-choice {
+        type enumeration {
+          enum ql-dus {
+            value 0;
+            description
+              "Do Not Use For Sync";
+          }
+          enum ql-eec2 {
+            value 1;
+            description
+              "Stratum 3E type IV Traceable";
+          }
+          enum ql-prov {
+            value 2;
+            description
+              "QL Provisionable";
+          }
+          enum ql-prs {
+            value 3;
+            description
+              "PRS Traceable";
+          }
+          enum ql-smc {
+            value 4;
+            description
+              "SMC Traceable";
+          }
+          enum ql-st2 {
+            value 5;
+            description
+              "Stratum 2 Traceable";
+          }
+          enum ql-st3 {
+            value 6;
+            description
+              "Stratum 3E type IV Traceable";
+          }
+          enum ql-st3e {
+            value 7;
+            description
+              "Stratum 3E type III Traceable";
+          }
+          enum ql-stu {
+            value 8;
+            description
+              "Sync Traceability Unknown";
+          }
+          enum ql-tnc {
+            value 9;
+            description
+              "TNC Traceable";
+          }
+          enum ql-dnu {
+            value 10;
+            description
+              "Do Not Use quality";
+          }
+          enum ql-eec1 {
+            value 11;
+            description
+              "EEC1 Traceable";
+          }
+          enum ql-prc {
+            value 12;
+            description
+              "PRC Traceable";
+          }
+          enum ql-sec {
+            value 13;
+            description
+              "SEC Traceable";
+          }
+          enum ql-ssu-a {
+            value 14;
+            description
+              "SSU-A Traceable";
+          }
+          enum ql-ssu-b {
+            value 15;
+            description
+              "SSU-B Traceable";
+          }
+          enum ql-unkn {
+            value 16;
+            description
+              "Quality level Unknown";
+          }
+          enum ql-prtc {
+            value 17;
+            description
+              "SSU-B Traceable";
+          }
+          enum ql-eprtc {
+            value 18;
+            description
+              "EPRTC Traceable";
+          }
+          enum ql-eeec {
+            value 19;
+            description
+              "EEEC Traceable";
+          }
+          enum ql-eprc {
+            value 20;
+            description
+              "EPRC Traceable";
+          }
+        }
+        mandatory true;
+        description
+          "leaf squelch-ql-dnu-quality-level-choice.";
+      }
+    }
+    /*
+    ssm option v2 {gen1 | gen2}
+    */
+    container ssm-option-v2 {
+      presence "";
+      description
+        "Select ssm option 2";
+      leaf ssm-option-v2-choice {
+        type enumeration {
+          enum gen1 {
+            value 0;
+            description
+              "ssm option 2 generation 1";
+          }
+          enum gen2 {
+            value 1;
+            description
+              "ssm option 2 generation 2";
+          }
+        }
+        mandatory true;
+        description
+          "leaf ssm-option-v2-choice.";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet" {
+    description
+      "ericsson-interface-sync-router6000";
+    /*
+    synchronous-mode
+    */
+    container synchronous-mode {
+      presence "";
+      description
+        "Enable synchronous mode";
+      uses port-synchronous-grp;
+    }
+  }
+
+}

@@ -1,0 +1,40 @@
+module rename-schema-nodes-two {
+
+    namespace "urn*test*rename-schema-nodes-two";
+    prefix this;
+
+    revision "2021-04-04";
+
+	import rename-schema-nodes-one {
+		prefix one;
+	}
+
+	augment /one:cont1 {
+	
+		container cont6 {
+		
+			leaf leaf61 {			// will be renamed
+				type string;
+			}
+	
+			leaf leaf62 {			// will be renamed
+				type string;
+			}
+		}
+
+	}
+
+	list list2 {
+		key leaf71;
+	
+		leaf leaf71 {
+			type string;
+		}
+
+		leaf leaf72 {				// will be renamed
+			type string;
+		}
+	}
+
+	rpc rpc4;
+}

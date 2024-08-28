@@ -1,0 +1,78 @@
+module ericsson-gnbdufunction-vdu-dev {
+  yang-version 1.1;
+  namespace urn:rdns:com:ericsson:oammodel:ericsson-gnbdufunction-vdu-dev;
+  prefix gnbdu3gppdev;
+
+  import _3gpp-common-managed-element { prefix me3gpp; }
+  import _3gpp-nr-nrm-gnbdufunction { prefix gnbdu3gpp; }
+  import ericsson-yang-extensions { prefix yexte; }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "The module defines the GNBDUFunction data model deviations for the Ericsson vDU.
+
+    Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+  revision 2021-05-04 {
+    description
+      "Deviations on _3gpp-nr-nrm-gnbdufunction.";
+    yexte:version 1;
+    yexte:release 0;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+
+  revision 2020-12-17 {
+    description
+      "Deviations on _3gpp-nr-nrm-gnbdufunction.";
+    yexte:version 0;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/gnbdu3gpp:attributes/gnbdu3gpp:vnfParametersList {
+    description "GNBDUFunction::vnfParametersList is not supported.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/gnbdu3gpp:attributes/gnbdu3gpp:peeParametersList {
+    description "Monitoring of PEE parameters is not supported for Ericsson vDU.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/gnbdu3gpp:attributes/gnbdu3gpp:priorityLabel {
+    description "Label value for management system to take into account is not supported for Ericsson vDU.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction {
+    deviate add {
+      unique 'gnbdu3gpp:attributes/gnbdu3gpp:gNBId gnbdu3gpp:attributes/gnbdu3gpp:gNBIdLength';
+    }
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/gnbdu3gpp:attributes/gnbdu3gpp:gNBId {
+    deviate add {
+      must '(. <= 4194303 and ../gnbdu3gpp:gNBIdLength = 22) or
+            (. <= 8388607 and ../gnbdu3gpp:gNBIdLength = 23) or
+            (. <= 16777215 and ../gnbdu3gpp:gNBIdLength = 24) or
+            (. <= 33554431 and ../gnbdu3gpp:gNBIdLength = 25) or
+            (. <= 67108863 and ../gnbdu3gpp:gNBIdLength = 26) or
+            (. <= 134217727 and ../gnbdu3gpp:gNBIdLength = 27) or
+            (. <= 268435455 and ../gnbdu3gpp:gNBIdLength = 28) or
+            (. <= 536870911 and ../gnbdu3gpp:gNBIdLength = 29) or
+            (. <= 1073741823 and ../gnbdu3gpp:gNBIdLength = 30) or
+            (. <= 2147483647 and ../gnbdu3gpp:gNBIdLength = 31) or
+            (../gnbdu3gpp:gNBIdLength = 32)' {
+        error-message
+          "Must be equal or less than 2^gNBIdLength - 1.";
+      }
+    }
+  }
+}

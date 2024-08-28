@@ -1,0 +1,1975 @@
+module ericsson-bgp-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bgp-pc5gc";
+  prefix bgppc5gc;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-routing-pc5gc {
+    prefix rtpc5gc;
+  }
+  import ietf-network-instance {
+    prefix ni;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model is for BGP in cloud routing engine.
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+revision 2020-12-14 {
+    description
+      "Correct router-id type";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+revision 2020-10-20 {
+    description
+      "Correct description for action clear-bgp ipv6";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+revision 2020-09-22 {
+    description
+      "Add new command for show bgp tcp brief";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+revision 2020-09-15 {
+    description
+      "Add new action command bgp clear-neighbor";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+revision 2020-07-02 {
+    description
+      "fix config neighbors for action is error";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+revision 2020-06-30 {
+    description
+      "Add constraint for action route-prefix's input";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision 2020-05-22 {
+    description
+      "initial revision";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping bgp-peer-af-grp {
+    description
+      "BGP peer address family configuration mode";
+    /*
+    route-map (map-set) <direction { in |out }>
+     */
+    list route-map {
+      key "direction";
+      max-elements 2;
+      description
+        "Apply route map to neighbor";
+      leaf direction {
+        type enumeration {
+          enum in {
+            description
+              "Apply route-map to incoming updates";
+          }
+          enum out {
+            description
+              "Apply route-map to outing updates";
+          }
+        }
+        description
+          "direction";
+      }
+      leaf map-set {
+        type string;
+        mandatory true;
+        description
+          "Route Map name";
+      }
+    }
+    /*
+    prefix-list (list-set) <direction { in |out }>
+     */
+    list prefix-list {
+      key "direction";
+      max-elements 2;
+      description
+        "Filter updates based on IP prefixes";
+      leaf direction {
+        type enumeration {
+          enum in {
+            description
+              "Filter incoming updates";
+          }
+          enum out {
+            description
+              "Filter outgoing updates";
+          }
+        }
+        description
+          "direction";
+      }
+      leaf list-set {
+        type string;
+        mandatory true;
+        description
+          "Prefix List name";
+      }
+    }
+  }
+
+  grouping bgp-af-grp {
+    description
+      "BGP address family configuration mode";
+    /*
+     redistribute { connected | static }
+     */
+    container redistribute {
+      when "name(..) = 'bgppc5gc:unicast'" {
+        description
+          "";
+      }
+      description
+        "Redistribute routes from another routing protocol";
+      container connected {
+        presence "";
+        description
+          "Connected routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container static {
+        presence "";
+        description
+          "Static routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+    }
+  }
+
+  grouping bgp-nbr-fast-reset-grp {
+    description
+      "BGP neighbor fast reset configuration mode";
+    /*
+    interfaces interface (intf-name)
+     */
+    container interfaces {
+      presence "";
+      description
+        "Configure fast reset tracking interfaces";
+      leaf-list interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        must '../../../../../../ni:name = /if:interfaces/if:interface[if:name=current()]/ni:bind-ni-name' {
+          error-message "the context of the interface name should not be modified.";
+        }
+        description
+          "Configure fast reset tracking an interface Interface
+           name";
+      }
+    }
+  }
+
+  grouping bgp-neighbor-grp {
+    description
+      "BGP neighbor configuration mode";
+    /*
+    advertisement-interval (interval-set-msec)
+     */
+    leaf advertisement-interval {
+      type uint32 {
+        range "0..600000";
+      }
+      default "20";
+      description
+        "Minimum interval between sending BGP routing updates";
+    }
+    /*
+    ebgp-multihop (mhop-set)
+     */
+    leaf ebgp-multihop {
+      when "../choice='external'" {
+        description
+          "";
+      }
+      type uint8 {
+        range "1..255";
+      }
+      description
+        "Allow EBGP neighbors not directly connected maximum hop
+         count";
+    }
+    /*
+    update-source interface (updsrc-set)
+     */
+    container update-source {
+      presence "";
+      description
+        "Source of routing updates";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        must '../../../../../ni:name = /if:interfaces/if:interface[if:name=current()]/ni:bind-ni-name' {
+          error-message "the context name of the interface  should not be modified.";
+        }
+        mandatory true;
+        description
+          "Source of routing updates interface";
+      }
+    }
+    /*
+    next-hop-self
+     */
+    leaf next-hop-self {
+      type empty;
+      description
+        "Disable the next hop calculation for this neighbor";
+    }
+    /*
+    bfd-enabled
+    */
+    leaf bfd-enabled{
+      type boolean;
+      default false;
+      description
+        "Enable/Disable BFD for this neighbor";
+    }
+    /*
+    fast-reset < if-down-time (reset-msec) >
+     */
+    container fast-reset {
+      presence "";
+      description
+        "Enable fast reset for this neighbor";
+      leaf if-down-time {
+        type uint16 {
+          range "0..60000";
+        }
+        mandatory true;
+        description
+          "Interface down time (in milliseconds)";
+      }
+      uses bgp-nbr-fast-reset-grp;
+    }
+    /*
+    address-family { ipv4 { unicast } | ipv6 {
+     unicast } }
+     */
+    container address-family {
+      description
+        "Enter address family command mode";
+      container ipv4 {
+        description
+          "
+                          IPv4 address family commands
+                        ";
+        container unicast {
+          presence "";
+          description
+            "
+                            Unicast address related commands
+                          ";
+          uses bgp-peer-af-grp;
+        }
+      }
+      container ipv6 {
+        description
+          "
+                          IPv6 address family commands
+                        ";
+        container unicast {
+          presence "";
+          description
+            "
+                            Unicast address related commands
+                          ";
+        }
+      }
+    }
+    /*
+    remote-as (as-set)
+     */
+    leaf remote-as {
+      when "../choice='external'" {
+        description
+          "";
+      }
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "Remote Autonomous system (AS)";
+    }
+  }
+
+  grouping bgp-grp {
+    description
+      "BGP router configuration mode";
+    /*
+    address-family { ipv4 { unicast } | ipv6 {
+     unicast } }
+     */
+    container address-family {
+      description
+        "
+                        Enter Address Family command mode
+                      ";
+      container ipv4 {
+        description
+          "
+                          IPv4 address family commands
+                        ";
+        container unicast {
+          presence "";
+          description
+            "
+                            Unicast address related commands
+                          ";
+          uses bgp-af-grp;
+        }
+      }
+      container ipv6 {
+        description
+          "
+                          IPv6 address family commands
+                        ";
+        container unicast {
+          presence "";
+          description
+            "
+                            Unicast address related commands
+                          ";
+          uses bgp-af-grp;
+        }
+      }
+    }
+    /*
+    neighbor { (nbr-addr) | (addr-v6) } <choice { external |
+     internal }>
+     */
+    list neighbor {
+      key "neighbor-choice";
+      description
+        "Enter Neighbor command mode";
+      leaf neighbor-choice {
+        type union {
+          type inet:ipv4-address;
+          type inet:ipv6-address;
+        }
+        description
+          "IPv4/IPv6 neighbor address";
+      }
+      leaf choice {
+        type enumeration {
+          enum external {
+            value 0;
+            description
+              "Define an EBGP neighbor";
+          }
+          enum internal {
+            value 1;
+            description
+              "Define an IBGP neighbor";
+          }
+        }
+        mandatory true;
+        description
+          "choice";
+      }
+      uses bgp-neighbor-grp;
+    }
+  }
+
+/*
+ * bgp action is as below
+ */
+  grouping bgp-chunk-statistics-grp {
+    description
+      "bgp chunk statistics get";
+    list chunk-statistics {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of bgp chunk for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which interface is locating on.";
+      }
+      leaf current-proc {
+         type string;
+         description
+           "bgp current proc.";
+      }
+      leaf allocked-mem {
+         type uint32;
+         description
+           "bgp allocked mem info.";
+      }
+      leaf total-chunks-retrieved {
+         type uint32;
+         description
+           "bgp total chunks retrieved.";
+      }
+      leaf stats-flags {
+         type uint32;
+         description
+           "bgp stats flags.";
+      }
+      leaf total-memory-size {
+         type uint32;
+         description
+           "total memory size.";
+      }
+      list chunk-status {
+        key "name";
+        leaf name {
+         type string;
+         description
+           "bgp name.";
+        }
+        leaf chunk-size {
+           type uint32;
+           description
+             "bgp chunk size.";
+        }
+        leaf chunk-alloc {
+           type uint32;
+           description
+             "bgp chunk alloc.";
+        }
+        leaf chunk-inuse {
+           type uint32;
+           description
+             "bgp chunk inuse.";
+        }
+        leaf elem-alloc {
+           type uint32;
+           description
+             "bgp elem alloc.";
+        }
+        leaf elem-inuse {
+           type uint32;
+           description
+             "bgp elem inuse.";
+        }
+        leaf elem-max {
+           type uint32;
+           description
+             "bgp elem max.";
+        }
+        leaf elem-size {
+           type uint32;
+           description
+             "bgp elem size.";
+        }
+        leaf chunk-usage {
+           type uint32;
+           description
+             "bgp chunk usage.";
+        }
+      }
+    }
+  }
+  grouping bgp-performance-statistics-grp {
+    description
+      "bgp performance get";
+      list bgp-performance-statistics {
+        config false;
+        key "instance-id";
+        description
+        "The current operational state of bgp route for each instance.";
+        leaf instance-id {
+        type string;
+            description
+            "The instance which interface is locating on.";
+        }
+        list performance-statistics {
+          key start-time;
+
+            leaf start-time {
+              type yang:date-and-time;
+              description
+              "start time of the first route received.";
+            }
+            leaf rcv-count {
+              type uint32;
+              description
+              "expected routes count received from kafka.";
+            }
+            leaf adv-count {
+              type uint32;
+              description
+              "expected routes count advertised to peers.";
+            }
+            leaf rcv-timer {
+              type uint32;
+              description
+              "time elapsed to receive all the expected number of routes. unit:ms";
+            }
+            leaf adv-timer {
+              type uint32;
+              description
+              "time elapsed to advertise all the expected number of routes to peers. unit:ms";
+            }
+        }
+    }
+  }
+  grouping bgp-routes-grp {
+    description
+      "bgp route get";
+    list routes {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of bgp route for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which interface is locating on.";
+      }
+      leaf router-id {
+        type inet:ipv4-address;
+         description
+           "BGP router identifier.";
+      }
+      leaf addr-family {
+        type string;
+          description
+            "Address Family";
+      }
+      leaf tbl-version {
+        type yang:gauge64;
+          description
+            "BGP route table version";
+      }
+      list route {
+        key "network nexthop peer source-type best-path";
+        leaf nexthop {
+          type inet:ip-address;
+            description
+              "nexthop.";
+        }
+        leaf network {
+          type inet:ip-prefix;
+            description
+              "network.";
+        }
+        leaf peer {
+          type inet:ip-address;
+            description
+              "peer address.";
+        }
+        leaf source-type {
+          type string;
+            description
+              "source type of path.";
+        }
+        leaf best-path {
+          type string;
+            description
+              "best path (yes/no).";
+        }
+        leaf metric {
+          type yang:gauge64;
+            description
+              "Metric";
+        }
+        leaf loc-prf {
+          type yang:gauge64;
+            description
+              "LocPrf";
+        }
+        leaf weight {
+          type yang:gauge64;
+            description
+              "Weight";
+        }
+        leaf as-path {
+          type string;
+            description
+              "As Path";
+        }
+      }
+    }
+  }
+  grouping bgp-routes-summary-grp {
+    description
+      "bgp route summary get";
+    list routes-summary {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of bgp route summary for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which interface is locating on.";
+      }
+      leaf gbl-config-peers-num {
+        type yang:gauge64;
+          description
+            "Global Neighbors Configured on all network-instances";
+      }
+      leaf config-peers-num {
+        type yang:gauge64;
+          description
+            "Neighbors Configured";
+      }
+      leaf estab-peers-num {
+        type yang:gauge64;
+          description
+            "Neighbors Established";
+      }
+      leaf router-id {
+        type inet:ipv4-address;
+         description
+           "BGP router identifier.";
+      }
+      leaf local-as {
+        type yang:gauge64;
+          description
+            "local AS number";
+      }
+      leaf path-redist {
+        type yang:gauge64;
+          description
+            "Sourced paths redistributed";
+      }
+      leaf path-network {
+        type yang:gauge64;
+          description
+            "Sourced paths networked";
+      }
+      leaf path-inject {
+        type yang:gauge64;
+          description
+            "Sourced paths injected";
+      }
+      leaf path-aggregate {
+        type yang:gauge64;
+          description
+            "Sourced paths aggregated";
+      }
+      leaf dampen-persist {
+        type yang:gauge64;
+          description
+            "Dampening";
+      }
+      leaf prefix-count {
+        type yang:gauge64;
+          description
+            "prefix count";
+      }
+      leaf addr-family {
+        type string;
+          description
+            "Address Family";
+      }
+      leaf tbl-version {
+        type yang:gauge64;
+          description
+            "BGP route table version";
+      }
+      leaf rib-tbl-version {
+        type yang:gauge64;
+          description
+            "RIB table version";
+      }
+      leaf deleted-vers {
+        type yang:gauge64;
+          description
+            "deleted vers";
+      }
+      leaf network-count {
+        type yang:gauge64;
+          description
+            "Network Count";
+      }
+      leaf network-memory {
+        type yang:gauge64;
+          description
+            "Network Memory";
+      }
+      leaf path-count {
+        type yang:gauge64;
+          description
+            "Network Count";
+      }
+      leaf path-memory {
+        type yang:gauge64;
+          description
+            "Network Memory";
+      }
+      list neighbor {
+        key "neighbor-ip";
+        leaf neighbor-ip {
+          type inet:ip-address;
+            description
+              "bgp neighbor ip.";
+        }
+        leaf remote-as {
+          type yang:gauge64;
+            description
+              "Remote AS number";
+        }
+        leaf msgrcvd {
+          type yang:gauge64;
+            description
+              "msg received number";
+        }
+        leaf msgsent {
+          type yang:gauge64;
+            description
+              "msg sent number";
+        }
+        leaf tblver {
+          type yang:gauge64;
+            description
+              "table version";
+        }
+        leaf inqueue {
+          type yang:gauge64;
+            description
+              "InQueue";
+        }
+        leaf outqueue {
+          type yang:gauge64;
+            description
+              "OutQueue";
+        }
+        leaf rst {
+          type yang:gauge64;
+            description
+              "Reset number";
+        }
+        leaf err {
+          type yang:gauge64;
+            description
+              "error";
+        }
+        leaf up-down-time {
+          type string;
+            description
+              "BGP neighbor up/down time.";
+        }
+        leaf pfx-rcvd {
+          type yang:gauge64;
+            description
+              "prefix received";
+        }
+        leaf pfx-sent {
+          type yang:gauge64;
+            description
+              "prefix sent";
+        }
+        leaf state {
+          type string;
+            description
+              "bgp state";
+        }
+        leaf rst-needed {
+          type string;
+            description
+              "reset needed";
+        }
+      }
+    }
+  }
+  grouping bgp-neighbors-grp {
+    description
+      "bgp neighbor get";
+    list neighbors {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of bgp neighbor for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which interface is locating on.";
+      }
+      list neighbor {
+        key neighbor-ip;
+        leaf neighbor-ip {
+          type inet:ip-address;
+            description
+              "bgp neighbor ip.";
+        }
+        leaf remote-as {
+          type yang:gauge64;
+            description
+              "Remote AS number";
+        }
+        leaf link-type {
+          type string;
+            description
+              "Link type";
+        }
+        leaf router-id {
+          type inet:ipv4-address;
+           description
+             "BGP router identifier.";
+        }
+        leaf state {
+          type string;
+            description
+              "BGP router identifier.";
+        }
+        leaf last-read {
+          type string;
+            description
+              "Last read.";
+        }
+        leaf last-sent {
+          type string;
+            description
+              "Last sent.";
+        }
+        leaf hold-time-cfg {
+          type uint32;
+            description
+              "Hold time configured.";
+        }
+        leaf hold-time-neg {
+          type uint32;
+            description
+              "Hold time negotiated.";
+        }
+        leaf keepalive-time-cfg {
+          type uint32;
+            description
+              "Keepalive time configured.";
+        }
+        leaf keepalive-time-neg {
+          type uint32;
+            description
+              "Keepalive time negotiated.";
+        }
+        leaf local-ip {
+          type inet:ip-address;
+            description
+              "Source IP address.";
+        }
+        leaf local-restart-timer {
+          type uint32;
+            description
+              "Local restart timer (sec).";
+        }
+        leaf rt-retain-timer {
+          type uint32;
+            description
+              "stale route retain timer (sec).";
+        }
+        leaf rcv-restart-timer {
+          type uint32;
+            description
+              "Received restart timer (sec).";
+        }
+        leaf rcv-restart-flag {
+          type uint32;
+            description
+              "Received restart flag.";
+        }
+        leaf active-open-failed-time {
+          type string;
+            description
+              "Last active open failed time.";
+        }
+        leaf active-open-failed-reason {
+          type string;
+            description
+              "Last active open failed reason.";
+        }
+        leaf passive-open-failed-time {
+          type string;
+            description
+              "Last passive open failed time.";
+        }
+        leaf passive-open-failed-reason {
+          type string;
+            description
+              "Last passive open failed reason.";
+        }
+        leaf reset-count {
+          type uint32;
+            description
+              "Reset count.";
+        }
+        leaf reset-time {
+          type string;
+            description
+              "Reset time.";
+        }
+        leaf reset-reason {
+          type string;
+            description
+              "Reset reason.";
+        }
+        leaf addr-family {
+          type string;
+            description
+              "Address Family.";
+        }
+        leaf tbl-version {
+          type yang:gauge64;
+            description
+              "BGP table version.";
+        }
+        leaf peer-version {
+          type yang:gauge64;
+            description
+              "Peer table version.";
+        }
+        leaf rcvd-routes {
+          type yang:gauge64;
+            description
+              "received routes.";
+        }
+        leaf import-routes {
+          type yang:gauge64;
+            description
+              "imported routes.";
+        }
+        leaf active-routes {
+          type yang:gauge64;
+            description
+              "active routes.";
+        }
+        leaf history-routes {
+          type yang:gauge64;
+            description
+              "history routes.";
+        }
+        leaf dampend-routes {
+          type yang:gauge64;
+            description
+              "dampend routes.";
+        }
+        leaf sent-routes {
+          type yang:gauge64;
+            description
+              "sent routes.";
+        }
+        leaf eor-rcvd {
+          type string;
+            description
+              "End-of-RIB marker rcvd time.";
+        }
+        leaf eor-sent {
+          type string;
+            description
+              "End-of-RIB marker sent time.";
+        }
+      }
+    }
+  }
+  grouping bgp-neighbors-summary-grp {
+    description
+      "bgp neighbor summary get";
+    list neighbors-summary {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of bgp neighbor summary for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which interface is locating on.";
+      }
+      leaf gbl-config-peers-num {
+        type yang:gauge64;
+          description
+            "Global Neighbors Configured on all network-instances";
+      }
+      leaf config-peers-num {
+        type uint32;
+          description
+            "Neighbors Configured";
+      }
+      leaf estab-peers-num {
+        type uint32;
+          description
+            "Neighbors Established";
+      }
+      leaf router-id {
+        type inet:ipv4-address;
+         description
+           "BGP router identifier.";
+      }
+      leaf local-as {
+        type yang:gauge64;
+          description
+            "local AS number";
+      }
+      list neighbor {
+        key "neighbor-ip";
+        leaf neighbor-ip {
+          type inet:ip-address;
+            description
+              "bgp neighbor ip.";
+        }
+        leaf remote-as {
+          type yang:gauge64;
+            description
+              "Remote AS number";
+        }
+        leaf msgrcvd {
+          type yang:gauge64;
+            description
+              "msg received number";
+        }
+        leaf msgsent {
+          type yang:gauge64;
+            description
+              "msg sent number";
+        }
+        leaf inqueue {
+          type yang:gauge64;
+            description
+              "InQueue";
+        }
+        leaf outqueue {
+          type yang:gauge64;
+            description
+              "OutQueue";
+        }
+        leaf rst {
+          type yang:gauge64;
+            description
+              "Reset number";
+        }
+        leaf err {
+          type yang:gauge64;
+            description
+              "error";
+        }
+        leaf up-down-time {
+          type string;
+            description
+              "BGP neighbor up/down time.";
+        }
+        leaf state {
+          type string;
+            description
+              "bgp state.";
+        }
+      }
+    }
+  }
+  grouping bgp-summary-grp {
+    description
+      "bgp summary get";
+    list summary {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of bgp summary for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which interface is locating on.";
+      }
+      leaf gbl-config-peers-num {
+        type yang:gauge64;
+          description
+            "Global Neighbors Configured on all network-instances";
+      }
+      leaf gbl-estab-peers-num {
+        type yang:gauge64;
+          description
+            "Global Neighbors Established on all network-instances";
+      }
+      leaf config-peers-num {
+        type yang:gauge64;
+          description
+            "Neighbors Configured";
+      }
+      leaf estab-peers-num {
+        type yang:gauge64;
+          description
+            "Neighbors Established";
+      }
+      leaf router-id {
+        type inet:ipv4-address;
+         description
+           "BGP router identifier.";
+      }
+      leaf local-as {
+        type yang:gauge64;
+          description
+            "local AS number";
+      }
+      leaf path-redist {
+        type yang:gauge64;
+          description
+            "Sourced paths redistributed";
+      }
+      leaf path-network {
+        type yang:gauge64;
+          description
+            "Sourced paths networked";
+      }
+      leaf path-inject {
+        type yang:gauge64;
+          description
+            "Sourced paths injected";
+      }
+      leaf path-aggregate {
+        type yang:gauge64;
+          description
+            "Sourced paths aggregated";
+      }
+      leaf dampen-persist {
+        type yang:gauge64;
+          description
+            "Dampening";
+      }
+      leaf prefix-count {
+        type yang:gauge64;
+          description
+            "prefix count";
+      }
+      leaf addr-family {
+        type string;
+          description
+            "Address Family";
+      }
+      leaf tbl-version {
+        type yang:gauge64;
+          description
+            "BGP route table version";
+      }
+      leaf rib-tbl-version {
+        type yang:gauge64;
+          description
+            "RIB table version";
+      }
+      leaf deleted-vers {
+        type yang:gauge64;
+          description
+            "deleted vers";
+      }
+      leaf network-count {
+        type yang:gauge64;
+          description
+            "Network Count";
+      }
+      leaf network-memory {
+        type yang:gauge64;
+          description
+            "Network Memory";
+      }
+      leaf path-count {
+        type yang:gauge64;
+          description
+            "Network Count";
+      }
+      leaf path-memory {
+        type yang:gauge64;
+          description
+            "Network Memory";
+      }
+      list neighbor {
+        key "neighbor-ip";
+        leaf neighbor-ip {
+          type inet:ip-address;
+            description
+              "bgp neighbor ip.";
+        }
+        leaf remote-as {
+          type yang:gauge64;
+            description
+              "Remote AS number";
+        }
+        leaf msgrcvd {
+          type yang:gauge64;
+            description
+              "msg received number";
+        }
+        leaf msgsent {
+          type yang:gauge64;
+            description
+              "msg sent number";
+        }
+        leaf tblver {
+          type yang:gauge64;
+            description
+              "table version";
+        }
+        leaf inqueue {
+          type yang:gauge64;
+            description
+              "InQueue";
+        }
+        leaf outqueue {
+          type yang:gauge64;
+            description
+              "OutQueue";
+        }
+        leaf rst {
+          type yang:gauge64;
+            description
+              "Reset number";
+        }
+        leaf err {
+          type yang:gauge64;
+            description
+              "error";
+        }
+        leaf up-down-time {
+          type string;
+            description
+              "BGP neighbor up/down time.";
+        }
+        leaf pfx-rcvd {
+          type yang:gauge64;
+            description
+              "prefix received";
+        }
+        leaf pfx-sent {
+          type yang:gauge64;
+            description
+              "prefix sent";
+        }
+        leaf state {
+          type string;
+            description
+              "bgp state";
+        }
+        leaf rst-needed {
+          type string;
+            description
+              "reset needed";
+        }
+      }
+    }
+  }
+
+  grouping bgp-route-prefix-grp {
+    description
+      "bgp route prefix get";
+    list route-prefix {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of bgp route prefix for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which interface is locating on.";
+      }
+      leaf addr-family {
+        type string;
+          description
+            "Address Family";
+      }
+      leaf table-entry {
+        type string;
+          description
+            "routing table entry";
+      }
+      leaf info-version {
+        type uint32;
+          description
+            "route info version";
+      }
+      leaf total-paths {
+        type uint32;
+          description
+            "total paths.";
+      }
+      leaf best-path-count {
+        type uint32;
+          description
+            "best path count.";
+      }
+      leaf best-peer {
+        type inet:ip-address;
+          description
+            "best peer.";
+      }
+      leaf reason-not-download-to-rib {
+        type string;
+          description
+            "print the reason why route not downloaded to rib.";
+      }
+      leaf db-label {
+        type uint32;
+          description
+            "Double Barrel alloc label.";
+      }
+      leaf active-db-label {
+        type uint32;
+          description
+            "Active's Double Barrel alloc label.";
+      }
+      leaf no-nh-check {
+        type string;
+          description
+            "Nexthop reachability check off.";
+      }
+      /*
+       print best path info
+       */
+      list path-info {
+        description
+          "print best path detail information.";
+        key "nexthop peer path-source best-path";
+        leaf nexthop {
+          type inet:ip-address;
+            description
+              "nexthop.";
+        }
+        leaf nexthop-info {
+          type string;
+            description
+              "nexthop information.";
+        }
+        leaf nexthop-metric {
+          type uint32;
+            description
+              "nexthop metric.";
+        }
+        leaf peer {
+          type inet:ip-address;
+            description
+              "peer address.";
+        }
+        leaf peer-router-id {
+          type inet:ip-address;
+            description
+              "peer router id.";
+        }
+        leaf peer-as {
+          type uint32;
+            description
+              "peer as num.";
+        }
+        leaf origin {
+          type string;
+            description
+              "origin.";
+        }
+        leaf localpref {
+          type uint32;
+            description
+              "localpref.";
+        }
+        leaf med {
+          type uint32;
+            description
+              "med.";
+        }
+        leaf weight {
+          type uint32;
+            description
+              "weight.";
+        }
+        leaf aigp-metric {
+          type yang:gauge64;
+            description
+              "aigp metric.";
+        }
+        leaf total-aigp-metric {
+          type yang:gauge64;
+            description
+              "total aigp metric.";
+        }
+        leaf path-source {
+          type string;
+            description
+              "print path flag.";
+        }
+        leaf last-updated {
+          type yang:date-and-time;
+            description
+              "Timestamp of the last modification of the route.";
+        }
+        leaf source-type {
+          type string;
+            description
+              "source type of path.";
+        }
+        leaf best-path {
+          type string;
+            description
+              "best path (yes/no).";
+        }
+        /*
+         print as path
+         */
+        leaf as-path {
+          type string;
+            description
+              "as path info.";
+        }
+        leaf lost-bestpath-reason {
+          type string;
+            description
+              "lost to bestpath reason.";
+        }
+        leaf path-additinal {
+          type string;
+            description
+              "lost to bestpath reason.";
+        }
+      }
+      list adv-peer-group{
+        description
+          "Advertised to peer-group peers.";
+        key "adv-peer-group-peers";
+        leaf adv-peer-group-peers{
+          type uint32;
+          description
+            "Advertised to peer-group peers";
+        }
+        list peer {
+          description
+            "Advertised to peer-group peers address";
+          key "peer-ip";
+          leaf peer-ip {
+            type inet:ip-address;
+            description
+              "Advertised to peer-group peers address";
+          }
+        }
+      }
+      list adv-non-peer-group{
+        description
+          "Advertised to non-peer-group peers";
+        key "adv-non-peer-group-peers";
+        leaf adv-non-peer-group-peers{
+          type uint32;
+          description
+            "Advertised to non-peer-group peers";
+        }
+        list peer {
+          description
+            "Advertised to non-peer-group peers address";
+          key "peer-ip";
+          leaf peer-ip {
+            type inet:ip-address;
+              description
+                "Advertised to non-peer-group peers address";
+          }
+        }
+      }
+    }
+  }
+  grouping bgp-client-real-time-grp {
+    description
+      "bgp client real-time get";
+    list client-real-time {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of bgp internal client real-time for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which bgp is locating on.";
+      }
+      leaf accept-prefix-count {
+        type uint32;
+          description
+            "Accept prefix count";
+      }
+      leaf last-rcv-time {
+        type yang:date-and-time;
+          description
+            "Last received message time";
+      }
+      leaf last-disconnect-time {
+        type yang:date-and-time;
+          description
+            "Last disconnect time";
+      }
+      leaf last-rcv-msg {
+        type string;
+          description
+            "Last received message";
+      }
+      leaf status {
+        type string;
+          description
+            "client status";
+      }
+    }
+  }
+  grouping bgp-client-recovery-grp {
+    description
+      "bgp client recovery get";
+    list client-recovery {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of bgp client recovery message for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which bgp is locating on.";
+      }
+      leaf recovery-prefix-count {
+        type uint32;
+          description
+            "Recovery prefix count";
+      }
+      leaf query-time {
+        type yang:date-and-time;
+          description
+            "Query db time";
+      }
+      leaf status {
+        type string;
+          description
+            "query db status";
+      }
+    }
+  }
+
+  grouping bgp-tcp-brief-grp {
+    description
+      "bgp tcp connections get";
+    list tcp-sessions {
+      config false;
+      key "instance-id";
+      description
+        "The current state of bgp tcp connections for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which bgp is locating on.";
+      }
+      leaf total-active-connections {
+        type uint32;
+        description
+          "Total tcp active connections";
+      }
+      list tcp-entry {
+        key "file-descriptor";
+        description
+          "The entry for bgp session";
+        leaf file-descriptor {
+          type uint32;
+          description
+            "Tcp socket file descriptor";
+        }
+        leaf recv-queue {
+          type yang:gauge64;
+          description
+            "The number of receive queue";
+        }
+        leaf send-queue {
+          type yang:gauge64;
+          description
+            "The number of send queue";
+        }
+        leaf local-address {
+          type inet:ip-address;
+          description
+            "Tcp socket local address";
+        }
+        leaf remote-address {
+          type inet:ip-address;
+          description
+            "Tcp socket remote address";
+        }
+        leaf local-port {
+          type uint16;
+          description
+            "Tcp socket local port";
+        }
+        leaf remote-port {
+          type uint16;
+          description
+            "Tcp socket remote port";
+        }
+        leaf state {
+          type string;
+          description
+            "Tcp socket state";
+        }
+        leaf network-instance {
+          type string;
+          description
+            "Context socket is associated with";
+        }
+      }
+    }
+  }
+  augment "/ni:network-instances/ni:network-instance/rtpc5gc:routing" {
+    description
+      "BGP locates on routing.";
+    /*
+    bgp { (bgp-as) }
+     */
+    list bgp {
+      key "bgp";
+      max-elements 1;
+      description
+        "Border Gateway Protocol (BGP)";
+      leaf bgp {
+        type union {
+          type uint32 {
+            range "1..4294967295";
+          }
+        }
+        description
+          "leaf bgp.";
+      }
+      uses bgp-grp;
+
+      container rib {
+        config false;
+       /*
+        * bgp-get-runstate { neighbor | route | summary | client-recovery | client-real-time | chunk-statistics | tcp-brief}
+        */
+        action chunk-statistics {
+          description
+            "get bgp chunk statistics relevant information.";
+          output {
+            uses bgp-chunk-statistics-grp;
+          }
+        }
+
+        action clear-neighbor {
+          description
+            "clear bgp neighbor.";
+          /*
+           clear bgp neighbor
+          */
+            input {
+              choice afi-choice {
+                description
+                "clear bgp neighbor afi choice";
+                case ipv4 {
+                  leaf ipv4 {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description
+                      "clear a specific bgp ipv4 neighbor";
+                  }
+                }
+                case ipv6 {
+                  leaf ipv6 {
+                    type inet:ipv6-address;
+                    mandatory true;
+                    description
+                      "clear a specific bgp ipv6 neighbor";
+                  }
+                }
+                case all {
+                  leaf all {
+                    type empty;
+                    description
+                      "clear bgp all neighbor";
+                  }
+                }
+                mandatory true;
+              }
+           }
+        }
+        action bgp-performance {
+          description
+            "set bgp performance info.";
+          /*
+           bgp  performance info
+          */
+          input {
+                leaf rcv-count {
+                  type uint32;
+                  mandatory true;
+                  description
+                    "expected routes count received from kafka.";
+                }
+                leaf adv-count {
+                  type uint32;
+                  mandatory true;
+                  description
+                    "expected routes count advertised to peers.";
+                }
+              }
+        }
+
+        action bgp-performance-statistics {
+          description
+            "get bgp performance statistics information.";
+          output {
+            uses bgp-performance-statistics-grp;
+          }
+        }
+
+        action routes {
+          description
+            "get bgp route information.";
+          /*
+          route {ipv4 | ipv6}
+          */
+          input {
+            choice afi-choice {
+              description
+                "show bgp route information ipv4/ipv6";
+              case ipv4 {
+                leaf ipv4 {
+                  type empty;
+                  description
+                    "show bgp ipv4 routes";
+                }
+              }
+              case ipv6 {
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "show bgp ipv6 routes";
+                }
+              }
+            }
+          }
+          output {
+            uses bgp-routes-grp;
+          }
+        }
+        action routes-summary {
+          description
+            "get bgp route summary information.";
+          /*
+          route summary
+          */
+          input {
+            choice afi-choice {
+              description
+                "show bgp route information ipv4/ipv6";
+              case ipv4 {
+                leaf ipv4 {
+                  type empty;
+                  description
+                    "show bgp ipv4 routes";
+                }
+              }
+              case ipv6 {
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "show bgp ipv6 routes";
+                }
+              }
+            }
+          }
+          output {
+            uses bgp-routes-summary-grp;
+          }
+        }
+        action neighbors {
+          description
+            "get bgp neighbor information.";
+          output {
+            uses bgp-neighbors-grp;
+          }
+        }
+        action neighbors-summary {
+          description
+            "get bgp neighbor summary information.";
+          output {
+            uses bgp-neighbors-summary-grp;
+          }
+        }
+        action summary {
+          description
+            "get bgp summary information.";
+          /*
+           bgp summary
+          */
+          input {
+            choice afi-choice {
+              description
+                "show bgp route information ipv4/ipv6";
+              case ipv4 {
+                leaf ipv4 {
+                  type empty;
+                  description
+                    "show bgp ipv4 routes";
+                }
+              }
+              case ipv6 {
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "show bgp ipv6 routes";
+                }
+              }
+            }
+          }
+          output {
+            uses bgp-summary-grp;
+          }
+        }
+        action route-prefix {
+          description
+            "get bgp route prefix.";
+          /*
+           bgp route prefix
+          */
+          input {
+            choice afi-choice {
+              description
+                "show bgp route information ipv4/ipv6";
+              case ipv4 {
+                leaf ipv4 {
+                  type inet:ipv4-prefix;
+                  mandatory true;
+                  description
+                    "show bgp ipv4 routes";
+                }
+              }
+              case ipv6 {
+                leaf ipv6 {
+                  type inet:ipv6-prefix;
+                  mandatory true;
+                  description
+                    "show bgp ipv6 routes";
+                }
+              }
+              mandatory true;
+            }
+          }
+          output {
+            uses bgp-route-prefix-grp;
+          }
+        }
+        action client-real-time {
+          description
+            "get bgp client real-time.";
+          /*
+           show client real-time
+          */
+          input {
+            choice afi-choice {
+              description
+                "show bgp client ipv4/ipv6 real-time";
+              case ipv4 {
+                leaf ipv4 {
+                  type empty;
+                  description
+                    "show bgp client ipv4 message real-time";
+                }
+              }
+              case ipv6 {
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "show bgp client ipv6 message real-time";
+                }
+              }
+            }
+          }
+          output {
+            uses bgp-client-real-time-grp;
+          }
+        }
+        action client-recovery {
+          description
+            "get bgp client-recovery.";
+          /*
+           bgp client-recovery
+          */
+          input {
+            choice afi-choice {
+              description
+                "show bgp client-recovery ipv4/ipv6";
+              case ipv4 {
+                leaf ipv4 {
+                  type empty;
+                  description
+                    "show bgp client-recovery ipv4";
+                }
+              }
+              case ipv6 {
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "show bgp client-recovery ipv6";
+                }
+              }
+            }
+          }
+          output {
+            uses bgp-client-recovery-grp;
+          }
+        }
+        action tcp-brief {
+          description
+            "Display status of BGP TCP connections.";
+          /*
+           bgp tcp-brief
+          */
+          input {
+            leaf all {
+              type empty;
+              description
+                "show bgp tcp-brief all";
+            }
+          }
+          output {
+            uses bgp-tcp-brief-grp;
+          }
+        }
+      }
+    }
+  }
+}

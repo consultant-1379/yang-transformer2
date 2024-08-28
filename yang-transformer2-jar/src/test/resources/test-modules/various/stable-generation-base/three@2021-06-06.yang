@@ -1,0 +1,28 @@
+module three {
+
+	namespace "urn:test:three";
+	prefix this;
+
+	revision "2021-06-06";
+
+	import one {
+		prefix one;
+	}
+
+	identity three-1;
+
+	identity three-2 {
+		base one:one-1;
+	}
+
+	identity three-3 {
+		base three-2;
+	}
+	
+	augment "/one:list1" {
+
+		leaf leaf52 {		// different leaf augmented-in
+			type string;
+		}
+	}
+}

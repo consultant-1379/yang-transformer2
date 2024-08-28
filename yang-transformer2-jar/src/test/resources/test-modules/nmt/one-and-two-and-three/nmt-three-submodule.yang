@@ -1,0 +1,13 @@
+submodule nmt-three-submodule {
+
+	belongs-to nmt-three {
+		prefix this;
+	}
+
+    revision "2021-12-04";
+
+	container cont4 {
+		presence "";
+	}
+
+}

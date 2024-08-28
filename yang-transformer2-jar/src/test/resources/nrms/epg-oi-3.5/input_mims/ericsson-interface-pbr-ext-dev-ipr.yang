@@ -1,0 +1,86 @@
+module ericsson-interface-pbr-ext-dev-ipr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-pbr-ext-dev-ipr";
+
+  prefix "ifpbrxdevipr";
+
+  import ericsson-ethernet-ext-ipos {
+    prefix "ethxipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-lag-ext-ipos {
+    prefix "lagxipos";
+  }
+
+  import ericsson-l2vlan-ext-ipos {
+    prefix "l2vlanxipos";
+  }
+
+  import ericsson-interfaces-ext-ipos {
+    prefix "ifxipos";
+  }
+
+  import ericsson-interface-pbr-ext-ipos {
+    prefix "ifpbrxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-pbr-ipos {
+    prefix "pbripos";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-pbr-ext-dev-ipos
+     Copyright (c) 2017-2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1, Delete some redundant node";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-02-16" {
+    description
+      "redirect command additions for L3 FEC mapping FT
+       JIRA19026";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-12" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+}

@@ -1,0 +1,39 @@
+module grouping-usage-one {
+
+    namespace "urn!test!grouping-usage-one";
+    prefix this;
+	
+    revision "2021-12-12";
+
+	include grouping-usage-one-submodule;
+
+	import grouping-usage-two {
+		prefix two;
+	}
+
+	grouping grouping11 {
+		leaf leaf11 { type string; }
+		leaf leaf12 { type string; }
+	}
+
+	grouping grouping21 {
+		uses this:grouping11;
+
+		leaf leaf21 { type string; }
+	}
+
+	grouping grouping31 {
+		leaf leaf31 { type string; }
+
+		uses two:grouping51;
+	}
+
+	container cont7 {
+
+		uses this:grouping21;
+		uses this:grouping31;
+		uses this:grouping41;
+
+		leaf leaf71 { type string; }
+	}
+}

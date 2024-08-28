@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ns2:ManagementInformationModelInformation
+	xmlns:ns1="urn:com:ericsson:schema:xml:oss:oss_common"
+	xmlns:ns2="urn:com:ericsson:schema:xml:oss:cfm_miminfo"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	ns1:name="NE-defined"
+	ns1:ns="vDU"
+	ns1:version="123.456.789">
+	
+	<ns1:modelCreationInfo author="YANG Transformer2">
+		<ns1:designedModel componentId="YANG Transformer2" />
+	</ns1:modelCreationInfo>
+	
+	<ns1:desc>blurb</ns1:desc>
+	
+	<ns2:supportedMims>
+		<ns2:mimMappedTo namespace="aaa:urn:xxx" originalModelUrn="/net_yang/aaa%3aurn%3axxx/xxx%402015-11-19" version="2015.11.19" />
+		<ns2:mimMappedTo namespace="bbb:urn:yyy" originalModelUrn="/net_yang/bbb%3aurn%3ayyy/yyy%402015-02-05" version="2015.2.5" />
+	</ns2:supportedMims>
+
+</ns2:ManagementInformationModelInformation>

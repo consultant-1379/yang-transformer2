@@ -1,0 +1,66 @@
+module key-handling {
+
+	namespace "urn;test;key-handling";
+	prefix this;
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision "2021-04-21";
+
+	container cont1 {
+		presence "";
+
+		list list2 {
+			key leaf21;
+
+			leaf leaf21 {
+				type string;
+			}
+		}
+
+		list list3 {
+			key "leaf31		 leaf32";
+
+			leaf leaf31 {
+				type string;
+			}
+
+			leaf leaf32 {
+				type string;
+			}
+
+			leaf leaf33 {
+				type string;
+			}
+		}
+	}
+
+	container cont5 {
+		config false;
+		notife:notifiable-state-data true;
+
+		list list6 {			// keyless list, allowed in 'config false'.
+
+			leaf leaf61 {
+				type string;
+			}
+		}
+
+		list list8 {
+			key "leaf81 leaf82";
+
+			leaf leaf81 {
+				type string;
+			}
+
+			leaf leaf82 {
+				type string;
+			}
+		}
+	}
+}

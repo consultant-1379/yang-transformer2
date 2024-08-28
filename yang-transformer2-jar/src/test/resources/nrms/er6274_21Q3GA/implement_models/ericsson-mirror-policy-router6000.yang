@@ -1,0 +1,295 @@
+module ericsson-mirror-policy-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-mirror-policy-router6000";
+
+  prefix "mirrorpolrouter6000";
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-mirror-policy-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-02-25" {
+    description
+      "remove mirror lag";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2021-02-04" {
+    description
+      "Add mirror policy over lag and l2 access group";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-07-21" {
+    description
+      "destination/rate/maximum-length should be configured
+       separately";
+    reference
+      "exec-cli command";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-05-10" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  grouping policy-mirror-grp {
+    description
+      "Mirror policy configuration mode set";
+    /*
+    destination (dest-name)
+    */
+    leaf destination {
+      type string {
+        length "1..39";
+      }
+      description
+        "Specify mirror destination";
+    }
+    /*
+    rate (rate-num) burst (burst-num)
+    */
+    container rate {
+      presence "";
+      description
+        "Maximum data rate";
+      leaf rate {
+        type uint32 {
+          range "64..1000000";
+        }
+        mandatory true;
+        description
+          "Data rate in kbps";
+      }
+      leaf burst {
+        type uint32 {
+          range "1..4250000000";
+        }
+        mandatory true;
+        description
+          "Burst size";
+      }
+    }
+    /*
+    maximum-length (len-num)
+    */
+    leaf maximum-length {
+      type uint16 {
+        range "14..256";
+      }
+      description
+        "Maximum mirror length";
+    }
+    /*
+    ip access-group (acl-name) (mirror-ctxname)
+    */
+    list ip-access-group {
+      when "../mirror-policy-choice='circuit'" {
+        description
+          "";
+      }
+      key "acl-name mirror-ctxname";
+      max-elements 1;
+      description
+        "Specify access list";
+      leaf acl-name {
+        type string {
+          length "1..39";
+        }
+        description
+          "Policy access list name";
+      }
+      leaf mirror-ctxname {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        description
+          "Name of the context in which the policy access list
+           is defined";
+      }
+      uses policy-group-grp;
+    }
+    /*
+    ipv6 access-group (acl-name) (mirror-ctxname)
+    */
+    list ipv6-access-group {
+      when "../mirror-policy-choice='circuit'" {
+        description
+          "";
+      }
+      key "acl-name mirror-ctxname";
+      max-elements 1;
+      description
+        "Specify access list";
+      leaf acl-name {
+        type string {
+          length "1..39";
+        }
+        description
+          "Policy access list name";
+      }
+      leaf mirror-ctxname {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        description
+          "Name of the context in which the policy access list
+           is defined";
+      }
+      uses policy-group-grp;
+    }
+    /*
+    l2 access-group (aclname-rg)
+    */
+    list l2 {
+      must "../mirror-policy-choice='circuit'" {
+        error-message "";
+        description
+          "";
+      }
+      key "access-group";
+      max-elements 1;
+      description
+        "Configure L2 attributes";
+      leaf access-group {
+        type string {
+          length "1..39";
+        }
+        description
+          "Specify a policy access list to define classes for
+           this policy";
+      }
+      uses policy-group-grp;
+    }
+  }
+
+  grouping policy-group-grp {
+    description
+      "Policy class group configuration mode";
+    /*
+    class (class-name)
+    */
+    list class {
+      key "class";
+      description
+        "Acl class name";
+      leaf class {
+        type string {
+          length "1..39";
+        }
+        description
+          "Policy acl class name";
+      }
+      uses class-policy-mirror-grp;
+    }
+  }
+
+  grouping class-policy-mirror-grp {
+    description
+      "Class configuration mode";
+    /*
+    destination (dest-name)
+    */
+    leaf destination {
+      type string {
+        length "1..39";
+      }
+      description
+        "Specify mirror destination";
+    }
+    /*
+    maximum-length (len-num)
+    */
+    leaf maximum-length {
+      type uint16 {
+        range "14..256";
+      }
+      description
+        "Maximum mirror length";
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-mirror-policy";
+    /*
+    mirror policy { port | circuit } (mirror-polname)
+    */
+    list mirror-policy {
+      key "mirror-polname";
+      description
+        "Configure mirror policy";
+      leaf mirror-polname {
+        type string {
+          length "1..39";
+        }
+        description
+          "mirror policy name";
+      }
+      leaf mirror-policy-choice {
+        type enumeration {
+          enum port {
+            value 0;
+            description
+              "Configure port mirror policy";
+          }
+          enum circuit {
+            value 1;
+            description
+              "Configure circuit mirror policy";
+          }
+        }
+        mandatory true;
+        description
+          "leaf mirror-policy-choice.";
+      }
+      uses policy-mirror-grp;
+    }
+  }
+
+}

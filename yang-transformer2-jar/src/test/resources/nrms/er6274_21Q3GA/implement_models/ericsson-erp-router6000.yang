@@ -1,0 +1,536 @@
+module ericsson-erp-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-erp-router6000";
+
+  prefix "erprouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-lag-ext-router6000 {
+    prefix "lagxrouter6000";
+  }
+
+  import ericsson-l2-service-router6000 {
+    prefix "l2servicer6k";
+  }
+
+  import iana-if-type {
+    prefix "ianaift";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-erp-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-02-19" {
+    description
+      "remove must condition check for slot/port";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-08-21" {
+    description
+      "IPOS 24915 yang model for phase 2";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-07-24" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping config-erp-inst-grp {
+    description
+      "ERP instance configuration mode";
+    /*
+    profile (profile-name)
+    */
+    leaf profile {
+      type string;
+      description
+        "Associate ethernet ring profile";
+    }
+    /*
+    ring-id (ID-num)
+    */
+    leaf ring-id {
+      type uint8 {
+        range "1..239";
+      }
+      default "1";
+      description
+        "G.8032 ring ID";
+    }
+    /*
+    virtual-raps-channel
+    */
+    leaf virtual-raps-channel {
+      type empty;
+      description
+        "Enable virtual channel for sub-ring";
+    }
+    /*
+    port0 { port (slot-port) | lg (lg0-name) }
+    */
+    container port0 {
+      description
+        "Connect port0 to local port or LAG";
+      list port {
+        key "port";
+        description
+          "Select port to configure ERP role";
+        leaf port {
+          type leafref {
+            path "/if:interfaces/if:interface/if:name";
+          }
+          description
+            "Enter slot/port";
+        }
+        uses config-erp-inst-port-grp;
+      }
+      list lg {
+        key "lg";
+        description
+          "Connect port0 to local LAG";
+        leaf lg {
+          type string;
+          description
+            "LAG name";
+        }
+        uses config-erp-inst-lg-grp;
+      }
+    }
+    /*
+    port1 { port (slot-port) | lg (lg1-name) }
+    */
+    container port1 {
+      description
+        "Connect port1 to local port or LAG";
+      list port {
+        key "port";
+        description
+          "Select Ethernet port1 to configure ERP role";
+        leaf port {
+          type leafref {
+            path "/if:interfaces/if:interface/if:name";
+          }
+          description
+            "Enter slot/port";
+        }
+        uses config-erp-inst-port-grp;
+      }
+      list lg {
+        key "lg";
+        description
+          "Connect port1 to local LAG";
+        leaf lg {
+          type string;
+          description
+            "LAG name";
+        }
+        uses config-erp-inst-lg-grp;
+      }
+    }
+    /*
+    aps-channel
+    */
+    container aps-channel {
+      presence "";
+      description
+        "Config APS channel configuration mode";
+      uses config-erp-inst-aps-grp;
+    }
+    /*
+    tcn-propagate
+    */
+    container tcn-propagate {
+      presence "";
+      description
+        "Topology change notification mode, to specify target
+         rings";
+      uses config-erp-tcn-grp;
+    }
+  }
+
+  grouping config-erp-profile-grp {
+    description
+      "ERP profile configuration mode";
+    /*
+    timer { guard (guard-val) | hold-off (holdoff-val) | wtr
+     (wtr-val) }
+    */
+    container timer {
+      description
+        "Set time intervals";
+      leaf guard {
+        type uint16 {
+          range "10..2000";
+        }
+        default "500";
+        description
+          "Configure guard interval";
+      }
+      leaf hold-off {
+        type uint16 {
+          range "0..10000";
+        }
+        default "0";
+        description
+          "Configure hold-off interval";
+      }
+      leaf wtr {
+        type uint8 {
+          range "1..12";
+        }
+        default "1";
+        description
+          "Configure Wait-to-Restore interval";
+      }
+    }
+    /*
+    non-revertive
+    */
+    leaf non-revertive {
+      type empty;
+      description
+        "Set a ring instance as non-revertive";
+    }
+  }
+
+  grouping config-erp-inst-aps-grp {
+    description
+      "ERP aps channel configuration mode";
+    /*
+    level (level-id)
+    */
+    leaf level {
+      type uint8 {
+        range "0..7";
+      }
+      default "7";
+      description
+        "Set the Automatic Protection Switching message level";
+    }
+    /*
+    port0 { (slot-port) | lg (lg0-name) }[ service-instance (lg-
+     number) ]
+    */
+    container port0 {
+      presence "";
+      description
+        "Specify APS configuration on port 0";
+      container slot-port {
+        description
+          "container slot-port.";
+        leaf slot-port {
+          type leafref {
+            path "/if:interfaces/if:interface/if:name";
+          }
+          description
+            "config erp port0 slot/port";
+        }
+        leaf service-instance {
+          type uint32 {
+            range "1..262143";
+          }
+          description
+            "Service-instance identifier";
+        }
+      }
+      container lg {
+        description
+          "container lg.";
+        leaf lg {
+          type string;
+          description
+            "Select Ethernet LAG to configure ERP role";
+        }
+        leaf service-instance {
+          type uint32 {
+            range "1..262143";
+          }
+          description
+            "Service-instance identifier";
+        }
+      }
+    }
+    /*
+    port1 { (slot-port) | lg (lg1-name) } [ service-instance
+     (lg-number) ]
+    */
+    container port1 {
+      presence "";
+      description
+        "Specify APS configuration on port 1";
+      container slot-port {
+        description
+          "container slot-port.";
+        leaf slot-port {
+          type leafref {
+            path "/if:interfaces/if:interface/if:name";
+          }
+          description
+            "config erp port1 slot/port";
+        }
+        leaf service-instance {
+          type uint32 {
+            range "1..262143";
+          }
+          description
+            "Service-instance identifier";
+        }
+      }
+      container lg {
+        description
+          "container lg.";
+        leaf lg {
+          type string;
+          description
+            "Select Ethernet LAG to configure ERP role";
+        }
+        leaf service-instance {
+          type uint32 {
+            range "1..262143";
+          }
+          description
+            "Service-instance identifier";
+        }
+      }
+    }
+  }
+
+  grouping config-erp-inst-port-grp {
+    description
+      "ERP port configuration mode";
+    /*
+    rpl { owner | neighbor | next-neighbor }
+    */
+    container rpl {
+      description
+        "Set Ring Protection Link role";
+      choice rpl {
+        case owner {
+          leaf owner {
+            type empty;
+            description
+              "Specify the ring port as the RPL owner";
+          }
+        }
+        case neighbor {
+          leaf neighbor {
+            type empty;
+            description
+              "Specify the ring port as the RPL neighbor";
+          }
+        }
+        case next-neighbor {
+          leaf next-neighbor {
+            type empty;
+            description
+              "Specify the ring port as the RPL next neighbor";
+          }
+        }
+      }
+    }
+    /*
+    track (object-name) action report_ccm_fail
+    */
+    container track {
+      presence "";
+      description
+        "Track the state of maintenance point for faulty of
+         port";
+      leaf object-name {
+        type string;
+        mandatory true;
+        description
+          "Tracked object name";
+      }
+      leaf action {
+        type empty;
+        mandatory true;
+        description
+          "Specify action";
+      }
+      leaf report_ccm_fail {
+        type empty;
+        mandatory true;
+        description
+          "Report ccm fail/rdi";
+      }
+    }
+  }
+
+  grouping config-erp-tcn-grp {
+    description
+      "ERP TCN configuration mode";
+    /*
+    target-ring-id (ring-id)
+    */
+    list target-ring-id {
+      key "target-ring-id";
+      description
+        "Target ring id, topology change notification will be
+         sent on this target ring";
+      leaf target-ring-id {
+        type uint8 {
+          range "1..239";
+        }
+        description
+          "ring ID range: 1-239";
+      }
+    }
+  }
+
+  grouping config-erp-inst-lg-grp {
+    description
+      "ERP LAG configuration mode";
+    /*
+    rpl { owner | neighbor | next-neighbor }
+    */
+    container rpl {
+      description
+        "Set Ring Protection Link role for LG 0";
+      choice rpl {
+        case owner {
+          leaf owner {
+            type empty;
+            description
+              "Specify the ring LAG as the RPL owner";
+          }
+        }
+        case neighbor {
+          leaf neighbor {
+            type empty;
+            description
+              "Specify the ring LAG as the RPL neighbor";
+          }
+        }
+        case next-neighbor {
+          leaf next-neighbor {
+            type empty;
+            description
+              "Specify the ring LAG as the RPL next neighbor";
+          }
+        }
+      }
+    }
+    /*
+    track (object-name) action report_ccm_fail
+    */
+    container track {
+      presence "";
+      description
+        "Track the state of maintenance point for faulty of LAG";
+      leaf object-name {
+        type string;
+        mandatory true;
+        description
+          "Tracked object name";
+      }
+      leaf action {
+        type empty;
+        mandatory true;
+        description
+          "Specify action";
+      }
+      leaf report_ccm_fail {
+        type empty;
+        mandatory true;
+        description
+          "Report ccm fail/rdi";
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-erp";
+    /*
+    ethernet-ring { profile (profile-name) | instance (instance-
+     name) [ sub-ring [ ic-node ] ] }
+    */
+    container ethernet-ring {
+      description
+        "Configure ethernet-ring protection";
+      list profile {
+        key "profile";
+        description
+          "Specify name of ethernet ring profile";
+        leaf profile {
+          type string;
+          description
+            "Ethernet ring protection profile name";
+        }
+        uses config-erp-profile-grp;
+      }
+      list instance {
+        key "instance-name";
+        description
+          "Specify name of ethernet ring instance";
+        leaf instance-name {
+          type string;
+          description
+            "Configure ethernet ring protection instance name";
+        }
+        container sub-ring {
+          presence "";
+          description
+            "Specifies instance is ethernet sub-ring";
+          leaf ic-node {
+            type empty;
+            description
+              "Specifies instance is for inter connect node";
+          }
+        }
+        uses config-erp-inst-grp;
+      }
+    }
+  }
+
+}

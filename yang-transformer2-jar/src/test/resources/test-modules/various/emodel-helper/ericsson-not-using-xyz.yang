@@ -1,0 +1,14 @@
+module ericsson-not-using-xyz {
+
+	namespace "urn:test:ericsson-not-using-xyz";
+	prefix this;
+
+	revision 2021-12-03;
+
+	container cont9 {
+
+		leaf leaf91 {
+			type string;
+		}
+	}
+}

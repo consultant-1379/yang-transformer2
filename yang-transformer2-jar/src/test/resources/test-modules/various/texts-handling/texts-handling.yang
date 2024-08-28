@@ -1,0 +1,85 @@
+module texts-handling {
+
+	namespace "urn~test~texts-handling";
+	prefix this;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision "2021-03-07";
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string;
+			description "base desc leaf11";
+		}
+
+		leaf leaf12 {
+			type string;
+			description "base desc leaf12";		// will be deviated
+		}
+
+		leaf leaf13 {
+			type string;						// will be deviated
+		}
+
+		leaf leaf14 {
+			type string;
+			yexte:disturbances "base disturbances leaf14";
+		}
+
+		leaf leaf15 {
+			type string;			// will be deviated with disturbances
+		}
+
+		leaf leaf16 {
+			type string;
+			yexte:side-effects "base side-effects leaf16";
+		}
+
+		leaf leaf17 {
+			type string;			// will be deviated with side-effects
+		}
+
+		leaf leaf18 {
+			type string;
+			yexte:precondition "base precondition leaf18";
+		}
+
+		leaf leaf19 {
+			type string;			// will be deviated with precondition
+		}
+
+		leaf leaf20 {
+			type string;
+			yexte:dependencies "base dependencies leaf20";
+		}
+
+		leaf leaf21 {
+			type string;			// will be deviated with dependencies
+		}
+
+		leaf leaf22 {
+			type string;
+			yexte:takes-effect "base takes-effect leaf22";
+		}
+
+		leaf leaf23 {
+			type string;			// will be deviated with takes-effect
+		}
+	}
+
+	container cont2 {
+		description "base desc cont2";
+	}
+
+	container cont3 {
+		yexte:dependencies "dependencies cont3";
+	}
+
+	container cont4 {
+		yexte:precondition "precondition cont4";
+	}
+}

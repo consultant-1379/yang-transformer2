@@ -1,0 +1,778 @@
+module ericsson-route-policy-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-route-policy-pc5gc";
+  prefix rtpolpc5gc;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ericsson-routing-pc5gc {
+    prefix rtpc5gc;
+  }
+  import ietf-network-instance {
+    prefix ni;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "ericsson-route-policy-pc5gc
+     Copyright (c) 2019-2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-02-28 {
+    description
+      "add match tag and set as-path-prepend";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+  revision 2019-08-15 {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  feature dscp {
+    description
+      "This feature indicates that the device supports dscp.";
+  }
+
+  feature traffic-index {
+    description
+      "This feature indicates that the device supports
+       traffic-index.";
+  }
+
+  feature dvsr {
+    description
+      "This feature indicates that the device supports dvsr.";
+  }
+
+  grouping as-path-list-grp {
+    description
+      "AS path list configuration mode";
+    /*
+    description (submode-description)
+     */
+    leaf description {
+      type string {
+        length "1..79";
+      }
+      description
+        "Configure an AS path list description";
+    }
+    /*
+    seq (seq-num) { deny | permit } { any | (submode-regex) }
+     */
+    list seq {
+      key "seq-num";
+      description
+        "AS path list sequence number";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Sequence number 1..4294967295";
+      }
+      leaf seq-choice {
+        type enumeration {
+          enum deny {
+            value 0;
+            description
+              "Set AS path list deny operation";
+          }
+          enum permit {
+            value 1;
+            description
+              "Set AS path list permit operation";
+          }
+        }
+        mandatory true;
+        description
+          "leaf seq-choice.";
+      }
+      choice seq-choice1 {
+        mandatory true;
+        description
+          "CRE choice";
+        case any {
+          leaf any {
+            type empty;
+            mandatory true;
+            description
+              "Match any AS path (wildcard)";
+          }
+        }
+        case submode-regex {
+          leaf submode-regex {
+            type string {
+              length "1..79";
+            }
+            mandatory true;
+            description
+              "A regular expression to match BGP AS paths";
+          }
+        }
+      }
+    }
+  }
+
+  grouping community-list-grp {
+    description
+      "Community list configuration mode";
+    /*
+    description (submode-description)
+     */
+    leaf description {
+      type string {
+        length "1..79";
+      }
+      description
+        "Configure a community list description";
+    }
+    /*
+    seq (seq-num) { deny | permit } { any | (submode-aann) |
+     internet | local-as | no-advertise | no-export | reg-exp
+     (submode-regex) }
+     */
+    list seq {
+      key "seq-num";
+      description
+        "Community list sequence number";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Sequence number 1..4294967295";
+      }
+      leaf seq-choice {
+        type enumeration {
+          enum deny {
+            value 0;
+            description
+              "Set community list deny operation";
+          }
+          enum permit {
+            value 1;
+            description
+              "Set community list permit operation";
+          }
+        }
+        mandatory true;
+        description
+          "leaf seq-choice.";
+      }
+      choice seq-choice1 {
+        mandatory true;
+        description
+          "CRE choice";
+        case any {
+          leaf any {
+            type empty;
+            mandatory true;
+            description
+              "Match any community (wildcard)";
+          }
+        }
+        case submode-aann {
+          leaf submode-aann {
+            type string {
+              pattern '[0-9]{1,5}:[0-9]{1,5}';
+            }
+            description
+              "Community number in nn:nn format";
+          }
+        }
+        case internet {
+          leaf internet {
+            type empty;
+            description
+              "Advertise this route to the internet community.
+               All routers belong to it";
+          }
+        }
+        case local-as {
+          leaf local-as {
+            type empty;
+            description
+              "Do not send outside a confed sub-as (well-known
+               community)";
+          }
+        }
+        case no-advertise {
+          leaf no-advertise {
+            type empty;
+            description
+              "Do not advertise to any peer (well-known
+               community)";
+          }
+        }
+        case no-export {
+          leaf no-export {
+            type empty;
+            description
+              "Do not export to EBGP peers (well-known
+               community)";
+          }
+        }
+        case reg-exp {
+          leaf reg-exp {
+            type string {
+              length "1..79";
+            }
+            description
+              "Match community list regular expression";
+          }
+        }
+      }
+    }
+  }
+
+  grouping ext-community-list-grp {
+    description
+      "Community list configuration mode";
+    /*
+    description (submode-description)
+     */
+    leaf description {
+      type string {
+        length "1..79";
+      }
+      description
+        "Configure a community list description";
+    }
+    /*
+    seq (seq-num) { deny | permit } { any |  reg-exp (submode-
+     regex) | (submode-number) }
+     */
+    list seq {
+      key "seq-num";
+      description
+        "Community list sequence number";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Sequence number 1..4294967295";
+      }
+      leaf seq-choice {
+        type enumeration {
+          enum deny {
+            value 0;
+            description
+              "Set community list deny operation";
+          }
+          enum permit {
+            value 1;
+            description
+              "Set community list permit operation";
+          }
+        }
+        mandatory true;
+        description
+          "leaf seq-choice.";
+      }
+      choice seq-choice1 {
+        mandatory true;
+        description
+          "CRE choice";
+        case any {
+          leaf any {
+            type empty;
+            mandatory true;
+            description
+              "Match any community (wildcard)";
+          }
+        }
+        case reg-exp {
+          leaf reg-exp {
+            type string {
+              length "1..79";
+            }
+            description
+              "Match community list regular expression";
+          }
+        }
+        case submode-number {
+          leaf submode-number {
+            type string;
+            description
+              "Extended community number {rt|ro}:
+               {AS:nnnn|A.B.C.D:nn|AS[L]:nn} format";
+          }
+        }
+      }
+    }
+  }
+
+  grouping ipv6-prefix-list-grp {
+    description
+      "IPv6 prefix list configuration mode";
+    /*
+    description (submode-description)
+     */
+    leaf description {
+      type string {
+        length "1..79";
+      }
+      description
+        "Configure an IPv6 prefix list description";
+    }
+    /*
+    seq (seq-num) { deny  | permit } { any | (ip-prefix) [ { ge
+     (ge-value) } [ le (le-value) ] | le (le-value) | eq (eq-
+     value) ] }
+     */
+    list seq {
+      key "seq-num";
+      description
+        "IPv6 prefix list sequence number";
+      leaf seq-num {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Sequence number 1..4294967295";
+      }
+      leaf seq-choice {
+        type enumeration {
+          enum deny {
+            value 0;
+            description
+              "Set IPv6 prefix list deny operation";
+          }
+          enum permit {
+            value 1;
+            description
+              "Set prefix list permit operation";
+          }
+        }
+        mandatory true;
+        description
+          "leaf seq-choice.";
+      }
+      choice seq-choice1 {
+        description
+          "CRE choice";
+        case any {
+          leaf any {
+            type empty;
+            description
+              "Match any IPv6 prefix (wildcard)";
+          }
+        }
+        case ip-prefix {
+          container ip-prefix {
+            description
+              "Configure IPv6 prefix";
+            leaf ip-prefix {
+              type inet:ipv6-prefix;
+              mandatory true;
+              description
+                "IPv6 prefix";
+            }
+            choice ip-prefix-opt {
+              description
+                "CRE choice";
+              case ge {
+                container ge {
+                  description
+                    "Configure prefix length";
+                  leaf ge {
+                    type uint8 {
+                      range "1..128";
+                    }
+                    mandatory true;
+                    description
+                      "Prefix length greater than or equal to
+                       specification";
+                  }
+                  leaf le {
+                    type uint8 {
+                      range "1..128";
+                    }
+                    description
+                      "Prefix length less than or equal to
+                       specification";
+                  }
+                }
+              }
+              case le {
+                leaf le {
+                  type uint8 {
+                    range "1..128";
+                  }
+                  description
+                    "Prefix length less than or equal to
+                     specification";
+                }
+              }
+              case eq {
+                leaf eq {
+                  type uint8 {
+                    range "1..128";
+                  }
+                  description
+                    "Prefix length equal to specification";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping prefix-list-grp {
+    description
+      "Prefix list configuration mode";
+    /*
+    description (submode-description)
+     */
+    leaf description {
+      type string {
+        length "1..79";
+      }
+      description
+        "Configure a prefix list description";
+    }
+    /*
+    seq (num) { deny | permit } { any | (ip-prefix)  [ { ge
+     (ge-value)} [ le (le-value) ] | le (le-value) | eq (eq-
+     value) ] }
+     */
+    list seq {
+      key "num";
+      description
+        "Prefix list sequence number";
+      leaf num {
+        type uint32 {
+          range "1..max";
+        }
+        description
+          "Sequence number 1..4294967295";
+      }
+      leaf action {
+        type enumeration {
+          enum deny {
+            value 0;
+            description
+              "Set prefix list deny operation";
+          }
+          enum permit {
+            value 1;
+            description
+              "Set prefix list permit operation";
+          }
+        }
+        mandatory true;
+        description
+          "Set prefix list operation.";
+      }
+      choice ip-prefixes {
+        description
+          "Match IP prefix";
+        case any {
+          leaf any {
+            type empty;
+            description
+              "Match any prefix (wildcard)";
+          }
+        }
+        case ip-prefix {
+          container ip-prefix {
+            description
+              "Configure IP prefix";
+            leaf ip-prefix {
+              type inet:ipv4-prefix;
+              mandatory true;
+              description
+                "IP prefix";
+            }
+            leaf ge {
+              type uint8 {
+                range "1..32";
+              }
+              description
+                "Prefix length greater than or equal to
+                 specification";
+            }
+            leaf le {
+              must 'number (.) > number (../ge) or not (../ge)' {
+                error-message "le value should be smaller than ge value";
+                description
+                  "le value should be smaller than ge value";
+              }
+              type uint8 {
+                range "1..32";
+              }
+              description
+                "Prefix length less than or equal to specification";
+            }
+            leaf eq {
+              type uint8 {
+                range "1..32";
+              }
+              must 'not (../le) and not (../ge)' {
+                error-message "ge or le can not be configured with eq";
+                description
+                  "ge or le can not be configured with eq";
+              }
+              description
+                "Prefix length equal to specification";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping route-map-grp {
+    description
+      "Route map configuration mode";
+    leaf set-ip-next-hop {
+      type union {
+        type enumeration {
+          /* TODO
+          enum prefix-address {
+            value 0;
+            description
+              "Set next hop address to IPv4 prefix address
+               for host (/32) prefixes only";
+          }
+           */
+          enum peer-address {
+            value 0;
+            description
+              "Set next hop address to BGP peer address";
+          }
+        }
+        type inet:ipv4-address;
+      }
+      description
+        "Set route next hop address";
+    }
+    leaf set-ip-aggregate {
+      type string;
+      description
+        "Set IP aggregate prefix list for redistribution";
+    }
+    leaf set-local-preference {
+      type uint32 {
+        range "0..max";
+      }
+      description
+        "Set BGP local preference path attribute";
+    }
+    leaf set-metric {
+      type uint32 {
+        range "0..max";
+      }
+      description
+        "Set route metric for destination routing protocol";
+    }
+    leaf set-origin {
+      type enumeration {
+        enum igp {
+          value 0;
+          description
+            "Local IGP";
+        }
+        enum egp {
+          value 1;
+          description
+            "Remote EGP";
+        }
+        enum incomplete {
+          value 2;
+          description
+            "Unknown origin";
+        }
+      }
+      description
+        "Set BGP origin path attribute";
+    }
+    leaf set-weight {
+      type uint16 {
+        range "0..max";
+      }
+      description
+        "Set BGP weight";
+    }
+    list set-as-path-prepend {
+      key "seq";
+      max-elements 16;
+      description
+        "As-path prepend sequence number";
+      leaf seq {
+        type uint32 {
+          range "1..max";
+        }
+        mandatory true;
+        description
+          "Sequence number";
+      }
+      leaf as-path-prepend {
+        type uint32 {
+          range "1..max";
+        }
+        mandatory true;
+        description
+          "Prepend to AS path";
+      }
+    }
+    leaf match-ip-addr-prefix-list {
+      type string;
+      description
+        "IP route destination address match IP prefix list";
+    }
+    leaf match-ip-nhop-prefix-list {
+      type string;
+      description
+        "IP route next-hop address match IP prefix list";
+    }
+    leaf match-metric {
+      type uint32 {
+        range "0..max";
+      }
+      description
+        "Match route metric";
+    }
+    leaf match-tag {
+      type uint32;
+      description
+        "Match route tag";
+    }
+  }
+
+  augment "/ni:network-instances/ni:network-instance" {
+    description
+      "ericsson-route-policy";
+    /*
+    route-map (map-name)
+     */
+    list route-map {
+
+      status current {
+        yexte:preliminary;
+      }
+
+      key "name";
+      description
+        "Configure a route map";
+      leaf name {
+        type string {
+          length "1..39";
+        }
+        description
+          "Route map name";
+      }
+      leaf description {
+        type string {
+          length "1..79";
+        }
+        description
+          "Configure a route map description";
+      }
+      list seq {
+        key "num";
+        min-elements 1;
+        description
+          "Configure a route map entry";
+        leaf num {
+          type uint32 {
+            range "1..max";
+          }
+          description
+            "Route map entry sequence number to insert
+             1..4294967295";
+        }
+        leaf action {
+          type enumeration {
+            enum deny {
+              value 0;
+              description
+                "Set route map deny operation";
+            }
+            enum permit {
+              value 1;
+              description
+                "Set route map permit operation";
+            }
+          }
+          mandatory true;
+          description
+            "Set route map operation.";
+        }
+        uses route-map-grp;
+      }
+    }
+  }
+
+  augment "/ni:network-instances/ni:network-instance/rtpc5gc:ipv6" {
+    description
+      "ericsson-route-policy";
+    /*
+    prefix-list (list-name)
+     */
+    list prefix-list {
+      must './seq or ./description' {
+        error-message "seq or description must be configured";
+        description
+          "Sequence or description must be configured";
+      }
+      key "prefix-list";
+      description
+        "Configure a prefix list";
+      leaf prefix-list {
+        type string {
+          length "1..39";
+        }
+        description
+          "Prefix list name";
+      }
+      uses ipv6-prefix-list-grp;
+    }
+  }
+
+  augment "/ni:network-instances/ni:network-instance/rtpc5gc:ip" {
+    description
+      "ericsson-route-policy";
+    /*
+    prefix-list (list-name)
+     */
+    list prefix-list {
+      must './seq or ./description' {
+        error-message "seq or description must be configured";
+        description
+          "Sequence or description must be configured";
+      }
+      key "prefix-list";
+      description
+        "Configure a prefix list";
+      leaf prefix-list {
+        type string {
+          length "1..39";
+        }
+        description
+          "Prefix list name";
+      }
+      uses prefix-list-grp;
+    }
+  }
+}

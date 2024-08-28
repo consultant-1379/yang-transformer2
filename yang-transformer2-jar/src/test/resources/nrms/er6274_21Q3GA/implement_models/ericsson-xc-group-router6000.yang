@@ -1,0 +1,446 @@
+module ericsson-xc-group-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-xc-group-router6000";
+
+  prefix "xcgrouprouter6000";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-lag-ext-router6000 {
+    prefix "lagxrouter6000";
+  }
+
+  import ericsson-vpws-router6000 {
+    prefix "vpwsrouter6000";
+  }
+
+  import ericsson-evpn-vpws-router6000 {
+    prefix "evpnvpwsrouter6000";
+  }
+
+  import ericsson-l2-service-router6000 {
+    prefix "l2servicer6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-xc-group-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-02-26" {
+    description
+      "Adding evpn-vpws ref-path";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2019-02-19" {
+    description
+      "Adding evpn-vpws instance as a part of xc config command";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-05-24" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-03-30" {
+    description
+      "modify the must of end-si-id.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-13" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping config-xc-group-grp {
+    description
+      "XC group configuration mode";
+    /*
+    xc lg (lg-name) <service-instance (si-id-in)> [(end-si-id-
+     in)] to { <slot-port-out (slot-port-id-out)<service-
+     instance-out (si-id-out)> [(end-si-id-out)]> | <lg (lg-name)
+     <service-instance-out (si-id-out)> [(end-si-id-out)]> |
+     <pseudowire instance (pw-inst-id)> | <evpn-vpws-instance
+     (instance-id)>}
+    */
+    list xc-lg {
+      key "lg-name service-instance";
+      description
+        "Link-group of circuit(s)";
+      leaf lg-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Linkgroup name";
+      }
+      leaf service-instance {
+        type leafref {
+          path "/if:interfaces/if:interface/lagxrouter6000:link-"
+          + "group/l2servicer6k:service-instance/l2servicer6k:spec-"
+          + "instance-id";
+        }
+        description
+          "Service instance identifier.";
+      }
+      leaf end-si-id-in {
+        type uint32;
+        must "number(/if:interfaces/if:interface[if:name=current"
+        + "()/../lg-name]/lagxrouter6000:link-group/l2servicer6k"
+        + ":service-instance/l2servicer6k:end-instance-id) >= "
+        + "number(.)" {
+          error-message "invalid length or prefix range.";
+          description
+            "";
+        }
+        description
+          "End identifier of the consecutive range of service
+           instances.";
+      }
+      leaf to {
+        type empty;
+        mandatory true;
+        description
+          "Configure the outbound circuit to be crossconnected
+           to";
+      }
+      choice xc-lg-choice {
+        mandatory true;
+        case slot-port-out {
+          container slot-port-out {
+            description
+              "outbound circuit";
+            leaf slot-port-id-out {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Specify outbound circuit";
+            }
+            leaf service-instance-out {
+              type leafref {
+                path "/if:interfaces/if:interface/ethxrouter6000"
+                + ":ethernet/l2servicer6k:service-"
+                + "instance/l2servicer6k:spec-instance-id";
+              }
+              mandatory true;
+              description
+                "Service instance identifier.";
+            }
+            leaf end-si-id-out {
+              type uint32;
+              must "number(/if:interfaces/if:interface[if:name=c"
+              + "urrent()/../slot-port-id-"
+              + "out]/ethxrouter6000:ethernet/l2servicer6k:service-"
+              + "instance/l2servicer6k:end-instance-id) >= "
+              + "number(.)" {
+                error-message "invalid length or prefix range.";
+                description
+                  "";
+              }
+              description
+                "End identifier of the consecutive range of
+                 service instances.";
+            }
+          }
+        }
+        case lg {
+          container lg {
+            description
+              "Link-group of circuit(s)";
+            leaf lg-name {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Linkgroup name";
+            }
+            leaf service-instance-out {
+              type leafref {
+                path "/if:interfaces/if:interface/lagxrouter6000"
+                + ":link-group/l2servicer6k:service-"
+                + "instance/l2servicer6k:spec-instance-id";
+              }
+              mandatory true;
+              description
+                "Service instance identifier.";
+            }
+            leaf end-si-id-out {
+              type uint32;
+              must "number(/if:interfaces/if:interface[if:name=c"
+              + "urrent()/../lg-name]/lagxrouter6000:link-"
+              + "group/l2servicer6k:service-instance/l2servicer6k"
+              + ":end-instance-id) >= number(.)" {
+                error-message "invalid length or prefix range.";
+                description
+                  "";
+              }
+              description
+                "End identifier of the consecutive range of
+                 service instances.";
+            }
+          }
+        }
+        case pseudowire {
+          container pseudowire {
+            description
+              "VLL cross connection";
+            leaf instance {
+              type leafref {
+                path "/ctxsr6k:contexts/vpwsrouter6000:pseudowir"
+                + "e/vpwsrouter6000:instance/vpwsrouter6000:instanc"
+                + "e";
+              }
+              mandatory true;
+              description
+                "Configure a Pseudowire Instance";
+            }
+          }
+        }
+        case evpn-vpws-instance {
+          leaf evpn-vpws-instance {
+            type leafref {
+              path "/ctxsr6k:contexts/evpnvpwsrouter6000:vpws-"
+              + "instance/evpnvpwsrouter6000:instance-id";
+            }
+            description
+              "EVPN VPWS cross connection";
+          }
+        }
+      }
+    }
+    /*
+    xc (slot-port-id) <service-instance (si-id-in)> [(end-si-id-
+     in)] to { <slot-port-out (slot-port-id-out)<service-
+     instance-out (si-id-out)> [(end-si-id-out)]> | <lg (lg-name)
+     <service-instance-out (si-id-out)> [(end-si-id-out)]> |
+     <pseudowire instance (pw-inst-id)> | <evpn-vpws-instance
+     (instance-id)>}
+    */
+    list xc {
+      key "slot-port-id service-instance";
+      description
+        "Configure a circuit crossconnect";
+      leaf slot-port-id {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "input circuit(s)";
+      }
+      leaf service-instance {
+        type leafref {
+          path "/if:interfaces/if:interface/ethxrouter6000:ether"
+          + "net/l2servicer6k:service-instance/l2servicer6k:spec-"
+          + "instance-id";
+        }
+        description
+          "Service instance identifier.";
+      }
+      leaf end-si-id-in {
+        type uint32;
+        must "number(/if:interfaces/if:interface[if:name=current"
+        + "()/../slot-port-id]/ethxrouter6000:ethernet/l2servicer6k"
+        + ":service-instance/l2servicer6k:end-instance-id) >= "
+        + "number(.)" {
+          error-message "invalid length or prefix range.";
+          description
+            "";
+        }
+        description
+          "End identifier of the consecutive range of service
+           instances.";
+      }
+      leaf to {
+        type empty;
+        mandatory true;
+        description
+          "Configure the outbound circuit to be crossconnected
+           to";
+      }
+      choice xc-choice {
+        mandatory true;
+        case slot-port-out {
+          container slot-port-out {
+            description
+              "outbound circuit";
+            leaf slot-port-id-out {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Specify outbound circuit";
+            }
+            leaf service-instance-out {
+              type leafref {
+                path "/if:interfaces/if:interface/ethxrouter6000"
+                + ":ethernet/l2servicer6k:service-"
+                + "instance/l2servicer6k:spec-instance-id";
+              }
+              mandatory true;
+              description
+                "Service instance identifier.";
+            }
+            leaf end-si-id-out {
+              type uint32;
+              must "number(/if:interfaces/if:interface[if:name=c"
+              + "urrent()/../slot-port-id-"
+              + "out]/ethxrouter6000:ethernet/l2servicer6k:service-"
+              + "instance/l2servicer6k:end-instance-id) >= "
+              + "number(.)" {
+                error-message "invalid length or prefix range.";
+                description
+                  "";
+              }
+              description
+                "End identifier of the consecutive range of
+                 service instances.";
+            }
+          }
+        }
+        case lg {
+          container lg {
+            description
+              "Link-group of circuit(s)";
+            leaf lg-name {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Linkgroup name";
+            }
+            leaf service-instance-out {
+              type leafref {
+                path "/if:interfaces/if:interface/lagxrouter6000"
+                + ":link-group/l2servicer6k:service-"
+                + "instance/l2servicer6k:spec-instance-id";
+              }
+              mandatory true;
+              description
+                "Service instance identifier.";
+            }
+            leaf end-si-id-out {
+              type uint32;
+              must "number(/if:interfaces/if:interface[if:name=c"
+              + "urrent()/../lg-name]/lagxrouter6000:link-"
+              + "group/l2servicer6k:service-instance/l2servicer6k"
+              + ":end-instance-id) >= number(.)" {
+                error-message "invalid length or prefix range.";
+                description
+                  "";
+              }
+              description
+                "End identifier of the consecutive range of
+                 service instances.";
+            }
+          }
+        }
+        case pseudowire {
+          container pseudowire {
+            description
+              "VLL cross connection";
+            leaf instance {
+              type leafref {
+                path "/ctxsr6k:contexts/vpwsrouter6000:pseudowir"
+                + "e/vpwsrouter6000:instance/vpwsrouter6000:instanc"
+                + "e";
+              }
+              mandatory true;
+              description
+                "VLL cross connection";
+            }
+          }
+        }
+        case evpn-vpws-instance {
+          leaf evpn-vpws-instance {
+            type leafref {
+              path "/ctxsr6k:contexts/evpnvpwsrouter6000:vpws-"
+              + "instance/evpnvpwsrouter6000:instance-id";
+            }
+            description
+              "EVPN VPWS cross connection";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-xc-group";
+    /*
+    xc-group {(group-name) | default }
+    */
+    list xc-group {
+      key "xc-group";
+      description
+        "Configure crossconnect group";
+      leaf xc-group {
+        type union {
+          type string;
+          type enumeration {
+            enum default {
+              value 0;
+              description
+                "Default group name";
+            }
+          }
+        }
+        description
+          "leaf xc-group.";
+      }
+      uses config-xc-group-grp;
+    }
+  }
+
+}

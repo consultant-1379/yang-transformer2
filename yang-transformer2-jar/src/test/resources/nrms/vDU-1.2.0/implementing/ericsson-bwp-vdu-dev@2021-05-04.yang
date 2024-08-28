@@ -1,0 +1,102 @@
+module ericsson-bwp-vdu-dev {
+  yang-version 1.1;
+  namespace urn:rdns:com:ericsson:oammodel:ericsson-bwp-vdu-dev;
+  prefix bwp3gppextdev;
+
+  import _3gpp-common-managed-element { prefix me3gpp; }
+  import _3gpp-nr-nrm-gnbdufunction { prefix gnbdu3gpp; }
+  import _3gpp-nr-nrm-bwp { prefix bwp3gpp; }
+  import ericsson-yang-extensions { prefix yexte; }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "The module defines the BWP data model deviations for the Ericsson vDU.
+
+    Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+  revision 2021-05-04 {
+    description
+      "Deviations on _3gpp-nr-nrm-bwp.";
+    yexte:version 1;
+    yexte:release 0;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+
+  revision 2020-12-17 {
+    description
+      "Deviations on _3gpp-nr-nrm-bwp.";
+    yexte:version 0;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/bwp3gpp:BWP/bwp3gpp:attributes/bwp3gpp:vnfParametersList {
+    description "BWP::vnfParametersList is not supported.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/bwp3gpp:BWP/bwp3gpp:attributes/bwp3gpp:peeParametersList {
+    description "Monitoring of PEE parameters is not supported for Ericsson vDU.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/bwp3gpp:BWP/bwp3gpp:attributes/bwp3gpp:priorityLabel {
+    description "Label value for management system to take into account is not supported for Ericsson vDU.";
+    deviate not-supported;
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/bwp3gpp:BWP/bwp3gpp:attributes/bwp3gpp:bwpContext {
+    deviate add {
+        must '. != "SUL"' {
+          error-message
+            "SUL not supported.";
+        }
+    }
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/bwp3gpp:BWP/bwp3gpp:attributes/bwp3gpp:isInitialBwp {
+    deviate replace {
+      mandatory false;
+    }
+    deviate add {
+      default "INITIAL";
+      must '. = "INITIAL"' {
+        error-message
+          "Only INITIAL is supported.";
+      }
+    }
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/bwp3gpp:BWP/bwp3gpp:attributes/bwp3gpp:cyclicPrefix {
+    deviate replace {
+      mandatory false;
+    }
+    deviate add {
+      default "NORMAL";
+      must '. = "NORMAL"' {
+        error-message
+          "Only NORMAL is supported.";
+      }
+    }
+  }
+
+  deviation /me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/bwp3gpp:BWP/bwp3gpp:attributes/bwp3gpp:startRB {
+    deviate replace {
+      mandatory false;
+    }
+    deviate add {
+      default "0";
+      must '. = "0"' {
+        error-message
+          "Only 0 is supported.";
+      }
+    }
+  }
+}

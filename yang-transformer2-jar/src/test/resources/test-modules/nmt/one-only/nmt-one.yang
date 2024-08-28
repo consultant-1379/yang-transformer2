@@ -1,0 +1,12 @@
+module nmt-one {
+
+    namespace "urn:test:nmt-one";
+    prefix this;
+
+    revision "2021-11-10";
+
+	container cont1 {
+		presence "";
+	}
+
+}

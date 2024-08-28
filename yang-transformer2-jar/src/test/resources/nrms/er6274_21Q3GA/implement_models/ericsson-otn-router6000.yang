@@ -1,0 +1,321 @@
+module ericsson-otn-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-otn-router6000";
+
+  prefix "otnr6k";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-router6000 {
+    prefix "ethxrouter6000";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-otn-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-25" {
+    description
+      "add everest denali for fec and modify sd-fc
+       forber-threshold";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2019-06-19" {
+    description
+      "modify for deg-value pattern";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2019-05-31" {
+    description
+      "modify ber pre sd sf for CLI";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-08-22" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping otn-grp {
+    description
+      "Port OTN framing configuration mode";
+    /*
+    prbs { prbs-7 | prbs-15 | prbs-31 }
+    */
+    container prbs {
+      description
+        "Configure CFP prbs";
+      choice prbs {
+        case prbs-7 {
+          leaf prbs-7 {
+            type empty;
+            description
+              "Tx PRBS pattern 2^7";
+          }
+        }
+        case prbs-15 {
+          leaf prbs-15 {
+            type empty;
+            description
+              "Tx PRBS pattern 2^15";
+          }
+        }
+        case prbs-31 {
+          leaf prbs-31 {
+            type empty;
+            description
+              "Tx PRBS pattern 2^31";
+          }
+        }
+      }
+    }
+    /*
+    loopback { client-loopback | network-loopback }
+    */
+    container loopback {
+      description
+        "Configure CFP loopback";
+      choice loopback {
+        case client-loopback {
+          leaf client-loopback {
+            type empty;
+            description
+              "loopback towards Host side";
+          }
+        }
+        case network-loopback {
+          leaf network-loopback {
+            type empty;
+            description
+              "loopback towards Network side";
+          }
+        }
+      }
+    }
+    /*
+    ber-threshold { { < pre-fec-sd { staircase (staircase-value)
+     | g709 (g709-value) } > } | { < pre-fec-sf { staircase
+     (staircase-value) | g709 (g709-value) } > } | { < sm-deg
+     (deg-value) > } }
+    */
+    container ber-threshold {
+      status obsolete;
+      description
+        "Configure BER threshold";
+      container pre-fec-sd {
+        description
+          "Pre-FEC threshold for FEC Degrade alarm";
+        leaf staircase {
+          type string {
+            pattern '(([1-2]\.[0-9])|(3\.[0-6]))E-([3-9]|10)';
+          }
+          description
+            "OTU-4 7% Staircase HD-FEC";
+        }
+        leaf g709 {
+          type string {
+            pattern '(([1-7]\.[0-9])|(8\.[0-5]))E-([5-9]|10)';
+          }
+          description
+            "G.709 compliant FEC";
+        }
+      }
+      container pre-fec-sf {
+        description
+          "Pre-FEC threshold for FEC Fail alarm";
+        leaf staircase {
+          type string {
+            pattern '(([1-2]\.[0-9])|(3\.[0-6]))E-([3-9]|10)';
+          }
+          description
+            "OTU-4 7% Staircase HD-FEC";
+        }
+        leaf g709 {
+          type string {
+            pattern '(([1-7]\.[0-9])|(8\.[0-5]))E-([5-9]|10)';
+          }
+          description
+            "G.709 compliant FEC";
+        }
+      }
+      leaf sm-deg {
+        type string {
+          pattern
+          '((([1-9]|1[0-9])\.[0-9])|(20\.0))E-(8|9|10|11)';
+        }
+        description
+          "SM-BIP8 threshold for OTU Degrade";
+      }
+    }
+    /*
+    fec { staircase | g709 | sd-fec-everest | sd-fec-denali }
+    */
+    container fec {
+      description
+        "Configure OTN FEC mechanism";
+      choice fec {
+        case staircase {
+          leaf staircase {
+            type empty;
+            description
+              "OTU-4 7% Staircase HD-FEC";
+          }
+        }
+        case g709 {
+          leaf g709 {
+            type empty;
+            description
+              "G.709 compliant FEC";
+          }
+        }
+        case sd-fec-everest {
+          leaf sd-fec-everest {
+            type empty;
+            description
+              "Everest-Compatible 15% SD-FEC(Soft Decision-FEC)";
+          }
+        }
+        case sd-fec-denali {
+          leaf sd-fec-denali {
+            type empty;
+            description
+              "Denali-Compatible 15%
+               SD-FEC-non-differential(Soft Decision-FEC)";
+          }
+        }
+      }
+    }
+    /*
+    output-power (power-value)
+    */
+    leaf output-power {
+      type int16 {
+        range "-1000..100";
+      }
+      description
+        "Configure TX Output Power";
+    }
+    /*
+    ber-threshold-config { { < pre-fec-sd { staircase
+     (staircase-value) | g709 (g709-value) | sd-fec (fec-value) }
+     > } | { < pre-fec-sf { staircase (staircase-value) | g709
+     (g709-value)  | sd-fec (fec-value) } > } | { < sm-deg (deg-
+     value) > } }
+    */
+    container ber-threshold-config {
+      description
+        "Configure BER threshold";
+      container pre-fec-sd {
+        description
+          "Pre-FEC threshold for FEC Degrade alarm";
+        leaf staircase {
+          type string {
+            pattern '(([1-9]\.\d)|([1-2]\d\.\d)|(3[0-5]\.\d)|(36'
+            + '\.0))E-([4-9]|10)';
+          }
+          description
+            "OTU-4 7% Staircase HD-FEC";
+        }
+        leaf g709 {
+          type string {
+            pattern '(([1-9]\.\d)|([1-7]\d\.\d)|(8[0-4]\.\d)|(85'
+            + '\.0))E-([6-9]|10)';
+          }
+          description
+            "G.709 compliant FEC";
+        }
+        leaf sd-fec {
+          type string {
+            pattern
+            '(([1-9]\.\d)|(1[0-5]\.\d)|(16\.0))E-([3-9]|10)';
+          }
+          description
+            "Soft Decision Forward Error Correction";
+        }
+      }
+      container pre-fec-sf {
+        description
+          "Pre-FEC threshold for FEC Fail alarm";
+        leaf staircase {
+          type string {
+            pattern '(([1-9]\.\d)|([1-2]\d\.\d)|(3[0-5]\.\d)|(36'
+            + '\.0))E-([4-9]|10)';
+          }
+          description
+            "OTU-4 7% Staircase HD-FEC";
+        }
+        leaf g709 {
+          type string {
+            pattern '(([1-9]\.\d)|([1-7]\d\.\d)|(8[0-4]\.\d)|(85'
+            + '\.0))E-([6-9]|10)';
+          }
+          description
+            "G.709 compliant FEC";
+        }
+        leaf sd-fec {
+          type string {
+            pattern
+            '(([1-9]\.\d)|(1[0-5]\.\d)|(16\.0))E-([3-9]|10)';
+          }
+          description
+            "Soft Decision Forward Error Correction";
+        }
+      }
+      leaf sm-deg {
+        type string {
+          pattern '(([1-9]\.\d)|(1\d\.\d)|(20\.0))E-(8|9|10|11)';
+        }
+        description
+          "SM-BIP8 threshold for OTU Degrade";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxrouter6000:ethernet" {
+    description
+      "ericsson-otn";
+    /*
+    transceiver-framer-otn
+    */
+    container transceiver-framer-otn {
+      presence "";
+      description
+        "Configure transceiver parameters";
+      uses otn-grp;
+    }
+  }
+
+}

@@ -1,0 +1,23 @@
+module identityref-duplicates-two {
+
+    namespace "urn!test!identityref-duplicates-two";
+    prefix two;
+
+    revision "2021-03-09";
+
+	import identityref-duplicates-one {
+		prefix one;
+	}
+
+	identity red {		// exists in one / two / three
+		base one:base;
+	}
+
+	identity yellow {		// exists in one / two
+		base one:base;
+	}
+
+	identity blue {		// exists in two / three
+		base one:base;
+	}
+}

@@ -1,0 +1,64 @@
+module if-feature-handling-module1 {
+
+	namespace "urn;test;if-feature-handling-module1";
+	prefix this;
+
+	revision "2022-09-23";
+
+	include if-feature-handling-submodule2;
+
+	feature feature11;
+	feature feature12;
+	feature feature13;
+	feature feature14;
+
+	container cont11 {
+		presence "";
+	}
+
+	container cont12 {
+		presence "";
+		if-feature feature11;
+	}
+
+	container cont13 {
+		presence "";
+		if-feature "this:feature11 or feature12 or feature13";
+	}
+
+	container cont14 {
+		presence "";
+		if-feature "not feature12";
+	}
+
+	container cont15 {
+		presence "";
+		if-feature "this:feature11 and (feature12 and feature13)";
+	}
+
+	container cont16 {
+		presence "";
+		if-feature "((this:feature11 and feature12) or (feature13 and feature14))";
+	}
+
+	container cont17 {
+		presence "";
+		if-feature this:feature18;
+	}
+
+	container cont21 {
+		presence "";
+
+		leaf leaf211 {
+			type string;
+			mandatory true;
+		}
+
+		leaf leaf212 {
+			type string;
+			if-feature feature11;
+			mandatory true;
+		}
+	}
+
+}

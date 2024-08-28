@@ -1,0 +1,402 @@
+module ericsson-interface-pbr-ext-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-pbr-ext-ipos";
+
+  prefix "ifpbrxipos";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-lag-ext-ipos {
+    prefix "lagxipos";
+  }
+
+  import ericsson-ethernet-ext-ipos {
+    prefix "ethxipos";
+  }
+
+  import ericsson-l2vlan-ext-ipos {
+    prefix "l2vlanxipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-pbr-ipos {
+    prefix "pbripos";
+  }
+
+  import ericsson-bvi-ext-ipos {
+    prefix "bvixipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-pbr-ext-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1, Delete some redundant node";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-07-02" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-04-09" {
+    description
+      "modify error message and description of fwd-name";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-22" {
+    description
+      "Fix jira IPOS-12068";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-07-08" {
+    description
+      "remove forward under the port ethernet and dot1q pvc";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-04-14" {
+    description
+      "add forward under the port BVI";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  augment "/if:interfaces/if:interface/lagxipos:link-group" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name)  in [ ip [ ipv6 ] acl-counters |
+     ipv6 acl-counters ]
+    */
+    list forward-policy {
+      must "(../lagxipos:bind-interface)" {
+        error-message "Bind this circuit to an interface first "
+        + "before configuring this type of binding.";
+        description
+          "Bind this circuit to an interface first before
+           configuring this type of binding.";
+      }
+      key "fwd-name";
+      max-elements 1;
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type leafref {
+	  path "/ctxsipos:contexts/pbripos:forward/pbripos:"
+	  + "fwd-polname";
+        }
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        description
+          "";
+        case ip {
+          container ip {
+            description
+              "Configure IP or IPV6 attributes";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPv6";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxipos:ethernet" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name)  in [ ip [ ipv6 ] acl-counters |
+     ipv6 acl-counters ]
+    */
+    container forward-policy {
+      presence "";
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type leafref {
+	  path "/ctxsipos:contexts/pbripos:forward/pbripos:"
+	  + "fwd-polname";
+        }
+        must "(../../ethxipos:bind-interface)" {
+          error-message "Bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "Bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        description
+          "";
+        case ip {
+          container ip {
+            description
+              "Configure IP or IPV6 attributes";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPv6";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/bvixipos:bvi" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name) in [ ip acl-counters | ipv6 acl-
+     counters | ip ipv6 acl-counters ]
+    */
+    container forward-policy {
+      presence "";
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type leafref {
+	  path "/ctxsipos:contexts/pbripos:forward/pbripos:"
+	  + "fwd-polname";
+        }
+        must "(../../bvixipos:bind-interface)" {
+          error-message "Bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "Bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        description
+          "";
+        case ip-acl-counters {
+          leaf ip-acl-counters {
+            type empty;
+            description
+              "Configure IP enable ACL counters";
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Configure IPv6 enable ACL counters";
+          }
+        }
+        case ip-ipv6-acl-counters {
+          leaf ip-ipv6-acl-counters {
+            type empty;
+            description
+              "Configure IP and IPV6 enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/l2vlanxipos:dot1q/"
+  + "l2vlanxipos:pvc" {
+    description
+      "ericsson-pbr-interface";
+    /*
+    forward policy (fwd-name)  in [ ip [ ipv6 ] acl-counters |
+     ipv6 acl-counters ]
+    */
+    container forward-policy {
+      presence "";
+      description
+        "Configure forward policy";
+      leaf fwd-name {
+        type leafref {
+	  path "/ctxsipos:contexts/pbripos:forward/pbripos:"
+	  + "fwd-polname";
+        }
+        must "(../../l2vlanxipos:bind-interface)" {
+          error-message "Bind this circuit to an interface first "
+          + "before configuring this type of binding.";
+          description
+            "Bind this circuit to an interface first before
+             configuring this type of binding.";
+        }
+        mandatory true;
+        description
+          "Forward policy name";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Configure inbound forward policy";
+      }
+      choice forward-policy-opt {
+        description
+          "";
+        case ip {
+          container ip {
+            description
+              "Configure IP or IPV6 attributes";
+            leaf ip {
+              type empty;
+              mandatory true;
+              description
+                "Configure IP attributes";
+            }
+            leaf ipv6 {
+              type empty;
+              description
+                "Configure IPv6";
+            }
+            leaf acl-counters {
+              type empty;
+              mandatory true;
+              description
+                "Enable ACL counters";
+            }
+          }
+        }
+        case ipv6-acl-counters {
+          leaf ipv6-acl-counters {
+            type empty;
+            description
+              "Enable ACL counters";
+          }
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,766 @@
+module ericsson-pbr-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-pbr-ipos";
+
+  prefix "pbripos";
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-types-ipos {
+    prefix "typesipos";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-pbr-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "6";
+  }
+
+  revision "2018-07-10" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "5";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "4";
+  }
+
+  revision "2018-05-24" {
+    description
+      "Change when condition to must condition for drop and
+       redirect-destination in group policy-frwd-grp. fix
+       JIRA-23700";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision "2018-04-24" {
+    description
+      "Change when condition to must condition for drop and
+       redirect-destination";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-03-08" {
+    description
+      "Ip-access-group and ipv6-access-group can be configured
+       with 'radius-guide' set";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-02-16" {
+    description
+      "Redirect command additions for L3 FEC mapping FT
+       JIRA19026";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-22" {
+    description
+      "Change must condition to mandatory to fix JIRA20396";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2016-12-29" {
+    description
+      "Remove presence to fix JIRA-3655.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-12-20" {
+    description
+      "Add back presence for container.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-15" {
+    description
+      "Remove presence of container to non-presence.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "Initial revision";
+    reference
+      "rfc6020";
+  }
+
+  grouping config-policy-group-class-sub-pbr-grp {
+    description
+      "";
+    /*
+    redirect destination {local |  <redirect-destination-choice
+     { < ip <next-hopfake <next-hop {(host-addr) | default}>> [
+     context (ctxname-v4)]> | < ipv6 <next-hopfake <next-hop
+     {(host-addr) | default}> >[ context (ctxname-v6)]> }> | <lsp
+     {sr-te|rsvp-te|igp-sr|ldp|static-mpls|static-sr} {<tunnel-
+     name>} { <ip  (host-addr) [ context (ctxname-v4)]> | < ipv6
+     (host-addr-v6) [ context (ctxname-v6)]>}>}
+    */
+    container redirect-destination {
+      description
+        "Container redirect destination";
+      choice redirect-destination {
+        description
+          "";
+        case local {
+          leaf local {
+            type empty;
+            must "not (../../drop)" {
+              error-message "Must remove drop first";
+              description
+                "Must remove drop first";
+            }
+            description
+              "Specify redirect to local server";
+          }
+        }
+        case redirect-destination-choice {
+          container redirect-destination-choice {
+            description
+              "Container redirect-destination-choice.";
+            container ip {
+              must "not (../../../drop) and ./next-hopfake/"
+              + "next-hop" {
+                error-message "Must remove drop first and have "
+                + "sub's next-hop.";
+                description
+                  "Must remove drop first and have sub's
+                   next-hop.";
+              }
+              presence "";
+              description
+                "Configure IPv4 attributes";
+              container next-hopfake {
+                description
+                  "Next-hop-list";
+                leaf-list next-hop {
+                  type typesipos:nexthop_ipv4_addr;
+                  min-elements 1;
+                  max-elements 8;
+                  ordered-by user;
+                  description
+                    "Specify next hop IPv4 addresses";
+                }
+              }
+              leaf context {
+                type leafref {
+                  path "/ctxsipos:contexts/ctxipos:context/"
+                  + "ctxipos:context-name";
+                }
+                description
+                  "Configure context name";
+              }
+            }
+            container ipv6 {
+              must "not (../../../drop) and ./next-hopfake/"
+              + "next-hop" {
+                error-message "Must remove drop first and have "
+                + "sub's next-hop.";
+                description
+                  "Must remove drop first and have sub's
+                   next-hop.";
+              }
+              presence "";
+              description
+                "Configure IPv6";
+              container next-hopfake {
+                description
+                  "Next-hop-list";
+                leaf-list next-hop {
+                  type typesipos:nexthop_ipv6_addr;
+                  min-elements 1;
+                  max-elements 8;
+                  ordered-by user;
+                  description
+                    "Specify next hop IPv6 addresses";
+                }
+              }
+              leaf context {
+                type leafref {
+                  path "/ctxsipos:contexts/ctxipos:context/"
+                  + "ctxipos:context-name";
+                }
+                description
+                  "leaf context.";
+              }
+            }
+          }
+        }
+        case lsp {
+          container lsp {
+            description
+              "Specify redirect over Label Switched Path (LSP)";
+            choice lsp-choice {
+              description
+                "";
+              case sr-te {
+                leaf sr-te {
+                  type empty;
+                  description
+                    "Redirect over PCE initiated SR-TE tunnel";
+                }
+              }
+              case rsvp-te {
+                leaf rsvp-te {
+                  type empty;
+                  description
+                    "Redirect over RSVP-TE tunnel";
+                }
+              }
+              case igp-sr {
+                leaf igp-sr {
+                  type empty;
+                  description
+                    "Redirect over best-match IGP-SR (IS-IS SR)
+                     LSP";
+                }
+              }
+              case ldp {
+                leaf ldp {
+                  type empty;
+                  description
+                    "Redirect over best-match LDP LSP";
+                }
+              }
+              case static-mpls {
+                leaf static-mpls {
+                  type empty;
+                  description
+                    "Redirect over static MPLS LSP";
+                }
+              }
+              case static-sr {
+                leaf static-sr {
+                  type empty;
+                  description
+                    "Redirect over statically configured SR
+                     tunnel";
+                }
+              }
+            }
+            leaf tunnel-name {
+              when "((../../lsp/sr-te) or (../../lsp/rsvp-te) or "
+              + "(../../lsp/static-sr))" {
+                description
+                  "Specifying tunnel allowed only for
+                   SR-TE,RSVP-TE, and static SR";
+              }
+              type string;
+              description
+                "Name of LSP tunnel";
+            }
+            container ip-choice {
+              presence "";
+              description
+                "Configure IP address";
+              container ip {
+                presence "";
+                description
+                  "Configure IPv4 attributes";
+                leaf host-addr {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IPv4 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path "/ctxsipos:contexts/ctxipos:context/"
+                    + "ctxipos:context-name";
+                  }
+                  description
+                    "Configure context name";
+                }
+              }
+              container ipv6 {
+                description
+                  "Configure IPv6";
+                leaf host-addr-v6 {
+                  when "../../ipv6" {
+                    description
+                      "IPv6 address is only accepted if ipv6
+                       keyword is present";
+                  }
+                  type inet:ipv6-address;
+                  description
+                    "IPv6 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path "/ctxsipos:contexts/ctxipos:context/"
+                    + "ctxipos:context-name";
+                  }
+                  description
+                    "Configure context name";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    drop
+    */
+    leaf drop {
+      type empty;
+      must "(not (../redirect-destination/local) and not (../"
+      + "redirect-destination/redirect-destination-choice/ip) and "
+      + "not (../redirect-destination/redirect-destination-choice/"
+      + "ipv6))" {
+        error-message "Conflict with redirect destination. To "
+        + "configure drop must remove redirect destination first.";
+        description
+          "Conflict with redirect destination. To configure drop
+           must remove redirect destination first.";
+      }
+      description
+        "Drop intercepted traffic";
+    }
+  }
+
+  grouping config-policy-group-sub-pbr-grp {
+    description
+      "";
+    /*
+    class (class-name)
+    */
+    list class {
+      key "class";
+      description
+        "Class-definition class";
+      leaf class {
+        type string;
+        description
+          "Class-definition class name";
+      }
+      uses config-policy-group-class-sub-pbr-grp;
+    }
+  }
+
+  grouping policy-frwd-grp {
+    description
+      "Forward policy configuration mode";
+    /*
+    ip access-group (acl-name)(mirror-ctxname)
+    */
+    container ip-access-group {
+      must "((not(../radius-guided)) and acl-name and "
+      + "mirror-ctxname)or(../radius-guided)" {
+        error-message "ACL name and mirror context name are "
+        + "mandatory if no radius guided.";
+        description
+          "ACL name and mirror context name are mandatory if no
+           radius guided.";
+      }
+      presence "";
+      description
+        "Specify access list";
+      leaf acl-name {
+        type string;
+        must "../mirror-ctxname" {
+          error-message "Mirror context name must be configured "
+          + "with ACL name.";
+          description
+            "Mirror context name must be configured with ACL
+             name.";
+        }
+        description
+          "Optional policy static access list name";
+      }
+      leaf mirror-ctxname {
+        type leafref {
+	  path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+	  + "context-name";
+        }
+        must "../acl-name" {
+          error-message "ACL name must be configured with mirror "
+          + "context name.";
+          description
+            "ACL name must be configured with mirror context
+             name.";
+        }
+        description
+          "Name of the context in which the policy access list
+           is defined";
+      }
+      uses config-policy-group-sub-pbr-grp;
+    }
+    /*
+    ipv6 access-group (acl-name)(mirror-ctxname)
+    */
+    container ipv6-access-group {
+      must "((not(../radius-guided)) and acl-name and "
+      + "mirror-ctxname)or(../radius-guided)" {
+        error-message "ACL name and mirror context name are "
+        + "mandatory if no radius guided.";
+        description
+          "ACL name and mirror context name are mandatory if no
+           radius guided.";
+      }
+      presence "";
+      description
+        "Specify access list";
+      leaf acl-name {
+        type string;
+        must "../mirror-ctxname" {
+          error-message "Mirror context name must be configured "
+          + "with ACL name.";
+          description
+            "Mirror context name must be configured with ACL
+             name.";
+        }
+        description
+          "Optional policy static access list name";
+      }
+      leaf mirror-ctxname {
+        type leafref {
+	  path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+	  + "context-name";
+        }
+        must "../acl-name" {
+          error-message "ACL name must be configured with mirror "
+          + "context name.";
+          description
+            "ACL name must be configured with mirror context
+             name.";
+        }
+        description
+          "Name of the context in which the policy access list
+           is defined";
+      }
+      uses config-policy-group-sub-pbr-grp;
+    }
+    /*
+    redirect destination {local |  <redirect-destination-choice
+     { < ip <next-hopfake <next-hop {(host-addr) | default}>> [
+     context (ctxname-v4)]> | < ipv6 <next-hopfake <next-hop
+     {(host-addr) | default}> >[ context (ctxname-v6)]> }> | <lsp
+     {sr-te|rsvp-te|igp-sr|ldp|static-mpls|static-sr} {<tunnel-
+     name>} { <ip  (host-addr) [ context (ctxname-v4)]> | < ipv6
+     (host-addr-v6) [ context (ctxname-v6)]>}>}
+    */
+    container redirect-destination {
+      description
+        "Configure redirect destination";
+      choice redirect-destination {
+        description
+          "";
+        case local {
+          leaf local {
+            type empty;
+            must "not (../../drop)" {
+              error-message "Must remove drop first.";
+              description
+                "Must remove drop first.";
+            }
+            description
+              "Specify redirect to local server";
+          }
+        }
+        case redirect-destination-choice {
+          container redirect-destination-choice {
+            description
+              "Configure redirect-destination-choice.";
+            container ip {
+              must "./next-hopfake/next-hop and not (../../../"
+              + "drop)" {
+                error-message "Must remove drop first and have "
+                + "sub's next-hop.";
+                description
+                  "Must remove drop first and have sub's
+                   next-hop.";
+              }
+              presence "";
+              description
+                "Configure IPv4 attributes";
+              container next-hopfake {
+                description
+                  "Next-hop-list";
+                leaf-list next-hop {
+                  type typesipos:nexthop_ipv4_addr;
+                  min-elements 1;
+                  max-elements 8;
+                  ordered-by user;
+                  description
+                    "Specify next hop IPv4 addresses";
+                }
+              }
+              leaf context {
+                type leafref {
+                  path "/ctxsipos:contexts/ctxipos:context/"
+                  + "ctxipos:context-name";
+                }
+                description
+                  "Configure context name";
+              }
+            }
+            container ipv6 {
+              must "./next-hopfake/next-hop and not (../../../"
+              + "drop)" {
+                error-message "Must remove drop first and have "
+                + "sub's next-hop.";
+                description
+                  "Must remove drop first and have sub's
+                   next-hop.";
+              }
+              presence "";
+              description
+                "Configure IPv6";
+              container next-hopfake {
+                description
+                  "Next-hop-list";
+                leaf-list next-hop {
+                  type typesipos:nexthop_ipv6_addr;
+                  min-elements 1;
+                  max-elements 8;
+                  ordered-by user;
+                  description
+                    "Specify next hop IPv6 addresses";
+                }
+              }
+              leaf context {
+                type leafref {
+                  path "/ctxsipos:contexts/ctxipos:context/"
+                  + "ctxipos:context-name";
+                }
+                description
+                  "Configure context name";
+              }
+            }
+          }
+        }
+        case lsp {
+          container lsp {
+            description
+              "Specify redirect over Label Switched Path (LSP)";
+            choice lsp-choice {
+              description
+                "";
+              case sr-te {
+                leaf sr-te {
+                  type empty;
+                  description
+                    "Redirect over PCE initiated SR-TE tunnel";
+                }
+              }
+              case rsvp-te {
+                leaf rsvp-te {
+                  type empty;
+                  description
+                    "Redirect over RSVP-TE tunnel";
+                }
+              }
+              case igp-sr {
+                leaf igp-sr {
+                  type empty;
+                  description
+                    "Redirect over best-match IGP-SR (IS-IS SR)
+                     LSP";
+                }
+              }
+              case ldp {
+                leaf ldp {
+                  type empty;
+                  description
+                    "Redirect over best-match LDP LSP";
+                }
+              }
+              case static-mpls {
+                leaf static-mpls {
+                  type empty;
+                  description
+                    "Redirect over static MPLS LSP";
+                }
+              }
+              case static-sr {
+                leaf static-sr {
+                  type empty;
+                  description
+                    "Redirect over statically configured SR
+                     tunnel";
+                }
+              }
+            }
+            leaf tunnel-name {
+              when "((../../lsp/sr-te) or (../../lsp/rsvp-te) or "
+              + "(../../lsp/static-sr))" {
+                description
+                  "Specifying tunnel allowed only for
+                   SR-TE,RSVP-TE, and static SR";
+              }
+              type string;
+              description
+                "Name of LSP tunnel";
+            }
+            container ip-choice {
+              presence "";
+              description
+                "Configure IP address";
+              container ip {
+                presence "";
+                description
+                  "Configure IPv4 attributes";
+                leaf host-addr {
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "IPv4 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path "/ctxsipos:contexts/ctxipos:context/"
+                    + "ctxipos:context-name";
+                  }
+                  description
+                    "Configure context name";
+                }
+              }
+              container ipv6 {
+                description
+                  "Configure IPv6";
+                leaf host-addr-v6 {
+                  when "../../ipv6" {
+                    description
+                      "IPv6 address is only accepted if ipv6
+                       keyword is present";
+                  }
+                  type inet:ipv6-address;
+                  description
+                    "IPv6 host address";
+                }
+                leaf context {
+                  type leafref {
+                    path "/ctxsipos:contexts/ctxipos:context/"
+                    + "ctxipos:context-name";
+                  }
+                  description
+                    "Configure context name";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    drop
+    */
+    leaf drop {
+      type empty;
+      must "(not (../redirect-destination/local) and not (../"
+      + "redirect-destination/redirect-destination-choice/ip) and "
+      + "not (../redirect-destination/redirect-destination-choice/"
+      + "ipv6))" {
+        error-message "Conflict with redirect-destination.to "
+        + "config drop,must remove redirect-destination first.";
+        description
+          "Conflict with redirect-destination.to config
+           drop,must remove redirect-destination first.";
+      }
+      description
+        "Drop intercepted traffic";
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-pbr";
+    /*
+    forward (fwd-polname) [ radius-guided ]
+    */
+    list forward {
+      key "fwd-polname";
+      description
+        "Configure forward policy parameters";
+      leaf fwd-polname {
+        type string;
+        description
+          "forward policy name";
+      }
+      leaf radius-guided {
+        type empty;
+        description
+          "Designate as Radius guided policy";
+      }
+      uses policy-frwd-grp;
+    }
+  }
+
+}

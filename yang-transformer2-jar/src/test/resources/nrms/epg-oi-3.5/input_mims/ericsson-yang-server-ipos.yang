@@ -1,0 +1,460 @@
+module ericsson-yang-server-ipos {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-yang-server-ipos";
+  prefix ysvripos;
+
+  import tailf-common {
+    prefix tailf;
+  }
+
+  import confd_dyncfg {
+    prefix dyncfg;
+  }
+  import tailf-xsd-types {
+    prefix xs;
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-logger-ipos {
+    prefix "loggeripos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "
+     YANG server configuration parameters that can be modified in runtime.
+     Copyright (c) 2016,2017 Ericsson AB.
+     All rights reserved.
+    ";
+
+  revision 2019-01-09 {
+    description
+      "Add a yang-server-error enum value below 'leaf name' of container rotate.";
+    reference
+      "confd_dyncfg.yang";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "4";
+  }
+
+  revision 2018-06-21 {
+    description
+      "YANG model description correction.";
+    reference
+      "confd_dyncfg.yang";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision 2018-03-22 {
+    description
+      "add leaf history-remove-duplicates in container cli";
+    reference
+      "confd_dyncfg.yang";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+ revision 2017-10-20 {
+    description
+      "add new dynamic config command.";
+    reference
+      "confd_dyncfg.yang";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision 2017-10-16 {
+    description
+      "add container cm-notification-sender";
+  }
+
+  revision 2017-07-13 {
+    description
+      "delete leaf cli style";
+    reference
+      "confd_dyncfg.yang";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  revision 2017-07-06 {
+    description
+      "add container rotate and delete logger-rotate model";
+    reference
+      "confd_dyncfg.yang";
+  }
+  revision 2017-06-16 {
+    description
+      "Fix the lint errors";
+    reference
+      "confd_dyncfg.yang";
+  }
+  revision 2016-12-22 {
+    description
+      "Change errorLog maxSize type 2016-12-22";
+    reference
+      "confd_dyncfg.yang";
+  }
+  revision 2016-12-19 {
+    description
+      "Add container logs and cli-suppress-shortenabled, modify namespace and description 2016-12-19";
+    reference
+      "confd_dyncfg.yang";
+  }
+  revision 2016-12-12 {
+    description
+      "Change the yang model name from 'ericsson-ipos-confd-system'
+       to 'ericsson-yang-server-ipos', fix the namespace and items names 2016-12-12";
+    reference
+      "confd_dyncfg.yang";
+  }
+  revision 2016-10-24 {
+    description
+      "Initial released yang model 2016-10-24";
+    reference
+      "confd_dyncfg.yang";
+  }
+
+  container cm-notification-sender{
+		presence "";
+			description
+			"CM notification sender sends push change update,
+			push change updates not created, and heartbeat notification to yang server";
+
+	      leaf enabled{
+			type boolean;
+			default "true";
+			tailf:cli-suppress-shortenabled;
+			description "Enable/Disable CM notification sender";
+	      }
+	}
+
+  container yang-server {
+    presence "";
+    description
+      "YANG server configuration";
+
+    tailf:callpoint sesslim-hook {
+        tailf:set-hook subtree;
+    }
+    container cli {
+      presence "";
+      description
+        "CLI settings";
+      leaf rollback-max {
+        type dyncfg:rollMax;
+        tailf:link "/dyncfg:confdConfig/dyncfg:cli/dyncfg:rollbackMax";
+        description
+          "Maximum number of possible alternatives to present when doing rollback";
+      }
+      leaf idle-timeout {
+        type xs:duration;
+        tailf:link "/dyncfg:confdConfig/dyncfg:cli/dyncfg:idleTimeout";
+        description
+          "Maximum idle time before terminating a CLI session";
+      }
+      leaf c-prompt1 {
+        type string;
+        tailf:link "/dyncfg:confdConfig/dyncfg:cli/dyncfg:cPrompt1";
+        description
+          "Global prompt used in operational mode";
+      }
+      leaf c-prompt2 {
+        type string;
+        tailf:link "/dyncfg:confdConfig/dyncfg:cli/dyncfg:cPrompt2";
+        description
+          "Global prompt used in configuration mode";
+      }
+      container timestamp {
+        presence "";
+        description
+             "Timestamp settings";
+        leaf enabled {
+          type boolean;
+          tailf:cli-suppress-shortenabled;
+          tailf:link "/dyncfg:confdConfig/dyncfg:cli/dyncfg:timestamp/dyncfg:enabled";
+          description
+            "Enabled is either 'true' or 'false'. If 'true' the CLI prints a timestamp before the output of each command";
+        }
+        leaf format {
+          type string;
+          tailf:link "/dyncfg:confdConfig/dyncfg:cli/dyncfg:timestamp/dyncfg:format";
+          description
+             "Specifies the format of a timestamp";
+        }
+      }
+      leaf history-remove-duplicates {
+        type boolean;
+        tailf:link "/dyncfg:confdConfig/dyncfg:cli/dyncfg:historyRemoveDuplicates";
+        description
+          "If set to 'true' then repeated commands in the CLI are only stored once in the history.
+	   Each invocation of the command only updates the date of the last entry.
+	   If set to 'false' duplicates are stored in the history";
+      }
+    }
+    container netconf {
+      presence "";
+      description
+        "NETCONF settings";
+      leaf idle-timeout {
+        type xs:duration;
+        tailf:link "/dyncfg:confdConfig/dyncfg:netconf/dyncfg:idleTimeout";
+        description
+          "Maximum idle time before terminating a NETCONF session";
+      }
+    }
+    container session-limits {
+      presence "";
+      description
+        "Session limit settings";
+      container session-limit{
+        must "(./max-cli-sessions + ./max-netconf-sessions) <= 32" {
+            error-message "The total number of CLI and NETCONF sessions cannot exceed 32";
+            description "The total number of CLI and NETCONF sessions cannot exceed 32";
+        }
+        presence "";
+        description
+          "Settings for the concurrent access sessions";
+        leaf max-cli-sessions {
+          type uint32 {
+            range "1..31";
+          }
+          default 16;
+          description
+            "The maximum number of access sessions from CLI";
+        }
+        leaf max-netconf-sessions {
+          type uint32 {
+            range "1..31";
+          }
+          default 16;
+          description
+            "The maximum number of access sessions from NETCONF";
+        }
+      }
+      container config-session-limit{
+        presence "";
+        description
+          "Settings for the concurrent configuration sessions";
+        leaf max-cli-sessions {
+          type uint32 {
+            range "1..31";
+          }
+          default 16;
+          description
+            "The maximum number of configuration sessions from CLI";
+        }
+        leaf max-netconf-sessions {
+          type uint32 {
+            range "1..31";
+          }
+          default 16;
+          description
+            "The maximum number of configuration sessions from NETCONF";
+        }
+      }
+    }
+  }
+
+
+  augment "/ctxsipos:contexts/loggeripos:logging" {
+    description
+      "augment the ipos logging";
+    container confd-log {
+      description
+        "Configure the YANG server log settings";
+      leaf enabled {
+        type boolean;
+        tailf:cli-suppress-shortenabled;
+        tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:confdLog/dyncfg:enabled";
+        description
+          "Enabled is either 'true' or 'false'. If 'true', the log is enabled";
+      }
+    }
+    container developer-log {
+      description
+        "Configure the YANG server debug log settings";
+      leaf enabled {
+        type boolean;
+        tailf:cli-suppress-shortenabled;
+        tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:developerLog/dyncfg:enabled";
+        description
+          "Enabled is either 'true' or 'false'. If 'true', the log is enabled";
+      }
+    }
+
+    leaf developer-log-level {
+      type dyncfg:developerLogLevelType;
+      tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:developerLogLevel";
+      description
+        "Controls which level of developer messages are printed in the developer log";
+    }
+
+    container audit-log {
+      description
+        "Configure the YANG server audit log settings";
+      leaf enabled {
+        type boolean;
+        tailf:cli-suppress-shortenabled;
+        tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:auditLog/dyncfg:enabled";
+        description
+          "Enabled is either 'true' or 'false'. If 'true', the log is enabled";
+      }
+    }
+    leaf audit-log-commit {
+      type boolean;
+      tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:auditLogCommit";
+      description
+        "Controls whether the audit log should include messages about
+         the resulting configuration changes for each commit to the
+         running data store.";
+    }
+
+    container netconf-log {
+      description
+        "Configure the YANG server NETCONF log settings";
+      leaf enabled {
+        type boolean;
+        tailf:cli-suppress-shortenabled;
+        tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:netconfLog/dyncfg:enabled";
+        description
+          "Enabled is either 'true' or 'false'. If 'true', the log is enabled";
+      }
+    }
+    container netconf-trace-log {
+      description
+        "Configure the YANG server NETCONF trace log settings";
+      leaf enabled {
+        type boolean;
+        tailf:cli-suppress-shortenabled;
+        tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:netconfTraceLog/dyncfg:enabled";
+        description
+          "Enabled is either 'true' or 'false'. If 'true', the log is enabled";
+      }
+    }
+    container xpath-trace-log {
+      description
+        "Configure the YANG server XPATH trace log settings";
+      leaf enabled {
+        type boolean;
+        tailf:cli-suppress-shortenabled;
+        tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:xpathTraceLog/dyncfg:enabled";
+        description
+          "Enabled is either 'true' or 'false'. If 'true', the log is enabled";
+      }
+    }
+    container error-log {
+      description
+        "Configure the YANG server error log settings";
+      leaf enabled {
+        type boolean;
+        tailf:cli-suppress-shortenabled;
+        tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:errorLog/dyncfg:enabled";
+        description
+          "Enabled is either 'true' or 'false'. If 'true', the log is enabled";
+      }
+      leaf max-size {
+        type dyncfg:errorLogSize;
+        tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:errorLog/dyncfg:maxSize";
+        description
+          "Max-size is the maximum size of an individual log file before it is rotated";
+      }
+      container debug {
+        description
+          "Configure the YANG server debug settings";
+        leaf enabled {
+          type boolean;
+          tailf:cli-suppress-shortenabled;
+          tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:errorLog/dyncfg:debug/dyncfg:enabled";
+          description
+            "Enable the YANG server debug or not";
+        }
+        leaf level {
+          type uint16;
+          tailf:link "/dyncfg:confdConfig/dyncfg:logs/dyncfg:errorLog/dyncfg:debug/dyncfg:level";
+          description
+            "Level 0..7 respectively represent 'Emergency','Alert','Critical','Error','Warning','Notice','Informational','Debug'";
+        }
+      }
+    }
+    /*
+    rotate file (file-name) { count (rotate-count) | size (file-size) }
+    */
+    container rotate {
+      description
+        "Set log rotate count or size";
+      list file {
+        description
+          "Specify the log file";
+        key "name";
+        leaf name {
+          type enumeration {
+            enum netconflog {
+              description
+                "netconf.log";
+            }
+            enum netconftrace {
+              description
+                "netconf.trace";
+            }
+            enum auditlog {
+              description
+                "audit.log";
+            }
+            enum xpathtrace {
+              description
+                "xpath.trace";
+            }
+            enum yang-server-developer {
+              description
+                "yang_server_developer.log";
+            }
+            enum yang-server-daemon {
+              description
+                "yang_sever_daemon.log";
+            }
+            enum yang-server-error {
+              description
+                "yang_server_error.log";
+            }
+          }
+          description
+            "Specify the log file";
+        }
+        leaf count {
+            type uint16 {
+              range "5..50";
+            }
+            default "5";
+            description
+              "Log files are rotated count times";
+        }
+        leaf size {
+            type uint16 {
+              range "10..20";
+            }
+            default "10";
+            description
+              "Log files are rotated only if they grow bigger
+               than size(MB) bytes";
+        }
+      }
+    }
+  }
+}

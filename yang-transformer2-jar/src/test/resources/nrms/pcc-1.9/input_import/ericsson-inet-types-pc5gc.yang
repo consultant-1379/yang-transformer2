@@ -1,0 +1,95 @@
+module ericsson-inet-types-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-inet-types-pc5gc";
+  prefix inettpc5gc;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "ericsson-inet-types-pc5gc
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-08-09 {
+    description
+      "Base interface type change";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision 2019-05-20 {
+    description
+      "Initial version";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  typedef ipv4-address-or-prefix {
+    type union {
+      type inet:ipv4-address;
+      type inet:ipv4-prefix;
+    }
+    description
+      "The ipv4-address-or-prefix type represents an IPv4 address or an
+       IPv4 prefix.";
+  }
+
+  typedef ipv6-address-or-prefix {
+    type union {
+      type inet:ipv6-address;
+      type inet:ipv6-prefix;
+    }
+    description
+      "The ipv6-address-or-prefix type represents an IPv6 address or an
+       IPv6 prefix.";
+  }
+
+  typedef ip-address-or-prefix {
+    type union {
+      type ipv4-address-or-prefix;
+      type ipv6-address-or-prefix;
+    }
+    description
+      "The ip-address-or-prefix type represents an IPv4/IPv6 address or an
+       IPv4/IPv6 prefix.";
+  }
+
+  identity service-owner {
+    description
+      "Base identity for service owner";
+  }
+
+  identity cre {
+    base service-owner;
+    description
+      "Cloud Routing Engine service owner";
+  }
+
+  identity cfw {
+    base service-owner;
+    description
+      "Cloud Firewall service owner";
+  }
+
+  identity up {
+    base service-owner;
+    description
+      "User Plane service owner";
+  }
+
+}

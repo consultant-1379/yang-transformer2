@@ -1,0 +1,143 @@
+module ericsson-evpn-vpws-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-evpn-vpws-router6000";
+
+  prefix "evpnvpwsrouter6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-evpn-vpws-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-02-27" {
+    description
+      "no control word is enabled";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-12-26" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping vpws-instance-grp {
+    description
+      "vpws instance configuration mode";
+    /*
+    service-id {local (sid-local) remote (sid-remote)}
+    */
+    container service-id {
+      presence "";
+      description
+        "Configure VPWS_INSTANCE";
+      leaf local {
+        type uint32 {
+          range "1..4294967295";
+        }
+        mandatory true;
+        description
+          "local service id";
+      }
+      leaf remote {
+        type uint32 {
+          range "1..4294967295";
+        }
+        mandatory true;
+        description
+          "remote service id";
+      }
+    }
+    /*
+    evpn instance context (inst-cont)
+    */
+    container evpn-instance-context {
+      presence "";
+      description
+        "Configure evpn context";
+      leaf inst-cont {
+        type string;
+        mandatory true;
+        description
+          "EVPN context name";
+      }
+    }
+    /*
+    mtu (vpws-mtu)
+    */
+    leaf mtu {
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "Configure MTU";
+    }
+    /*
+    ignore-mtu
+    */
+    leaf ignore-mtu {
+      type empty;
+      description
+        "Ignore MTU";
+    }
+    /*
+    control-word
+    */
+    leaf control-word {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable control-word";
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-evpn-vpws";
+    /*
+    vpws instance (instance-id) evpn
+    */
+    list vpws-instance {
+      key "instance-id";
+      description
+        "Configure VPWS_INSTANCE";
+      leaf instance-id {
+        type uint32 {
+          range "1..4294967295";
+        }
+        description
+          "Id";
+      }
+      container evpn {
+        presence "";
+        description
+          "enable VPWS for EVPN";
+        uses vpws-instance-grp;
+      }
+    }
+  }
+
+}

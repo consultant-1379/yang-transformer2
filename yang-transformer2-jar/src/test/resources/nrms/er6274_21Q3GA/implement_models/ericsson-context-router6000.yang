@@ -1,0 +1,1031 @@
+module ericsson-context-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-context-router6000";
+
+  prefix "ctxr6k";
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-context-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-02-03" {
+    description
+      "Support ISIS SR MPLS IPv6";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "7";
+    yexte:correction "0";
+  }
+
+  revision "2020-09-23" {
+    description
+      "Support ECMP64 for IP Unicast";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "6";
+    yexte:correction "0";
+  }
+
+  revision "2020-06-05" {
+    description
+      "add mpls diffserv command";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "5";
+    yexte:correction "0";
+  }
+
+  revision "2019-08-01" {
+    description
+      "modify number_range to num-range";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "4";
+    yexte:correction "1";
+  }
+
+  revision "2019-07-11" {
+    description
+      "add vpn-rd-auto command and modify vpn-val to optional";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2018-09-28" {
+    description
+      "modify evpn presence";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2018-09-05" {
+    description
+      "add evpn model";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-08-22" {
+    description
+      "add license priority";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-05-08" {
+    description
+      "rollback vpn-rd type change";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-01-24" {
+    description
+      "Add GC_FLAG_GLOBALCONFIG for the commands in
+       dot1q_profile mode";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-12-19" {
+    description
+      "add router-id";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-12-04" {
+    description
+      "update pattern for VPN RD";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "4";
+  }
+
+  revision "2017-11-10" {
+    description
+      "update pattern and description for VPN RD";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision "2017-10-25" {
+    description
+      "update revision for VPN RD description";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2017-09-21" {
+    description
+      "4byte ASN in BGP VPN RD";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2017-09-06" {
+    description
+      "Fix qos protocol model issue";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-08-01" {
+    description
+      "qos protocol priority";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-02" {
+    description
+      "New command for dot1q vcpe";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-06-02" {
+    description
+      "Peel off segment routing";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-24" {
+    description
+      "IPOS-11149:context and interface new command";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-01" {
+    description
+      "Peel off mld";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-29" {
+    description
+      "Add pattern for 'alias'";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-29" {
+    description
+      "add sub command 'maximum-routes' for context ipv6";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-03-07" {
+    description
+      "add dvsr container";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-02-23" {
+    description
+      "support domain alias";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-29" {
+    description
+      "Delete route-map name;some list modify can del";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-08" {
+    description
+      "Add a must condition for vpn-rd";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-08" {
+    description
+      "Add a feature name for subscriber";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature ancp {
+    description
+      "This feature indicates that the device supports ancp in
+       context.";
+  }
+
+  feature ospf3 {
+    description
+      "This feature indicates that the device supports ospf3 in
+       context.";
+  }
+
+  feature pim {
+    description
+      "This feature indicates that the device supports pim in
+       context.";
+  }
+
+  feature rip {
+    description
+      "This feature indicates that the device supports rip in
+       context.";
+  }
+
+  feature ripng {
+    description
+      "This feature indicates that the device supports ripng in
+       context.";
+  }
+
+  feature subscriber {
+    description
+      "This feature indicates that the device supports
+       subscriber in context.";
+  }
+
+  feature iplog {
+    description
+      "This feature indicates that the device supports ip log in
+       context.";
+  }
+
+  grouping ctx-grp {
+    description
+      "Context configuration mode";
+    /*
+    vcpe profile (pol-str)
+    */
+    container vcpe {
+      description
+        "virtual cpe";
+      list profile {
+        key "profile";
+        description
+          "configure vcpe profile name";
+        leaf profile {
+          type string;
+          description
+            "vcpe profile name";
+        }
+        uses vcpe-profile-grp;
+      }
+    }
+    /*
+    ippm < twamp light >
+    */
+    container ippm {
+      description
+        "Configure IPPM";
+      container twamp-light {
+        description
+          "Configure TWAMP light tests";
+      }
+    }
+    /*
+    description (cfg_ctx_desc_str)
+    */
+    leaf description {
+      type string;
+      description
+        "Add descriptive text for this context";
+    }
+    /*
+    domain (alias) [ advertise ]
+    */
+    list domain {
+      key "alias";
+      description
+        "Add a subscriber service domain alias to the context";
+      leaf alias {
+        type string {
+          pattern '[a-zA-Z0-9_-]+';
+        }
+        description
+          "Name of subscriber service domain alias in context";
+      }
+      leaf advertise {
+        type empty;
+        description
+          "Advertise subscriber service domain alias in PPPoE
+           discovery";
+      }
+    }
+    /*
+    subscriber { name (sub-str) | profile (prof-str) }
+    */
+    container subscriber {
+      if-feature subscriber;
+      description
+        "Configure subscriber accounts and options";
+      list name {
+        key "name";
+        description
+          "Configure individual subscriber accounts";
+        leaf name {
+          type string;
+          description
+            "subscriber account name";
+        }
+        uses sub-grp;
+      }
+      list profile {
+        key "profile";
+        description
+          "Configure named subscriber profile";
+        leaf profile {
+          type string;
+          description
+            "subscriber profile name";
+        }
+        uses sub-grp;
+      }
+    }
+    /*
+    router { rip (rip-inst) | ripng (rip-inst) | ancp}
+    */
+    container router {
+      description
+        "Configure a routing protocol";
+      list rip {
+        if-feature rip;
+        key "rip";
+        description
+          "Routing Information Protocol (RIP)";
+        leaf rip {
+          type string;
+          description
+            "Instance name";
+        }
+      }
+      list ripng {
+        if-feature ripng;
+        key "ripng";
+        description
+          "Routing Information Protocol (RIP)";
+        leaf ripng {
+          type string;
+          description
+            "Instance name";
+        }
+      }
+      leaf ancp {
+        if-feature ancp;
+        type empty;
+        description
+          "Access Node Control (GSMP)";
+      }
+    }
+    /*
+    ospf3 maximum { paths (path-value) | neighbor-exchange
+     (exchange-value) }
+    */
+    container ospf3-maximum {
+      when "(../context-name = 'local')" {
+        description
+          "";
+      }
+      description
+        "Configure OSPFv3 global limits";
+      leaf paths {
+        type uint8 {
+          range "1..64";
+        }
+        description
+          "Configure maximum number equal-cost route paths";
+      }
+      leaf neighbor-exchange {
+        type uint32 {
+          range "2..4294967295";
+        }
+        description
+          "Maximum neighbors exchanging concurrently";
+      }
+    }
+    /*
+    qos protocol { arp | ntp } { priority (dscp-value) }
+    */
+    list qos-protocol {
+      key "qos-protocol-choice";
+      description
+        "Protocol name";
+      leaf qos-protocol-choice {
+        type enumeration {
+          enum arp {
+            value 0;
+            description
+              "Address Resolution Protocol";
+          }
+          enum ntp {
+            value 1;
+            description
+              "Network Time Protocol";
+          }
+        }
+        description
+          "Select the protocol";
+      }
+      leaf priority {
+        type typesrouter6000:dscp-value;
+        mandatory true;
+        description
+          "Priority of the current protocol";
+      }
+    }
+    /*
+    license-priority (priority-val)
+    */
+    leaf license-priority {
+      type uint8 {
+        range "1..100";
+      }
+      description
+        "Configure license priority for VPN context";
+    }
+    /*
+    mpls diffserv trust outermost-exp
+    */
+    leaf mpls-diffserv-trust-outermost-exp {
+      type empty;
+      description
+        "Set outermost-exp mode";
+    }
+    /*
+    dvsr
+    */
+    container dvsr {
+      description
+        "Container to hold DVSR profile configuration";
+    }
+    /*
+    ip
+    */
+    container ip {
+      description
+        "IP configuration command";
+      container pool {
+        description
+          "Configure per context IP pool";
+        container falling-threshold {
+          description
+            "Configure per context IP pool falling threshold";
+          list percentage {
+            key "percent-index";
+            description
+              "Specify a context IP pool percentage falling
+               threshold";
+            leaf percent-index {
+              type uint8 {
+                range "1..2";
+              }
+              description
+                "percentage threshold index<1..2>";
+            }
+            leaf percent-size {
+              type uint8 {
+                range "1..100";
+              }
+              description
+                "percentage falling threshold value";
+            }
+            choice percentage-choice {
+              case trap {
+                container trap {
+                  description
+                    "Generate SNMP trap";
+                  leaf log {
+                    type empty;
+                    description
+                      "Generate log message";
+                  }
+                }
+              }
+              case log {
+                container log {
+                  description
+                    "Generate log message";
+                  leaf trap {
+                    type empty;
+                    description
+                      "Generate SNMP trap";
+                  }
+                }
+              }
+            }
+          }
+          container absolute {
+            description
+              "Specify a context IP pool absolute falling
+               threshold";
+            leaf abs-index {
+              type uint8 {
+                range "1";
+              }
+              description
+                "absolute threshold index";
+            }
+            leaf abs-size {
+              type uint32 {
+                range "1..4294967295";
+              }
+              description
+                "absolute falling threshold value";
+            }
+            choice absolute-choice {
+              case trap {
+                container trap {
+                  description
+                    "Generate SNMP trap";
+                  leaf log {
+                    type empty;
+                    description
+                      "Generate log message";
+                  }
+                }
+              }
+              case log {
+                container log {
+                  description
+                    "Generate log message";
+                  leaf trap {
+                    type empty;
+                    description
+                      "Generate SNMP trap";
+                  }
+                }
+              }
+            }
+          }
+        }
+        leaf options-use-class-c-bcast-addrs {
+          type empty;
+          description
+            "Allow class-C broadcast addresses in all configured
+             IP-Pools";
+        }
+      }
+      container log {
+        when "../../context-name='local'" {
+          description
+            "";
+        }
+        if-feature iplog;
+        description
+          "Configure RIB log buffers";
+        container route {
+          presence "";
+          description
+            "Route API log buffer";
+          leaf size {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "Set the size of the log buffer";
+          }
+        }
+        container config {
+          presence "";
+          description
+            "Config API log buffer";
+          leaf size {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "Set the size of the log buffer";
+          }
+        }
+        container message {
+          presence "";
+          description
+            "Message API log buffer";
+          leaf size {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "Set the size of the log buffer";
+          }
+        }
+        container eof {
+          presence "";
+          description
+            "EOF log buffer";
+          leaf size {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "Set the size of the log buffer";
+          }
+        }
+        list protocol {
+          key "protocol";
+          description
+            "Protocol log buffer";
+          leaf protocol {
+            type uint8 {
+              range "1..254";
+            }
+            description
+              "RIB protocol number <1..254>";
+          }
+          leaf size {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "Set the size of the log buffer";
+          }
+        }
+        list slot {
+          key "slot-num slot-choice";
+          description
+            "Line card log buffer";
+          leaf slot-num {
+            type typesrouter6000:slot-number;
+            description
+              "Slot number";
+          }
+          leaf slot-choice {
+            type enumeration {
+              enum ingress {
+                value 0;
+                description
+                  "Ingress log buffer";
+              }
+              enum egress {
+                value 1;
+                description
+                  "Egress log buffer";
+              }
+            }
+            description
+              "leaf slot-choice.";
+          }
+          leaf size {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "Set the size of the log buffer";
+          }
+        }
+      }
+    }
+    /*
+    ipv6
+    */
+    container ipv6 {
+      description
+        "IPv6 configuration command";
+    }
+    /*
+    router-id (id-spec)
+    */
+    leaf router-id {
+      type inet:ipv4-address;
+      status obsolete;
+      description
+        "Context-level IP Router ID";
+    }
+    /*
+    router-id-conf { (id-spec) | ipv6 (addr) }
+    */
+    container router-id-conf {
+      description
+        "Context-level IP Router ID";
+      leaf id-spec {
+        type inet:ipv4-address;
+        description
+          "Router ID value";
+      }
+      leaf ipv6 {
+        type inet:ipv6-address;
+        description
+          "ipv6 router ID";
+      }
+    }
+  }
+
+  grouping dot1q-profile-grp {
+    description
+      "DOT1Q profile configuration mode";
+    /*
+    description (desc-str)
+    */
+    leaf description {
+      type string;
+      description
+        "set description string";
+    }
+  }
+
+  grouping sub-grp {
+    description
+      "Subscriber configuration mode";
+    /*
+    ipv6 { nd-profile (profile-name) }
+    */
+    container ipv6 {
+      presence "";
+      description
+        "Configure IPV6 attributes";
+      leaf nd-profile {
+        type string;
+        mandatory true;
+        description
+          "Set the Neighbor Discovery profile";
+      }
+    }
+    /*
+    forward policy (pol-name) in
+    */
+    container forward-policy {
+      presence "";
+      description
+        "Set forward policy to use";
+      leaf pol-name {
+        type string;
+        mandatory true;
+        description
+          "Name of already created forward policy";
+      }
+      leaf in {
+        type empty;
+        mandatory true;
+        description
+          "Set inbound forward policy to use";
+      }
+    }
+  }
+
+  grouping vcpe-profile-grp {
+    description
+      "vcpe profile configuration";
+    /*
+    line-identifier access-circuit
+    */
+    leaf line-identifier-access-circuit {
+      type empty;
+      description
+        "line is identified using access-circuit";
+    }
+  }
+
+  grouping evpnctx-grp {
+    description
+      "Evpn context configuration mode";
+    /*
+    domain (domain-str) [ advertise ]
+    */
+    list domain {
+      key "domain-str";
+      description
+        "Add a subscriber service domain alias to the context";
+      leaf domain-str {
+        type string;
+        description
+          "Name of subscriber service domain alias in context";
+      }
+      leaf advertise {
+        type empty;
+        description
+          "Advertise subscriber service domain alias in PPPoE
+           discovery";
+      }
+    }
+    /*
+    description (desc-str)
+    */
+    leaf description {
+      type string;
+      description
+        "Add descriptive text for this context";
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-context";
+    /*
+    context (context-name) [ vpn-conf [(vpn-val)] ] [evpn]
+    */
+    list context {
+      key "context-name";
+      description
+        "Configure an operational context";
+      leaf context-name {
+        type string;
+        description
+          "Specify a named context to configure";
+      }
+      leaf vpn-rd {
+        status obsolete;
+        type string {
+          pattern '(((([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|'
+          + '25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9'
+          + ']|25[0-5]))|(\d{1,5}|0(x|X)([0-9a-'
+          + 'fA-F]{1,4}))|(\d{1,10}|0(x|X)([0-9a-'
+          + 'fA-F]{1,8}))):(\d{1,10}|0(x|X)([0-9a-fA-F]{1,8}))';
+        }
+        must "../context-name!='local'" {
+          error-message "Must configure in non-local context";
+          description
+            "Must configure in non-local context";
+        }
+        description
+          "Configure a VPN context (VPN RD in ASN:nnnn or
+           A.B.C.D:nn or ASN[L]:nn format)";
+      }
+      container vpn-conf {
+        must "../context-name!='local'" {
+          error-message "Must configure in non-local context";
+          description
+            "Must configure in non-local context";
+        }
+        presence "";
+        description
+          "Configure a VPN context (VPN RD in ASN:nnnn or
+           A.B.C.D:nn or ASN[L]:nn format)";
+        leaf vpn-val {
+          type string {
+            pattern '(((([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9'
+            + ']|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4]'
+            + '[0-9]|25[0-5]))|(\d{1,5}|0(x|X)([0-9a-'
+            + 'fA-F]{1,4}))|(\d{1,10}|0(x|X)([0-9a-'
+            + 'fA-F]{1,8}))):(\d{1,10}|0(x|X)([0-9a-fA-F]{1,8}))';
+          }
+          description
+            "VPN RD in ASN:nnnn or A.B.C.D:nn or ASN[L]:nn
+             format";
+        }
+      }
+      container evpn {
+        presence "";
+        description
+          "Configure a evpn context";
+        uses evpnctx-grp;
+      }
+      uses ctx-grp;
+    }
+    /*
+    vpn-rd-auto (auto-ip) [ num-range (range-start) colon
+     (range-end) ]
+    */
+    container vpn-rd-auto {
+      presence "";
+      description
+        "Configure auto rd";
+      leaf auto-ip {
+        type inet:ipv4-address;
+        mandatory true;
+        description
+          "IP-address";
+      }
+      container vpn-rd-auto-opt {
+        presence "";
+        description
+          "container vpn-rd-auto-opt.";
+        leaf num-range {
+          type uint16 {
+            range "1..65535";
+          }
+          default "49151";
+          description
+            "num-range";
+        }
+        leaf colon {
+          type uint16 {
+            range "1..65535";
+          }
+          default "65535";
+          description
+            "Specify the range end";
+        }
+      }
+    }
+    /*
+    dot1q {profile (profile-name)}
+    */
+    list dot1q {
+      key "profile";
+      description
+        "dot1q configuration commands";
+      leaf profile {
+        type string;
+        description
+          "specify dot1q profile information";
+      }
+      uses dot1q-profile-grp;
+    }
+  }
+
+}

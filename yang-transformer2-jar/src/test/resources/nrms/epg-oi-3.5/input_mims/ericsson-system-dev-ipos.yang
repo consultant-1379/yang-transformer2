@@ -1,0 +1,281 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-system-dev-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-system-dev-ipos";
+
+  prefix "ietfsysxvipos";
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+
+  import ietf-netconf-acm {
+    prefix "nacm";
+  }
+
+  import iana-crypt-hash {
+    prefix "ianach";
+  }
+
+  import ietf-system {
+    prefix "sys";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-system-ext {
+    prefix "sysxe";
+  }
+
+  import tailf-common {
+    prefix tailf;
+  }
+  organization "Ericsson AB";
+  contact "iposcli@ericsson.com";
+
+  description
+    "ericsson-system-dev-ipos
+     Copyright (c) 2018-2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-09-09" {
+    description
+      "delete duplicate deviation.";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2019-01-30" {
+    description   "Deviate user-authentication-order to not support sysxe:ldap";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-12-06" {
+    description   "Delete redundant deviation configuration";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-11-27" {
+    description   "Deviate system-restart and /system/dns-resolver
+                   to not-support";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-11-06" {
+    description   "move changes from ietf model to deviation file";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-07-05" {
+    description   "Add user name length limit";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-04-27" {
+    description   "Extend the algorithm type";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+  
+  revision "2018-01-17" {
+    description   "update the deviation yang model password type";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-09-07" {
+    description   "update the deviation yang model name";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+  revision "2017-05-12" {
+    description   "initial revision";
+    reference "rfc6020.txt.";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/sys:system/sys:ntp/sys:server/sys:association-type" {
+    deviate add {
+      must "(. != 'pool') " {
+            error-message "Association type must be server or peer";
+            description  "Association type must be server or peer";
+      }
+    }
+  }
+
+  deviation "/sys:system/sys:ntp/sys:enabled" {
+         deviate not-supported;
+     }
+
+
+ deviation "/sys:system/sys:ntp/sys:server/sys:iburst" {
+         deviate not-supported;
+     }
+
+deviation "/sys:system/sys:clock/sys:timezone" {
+         deviate not-supported;
+     }
+
+  deviation "/sys:system/sys:authentication/sys:user/sys:password" {
+      deviate replace {
+         type string;
+      }
+      deviate add {
+          mandatory true;
+      }
+  }
+
+  deviation "/sys:system/sys:authentication/sys:user/sys:authorized-key" {
+      deviate add {
+          unique "sys:algorithm sys:key-data";
+      }
+  }
+  deviation "/sys:system/sys:authentication/sys:user/sys:authorized-key/sys:algorithm" {
+      deviate add {
+          must "(. = 'ssh-rsa') or (. = 'ssh-dss') or (. = 'dsa') or (. = 'rsa')" {
+            error-message "only support ssh-rsa, ssh-dss, dsa, rsa algorithm";
+            description  "only support ssh-rsa, ssh-dss, dsa, rsa algorithm";
+          }
+      }
+  }
+
+  deviation "/sys:system/sys:radius/sys:server" {
+      deviate add {
+          max-elements 5;
+      }
+  }
+ /* deviation "/sys:system/sys:radius/sys:server/sys:authentication-type" {
+    deviate replace {
+      type enumeration {
+        enum radius-pap {
+          description
+            "The device requests Password Authentication Protocol (PAP)
+             authentication from the RADIUS server.";
+        }
+      }
+      default radius-pap;
+    }
+  } */
+  deviation "/sys:system/sys:radius/sys:server/sys:transport/sys:udp/sys:udp/sys:authentication-port" {
+      deviate replace {
+          type inet:port-number {
+            range "1024..65535";
+          }
+      }
+  }
+  deviation "/sys:system/sys:radius/sys:server" {
+      deviate add {
+          unique "sys:transport/sys:udp/sys:udp/sys:address sys:transport/sys:udp/sys:udp/sys:authentication-port";
+    }
+  }
+
+  deviation "/sys:system/sys:radius/sys:options/sys:timeout" {
+      deviate replace {
+        default "10";
+      }
+  }
+  deviation "/sys:system/sys:radius/sys:options/sys:attempts" {
+      deviate replace {
+        default "3";
+      }
+  }
+  
+  deviation "/sys:system/sys:ntp/sys:server/sys:association-type" {
+      deviate replace {
+      type enumeration {
+            enum server {
+              description
+                "Use client association mode.  This device
+                 will not provide synchronization to the
+                 configured NTP server.";
+            }
+            enum peer {
+              description
+                "Use symmetric active association mode.
+                 This device may provide synchronization
+                 to the configured NTP server.";
+            }
+          }
+
+    }
+  }
+  deviation "/sys:system/sys:radius/sys:server/sys:transport/sys:udp/sys:udp/sys:shared-secret" {
+      deviate replace {
+          type tailf:aes-cfb-128-encrypted-string;
+      }
+  }
+
+  deviation "/sys:system/sys:authentication/sys:user/sys:name" {
+      deviate replace {
+          type string {
+            length "1..31";
+          }
+      }
+  }
+
+  deviation "/sys:system-restart" {
+      deviate not-supported;
+  }
+
+  deviation "/sys:system/sys:dns-resolver" {
+      deviate not-supported;
+  }
+
+  deviation "/sys:system/sys:authentication/sys:user-authentication-order" {
+      deviate add {
+         must '(. != "sysxe:ldap")' {
+           error-message
+             "LDAP authenticaion is not supported.";
+           description
+             "LDAP authenticaion is not supported.";
+         }
+      }
+  }
+}

@@ -1,0 +1,86 @@
+module string-type {
+
+	namespace "urn#test#string-type";
+	prefix this;
+
+	revision "2021-01-31";
+
+	container cont1 {
+
+		leaf leaf11 {
+			type string {
+				length "min .. max";
+			}
+		}
+
+		leaf leaf12 {
+			type string {
+				length "min .. 10";
+			}
+		}
+
+		leaf leaf13 {
+			type string {
+				length "20 .. max";
+			}
+		}
+	
+		leaf leaf14 {
+			type string {
+				length "5 .. 30";
+			}
+		}
+
+		leaf leaf15 {
+			type string {
+				length "5 .. 30 | 40 .. 50";
+			}
+		}
+
+		leaf leaf16 {
+			type string {
+				length "50 .. 123456789012345678901234567890";		// provoke error
+			}
+		}
+
+		leaf leaf17 {
+			type string {
+				length "ten .. twenty";		// provoke error
+			}
+		}
+
+		leaf leaf18 {
+			type string {
+				pattern "ab*c";
+			}
+		}
+
+		leaf leaf19 {
+			type string {
+				pattern "ab*c";
+				pattern "de*f";
+			}
+		}
+
+		leaf leaf20 {
+			type string {
+				pattern "ab*c" {
+					modifier invert-match;
+				}
+			}
+		}
+
+		leaf leaf21 {
+			type string {
+				pattern "ab*c{";		// Incorrect pattern, should be ignored.
+			}
+		}
+
+		leaf leaf22 {
+			type string {
+				pattern "ab*c{";		// Incorrect pattern, should be ignored.
+				pattern "de*f";
+			}
+		}
+	}
+}

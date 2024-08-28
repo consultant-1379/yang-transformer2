@@ -1,0 +1,19 @@
+module top-level-attributes-two {
+
+    namespace "urn#test#top-level-attributes-two";
+    prefix this;
+	
+    revision "2021-03-31";
+
+	import top-level-attributes-one {
+		prefix one;
+	}
+
+	leaf leaf11 {
+		type int64;
+	}
+
+	identity identity3 {
+		base one:identity1;
+	}
+}

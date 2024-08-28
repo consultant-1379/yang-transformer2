@@ -1,0 +1,40 @@
+module ericsson-lldp-state-dev-router6000 {
+  yang-version 1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-lldp-state-dev-router6000";
+  prefix lldpstdevrouter6000;
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-lldp-state-router6000 {
+    prefix "lldpstrouter6000";
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "Copyright (c) 2018 Ericsson AB. All rights reserved";
+
+  revision "2019-03-25" {
+    description "initial revision";
+    reference "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/ctxsr6k:contexts-state/lldpstrouter6000:lldp/lldpstrouter6000:lldp-v2-configuration/lldpstrouter6000:lldp-v2-port-config-entry-v2/lldpstrouter6000:lldp-v2-port-notification-interval" {
+    deviate not-supported;
+  }
+
+  deviation "/ctxsr6k:contexts-state/lldpstrouter6000:lldp/lldpstrouter6000:lldp-v2-configuration/lldpstrouter6000:lldp-v2-notification-interval" {
+    deviate not-supported;
+  }
+}

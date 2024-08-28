@@ -1,0 +1,61 @@
+module complex-defaults-dev {
+
+	namespace "urn-test-complex-defaults-dev";
+	prefix this;
+
+	revision "2021-11-03";
+
+	import complex-defaults {
+		prefix cd;
+	}
+
+	import _3gpp-common-yang-extensions {
+		prefix yext3gpp;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	deviation /cd:cont1/cd:leaf12 {
+		deviate delete {
+			default "abc";
+		}
+	}
+
+	deviation /cd:cont1/cd:leaf13 {
+		deviate replace {
+			default "def";
+		}
+	}
+
+	deviation /cd:cont1/cd:leaf14 {
+		deviate add {
+			default "ghi";
+		}
+	}
+
+	deviation /cd:cont2/cd:leaf21 {
+		deviate replace {
+			default "xyz";
+		}
+	}
+
+	deviation /cd:cont3/cd:leaflist31 {
+		deviate replace {
+			type int32;
+			default 10;
+			default 20;
+		}
+	}
+
+	identity identity-2 {
+		base cd:identity-1;
+	}
+
+	deviation /cd:cont4/cd:leaf41 {
+		deviate replace {
+			default identity-2;
+		}
+	}
+}

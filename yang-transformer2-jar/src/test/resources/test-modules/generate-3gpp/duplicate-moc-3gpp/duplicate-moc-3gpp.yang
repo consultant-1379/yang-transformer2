@@ -1,0 +1,74 @@
+module duplicate-moc-3gpp {
+
+	namespace "urn:test:duplicate-moc-3gpp";
+	prefix this;
+
+	revision "2023-06-09";
+
+	import duplicate-moc-3gpp-ext {
+		prefix ext;
+	}
+
+	list Moc1 {
+
+		key "id";
+		leaf id {
+			type string;
+		}
+
+		container attributes {
+			leaf leaf11 {
+				type string;
+			}
+		}
+
+		uses ext:Moc7_Grouping;
+	}
+
+	list Moc2 {
+
+		key "id";
+		leaf id {
+			type string;
+		}
+
+		container attributes {
+			leaf leaf21 {
+				type string;
+			}
+		}
+
+		uses ext:Moc7_Grouping;
+	}
+
+	list Moc3 {
+
+		key "id";
+		leaf id {
+			type string;
+		}
+
+		container attributes {
+			leaf leaf31 {
+				type string;
+			}
+		}
+
+
+		list Moc4 {
+
+			key "id";
+			leaf id {
+				type string;
+			}
+
+			container attributes {
+				leaf leaf41 {
+					type string;
+				}
+			}
+
+			uses ext:Moc7_Grouping;
+		}
+	}
+}

@@ -1,0 +1,83 @@
+module ericsson-acl-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-acl-dev-router6000";
+
+  prefix "aclrouter6000";
+
+  import ericsson-acl-router6000 {
+   prefix "aclr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-acl-dev-common
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-08-14" {
+   description
+     "Enable cls_name for admin-access-group";
+   reference
+     "rfc6020";
+     yexte:version "2";
+     yexte:release "1";
+     yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-16" {
+    description
+      "deviation for ericsson-acl-ipos@2017-12-16.yang file";
+      yexte:version 1;
+      yexte:release 1;
+      yexte:correction 0;
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-23" {
+    description
+      "deviation for ericsson-acl-ipos@2016-12-16.yang file";
+      yexte:version 1;
+      yexte:release 0;
+      yexte:correction 0;
+    reference
+      "rfc6020";
+  }
+
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/aclr6k:admin-access-group/aclr6k:log" {
+    deviate not-supported;
+  }
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ipv6/aclr6k:admin-access-group/aclr6k:log" {
+    deviate not-supported;
+  }
+}

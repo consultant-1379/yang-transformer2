@@ -1,0 +1,67 @@
+module ericsson-tailf-acm-ext {
+	yang-version 1.1;
+	namespace urn:rdns:com:ericsson:oammodel:ericsson-tailf-acm-ext;
+	prefix tacmxe;
+	
+	import ericsson-yang-extensions { prefix yexte; }
+  	import ietf-netconf-acm { prefix nacm; }
+  	import tailf-acm { prefix tacm; }
+  	
+  	organization "Ericsson AB";
+	contact "Ericsson first line support via email.";
+	description 
+		"The module extends and deviates tailf-acm.
+		
+		Defaults are set to deny. In general it is cleaner to build groups of 
+	 	permissions than denials or a mix of them. Contradicting denials in different groups
+	 	could harm the additive concept of role-based-access-control and the 
+	 	ordering of groups (at external user management) will start to matter 
+	 	as order of rules is respected.
+	 	
+	 	NOTE: THIS MODULE BLOCKS ACCESS TO ALL CLI COMMANDS BY DEFAULT. 
+	 	THE SERVER SHOULD BE LOADED WITH INITIAL DATA ALLOWING AT LEAST ADMIN ACCESS TO THE CLI.
+		
+		Copyright (c) 2016 Ericsson AB. All rights reserved.";
+
+	revision "2016-12-05" {
+	    description "First version";
+		yexte:version 1;
+		yexte:release 0;
+		yexte:correction 0;
+	}
+			
+	deviation /nacm:nacm/tacm:cmd-read-default {
+		description
+			"Default read permission is deny. Define permissions for allowed operations.
+			The user is not allowed to change it.";
+
+		deviate replace {
+			config false;
+		}
+		deviate replace {
+			default "deny";
+		}
+	}
+	
+	deviation /nacm:nacm/tacm:cmd-exec-default {
+		description
+			"Default execute permission is deny. Define permissions for allowed operations.
+			The user is not allowed to change it.";
+			
+		deviate replace {
+			config false;
+		}
+		deviate replace {
+			default "deny";
+		}
+	}	
+	
+	deviation /nacm:nacm/tacm:log-if-default-permit {
+		description
+			"As all defaults are set to deny, there is no need for this leaf";
+			
+		deviate replace {
+			config false;
+		}
+	}
+}

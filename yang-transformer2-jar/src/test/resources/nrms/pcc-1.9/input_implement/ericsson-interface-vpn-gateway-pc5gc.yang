@@ -1,0 +1,56 @@
+module ericsson-interface-vpn-gateway-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-vpn-gateway-pc5gc";
+  prefix ifvpngwpc5gc;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-base-if-type-pc5gc {
+    prefix pcbift;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "ericsson-interface-vpn-gateway-pc5gc
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-08-09 {
+    description
+      "Change base interface type";
+    reference
+      "EN/LZN 704 0249";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision 2020-07-15 {
+    description
+      "Initial version";
+    reference
+      "EN/LZN 704 0249";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  identity vpnGateway {
+    base pcbift:pc-interface-type;
+    description
+      "VPN Gateway tunnel endpoint.";
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "if:type = 'ifvpngwpc5gc:vpnGateway'";
+    description
+      "VPN Gateway logical tunnel interface.";
+  }
+}

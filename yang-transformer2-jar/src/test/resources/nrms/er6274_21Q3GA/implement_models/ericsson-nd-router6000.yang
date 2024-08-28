@@ -1,0 +1,624 @@
+module ericsson-nd-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-nd-router6000";
+
+  prefix "ndr6k";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-interfaces-ext-router6000 {
+    prefix "ifxrouter6000";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-nd-router6000
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-23" {
+    description
+      "Add default value for ra-interval and ra-lifetime";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-11-10" {
+    description
+      "fixed compiling warning";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-08-18" {
+    description
+      "Remove if-feature of nd";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-02-24" {
+    description
+      "add must condition for interface";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2016-12-15" {
+    description
+      "add default value";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-08" {
+    description
+      "remove nd command";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature nd {
+    description
+      "This feature indicates that the device supports nd.";
+  }
+
+  grouping nd-grp {
+    description
+      "ND configuration mode";
+    /*
+    interface (intf-name)
+    */
+    list interface {
+      key "interface";
+      description
+        "Configure ND parameters on an interface";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Interface name";
+      }
+      uses nd-if-grp;
+    }
+    /*
+    ra { interval (intv-num) | lifetime (life-num) | suppress [
+     unsolicited ] | managed-config | other-config }
+    */
+    container ra {
+      description
+        "Configure router advertisement parameters";
+      leaf interval {
+        type uint16 {
+          range "5..600";
+        }
+        description
+          "Configure RA interval in seconds";
+      }
+      leaf lifetime {
+        type uint16 {
+          range "0..36000";
+        }
+        description
+          "Configure RA lifetime in seconds";
+      }
+      container suppress {
+        presence "";
+        description
+          "Suppress all RAs on the interface";
+        leaf unsolicited {
+          type empty;
+          description
+            "Suppress unsolicited RAs on the interface";
+        }
+      }
+      leaf managed-config {
+        type empty;
+        description
+          "Set \"managed address configuration\" in RA";
+      }
+      leaf other-config {
+        type empty;
+        description
+          "Set \"other stateful configuration\" in RA";
+      }
+    }
+    /*
+    ns-retry-interval (intv-num)
+    */
+    leaf ns-retry-interval {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Configure neighbor solicitation retry frequency";
+    }
+    /*
+    reachable-time (reach-num)
+    */
+    leaf reachable-time {
+      type uint32 {
+        range "0..3600000";
+      }
+      description
+        "Configure neighbor reachability time";
+    }
+    /*
+    valid-lifetime (valid-num)
+    */
+    leaf valid-lifetime {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Configure valid lifetime of prefixes on the interface";
+    }
+    /*
+    preferred-lifetime (pref-num)
+    */
+    leaf preferred-lifetime {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Configure preferred lifetime of prefixes on the
+         interface";
+    }
+    /*
+    hop-limit (hop-cnt)
+    */
+    leaf hop-limit {
+      type uint8 {
+        range "0..255";
+      }
+      description
+        "Configure hop-limit advertised in Router Advertisement
+         messages";
+    }
+  }
+
+  grouping nd-if-grp {
+    description
+      "ND interface configuration mode";
+    /*
+    neighbor (neig-addr6) (neig-mac)
+    */
+    list neighbor {
+      key "neig-addr6";
+      description
+        "Configure static neighbor entry";
+      leaf neig-addr6 {
+        type inet:ipv6-address;
+        description
+          "IPv6 neighbor address";
+      }
+      leaf neig-mac {
+        type yang:mac-address;
+        mandatory true;
+        description
+          "IPv6 neighbor mac-address";
+      }
+    }
+    /*
+    prefix (prefix-addr)  [ preferred-lifetime (pref-num) ][
+     valid-lifetime (valid-num) ] [ no-onlink ] [ no-autoconfig ]
+    */
+    list prefix {
+      key "prefix-addr";
+      description
+        "Configure IPv6 prefixes for router advertisements";
+      leaf prefix-addr {
+        type inet:ipv6-prefix;
+        description
+          "IPv6 prefix";
+      }
+      leaf preferred-lifetime {
+        type uint32 {
+          range "0..4294967295";
+        }
+        default "4294967295";
+        description
+          "Configure preferred lifetime for the prefix";
+      }
+      leaf valid-lifetime {
+        type uint32 {
+          range "0..4294967295";
+        }
+        default "4294967295";
+        description
+          "Configure valid lifetime for the prefix";
+      }
+      leaf no-onlink {
+        type empty;
+        description
+          "Indicates this prefix is not assigned to the link";
+      }
+      leaf no-autoconfig {
+        type empty;
+        description
+          "Indicates this prefix can not be used for autoconfig";
+      }
+    }
+    /*
+    disable-on-address-collision
+    */
+    leaf disable-on-address-collision {
+      type empty;
+      description
+        "Decide if interface should be brought down on address
+         collision detection";
+    }
+    /*
+    ra { interval (intv-num) | lifetime (life-num) | suppress [
+     unsolicited ] | managed-config | other-config }
+    */
+    container ra {
+      description
+        "Configure router advertisement parameters";
+      leaf interval {
+        type uint16 {
+          range "5..600";
+        }
+        description
+          "Configure RA interval in seconds";
+      }
+      leaf lifetime {
+        type uint16 {
+          range "0..36000";
+        }
+        description
+          "Configure RA lifetime in seconds";
+      }
+      container suppress {
+        presence "";
+        description
+          "Suppress all RAs on the interface";
+        leaf unsolicited {
+          type empty;
+          description
+            "Suppress unsolicited RAs on the interface";
+        }
+      }
+      leaf managed-config {
+        type empty;
+        description
+          "Set \"managed address configuration\" in RA";
+      }
+      leaf other-config {
+        type empty;
+        description
+          "Set \"other stateful configuration\" in RA";
+      }
+    }
+    /*
+    ns-retry-interval (intv-num)
+    */
+    leaf ns-retry-interval {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Configure neighbor solicitation retry frequency";
+    }
+    /*
+    reachable-time (reach-num)
+    */
+    leaf reachable-time {
+      type uint32 {
+        range "0..3600000";
+      }
+      description
+        "Configure neighbor reachability time";
+    }
+    /*
+    valid-lifetime (valid-num)
+    */
+    leaf valid-lifetime {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Configure valid lifetime of prefixes on the interface";
+    }
+    /*
+    preferred-lifetime (pref-num)
+    */
+    leaf preferred-lifetime {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Configure preferred lifetime of prefixes on the
+         interface";
+    }
+    /*
+    hop-limit (hop-cnt)
+    */
+    leaf hop-limit {
+      type uint8 {
+        range "0..255";
+      }
+      description
+        "Configure hop-limit advertised in Router Advertisement
+         messages";
+    }
+  }
+
+  grouping nd-profile-grp {
+    description
+      "ND profile configuration mode";
+    /*
+    ra-interval (intv-num)
+    */
+    leaf ra-interval {
+      type uint16 {
+        range "0..600";
+      }
+      default "200";
+      description
+        "Configure Router Advertisement interval";
+    }
+    /*
+    ra-lifetime (life-num)
+    */
+    leaf ra-lifetime {
+      type uint16 {
+        range "0..36000";
+      }
+      default "1800";
+      description
+        "Configure Router Advertisement lifetime";
+    }
+    /*
+    ns-retry-interval (intv-num)
+    */
+    leaf ns-retry-interval {
+      type uint32 {
+        range "0..4294967295";
+      }
+      default "0";
+      description
+        "Configure Neighbor Solicitation interval";
+    }
+    /*
+    ns-refresh-interval (refresh-num)
+    */
+    leaf ns-refresh-interval {
+      type uint32 {
+        range "0..4294967295";
+      }
+      default "0";
+      description
+        "Configure NS refresh interval";
+    }
+    /*
+    preferred-lifetime { infinite | (pref-num) }
+    */
+    container preferred-lifetime {
+      description
+        "Configure preferred lifetime for IPv6 prefixes";
+      choice preferred-lifetime {
+        case infinite {
+          leaf infinite {
+            type empty;
+            description
+              "set to lifetime of subscriber";
+          }
+        }
+        case pref-num {
+          leaf pref-num {
+            type uint32 {
+              range "0..4294967295";
+            }
+            description
+              "preferred lifetime of prefixes in seconds";
+          }
+        }
+      }
+    }
+    /*
+    valid-lifetime { infinite | (valid-num) }
+    */
+    container valid-lifetime {
+      description
+        "Configure valid lifetime for IPv6 prefixes";
+      choice valid-lifetime {
+        case infinite {
+          leaf infinite {
+            type empty;
+            description
+              "set to lifetime of subscriber";
+          }
+        }
+        case valid-num {
+          leaf valid-num {
+            type uint32 {
+              range "0..4294967295";
+            }
+            description
+              "valid lifetime of prefixes in seconds";
+          }
+        }
+      }
+    }
+    /*
+    ra-managed-config
+    */
+    leaf ra-managed-config {
+      type empty;
+      description
+        "Set Managed-Config flag in Router Advertisement";
+    }
+    /*
+    ra-other-config
+    */
+    leaf ra-other-config {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable ra-other-config";
+    }
+    /*
+    ra-on-link
+    */
+    leaf ra-on-link {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable ra-on-link";
+    }
+    /*
+    dad-transmits (dads-num)
+    */
+    leaf dad-transmits {
+      type uint8 {
+        range "0..3";
+      }
+      default "1";
+      description
+        "Configure number of DAD transmits";
+    }
+    /*
+    proto-down-on-dad
+    */
+    leaf proto-down-on-dad {
+      type empty;
+      description
+        "Subscriber IPv6 brought down on DAD failure";
+    }
+    /*
+    hop-limit (hoplimit-num)
+    */
+    leaf hop-limit {
+      type uint8 {
+        range "0..255";
+      }
+      description
+        "Configure hop-limit advertised in Router Advertisement
+         messages";
+    }
+    /*
+    name-server (dns-addr)
+    */
+    list name-server {
+      key "name-server";
+      description
+        "Configure DNS server advertised in Router Advertisement
+         (maximum 3)";
+      leaf name-server {
+        type inet:ipv6-address;
+        description
+          "DNS Server IPv6 address";
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router" {
+    description
+      "ericsson-nd";
+    /*
+    nd
+    */
+    container nd {
+      presence "";
+      description
+        "IPv6 Neighbor Discovery Protocol (ND)";
+      uses nd-grp;
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context" {
+    description
+      "ericsson-nd";
+    /*
+    nd profile (profile-name)
+    */
+    list nd {
+      key "profile";
+      description
+        "Configure ND profile";
+      leaf profile {
+        type string;
+        description
+          "Configure ND profile";
+      }
+      uses nd-profile-grp;
+    }
+  }
+
+}

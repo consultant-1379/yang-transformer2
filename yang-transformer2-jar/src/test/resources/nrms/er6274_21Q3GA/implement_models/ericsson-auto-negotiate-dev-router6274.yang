@@ -1,0 +1,119 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-auto-negotiate-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-auto-negotiate-dev-router6274";
+
+  prefix "autonegotiatevrouter6274";
+
+  import ericsson-auto-negotiate-router6000{
+    prefix "autonerouter6000";
+  }
+  
+  import ericsson-ethernet-ext-router6000{
+    prefix "ethxrouter6000";
+  }
+  
+  import ietf-interfaces {
+    prefix "if";
+  }
+    
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+   
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-auto-negotiate-dev-router6274
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-01-11" {
+    description
+      "Remove autoneg force support";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2020-05-26" {
+    description
+      "modify ethernet speed deviation";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-03-20" {
+    description
+      "default value change.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  } 
+
+  revision "2018-01-17" {
+    description
+      "deviation for ericsson-auto-negotiate-router6000.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  } 
+
+  /*hide port -> auto-negotiate->duplex*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/autonerouter6000:auto-negotiate/autonerouter6000:duplex" {
+    deviate not-supported;
+  }
+   
+  /*only support for 1ge*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/autonerouter6000:auto-negotiate/autonerouter6000:flc" {
+    deviate replace {
+         default "off";
+     }
+  } 
+  
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/autonerouter6000:auto-negotiate/autonerouter6000:force" {
+    deviate not-supported;
+  }
+
+  /*add default value*/
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/autonerouter6000:auto-negotiate/autonerouter6000:auto-negotiate-enable"{
+    deviate replace {
+         default "true";
+     }
+  } 
+  
+  deviation "/if:interfaces/if:interface/ethxrouter6000:ethernet/autonerouter6000:flow-control/autonerouter6000:flow-control-enable"{
+    deviate replace {
+         default "false";
+     }
+  } 
+   
+  
+}

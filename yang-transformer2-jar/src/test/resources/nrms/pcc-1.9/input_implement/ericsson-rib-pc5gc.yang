@@ -1,0 +1,513 @@
+module ericsson-rib-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-rib-pc5gc";
+  prefix ribpc5gc;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+  import ericsson-routing-pc5gc {
+    prefix rtpc5gc;
+  }
+  import ietf-network-instance {
+    prefix ni;
+  }
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model is for rib in cloud routing engine.
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-10-16 {
+    description
+      "source-protocol bgp routes can't be parsed";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision 2020-09-22 {
+    description
+      "add action for get rib other information";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision 2020-05-12 {
+    description
+      "initial revision";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  identity control-plane-protocol {
+    description
+      "Base identity from which control-plane protocol identities are
+       derived.";
+  }
+
+  identity routing-protocol {
+    base control-plane-protocol;
+    description
+      "Identity from which Layer 3 routing protocol identities are
+       derived.";
+  }
+
+  identity direct {
+    base routing-protocol;
+    description
+      "Routing pseudo-protocol that provides routes to directly
+       connected networks.";
+  }
+
+  identity static {
+    base routing-protocol;
+    description
+      "'Static' routing pseudo-protocol.";
+  }
+
+  identity bgp {
+    base routing-protocol;
+    description
+      "'bgp' routing pseudo-protocol.";
+  }
+
+  grouping rib-route-grp {
+
+    description
+      "ip route information";
+
+      list routes {
+
+        config false;
+
+        key "instance-id";
+
+        leaf instance-id {
+          type string;
+          description
+            "specify instance ID";
+        }
+
+        list route {
+          key "source-protocol network next-hop-address";
+
+          leaf best-path {
+            type string;
+            description
+              "ip route best path ";
+          }
+          leaf source-protocol {
+            type identityref {
+              base routing-protocol;
+            }
+            description
+              "ip route source protocol type";
+          }
+          leaf network {
+            type string;
+            description
+              "ip route prefix/prefix-len";
+          }
+          leaf next-hop-address {
+            type inet:ip-address;
+            description
+              "ip route next-hop ip address";
+          }
+          leaf distance {
+            type yang:gauge64;
+            description
+              "ip route distance ";
+          }
+          leaf metric {
+            type yang:gauge64;
+            description
+              "ip route metric ";
+          }
+          leaf interface {
+            type string;
+            description
+              "interface name";
+          }
+          leaf redistributed {
+            type yang:gauge64;
+            description
+              "redistributed flag";
+          }
+          leaf last-updated {
+            type yang:date-and-time;
+            description
+              "Timestamp of the last modification of the route.  If the
+              route was never modified, it is the time when the route was
+              inserted into the RIB.";
+          }
+        }
+      }
+    }
+
+  grouping rib-chunk-statistics-grp {
+  list chunk-statistics {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of rib chunk statistics for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which chunk statistics is locating on.";
+      }
+      leaf current-proc {
+         type string;
+         description
+           "rib current proc.";
+      }
+      leaf allocked-mem {
+         type uint32;
+         description
+           "rib allocked mem info.";
+      }
+      leaf total-chunks-retrieved {
+         type uint32;
+         description
+           "rib total chunks retrieved.";
+      }
+      leaf stats-flags {
+         type uint32;
+         description
+           "rib stats flags.";
+      }
+      leaf total-memory-size {
+         type uint32;
+         description
+           "total memory size.";
+      }
+      list chunk-status {
+        key "name";
+        leaf name {
+         type string;
+         description
+           "rib name.";
+        }
+        leaf chunk-size {
+           type uint32;
+           description
+             "rib chunk size.";
+        }
+        leaf chunk-alloc {
+           type uint32;
+           description
+             "rib chunk alloc.";
+        }
+        leaf chunk-inuse {
+           type uint32;
+           description
+             "rib chunk inuse.";
+        }
+        leaf elem-alloc {
+           type uint32;
+           description
+             "rib elem alloc.";
+        }
+        leaf elem-inuse {
+           type uint32;
+           description
+             "rib elem inuse.";
+        }
+        leaf elem-max {
+           type uint32;
+           description
+             "rib elem max.";
+        }
+        leaf elem-size {
+           type uint32;
+           description
+             "rib elem size.";
+        }
+        leaf chunk-usage {
+           type uint32;
+           description
+             "rib chunk usage.";
+        }
+      }
+    }
+  }
+  grouping rib-sds-routes-grp {
+    list shared-data-service-routes {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of shared data service routes for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which shared data service routes is locating on.";
+      }
+      list route-entry{
+        key "network nexthop-address";
+        leaf network {
+          type inet:ip-prefix;
+          description
+            "ip prefix address";
+        }
+        leaf local-address {
+          type inet:ip-address;
+          description
+            "Local address";
+        }
+        leaf nexthop-address {
+          type inet:ip-address;
+          description
+            "shared data service route nexthop address";
+        }
+        leaf interface-grid {
+          type yang:gauge64;
+          description
+            "interface grid";
+        }
+      }
+    }
+  }
+  grouping rib-interfaces-grp {
+    list interfaces {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of rib interfaces for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which rib interfaces is locating on.";
+      }
+      list interface {
+        key "name";
+        leaf name {
+          type string;
+          description
+            "The interface name.";
+        }
+        leaf interface-grid {
+          type yang:gauge64;
+          description
+            "interface grid";
+        }
+        leaf type {
+          type string;
+          description
+            "interface type";
+        }
+        leaf oper-state {
+          type string;
+          description
+            "interface Oper State";
+        }
+        list ip-address {
+          key "address";
+          leaf address {
+            type inet:ip-address;
+            description
+              "ip address";
+          }
+        }
+      }
+    }
+  }
+  grouping rib-nexthops-grp {
+    list nexthops {
+      config false;
+      key "instance-id";
+      description
+        "The current operational state of rib nexthops for each instance.";
+      leaf instance-id {
+        type string;
+        description
+          "The instance which rib nexthops is locating on.";
+      }
+      list nexthop-entry {
+        key "nexthop-id";
+        leaf nexthop-id {
+          type yang:gauge64;
+          description
+            "NextHop grid";
+        }
+        leaf nexthop-route-ref-count {
+          type yang:gauge64;
+          description
+            "nexthop route reference count";
+        }
+        leaf nexthop-via-ref-count {
+          type yang:gauge64;
+          description
+            "nexthop via reference count";
+        }
+        list nexthop{
+          key "address";
+          leaf address {
+            type inet:ip-address;
+            description
+              "NextHop address";
+          }
+          leaf via-nexthop-id {
+            type yang:gauge64;
+            description
+              "via NextHop grid";
+          }
+          leaf interface {
+            type string;
+            description
+              "interface name";
+          }
+        }
+      }
+    }
+  }
+  augment "/ni:network-instances/ni:network-instance/rtpc5gc:routing" {
+
+    description
+      "RIB action";
+    container rib {
+        status current {
+          yexte:preliminary;
+        }
+        config false;
+        action routes {
+
+          description
+            "RIB route runstate information";
+
+          /*
+          route { (ipv4) | (ipv6) }
+           */
+          input {
+
+            choice afi {
+              description
+                "show ip route information ipv4/ipv6";
+              case ipv4 {
+                leaf ipv4 {
+                  type empty;
+                  description
+                    "show ipv4 routes";
+                }
+              }
+              case ipv6 {
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "show ipv6 routes";
+                }
+              }
+            }
+          }
+          output {
+            uses rib-route-grp;
+          }
+        }
+        action chunk-statistics {
+          description
+            "get rib chunk statistics relevant information.";
+          output {
+            uses rib-chunk-statistics-grp;
+          }
+        }
+        action shared-data-service-routes {
+          description
+            "RIB shared data service routes information";
+          input {
+            choice afi {
+              description
+                "show shared data service ipv4/ipv6 routes information";
+              case ipv4 {
+                leaf ipv4 {
+                  type empty;
+                  description
+                    "show shared data service ipv4 routes information";
+                }
+              }
+              case ipv6 {
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "show shared data service ipv6 routes information";
+                }
+              }
+            }
+          }
+          output {
+            uses rib-sds-routes-grp;
+          }
+        }
+        action interfaces {
+          description
+            "RIB interfaces information";
+          input {
+            choice afi {
+              description
+                "show rib interfaces ipv4/ipv6 information";
+              case ipv4 {
+                leaf ipv4 {
+                  type empty;
+                  description
+                    "show rib interfaces ipv4 information";
+                }
+              }
+              case ipv6 {
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "show rib interfaces ipv6 information";
+                }
+              }
+            }
+          }
+          output {
+            uses rib-interfaces-grp;
+          }
+        }
+        action nexthops {
+          description
+            "RIB nexthops information";
+          input {
+            choice afi {
+              description
+                "show rib ipv4/ipv6 nexthops information";
+              case ipv4 {
+                leaf ipv4 {
+                  type empty;
+                  description
+                    "show rib ipv4 nexthops information";
+                }
+              }
+              case ipv6 {
+                leaf ipv6 {
+                  type empty;
+                  description
+                    "show rib ipv6 nexthops information";
+                }
+              }
+            }
+          }
+          output {
+            uses rib-nexthops-grp;
+          }
+        }
+    }
+  }
+}

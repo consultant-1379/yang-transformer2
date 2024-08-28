@@ -1,0 +1,174 @@
+module ericsson-lm-ext-cba {
+    yang-version 1.1;
+    namespace urn:rdns:com:ericsson:oammodel:ericsson-lm-ext-cba;
+    prefix lmcba;
+
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+
+    import ericsson-lm {
+        prefix lme;
+    }
+
+    organization "Ericsson AB";
+    contact "Ericsson first line support via email";
+    description "License Management model.
+                 Copyright (c) 2017, 2018 Ericsson AB. All rights reserved.";
+
+    revision "2019-09-09" {
+        description
+            "fix incorrect release No.";
+        reference "EOI LM ericsson-lm 2.0 and ECIM CBA LM 6.0";
+        yexte:version 2;
+        yexte:release 0;
+        yexte:correction 2;
+    }
+
+    revision "2018-08-08" {
+        description
+            "align with EOI LM  ericsson-lm 2.0, add the default for license-expiration-warning.
+             align with EOI LM  ericsson-lm 2.0, add server-reconnect-attempt-interval";
+        reference "EOI LM ericsson-lm 2.0 and ECIM CBA LM 6.0";
+        yexte:version 2;
+        yexte:release 0;
+        yexte:correction 1;
+    }
+
+    revision "2017-06-18" {
+        description "align with EOI LM  ericsson-lm 2.0, remove Sentinel only attributes";
+        reference "EOI LM ericsson-lm 2.0 and ECIM CBA LM 6.0";
+        yexte:version 2;
+        yexte:release 0;
+        yexte:correction 0;
+    }
+
+    revision "2017-06-16" {
+        description "align with EOI LM  ericsson-lm 2.0";
+        reference "EOI LM ericsson-lm 2.0 and ECIM CBA LM 6.0";
+        yexte:version 1;
+        yexte:release 4;
+        yexte:correction 0;
+    }
+
+    revision "2017-05-23" {
+        description "align with CBA LM(6.0), the yang model based on lm mini model";
+        reference "ECIM CBA LM 6.0";
+        yexte:version 1;
+        yexte:release 3;
+        yexte:correction 0;
+    }
+
+    revision "2017-05-10" {
+        description "align with CBA LM(6.0), the yang model based on lm mini model";
+        reference "ECIM CBA LM 6.0";
+        yexte:version 1;
+        yexte:release 2;
+        yexte:correction 0;
+    }
+
+    augment "/lme:lm" {
+        description "extend ericsson-lm with CBA LM attributes";
+        leaf capacity-alarm-hysteresis {
+            type uint8 {
+                range "0..100";
+            }
+            default "5";
+            description
+                "Specifies alarm hysteresis percentage for capacity licenses.
+                    When a capacity reservation alarm is active, the reservation
+                    level has to drop below the alarm threshold by the hysteresis
+                    amount in order for the alarm to be cleared or downgraded.";
+        }
+        leaf capacity-alarm-threshold {
+            type uint8 {
+                range "0..100";
+            }
+            default "80";
+            description
+                "The capacity reservation percentage level at which a minor alarm
+                    will be raised.";
+        }
+        leaf license-expiration-warning {
+            type uint32 {
+                range "1..4294967295";
+            }
+            default "7";
+            description
+                "License Expiration advance warning interval.
+                    The number of days before expiration of a license at which
+                    LM raises a LmLicenseExpired alarm with severity=minor.";
+        }
+        leaf server-synchronization-interval {
+            type uint32 {
+                range "1..4294967295";
+            }
+            default "30";
+            description
+                "License Server Synchronization Interval.
+                The interval, in minutes, at which LM automatically synchronizes license
+                information with the license server.";
+        }
+        leaf server-reconnect-attempt-interval {
+            type uint32 {
+                range "1..4294967295";
+            }
+            default "30";
+            description
+                "License Server Reconnect Attempt Interval.
+                The interval, in seconds, between automatic reconnection attempt
+                when LM has lost connection to all configured license servers.";
+        }
+        action publish-license-inventory {
+            description
+                "Publish the License Inventory.
+                    Triggers the immediate publication of license information from the License Key
+                    File and usage information from the LmServer cache to the information model.
+                    Return value is true if the publication is successful, false otherwise. For LM
+                    deployments that connect to Arwa, the license information is retrieved from the
+                    Arwa License Server.";
+            output {
+                leaf return-value {
+                    type boolean;
+                    mandatory true;
+                    description
+                      "Indicates whether the publication of license information succeeded or not";
+                }
+            }
+        }
+    }
+
+    augment "/lme:lm/lme:feature-key" {
+        leaf granted {
+            type boolean;
+            config false;
+            description
+                "Indicates whether or not the licensed feature has been granted by the License
+                 Manager.";
+            }
+        description "extend feature-key list";
+    }
+
+    augment "/lme:lm/lme:emergency-unlock" {
+        action deactivate {
+            description
+                "Initiates the deactivation of the Emergency Unlock operational mode.";
+            output {
+                leaf return-value {
+                type boolean;
+                mandatory true;
+                description
+                    "Indicates whether the deactivation succeeded or not";
+                }
+            }
+        }
+        description "extend key emergency unlock container";
+    }
+
+    deviation "/lme:lm/lme:key-file-management/lme:install-key-file/lme:output/lme:return-value" {
+        deviate replace {
+            type boolean;
+        }
+    }
+
+}

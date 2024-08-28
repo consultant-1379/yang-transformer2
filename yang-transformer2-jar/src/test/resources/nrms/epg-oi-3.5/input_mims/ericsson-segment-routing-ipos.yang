@@ -1,0 +1,276 @@
+module ericsson-segment-routing-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-segment-routing-ipos";
+
+  prefix "sgrtipos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-segment-routing-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-07-10" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-05-02" {
+    description
+      "Added new container binding-sid absolute";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-13" {
+    description
+      "HW56377 Modify the Maximum node depth value";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-02" {
+    description
+      "Initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping segment-routing-grp {
+    description
+      "SR configuration mode";
+    /*
+    address-family ipv4
+    */
+    container address-family-ipv4 {
+      presence "";
+      description
+        "IPv4 address family";
+      uses sr-af4-grp;
+    }
+    /*
+    msd node (node-value)
+    */
+    container msd {
+      description
+        "Maximum segment depth";
+      leaf node {
+        type uint8 {
+          range "14";
+        }
+        description
+          "Configure node's maximum segment depth";
+      }
+    }
+  }
+
+  grouping sr-af4-grp {
+    description
+      "SR IPv4 address family configuration mode";
+    /*
+    prefix-sid-map-group (map-group)
+    */
+    list prefix-sid-map-group {
+      key "prefix-sid-map-group";
+      description
+        "Prefix SID map group command mode";
+      leaf prefix-sid-map-group {
+        type string;
+        description
+          "Group name";
+      }
+      uses sr-prefix-group-grp;
+    }
+    /*
+    tunnel (tunnel-name)
+    */
+    list tunnel {
+      key "tunnel";
+      description
+        "Configure segment routing tunnel name";
+      leaf tunnel {
+        type string;
+        description
+          "Tunnel name";
+      }
+      uses tunnel-grp;
+    }
+  }
+
+  grouping sr-prefix-group-grp {
+    description
+      "SR AF4 prefix group configuration mode";
+    /*
+    mapgroup-ip (mapgroup-ip) (mapgroup-sid) <range (range-
+     value)>
+    */
+    list mapgroup-ip {
+      key "mapgroup-ip";
+      description
+        "Differentiate mapgroup-ip";
+      leaf mapgroup-ip {
+        type inet:ipv4-prefix;
+        description
+          "IP Address";
+      }
+      leaf mapgroup-sid {
+        type uint32 {
+          range "16..1048575";
+        }
+        mandatory true;
+        description
+          "SID value";
+      }
+      leaf range {
+        type uint8 {
+          range "1..128";
+        }
+        mandatory true;
+        description
+          "Range of SID";
+      }
+    }
+  }
+
+  grouping tunnel-grp {
+    description
+      "SR tunnel configuration mode";
+    /*
+    egress (egress-ip)
+    */
+    leaf egress {
+      type inet:ipv4-address;
+      description
+        "Tunnel egress node";
+    }
+    /*
+    label-stack (first-sid) [ (second-sid) [ (third-sid) [
+     (fourth-sid) ] ] ]
+    */
+    container label-stack {
+      presence "";
+      description
+        "Configure out going label stack";
+      leaf first-sid {
+        type uint32 {
+          range "16..1048575";
+        }
+        mandatory true;
+        description
+          "First SID";
+      }
+      container second-sid-opt {
+        presence "";
+        description
+          "Second SID option";
+        leaf second-sid {
+          type uint32 {
+            range "16..1048575";
+          }
+          mandatory true;
+          description
+            "Second SID";
+        }
+        container third-sid-opt {
+          presence "";
+          description
+            "Third SID option";
+          leaf third-sid {
+            type uint32 {
+              range "16..1048575";
+            }
+            mandatory true;
+            description
+              "Third SID";
+          }
+          leaf fourth-sid {
+            type uint32 {
+              range "16..1048575";
+            }
+            description
+              "Fourth SID";
+          }
+        }
+      }
+    }
+    /*
+    binding-sid absolute (identifier)
+    */
+    container binding-sid {
+      description
+        "Configure binding segment identifier";
+      leaf absolute {
+        type uint32 {
+          range "1015808..1017855";
+        }
+        description
+          "Identifier from local range";
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context/ctxipos:router" {
+    description
+      "ericsson-segment-routing";
+    /*
+    segment-routing
+    */
+    container segment-routing {
+      when "../../ctxipos:context-name='local'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "segment-routing";
+      uses segment-routing-grp;
+    }
+  }
+
+}

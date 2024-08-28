@@ -1,0 +1,640 @@
+module ericsson-pmeventm {
+  yang-version 1.1;
+  namespace urn:rdns:com:ericsson:oammodel:ericsson-pmeventm;
+  prefix pmeve;
+  
+  import ericsson-yang-extensions { prefix yexte; }
+  import ericsson-yang-types { prefix typese; }
+  import ericsson-notifications { prefix notife; }
+  import ietf-inet-types { prefix inet; }
+
+  organization "Ericsson AB";
+  contact "Ericsson first line support via email";
+    
+  description "PM Event Management model.
+    Copyright (c) 2017 Ericsson AB. All rights reserved.
+    This model is used to manage the event jobs on the
+    Managed Element. Once an event job is activated the event
+    data can be collected and sent out via TCP streaming or file
+    transfer depending on the capabilities specified.";
+
+  revision "2019-09-20" {
+    // xbeekum, ethbll
+    description "Version based on ECIM_PmEventM 1.4
+      1) eventStatus is added below EventType
+      2) Support added for generation leaf for PM Events
+      3) Support added for a leaf in EventProducer for the associated 
+        Managed Function";
+    reference "CR: #1710454";
+    yexte:version 2;
+    yexte:release 3;
+    yexte:correction 2;
+  }
+  
+  revision "2018-08-27" {
+    // ethbll
+    description "removed is-system-created from top level container";
+    reference "TR: #1600524";
+    yexte:version 2;
+    yexte:release 2;
+    yexte:correction 2;
+  }
+
+  revision "2017-12-05" {
+    //ethbll
+    description "corrected producer-name pattern";
+    yexte:version 2;
+    yexte:release 1;
+    yexte:correction 1;
+  }
+  
+  revision "2017-05-15" {
+    description "Changed yexte:not-notifable to notife:notifiable-state-data false
+      added notfiable-state-data true to the pm-eventm container";
+    yexte:version 2;
+    yexte:release 1;
+    yexte:correction 0;
+  }
+  
+  revision "2017-02-02" {
+    description "Version based on ECIM_PmEventM 1.3.0";
+    yexte:version 2;
+    yexte:release 0;
+    yexte:correction 0;
+  }
+
+  revision "2016-10-10" {
+    description "Version based on ECIM_PmEventM 1.2.0";
+    yexte:version 1;
+    yexte:release 0;
+    yexte:correction 0;
+  }
+  
+  container pm-eventm {
+    description 
+      "The Performance Management (PM) Event Management module.
+       It is used to manage the event jobs on the Managed Element.
+       Once an event job is activated the events can be collected
+       and sent via streaming and/or file transfer.";
+    notife:notifiable-state-data true;
+
+    list event-producer {
+      key name;
+
+    
+      description 
+        "Event Producer. Allows for multiple types of Event Producers
+         within an Application describing distinct Event functions
+         and capabilities.
+         Within a single event-producer - If there are two instances
+         of event-type underneath different instances of event-group
+         then they refer to the same event-type.";
+       yexte:is-system-created;
+      
+      leaf name {
+        type string; 
+        description "Short identity of the Event Producer.";
+      }
+
+      leaf producer-name {
+        type string; 
+        config false;
+        description "Descriptive name of the Event Producer.";
+      }
+      
+      leaf generation {
+        type string;
+        config false;
+        description "Determines if Event Producer concerns GSM, UMTS, EPS, 
+          combined (GSM+UMTS+EPS), IMS or 5GS measurements.";
+        reference "3GPP TS 32.404";
+      }
+      
+      leaf-list associated-function {
+        type string; 
+        config false;
+        description "Indicates the Managed Function that is associated to 
+          the Event Producer";
+      }
+
+      container file-pull-capabilities {
+        description "Event capabilities specific to file pull.";
+        yexte:static-data true;
+        
+        leaf-list supported-reporting-periods {
+          type typese:time-period;
+          min-elements 1;
+          description "Specifies the list of reporting periods 
+            supported by the ME.";
+        }
+
+        leaf output-directory {
+          type string;
+          mandatory true;
+          description "Specifies the absolute file path to 
+            the Managed Element file system. 
+            Event files are fetched form this location.";
+        }
+
+        leaf aligned-reporting-period {
+          type boolean;
+          mandatory true;
+          description "The managed element will align its 
+            reporting periods to the hour if set to true.";
+        }
+
+        leaf-list supported-compression-types {
+          type identityref {
+            base typese:compression-types;
+          }
+          max-elements 2;
+          description "Supported file compression type or types. 
+             If this leaf-list is not present, 
+             compression of event data files is not supported.";
+        }
+
+        leaf final-rop {
+          type boolean;
+          default false;
+          description "Indicates if an event file for the last result 
+             output period (ROP) is expected.
+             When an event job is stopped, this leaf specifies
+             whether a result file for the last ROP is 
+             expected (true), or not expected (false).";
+        }
+
+      }
+
+      container event-capabilities {
+        description "Event capabilities.";
+        yexte:static-data true;
+
+        leaf max-no-of-jobs {
+          type uint16;
+          default 0;
+          description "This leaf defines the total maximum number of Event
+             Jobs supported by the application.
+             If not present, the limit is unknown";
+        }
+
+        
+        leaf file-location { 
+          type string;
+          description "Specifies the location or path where the 
+            Event Definition file will be stored.";
+        }
+
+        leaf file-name { 
+          type string;
+          description "Specifies the name of the Event 
+            Definition file.
+            This file is stored in the path specified 
+            in file-location leaf.";
+        }
+
+        leaf file-version { 
+          type string;
+          description "Specifies the version of the 
+            Event Definition file.";
+        }
+      }
+
+      container streaming-capabilities {
+        description "Streaming capabilities.";
+        yexte:static-data true;
+        
+        leaf-list supported-compression-types {
+          type identityref {
+            base typese:compression-types;
+          }
+          max-elements 2;
+          description "Supported stream compression type or types. If this
+             leaf-list is not present, the compression of event data
+             streams is not supported.";
+        }
+      }
+
+      list event-group {  
+        key name;
+        
+        description "Represents a logical group of related Event Types.
+          event-group is by definition a logical grouping
+          (not necessarily an exclusive grouping) of Events.";
+        yexte:static-data true;
+        
+        leaf name {
+          type string;
+          description "Name of the event-group";
+        }
+
+        leaf description {
+          type string;
+          mandatory true;
+          description "Describes the content and purpose 
+            of the event group.";
+          notife:notifiable-state-data false;
+        }
+  
+        leaf generation {
+            type string;
+            mandatory true;
+            description "The Switching domain or domains to which 
+              this measurement is applicable.
+              For example: GSM, UMTS, EPS, GSM/UMTS."; 
+            notife:notifiable-state-data false;
+        }
+
+        leaf resource-type {
+          type typese:schema-node-identifier;
+          notife:notifiable-state-data false;
+          description "The resource-type that generates events belonging to
+             the event group.";
+        }
+                
+        leaf version {
+          type string;
+          mandatory true;
+          description "Event Group version identifier. 
+             Unique version identifier
+             associated with a change to the contents of the Event 
+             Group, where new Event Types have been added.";
+          notife:notifiable-state-data false;
+        }
+
+        leaf-list valid-filters {
+          type leafref {
+            path "../../event-filter-type/name";
+          }
+          description "Defines valid filter type definitions for 
+            this Event Group.";
+          notife:notifiable-state-data false;
+        }
+
+        list event-type {
+          key name;
+          
+          description "Name of the event-type. 
+          event-types under any event-producer will be unique";
+            
+          leaf name {
+            type string;
+            notife:notifiable-state-data false;            
+            description 
+              "Name of the event-type.";
+          }
+
+          leaf trigger-description {
+            type string;
+            mandatory true;
+            description "Contains information about what causes 
+              the event to be raised.";
+            notife:notifiable-state-data false;
+          }
+          leaf event-status{
+            type enumeration {
+              enum preliminary {
+                value 0;
+                description "The event is available and stepped in this version of 
+                  the Managed Element, but is not yet approved.";
+              }        
+              enum used {
+                value 1;
+                description "The event is approved, available and stepped in this 
+                  version of the Managed Element.";
+              }        
+              enum deprecated {
+                value 2;
+                description "The event is available in this version of the Managed 
+                  Element, but as it is planned for removal it is not recommended 
+                  for use.";
+              }        
+            }
+            description "Indicates the status of the Event Type";
+            notife:notifiable-state-data false;
+          }
+          
+          leaf periodicity{
+            type uint64;
+            units seconds;    
+            description "Indicates the periodicity for periodic events in 
+              seconds. For non-periodic event it will not be set.";
+              notife:notifiable-state-data false;
+          }
+        }
+      }
+
+      list event-filter-type {
+        key name;
+        description "Describes the Event Filter Type definition.";
+        yexte:static-data true;
+        
+        leaf name {
+          type string;
+          description "Name of the event-filter-type";  
+        }
+
+        leaf description {
+          type string;
+          mandatory true;
+          description "Event Filter Type description.";
+          notife:notifiable-state-data false;
+        }
+
+        leaf filter-method {
+          type enumeration {
+            enum single-select {
+              value 0;
+              description "Select one value only from 
+              a defined set of options.";
+            }        
+            enum multi-select {
+              value 1;
+              description "Select multiple values from 
+              a predefined set, separated by a space.";
+            }        
+            enum interval {
+              value 2;
+              description "Select an interval value within 
+              the specified range.";
+            }        
+            enum resource-instances {
+              value 3;
+              description "Select one or more resource instances.";
+            }        
+            enum regexp {
+              value 4;
+              description "Regular expression.";
+            }        
+          }                  
+          mandatory true;
+          description "Method of filter classification.";
+          notife:notifiable-state-data false;
+        }
+
+        leaf value-spec {
+          type string;
+          description "Specifies the possible values, expressed as 
+            a string of space-separated values.";
+          notife:notifiable-state-data false;
+        }
+
+        leaf default-value {
+          type string;
+          description "Default value for this filter type.";
+          notife:notifiable-state-data false;
+        }
+      }
+
+      list event-job {
+        key name;
+        description "Defines the information to be used to configure 
+        and activate an event job on the Managed Element.";
+        leaf name {
+          type string;
+          description "Identity of the event-job entry.";
+        }
+
+        leaf description {
+          type string;
+          description "Describes the content and purpose of 
+          the job.";
+        }
+
+        list event-filter {
+          key name;  
+          description "Event filter or filters to be applied. 
+             This specifies the event criteria which must be 
+             valid for the events to be collected and what 
+             contents some events shall have.
+             (Examples of what may be specified in a 
+             filter: the CellId in a Cell Trace, UE fraction, 
+             events related to QoS values,
+             message encoding format, etc). 
+             The filters supported are specified in the 
+             event-group valid-filters leaf-list. 
+             The following conditions apply: 
+             The order the filters are set
+             does not matter. Only one filter of each 
+             type shall be set.";   
+                     
+          leaf name {  
+            type leafref {
+              path "../../../event-filter-type/name";  
+            }            
+            description "Filter name. This leaf contains the name of the 
+               referenced event-filter-type instance, 
+               found in key leaf name.";
+          }
+
+          leaf filter-value {
+            type string;
+            mandatory true;
+            description "Filter value.";
+          }
+
+        }
+
+        leaf requested-job-state {
+          type enumeration {
+            enum active {
+              value 1;
+              description "The job is requested to 
+               be activated.";
+            }
+
+            enum stopped {
+              value 2;
+              description "The job is requested to be stopped.";
+            }
+          }
+          default active;
+          description "The requested state of the job. 
+            It represents the state 
+            that the job has been ordered to reach. 
+            The value is ignored if job-control = view-only.";
+        }
+
+        leaf current-job-state {
+          type enumeration {
+            enum activating {
+              value 0;
+              description "The job is switching from 
+                stopped to active.";
+            }
+      
+            enum active {
+              value 1;
+              description "The job is producing events 
+                as intended.";
+            }
+      
+            enum deactivating {
+              value 3;
+              description "The job is switching from active 
+                to stopped.";
+            }
+      
+            enum stopped {
+              value 2;
+              description "The job is passive, 
+                either by request or due to other
+                reasons (for example, overload conditions)."; 
+                       
+            }
+      
+            enum failed {
+              value 4;
+              description "The job is permanently 
+                failed and deactivated. 
+                In this state it will not respond to further 
+                attempts to activate it. 
+                The job may however leave the failed state 
+                and enter the stopped state if the failure 
+                reason is resolved.";
+            }
+          }
+          config false;
+          mandatory true;
+          description "The current state of the job.";
+        }
+
+        leaf file-output-enabled {
+          type boolean;
+          mandatory true;
+          description "Indicates if event data output will 
+            be written to file.";
+        }
+
+        leaf reporting-period {
+          when "../file-output-enabled = 'true'";
+          type leafref {
+            path "../../file-pull-capabilities/supported-reporting-periods";
+          }
+          mandatory true;
+          description "Specifies how often event data will be made available.
+            Only valid when file-output-enabled = true.
+            The value must be valid according to the
+            supported-reporting-periods set by 
+            the Managed Element.";
+        }
+
+        leaf stream-output-enabled {
+          type boolean;
+          must ". = 'false' or ../streaming-uri" {
+            error-message "If stream output is requested the 
+            URI must be defined.";
+            description   "If stream output is requested the 
+              URI must be defined." ;
+          }
+          mandatory true;
+          description "Indicates if event data output 
+            will be streamed.";
+        }
+
+        leaf streaming-uri {
+          when "../stream-output-enabled = 'true'";
+          type inet:uri;
+          mandatory true;
+          description "Specifies the location (URI) where the 
+            trace data is to be streamed.
+            Only valid when stream-output-enabled = true.";
+        }
+
+        leaf job-control {
+          type enumeration {
+            enum full {
+              value 0;
+              description "MS has Full control of the event job. 
+                MS can create, delete, start and stop a job.";
+            }
+            enum start-stop {
+              value 1;
+              description 
+                "MS has Restricted control of the event job. 
+                MS can stop and start a job, but cannot 
+                delete or create it.
+                The selection of this option for predefined 
+                jobs will indicate 
+                that no event can be added or removed.
+                Updates can only to be done to the 
+                requested-state, destination
+                leafs and job-group under event-job.                
+                selected-groups and selected-events are not 
+                modifiable in this condition.";                
+            }
+            enum view-only {
+              value 2;
+              description "MS can only view the event job.";
+            }
+          }
+          default full;
+          config false;
+          description "Describes the level of MS control of 
+            the event job.";   
+        }
+
+        leaf-list selected-groups {
+          type leafref {
+             path "../../event-group/name";
+          }
+          description 
+            "The Event Group or Event Groups selected for the job. 
+              Set when an entire group or entire groups of
+              events are to be selected for the job.";
+        }
+
+        leaf-list selected-events {
+          type leafref {
+             path "../../event-group/event-type/name";
+          }
+          description 
+            "The Event Type or Event Types selected for the job. 
+              Set when an individual event or a subset of the events 
+              within a group or groups are to be selected for the job.";
+        }
+
+        
+        leaf file-compression-type { 
+          when "../file-output-enabled = 'true'";
+          type leafref {
+            path "../../file-pull-capabilities/supported-compression-types";
+          }
+          description 
+            "Compression Type to be applied to file output. 
+            Only valid when file-output-enabled = true. 
+            If this leaf is not set, no compression will be 
+            applied to the file output. Can only be assigned a 
+            value according to the capability 
+            supported-compression-types in the 
+            file-pull-capabilities resource.";
+        }
+
+        leaf stream-compression-type {
+          when "../stream-output-enabled = 'true'";
+          type leafref {
+            path "../../streaming-capabilities/supported-compression-types";
+          }
+          description 
+            "Compression Type to be applied to stream output. 
+             Only valid when stream-output-enabled = true. 
+             If this leaf is not set, no compression will be 
+             applied to the stream output.
+             Can only be assigned a value according to the 
+             capability supported-compression-types in the 
+             streaming-capabilities resource.";
+        }
+
+        leaf job-group {
+          type string {
+            pattern '[a-zA-Z0-9-]+';
+          }
+          description 
+            "Multiple jobs which end up in common set of files, 
+              have same job-group.
+              So, this identifies the job grouping.";
+        }
+      }
+    }
+  }
+}
+

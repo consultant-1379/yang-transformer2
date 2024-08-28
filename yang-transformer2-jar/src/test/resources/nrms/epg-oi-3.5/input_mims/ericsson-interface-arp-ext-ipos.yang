@@ -1,0 +1,175 @@
+module ericsson-interface-arp-ext-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-arp-ext-ipos";
+
+  prefix "ifarpxipos";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-interfaces-ext-ipos {
+    prefix "ifxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-arp-ext-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-06-19" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-03-19" {
+    description
+      "Replace container proxy-arp/secured-arp with choice
+       case.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  augment "/if:interfaces/if:interface/ifxipos:l3-interface/"
+  + "ifxipos:ip" {
+    description
+      "ericsson-arp-interface";
+    /*
+    arp { arpa | timeout (timeo-val) | {proxy-arp [ always ] |
+     secured-arp [ always ]} | delete-expired | sync icr [ choice
+     (peer-intf) [ (peer-ctx) ] ] }
+    */
+    container arp {
+      description
+        "ARP interface configuration";
+      leaf arpa {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable arpa";
+      }
+      leaf timeout {
+        type uint32 {
+          range "30..4294967";
+        }
+        default "3600";
+        description
+          "Set ARP cache timeout";
+      }
+      choice arp-choice {
+        description
+          "";
+        case proxy-arp {
+          container proxy-arp {
+            presence "";
+            description
+              "Enable proxy ARP on the interface";
+            leaf always {
+              type empty;
+              description
+                "Enable proxy ARP for multiple hosts behind the
+                 same circuit";
+            }
+          }
+        }
+        case secured-arp {
+          container secured-arp {
+            presence "";
+            description
+              "Enable secured ARP on the interface";
+            leaf always {
+              type empty;
+              description
+                "Enable secured ARP for multiple hosts behind
+                 the same circuit";
+            }
+          }
+        }
+      }
+      leaf delete-expired {
+        type empty;
+        description
+          "Delete dynamic ARP entries when expired";
+      }
+      container sync-icr {
+        presence "";
+        description
+          "ARP sync over ICR link";
+        container choice {
+          presence "";
+          description
+            "Configure interface or context name";
+          leaf peer-intf {
+            type string;
+            mandatory true;
+            description
+              "Peer interface name";
+          }
+          leaf peer-ctx {
+            type string;
+            description
+              "Peer context name";
+          }
+        }
+      }
+    }
+  }
+
+}

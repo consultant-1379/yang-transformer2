@@ -1,0 +1,51 @@
+module emodel-helper-two {
+
+	namespace "urn:test:emodel-helper-two";
+	prefix this;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	revision 2021-10-30 {
+		yexte:version 5;
+		yexte:release 6;
+		yexte:correction 7;
+	}
+
+	list list4 {
+		min-elements 3;
+
+		key leaf41;
+		leaf leaf41 {
+			type string;
+		}
+	}
+
+	list list5 {
+		max-elements 8;
+
+		key leaf51;
+		leaf leaf51 {
+			type string;
+		}
+	}
+
+	list list6 {
+		min-elements 0;
+
+		key leaf61;
+		leaf leaf61 {
+			type string;
+		}
+	}
+
+	list list7 {
+		max-elements unbounded;
+
+		key leaf71;
+		leaf leaf71 {
+			type string;
+		}
+	}
+}

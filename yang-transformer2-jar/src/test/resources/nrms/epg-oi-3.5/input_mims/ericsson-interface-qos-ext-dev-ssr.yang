@@ -1,0 +1,431 @@
+module ericsson-interface-qos-ext-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-interface-qos-ext-dev-ssr";
+
+  prefix "ifqosxdevssr";
+
+  import ericsson-qos-ipos {
+    prefix "qosipos";
+  }
+
+  import ericsson-ethernet-ext-ipos {
+    prefix "ethxipos";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-lag-ext-ipos {
+    prefix "lagxipos";
+  }
+
+  import ericsson-l2vlan-ext-ipos {
+    prefix "l2vlanxipos";
+  }
+
+  import ericsson-interfaces-ext-ipos {
+    prefix "ifxipos";
+  }
+
+  import ericsson-l2-service-ipos {
+    prefix "l2serviceipos";
+  }
+
+  import ericsson-bvi-ext-ipos {
+    prefix "bvixipos";
+  }
+
+  import ericsson-interface-qos-ext-ipos  {
+    prefix "ifqosxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ericsson-card-ipr {
+    prefix "cardipr";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-interface-qos-ext-dev-ipos
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1, Delete some redundant node";
+    reference
+      "rfc7950";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-09-07" {
+    description
+      "Replace hierarchical-mode-strict with hierarchical mode-strict to apply more parameters for hierarchical";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-12" {
+    description
+      "deviate pvc-list under l2vlan, pvc under ethernet and link-group";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-01-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/if:interfaces/if:interface/lagxipos:link-group"
+  + "/ifqosxipos:qos/ifqosxipos:rate" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/lagxipos:link-group"
+  + "/ifqosxipos:qos/ifqosxipos:hierarchical" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet"
+  + "/ifqosxipos:qos/ifqosxipos:rate/ifqosxipos:maximum/ifqosxipos:burst" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet"
+  + "/ifqosxipos:qos/ifqosxipos:rate/ifqosxipos:maximum/ifqosxipos:rate-num" {
+    deviate replace {
+      type uint32 {
+        range "8..1000000";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet"
+  + "/ifqosxipos:qos/ifqosxipos:hierarchical/ifqosxipos:priority-group" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet"
+  + "/ifqosxipos:qos/ifqosxipos:hierarchical/ifqosxipos:multicast" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet"
+  + "/ifqosxipos:qos/ifqosxipos:profile/ifqosxipos:overhead/ifqosxipos:name-overhead" {
+    deviate add {
+       must "(not(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + ") and (/cardipr:card[cardipr:type='ge-40-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or "
+            + "(not(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + ") and (/cardipr:card[cardipr:type='40-100ge-2-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or "
+            +"(not(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + ") and (/cardipr:card[cardipr:type='10ge-10-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or "
+            + "(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + "=1 and (/cardipr:card[cardipr:type='ge-40-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or"
+            + "(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + "=1 and (/cardipr:card[cardipr:type='40-100ge-2-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or"
+            + "(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + "=1 and (/cardipr:card[cardipr:type='10ge-10-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) "
+            + "or(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + "=2 and (/cardipr:card[cardipr:type='1-10ge-20-4-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or "
+            + "(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + "=3 and (/cardipr:card[cardipr:type='1-10ge-20-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or "
+            + "(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + "=3 and (/cardipr:card[cardipr:type='10-100ge-2-2-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or"
+            + "(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + "=3 and (/cardipr:card[cardipr:type='1-10ge-40-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or "
+            + "(/qosipos:qos/qosipos:profile[qosipos:profile-name"
+            + "=current()]/qosipos:overhead/qosipos:card-family"
+            + "=3 and (/cardipr:card[cardipr:type='10-100ge-4-4-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/'))))" {
+              error-message "in the ssr,the ge-40-port or 40-100ge-2-port or 10ge-10-port match the "
+              + "card-family 1,the 1-10ge-20-4-port match the card-family 2,the 1-10ge-20-port or 10-100ge-2-2-port  or"
+              + "1-10ge-40-port or 10-100ge-4-4-port match the card- "
+              + "family 3 ";
+              description
+                "in the ssr,the ge-40-port or 40-100ge-2-port or 10ge-10-port match the card-family
+                 1,the 1-10ge-20-4-port match the card-family 2,the 1-10ge-20-port or 10-100ge-2-2-port  or
+                 1-10ge-40-port or 10-100ge-4-4-port match the card-family 3";
+            }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet"
+  + "/ifqosxipos:qos/ifqosxipos:policy/ifqosxipos:queuing" {
+    deviate add {
+      must "((not(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq/qosipos:card-family"
+            + ")) and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]/qosipos:pwfq/qosipos:rate/qosipos:maximum)"
+            + "and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]/qosipos:pwfq/qosipos:queue/qosipos:queue-choice/qosipos:priority) "
+            + "and(/cardipr:card[cardipr:type='ge-40-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/')))) or "
+            + "((not(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq/qosipos:card-family"
+            + ")) and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]/qosipos:pwfq/qosipos:rate/qosipos:maximum)"
+            + "and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]/qosipos:pwfq/qosipos:queue/qosipos:queue-choice/qosipos:priority) "
+            + "and(/cardipr:card[cardipr:type='40-100ge-2-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/')))) or"
+            + "((not(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq/qosipos:card-family"
+            + ")) and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]/qosipos:pwfq/qosipos:rate/qosipos:maximum)"
+            + "and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]/qosipos:pwfq/qosipos:queue/qosipos:queue-choice/qosipos:priority) "
+            + "and(/cardipr:card[cardipr:type='10ge-10-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/'))))or "
+            + "((/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq[qosipos:card-family"
+            + "=1]/qosipos:rate/qosipos:maximum) and "
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]"
+            + "/qosipos:pwfq[qosipos:card-family=1]/qosipos:queue/qosipos:queue-choice/qosipos:priority) "
+            + "and (/cardipr:card[cardipr:type='ge-40-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/')))) or"
+            + "((/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq[qosipos:card-family"
+            + "=1]/qosipos:rate/qosipos:maximum) and "
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]"
+            + "/qosipos:pwfq[qosipos:card-family=1]/qosipos:queue/qosipos:queue-choice/qosipos:priority) "
+            + "and (/cardipr:card[cardipr:type='40-100ge-2-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/')))) or"
+            + "((/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq[qosipos:card-family"
+            + "=1]/qosipos:rate/qosipos:maximum) and "
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]"
+            + "/qosipos:pwfq[qosipos:card-family=1]/qosipos:queue/qosipos:queue-choice/qosipos:priority) "
+            + "and (/cardipr:card[cardipr:type='10ge-10-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/')))) "
+            + "or((/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq[qosipos:card-family"
+            + "=2]/qosipos:rate/qosipos:maximum) and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]"
+            + "/qosipos:pwfq[qosipos:card-family=2]/qosipos:queue/qosipos:queue-choice/qosipos:priority)"
+            +"and (/cardipr:card[cardipr:type='1-10ge-20-4-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/')))) "
+            + "or((/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq[qosipos:card-family"
+            + "=3]/qosipos:rate/qosipos:maximum) and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]"
+            + "/qosipos:pwfq[qosipos:card-family=3]/qosipos:queue/qosipos:queue-choice/qosipos:priority)"
+            +"and (/cardipr:card[cardipr:type='1-10ge-20-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/')))) or "
+            + "((/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq[qosipos:card-family"
+            + "=3]/qosipos:rate/qosipos:maximum) and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]"
+            + "/qosipos:pwfq[qosipos:card-family=3]/qosipos:queue/qosipos:queue-choice/qosipos:priority)"
+            +"and (/cardipr:card[cardipr:type='10-100ge-4-4-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/')))) or "
+            + "((/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq[qosipos:card-family"
+            + "=3]/qosipos:rate/qosipos:maximum) and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]"
+            + "/qosipos:pwfq[qosipos:card-family=3]/qosipos:queue/qosipos:queue-choice/qosipos:priority)"
+            +"and (/cardipr:card[cardipr:type='1-10ge-40-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/')))) or "
+            + "((/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:pwfq[qosipos:card-family"
+            + "=3]/qosipos:rate/qosipos:maximum) and (/qosipos:qos/qosipos:policy[qosipos:gpol-polname=current()]"
+            + "/qosipos:pwfq[qosipos:card-family=3]/qosipos:queue/qosipos:queue-choice/qosipos:priority)"
+            + "and (/cardipr:card[cardipr:type='10-100ge-2-2-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../if:name,'/'))))" {
+              error-message "in the ssr,the ge-40-port or 40-100ge-2-port or 10ge-10-port match the "
+              + "card-family 1,the 1-10ge-20-4-port match the card-family 2,the 1-10ge-20-port or 10-100ge-2-2-port  or"
+              + "1-10ge-40-port or 10-100ge-4-4-port match the card- "
+              + "family 3 ;pwfq policy must configure rate maximum and priority";
+              description
+                "in the ssr,the ge-40-port or 40-100ge-2-port or 10ge-10-port match the card-family
+                 1,the 1-10ge-20-4-port match the card-family 2,the 1-10ge-20-port or 10-100ge-2-2-port  or
+                 1-10ge-40-port or 10-100ge-4-4-port match the card-family 3;pwfq policy must configure rate maximum and priority";
+            }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet"
+  + "/ifqosxipos:qos/ifqosxipos:policy/ifqosxipos:policing/ifqosxipos:pol-name" {
+    deviate add {
+       must "(not(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + ") and (/cardipr:card[cardipr:type='ge-40-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or"
+            +"(not(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + ") and (/cardipr:card[cardipr:type='40-100ge-2-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or"
+            +"(not(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + ") and (/cardipr:card[cardipr:type='10ge-10-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or"
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + "=1 and (/cardipr:card[cardipr:type='ge-40-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or"
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + "=1 and (/cardipr:card[cardipr:type='40-100ge-2-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or"
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + "=1 and (/cardipr:card[cardipr:type='10ge-10-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or"
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + "=2 and (/cardipr:card[cardipr:type='1-10ge-20-4-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or "
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + "=3 and (/cardipr:card[cardipr:type='1-10ge-20-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or "
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + "=3 and (/cardipr:card[cardipr:type='10-100ge-2-2-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or"
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + "=3 and (/cardipr:card[cardipr:type='1-10ge-40-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) or "
+            + "(/qosipos:qos/qosipos:policy[qosipos:gpol-polname"
+            + "=current()]/qosipos:policing/qosipos:card-family"
+            + "=3 and (/cardipr:card[cardipr:type='10-100ge-4-4-port']/cardipr:card-slot"
+            + "=number(substring-before"
+            + "(../../../../../if:name,'/')))) "{
+              error-message "in the ssr,the ge-40-port or 40-100ge-2-port or 10ge-10-port match the "
+              + "card-family 1,the 1-10ge-20-4-port match the card-family 2,the 1-10ge-20-port or 10-100ge-2-2-port  or"
+              + "1-10ge-40-port or 10-100ge-4-4-port match the card- "
+              + "family 3 ";
+              description
+                "in the ssr,the ge-40-port or 40-100ge-2-port or 10ge-10-port match the card-family
+                 1,the 1-10ge-20-4-port match the card-family 2,the 1-10ge-20-port or 10-100ge-2-2-port  or
+                 1-10ge-40-port or 10-100ge-4-4-port match the card-family 3";
+            }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet"
+  + "/ifqosxipos:qos/ifqosxipos:hierarchical/ifqosxipos:weight" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxipos:dot1q/l2vlanxipos:pvc"
+  + "/ifqosxipos:qos/ifqosxipos:weight" {
+    deviate replace {
+      type uint16 {
+        range "1..1023";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxipos:dot1q/l2vlanxipos:pvc"
+  + "/ifqosxipos:rate-circuit/ifqosxipos:queuing-burst" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/lagxipos:link-group"
+  + "/ifqosxipos:rate-circuit/ifqosxipos:queuing-burst" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxipos:dot1q/l2vlanxipos:pvc"
+  + "/ifqosxipos:qos/ifqosxipos:rate/ifqosxipos:pir" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxipos:dot1q/l2vlanxipos:pvc"
+  + "/ifqosxipos:qos/ifqosxipos:rate/ifqosxipos:cir" {
+      deviate not-supported;
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxipos:dot1q/l2vlanxipos:pvc"
+  + "/ifqosxipos:qos/ifqosxipos:rate/ifqosxipos:maximum" {
+    deviate replace {
+      type uint32 {
+        range "8..1000000";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/l2vlanxipos:dot1q/l2vlanxipos:pvc"
+  + "/ifqosxipos:qos/ifqosxipos:rate/ifqosxipos:minimum" {
+    deviate replace {
+      type uint32 {
+        range "8..1000000";
+      }
+    }
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet/ifqosxipos:qos/ifqosxipos:port-queue-depth" {
+    deviate add {
+    must "((/cardipr:card[cardipr:type='vfrwd']/cardipr:card-slot = substring-before(../../../if:name,'/')) or /cardipr:card[cardipr:type='vsfo']/cardipr:card-slot = substring-before(../../../if:name,'/') or /cardipr:card[cardipr:type='1-10ge-20-port']/cardipr:card-slot = substring-before(../../../if:name,'/') or /cardipr:card[cardipr:type='1-10ge-40-port']/cardipr:card-slot = substring-before(../../../if:name,'/') or /cardipr:card[cardipr:type='10-100ge-2-2-port']/cardipr:card-slot = substring-before(../../../if:name,'/') or /cardipr:card[cardipr:type='10-100ge-4-4-port']/cardipr:card-slot = substring-before(../../../if:name,'/'))" {
+      error-message "card-type: 1-10ge-20-4-port/ge-40-port/10ge-10-port/40-100ge-2-port does not support the command port-queue-depth.";
+      }
+    }
+  }
+}

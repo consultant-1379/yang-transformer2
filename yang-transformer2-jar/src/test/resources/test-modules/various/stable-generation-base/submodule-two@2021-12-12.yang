@@ -1,0 +1,38 @@
+submodule submodule-two {
+
+	belongs-to one {
+		prefix this;
+	}
+
+	revision "2021-12-12";
+
+	identity two-1;
+
+	identity two-2 {		// ADDED in this revision
+		base two-1;
+	}
+
+	grouping grouping4 {
+
+		leaf leaf15 {
+			type string;
+		}
+		leaf leaf16 {		// ADDED in this revision
+			type string;
+		}
+	}
+
+	list list2 {
+		key key;
+
+		leaf key {
+			type string;
+		}
+
+		leaf leaf21 {
+			type string;
+		}
+
+		uses this:grouping1;	// ADDED in this revision
+	}
+}

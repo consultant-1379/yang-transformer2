@@ -1,0 +1,88 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-synchronization-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-synchronization-dev-router6274";
+
+  prefix "syncvrouter6274";
+
+  import ericsson-synchronization-router6000 {
+    prefix "syncr6000";
+  }
+
+  import ericsson-contexts-router6000 {
+   prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-synchronization-dev-router6274
+     Copyright (c) 2016 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-11-02" {
+    description
+      "Change the data type";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-08-22" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-08-01" {
+    description
+      "deviation for ericsson-synchronization-router6000 file.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  deviation "/ctxsr6k:contexts/syncr6000:synchronization/syncr6000:ptp-clock/syncr6000:ptp-clock/syncr6000:g8275-1-t-bc/syncr6000:g8275-1-t-bc/syncr6000:g8275-1-t-bc/syncr6000:ptp-port/syncr6000:port-id" {
+    deviate replace {
+      type uint16 {
+        range "1..384";
+      }
+    }
+  }
+  deviation "/ctxsr6k:contexts/syncr6000:synchronization/syncr6000:ptp-clock/syncr6000:ptp-clock/syncr6000:g8275-1-t-bc/syncr6000:g8275-1-t-bc/syncr6000:g8275-2-t-bc-p/syncr6000:ptp-port/syncr6000:port-id" {
+    deviate replace {
+      type uint16 {
+        range "1..384";
+      }
+    }
+  }
+  deviation "/ctxsr6k:contexts/syncr6000:synchronization/syncr6000:ptp-clock/syncr6000:ptp-clock/syncr6000:v1588v2-boundary/syncr6000:v1588v2-boundary/syncr6000:ptp-port/syncr6000:ptp-port" {
+    deviate replace {
+      type uint16 {
+        range "1..384";
+      }
+    }
+  }
+}
+
+
+

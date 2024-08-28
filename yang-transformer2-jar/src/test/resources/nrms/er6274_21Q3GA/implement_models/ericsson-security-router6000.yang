@@ -1,0 +1,120 @@
+module ericsson-security-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-security-router6000";
+
+  prefix "securityrouter600";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-security-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-30" {
+    description
+      "add  password-aging time";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-09-09" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping security-profile-grp {
+    description
+      "Security profile configuration mode";
+    /*
+    failed-login-attempts (attempts-val)
+    */
+    leaf failed-login-attempts {
+      type uint8 {
+        range "0..99";
+      }
+      description
+        "Set failed login attempts before the user is
+         locked-out";
+    }
+    /*
+    lockout-duration (period-val)
+    */
+    leaf lockout-duration {
+      type uint16 {
+        range "0..1440";
+      }
+      description
+        "Time period (in mins.) the user is locked after
+         consecutive failed login attempts";
+    }
+    /*
+    account-expiration (time-val)
+    */
+    leaf account-expiration {
+      type uint8 {
+        range "0..180";
+      }
+      description
+        "Time period (in days) the user account is disabled
+         after configured period of inactivity";
+    }
+    /*
+    password-aging (time)
+    */
+    leaf password-aging {
+      type uint8 {
+        range "1..180";
+      }
+      default "90";
+      description
+        "Time period (in days) the user password is expired
+         after configured period of inactivity";
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-security";
+    /*
+    security
+    */
+    container security {
+      description
+        "Global security";
+      container profile-admin-eal3-compliance {
+        presence "";
+        description
+          "Attach Security Profile";
+        uses security-profile-grp;
+      }
+      leaf admin-eal3-compliance {
+        type empty;
+        description
+          "Attach Security Profile";
+      }
+    }
+  }
+
+}

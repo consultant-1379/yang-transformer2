@@ -1,0 +1,2076 @@
+module ericsson-snmp-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-snmp-router6000";
+
+  prefix "snmpr6k";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-snmp-router6000
+     Copyright (c) 2021 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-02-23" {
+    description
+      "add ifindex-all-ctx-enable for ifmib";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2020-05-07" {
+    description
+      "add alarms L2CircuitBlocking";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2019-04-26" {
+    description
+      "modify snmp ping traceroute sync enm failed";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2019-02-21" {
+    description
+      "modify alarms sync enm failed";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-09-29" {
+    description
+      "remove snmp alarm model part";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2018-07-02" {
+    description
+      "ad context snmp command";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-01-23" {
+    description
+      "modify model id range from 4294967294 to 4294967295";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-01-02" {
+    description
+      "add error_message in range and pattern";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2017-10-10" {
+    description
+      "SNMP E/// alarms enable flags";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-08-29" {
+    description
+      "password encrypted;ietf-yang-types warning delete";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-08-02" {
+    description
+      "comments modify";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2016-10-21" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping snmp-server-grp {
+    description
+      "SNMP server configuration mode";
+    /*
+    traps { ifmib ip | l2tpmib | l2vpnmib | { mplsl3vpn [
+     interval (interval-value) ] } | nemib { non-exclusive |
+     exclusive } | vrrpmib }
+    */
+    container traps {
+      presence "";
+      description
+        "Specify the notifications to be enabled";
+      leaf ifmib-ip {
+        type empty;
+        description
+          "Enable notifications on IF-MIB ip layers";
+      }
+      leaf l2tpmib {
+        type empty;
+        description
+          "Enable L2TP notifications";
+      }
+      leaf l2vpnmib {
+        type empty;
+        description
+          "Enable L2VPN/PW notifications";
+      }
+      container mplsl3vpn {
+        presence "";
+        description
+          "Enable MPLS L3VPN notifications";
+        leaf interval {
+          type uint32 {
+            range "0..42949672";
+          }
+          description
+            "Set the interval of the route max threshold
+             notification";
+        }
+      }
+      container nemib {
+        presence "";
+        description
+          "Enable Notify Enhance MIB notifications";
+        leaf non-exclusive {
+          type empty;
+          description
+            "Do not suppress the corresponding standard traps";
+        }
+        leaf exclusive {
+          type empty;
+          description
+            "Suppress the corresponding standard traps";
+        }
+      }
+      leaf vrrpmib {
+        type empty;
+        description
+          "Enable VRRP notifications";
+      }
+    }
+    /*
+    context-filter ifmib
+    */
+    leaf context-filter-ifmib {
+      type empty;
+      description
+        "Enable context filtering on ifmib";
+    }
+    /*
+    agentx-timeout (agentxtimeout-value)
+    */
+    leaf agentx-timeout {
+      type uint8 {
+        range "0..255";
+      }
+      description
+        "Configure agentx timeout";
+    }
+    /*
+    alarms { ospfNbrStateChange | ospfv3NbrStateChange |
+     bgpEstablishedNotification | mplsLdpSessionUp |
+     bfdSessionDown }
+    */
+    container alarms {
+      status obsolete;
+      description
+        "Specify only the E/// alarm notifications to be
+         enabled";
+      choice alarms {
+        case ospfNbrStateChange {
+          leaf ospfNbrStateChange {
+            type empty;
+            description
+              "Enable only the ospfNbrStateChange E/// alarm
+               notifications";
+          }
+        }
+        case ospfv3NbrStateChange {
+          leaf ospfv3NbrStateChange {
+            type empty;
+            description
+              "Enable only the ospfv3NbrStateChange E/// alarm
+               notifications";
+          }
+        }
+        case bgpEstablishedNotification {
+          leaf bgpEstablishedNotification {
+            type empty;
+            description
+              "Enable only the bgpEstablishedNotification E///
+               alarm notifications";
+          }
+        }
+        case mplsLdpSessionUp {
+          leaf mplsLdpSessionUp {
+            type empty;
+            description
+              "Enable only the mplsLdpSessionUp E/// alarm
+               notifications";
+          }
+        }
+        case bfdSessionDown {
+          leaf bfdSessionDown {
+            type empty;
+            description
+              "Enable only the bfdSessionDown E/// alarm
+               notifications";
+          }
+        }
+      }
+    }
+    /*
+    cache-counter-query
+    */
+    leaf cache-counter-query {
+      type empty;
+      description
+        "Enable cache counter query to improve performance";
+    }
+    /*
+    ifindex-all-ctx-enable
+    */
+    leaf ifindex-all-ctx-enable {
+      type empty;
+      description
+        "Enable ifindex retrieval with all contexts from ifmib";
+    }
+    /*
+    alarms-config { ospfNbrStateChange | ospfv3NbrStateChange |
+     bgpEstablishedNotification | mplsLdpSessionUp |
+     bfdSessionDown | l2CircuitBlocking }
+    */
+    container alarms-config {
+      description
+        "Specify only the E/// alarm notifications to be
+         enabled";
+      leaf ospfNbrStateChange {
+        type empty;
+        description
+          "Enable only the ospfNbrStateChange E/// alarm
+           notifications";
+      }
+      leaf ospfv3NbrStateChange {
+        type empty;
+        description
+          "Enable only the ospfv3NbrStateChange E/// alarm
+           notifications";
+      }
+      leaf bgpEstablishedNotification {
+        type empty;
+        description
+          "Enable only the bgpEstablishedNotification E/// alarm
+           notifications";
+      }
+      leaf mplsLdpSessionUp {
+        type empty;
+        description
+          "Enable only the mplsLdpSessionUp E/// alarm
+           notifications";
+      }
+      leaf bfdSessionDown {
+        type empty;
+        description
+          "Enable only the bfdSessionDown E/// alarm
+           notifications";
+      }
+      leaf l2CircuitBlocking {
+        type empty;
+        description
+          "Enable only the l2CircuitBlocking E/// alarm
+           notifications";
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context" {
+    description
+      "ericsson-snmp";
+    /*
+    snmp
+    */
+    container snmp {
+      status obsolete;
+      description
+        "Configure SNMP ping tests";
+      list ping {
+        key "ping-name";
+        status obsolete;
+        description
+          "Configure SNMP ping tests";
+        leaf ping-name {
+          type string;
+          description
+            "A name for identifying a ping test";
+        }
+        leaf ip {
+          type empty;
+          mandatory true;
+          description
+            "IPv4 ping type";
+        }
+        leaf ping-choice {
+          type union {
+            type inet:ipv4-address;
+            type string;
+          }
+          mandatory true;
+          description
+            "leaf ping-choice.";
+        }
+        leaf frequency {
+          type uint32 {
+            range "0..86400";
+          }
+          description
+            "Specify ping test frequency";
+        }
+        leaf count {
+          type uint8 {
+            range "1..15";
+          }
+          description
+            "Specify number of ping probes";
+        }
+        leaf timeout {
+          type uint8 {
+            range "1..60";
+          }
+          description
+            "Specify ping timeout value";
+        }
+        leaf notify-complete {
+          type empty;
+          description
+            "Generate a pingTestCompleted notification";
+        }
+        leaf notify-test-fail {
+          type uint8 {
+            range "0..15";
+          }
+          description
+            "Generate a pingTestFailed notification";
+        }
+        leaf notify-probe-fail {
+          type uint8 {
+            range "0..15";
+          }
+          description
+            "Generate a pingProbeFailed notification";
+        }
+        leaf df {
+          type empty;
+          description
+            "Set the Don't Fragment bit in the IP header";
+        }
+        leaf pattern {
+          type yang:hex-string;
+          description
+            "Specify a pattern to fill in ICMP packet";
+        }
+        leaf size {
+          type uint16 {
+            range "36..18024";
+          }
+          description
+            "Specify ICMP datagram size to send";
+        }
+        leaf source {
+          type inet:ipv4-address;
+          description
+            "Specify source IP address";
+        }
+        leaf tos {
+          type yang:hex-string;
+          description
+            "Specify type of service";
+        }
+        leaf ttl {
+          type uint8 {
+            range "1..255";
+          }
+          description
+            "Specify time-to-live";
+        }
+      }
+      list traceroute {
+        key "traceroute-name";
+        status obsolete;
+        description
+          "Configure SNMP traceroute tests";
+        leaf traceroute-name {
+          type string;
+          description
+            "A name for identifying a traceroute test";
+        }
+        leaf traceroute-choice {
+          type union {
+            type inet:ipv4-address;
+            type string;
+          }
+          mandatory true;
+          description
+            "leaf traceroute-choice.";
+        }
+        leaf frequency {
+          type uint32 {
+            range "0..86400";
+          }
+          description
+            "Specify traceroute test frequency";
+        }
+        leaf count {
+          type uint8 {
+            range "1..10";
+          }
+          description
+            "Specify number of probes to send per hop";
+        }
+        leaf timeout {
+          type uint8 {
+            range "2..60";
+          }
+          description
+            "Specify timeout value";
+        }
+        leaf notify-path-change {
+          type empty;
+          description
+            "Generate a traceRoutePathChange notification";
+        }
+        leaf notify-test-complete {
+          type empty;
+          description
+            "Generate a traceRouteTestCompleted notification";
+        }
+        leaf notify-test-fail {
+          type empty;
+          description
+            "Generate a traceRouteTestFailed notification";
+        }
+        leaf df {
+          type empty;
+          description
+            "Set the Don't Fragment bit in the IP header";
+        }
+        leaf initial-ttl {
+          type uint8 {
+            range "1..255";
+          }
+          description
+            "Specify initial time-to-live";
+        }
+        leaf max-ttl {
+          type uint8 {
+            range "1..255";
+          }
+          description
+            "Specify maximum time-to-live";
+        }
+        leaf port {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Specify port number";
+        }
+        leaf tos {
+          type yang:hex-string;
+          description
+            "Specify type of service";
+        }
+        leaf source {
+          type inet:ipv4-address;
+          description
+            "Specify source IP address";
+        }
+        leaf size {
+          type uint16 {
+            range "40..32768";
+          }
+          description
+            "Specify UDP datagram size to send";
+        }
+      }
+    }
+    /*
+    snmp-config
+    */
+    container snmp-config {
+      description
+        "Configure SNMP ping tests";
+      list ping-config {
+        key "ping-name";
+        description
+          "Configure SNMP ping tests";
+        leaf ping-name {
+          type string;
+          description
+            "A name for identifying a ping test";
+        }
+        leaf ip {
+          type empty;
+          mandatory true;
+          description
+            "IPv4 ping type";
+        }
+        leaf ping-config-choice {
+          type union {
+            type inet:ipv4-address;
+            type string;
+          }
+          mandatory true;
+          description
+            "leaf ping-config-choice.";
+        }
+        leaf frequency {
+          type uint32 {
+            range "0..86400";
+          }
+          description
+            "Specify ping test frequency";
+        }
+        leaf count {
+          type uint8 {
+            range "1..15";
+          }
+          description
+            "Specify number of ping probes";
+        }
+        leaf timeout {
+          type uint8 {
+            range "1..60";
+          }
+          description
+            "Specify ping timeout value";
+        }
+        leaf notify-complete {
+          type empty;
+          description
+            "Generate a pingTestCompleted notification";
+        }
+        leaf notify-test-fail {
+          type uint8 {
+            range "0..15";
+          }
+          description
+            "Generate a pingTestFailed notification";
+        }
+        leaf notify-probe-fail {
+          type uint8 {
+            range "0..15";
+          }
+          description
+            "Generate a pingProbeFailed notification";
+        }
+        leaf df {
+          type empty;
+          description
+            "Set the Don't Fragment bit in the IP header";
+        }
+        leaf pattern {
+          type string {
+            pattern '0x[0-9a-fA-F]{1,4}';
+          }
+          description
+            "Specify a pattern to fill in ICMP packet";
+        }
+        leaf size {
+          type uint16 {
+            range "36..18024";
+          }
+          description
+            "Specify ICMP datagram size to send";
+        }
+        leaf source {
+          type inet:ipv4-address;
+          description
+            "Specify source IP address";
+        }
+        leaf tos {
+          type string {
+            pattern '0x[0-9a-fA-F]{1,2}';
+          }
+          description
+            "Specify type of service";
+        }
+        leaf ttl {
+          type uint8 {
+            range "1..255";
+          }
+          description
+            "Specify time-to-live";
+        }
+      }
+      list traceroute-config {
+        key "traceroute-name";
+        description
+          "Configure SNMP traceroute tests";
+        leaf traceroute-name {
+          type string;
+          description
+            "A name for identifying a traceroute test";
+        }
+        leaf traceroute-config-choice {
+          type union {
+            type inet:ipv4-address;
+            type string;
+          }
+          mandatory true;
+          description
+            "leaf traceroute-config-choice.";
+        }
+        leaf frequency {
+          type uint32 {
+            range "0..86400";
+          }
+          description
+            "Specify traceroute test frequency";
+        }
+        leaf count {
+          type uint8 {
+            range "1..10";
+          }
+          description
+            "Specify number of probes to send per hop";
+        }
+        leaf timeout {
+          type uint8 {
+            range "2..60";
+          }
+          description
+            "Specify timeout value";
+        }
+        leaf notify-path-change {
+          type empty;
+          description
+            "Generate a traceRoutePathChange notification";
+        }
+        leaf notify-test-complete {
+          type empty;
+          description
+            "Generate a traceRouteTestCompleted notification";
+        }
+        leaf notify-test-fail {
+          type empty;
+          description
+            "Generate a traceRouteTestFailed notification";
+        }
+        leaf df {
+          type empty;
+          description
+            "Set the Don't Fragment bit in the IP header";
+        }
+        leaf initial-ttl {
+          type uint8 {
+            range "1..255";
+          }
+          description
+            "Specify initial time-to-live";
+        }
+        leaf max-ttl {
+          type uint8 {
+            range "1..255";
+          }
+          description
+            "Specify maximum time-to-live";
+        }
+        leaf port {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Specify port number";
+        }
+        leaf tos {
+          type string {
+            pattern '0x[0-9a-fA-F]{1,2}';
+          }
+          description
+            "Specify type of service";
+        }
+        leaf source {
+          type inet:ipv4-address;
+          description
+            "Specify source IP address";
+        }
+        leaf size {
+          type uint16 {
+            range "40..32768";
+          }
+          description
+            "Specify UDP datagram size to send";
+        }
+      }
+    }
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-snmp";
+    /*
+    snmp
+    */
+    container snmp {
+      description
+        "SNMP configuration";
+      list view {
+        key "name oid-tree";
+        description
+          "Configuration of SNMP MIB view";
+        leaf name {
+          type string {
+            length "1..32";
+          }
+          description
+            "The name of this VACM MIB view";
+        }
+        leaf oid-tree {
+          type string;
+          description
+            "Object identifier (OID) of the ASN-1 subtree to be
+             included or excluded from the view";
+        }
+        leaf restriction {
+          type enumeration {
+            enum excluded {
+              value 0;
+              description
+                "exclude the subtree from the view";
+            }
+            enum included {
+              value 1;
+              description
+                "include the subtree in the view";
+            }
+          }
+          mandatory true;
+          description
+            "access control for the specific MIB objects";
+        }
+      }
+      list community {
+        key "name";
+        description
+          "List of communities";
+        leaf name {
+          type string {
+            length "1..64";
+          }
+          description
+            "community name";
+        }
+        choice context-access {
+          description
+            "The context that the community is allowed to
+             access";
+          case all-contexts {
+            leaf all-contexts {
+              type empty;
+              description
+                "Allows the community access to all contexts";
+            }
+          }
+          case context {
+            leaf context {
+              type leafref {
+                path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+                + ":context-name";
+              }
+              description
+                "Name of the context that contains the specific
+                 instances of MIB objects available to the
+                 community";
+            }
+          }
+        }
+        leaf tag {
+          type string;
+          description
+            "link community to notify-target entry tag";
+        }
+        leaf view {
+          type leafref {
+            path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:view/sn"
+            + "mpr6k:name";
+          }
+          description
+            "Associate the community with a MIB view name";
+        }
+        leaf access {
+          type enumeration {
+            enum read-only {
+              value 0;
+              description
+                "allows the community read-only access to MIB
+                 objects";
+            }
+            enum read-write {
+              value 1;
+              description
+                "allows the community read-write access to MIB
+                 objects";
+            }
+          }
+          description
+            "Type of access";
+        }
+      }
+      container engine-id {
+        description
+          "Unique engine ID for SNMPv3 local or remote systems";
+        leaf local {
+          type string {
+            pattern '[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){4,31}' {
+              error-message "10-64 hex digits, E.g: "
+              + "xx:xx:xx:xx:xx:xx";
+            }
+          }
+          description
+            "Local engine ID";
+        }
+        list remote {
+          key "remote-name";
+          description
+            "list of remote engine IDs";
+          leaf remote-name {
+            type string;
+            description
+              "remote name";
+          }
+          leaf engine-id {
+            type string {
+              pattern '[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){4,31}' {
+                error-message "10-64 hex digits, E.g: "
+                + "xx:xx:xx:xx:xx:xx";
+              }
+            }
+            mandatory true;
+            description
+              "engine-id (10-64 hex digits, E.g:
+               xx:xx:xx:xx:xx:xx)";
+          }
+        }
+      }
+      list group {
+        key "group-name";
+        description
+          "Configuration of SNMPv3 groups";
+        leaf group-name {
+          type string {
+            length "1..32";
+          }
+          description
+            "Group name";
+        }
+        container security-model {
+          description
+            "Select SNMP security model";
+          container v1 {
+            presence "";
+            description
+              "Security model based on SNMPv1 community";
+            list context {
+              key "ctx-name";
+              description
+                "list of contexts";
+              leaf ctx-name {
+                type string;
+                description
+                  "A complete or partial context name";
+              }
+              leaf ctx-type {
+                type enumeration {
+                  enum exact {
+                    value 0;
+                    description
+                      "Matches only the context exactly as
+                       specified by the ctx-name";
+                  }
+                  enum prefix {
+                    value 1;
+                    description
+                      "Matches any context that begins with the
+                       ctx-name";
+                  }
+                }
+                default "exact";
+                description
+                  "context name match type";
+              }
+              leaf notify {
+                type leafref {
+                  path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:v"
+                  + "iew/snmpr6k:name";
+                }
+                description
+                  "Name of the view from which notifications are
+                   sent to the group";
+              }
+              leaf read {
+                type leafref {
+                  path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:v"
+                  + "iew/snmpr6k:name";
+                }
+                description
+                  "Name of the view for which this group has
+                   read access";
+              }
+              leaf write {
+                type leafref {
+                  path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:v"
+                  + "iew/snmpr6k:name";
+                }
+                description
+                  "Name of the view to which this group has
+                   write access";
+              }
+            }
+          }
+          container v2c {
+            presence "";
+            description
+              "Security model based on SNMPv2 community";
+            list context {
+              key "ctx-name";
+              description
+                "list of contexts";
+              leaf ctx-name {
+                type string;
+                description
+                  "A complete or partial context name";
+              }
+              leaf ctx-type {
+                type enumeration {
+                  enum exact {
+                    value 0;
+                    description
+                      "Matches only the context exactly as
+                       specified by the ctx-name";
+                  }
+                  enum prefix {
+                    value 1;
+                    description
+                      "Matches any context that begins with the
+                       ctx-name";
+                  }
+                }
+                default "exact";
+                description
+                  "context name match type";
+              }
+              leaf notify {
+                type leafref {
+                  path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:v"
+                  + "iew/snmpr6k:name";
+                }
+                description
+                  "Name of the view from which notifications are
+                   sent to the group";
+              }
+              leaf read {
+                type leafref {
+                  path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:v"
+                  + "iew/snmpr6k:name";
+                }
+                description
+                  "Name of the view for which this group has
+                   read access";
+              }
+              leaf write {
+                type leafref {
+                  path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:v"
+                  + "iew/snmpr6k:name";
+                }
+                description
+                  "Name of the view to which this group has
+                   write access";
+              }
+            }
+          }
+          list usm {
+            key "usm-type";
+            description
+              "Security model based on SNMP users(SNMPv3 only)";
+            leaf usm-type {
+              type enumeration {
+                enum auth {
+                  value 0;
+                  description
+                    "Authorizes SNMP users";
+                }
+                enum noauth {
+                  value 1;
+                  description
+                    "Does not authorize SNMP users";
+                }
+                enum priv {
+                  value 2;
+                  description
+                    "Enforces authentication privilege level
+                     support in SNMPv3";
+                }
+              }
+              description
+                "security level";
+            }
+            container usm-context {
+              description
+                "configuration of context";
+              list context {
+                key "ctx-name";
+                description
+                  "list of contexts";
+                leaf ctx-name {
+                  type string;
+                  description
+                    "A complete or partial context name";
+                }
+                leaf ctx-type {
+                  type enumeration {
+                    enum exact {
+                      value 0;
+                      description
+                        "Matches only the context exactly as
+                         specified by the ctx-name";
+                    }
+                    enum prefix {
+                      value 1;
+                      description
+                        "Matches any context that begins with
+                         the ctx-name";
+                    }
+                  }
+                  default "exact";
+                  description
+                    "context name match type";
+                }
+                leaf notify {
+                  type leafref {
+                    path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k"
+                    + ":view/snmpr6k:name";
+                  }
+                  description
+                    "Name of the view from which notifications
+                     are sent to the group";
+                }
+                leaf read {
+                  type leafref {
+                    path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k"
+                    + ":view/snmpr6k:name";
+                  }
+                  description
+                    "Name of the view for which this group has
+                     read access";
+                }
+                leaf write {
+                  type leafref {
+                    path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k"
+                    + ":view/snmpr6k:name";
+                  }
+                  description
+                    "Name of the view to which this group has
+                     write access";
+                }
+              }
+              container all-contexts {
+                presence "";
+                description
+                  "Select all contexts";
+                leaf notify {
+                  type leafref {
+                    path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k"
+                    + ":view/snmpr6k:name";
+                  }
+                  description
+                    "Name of the view from which notifications
+                     are sent to the group";
+                }
+                leaf read {
+                  type leafref {
+                    path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k"
+                    + ":view/snmpr6k:name";
+                  }
+                  description
+                    "Name of the view for which this group has
+                     read access";
+                }
+                leaf write {
+                  type leafref {
+                    path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k"
+                    + ":view/snmpr6k:name";
+                  }
+                  description
+                    "Name of the view to which this group has
+                     write access";
+                }
+              }
+            }
+          }
+        }
+      }
+      container server {
+        presence "";
+        description
+          "Configuration of the SNMP engine";
+        leaf port {
+          type uint16 {
+            range "1..65535";
+          }
+          default "161";
+          description
+            "The UDP port on which the engine listens";
+        }
+        leaf enhance-ifmib {
+          type empty;
+          description
+            "Enables enhancements to the IF-MIB implementation";
+        }
+        leaf enterprise {
+          type enumeration {
+            enum ericsson {
+              value 0;
+              description
+                "Ericsson Router MIB";
+            }
+            enum rbn {
+              value 1;
+              description
+                "Legacy RBN MIB";
+            }
+          }
+          default "ericsson";
+          description
+            "Specify the enterprise MIB to be adopted";
+        }
+        uses snmp-server-grp;
+      }
+      list user {
+        key "user-name";
+        description
+          "Configuration of SNMPv3 user";
+        leaf user-name {
+          type string;
+          description
+            "User name";
+        }
+        container user-choice {
+          presence "";
+          description
+            "container user-choice.";
+          container engine-local {
+            presence "";
+            description
+              "configuration of local engine";
+            leaf group {
+              type leafref {
+                path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:gro"
+                + "up/snmpr6k:group-name";
+              }
+              description
+                "Name of the group to which the user belongs";
+            }
+            container security-model-usm {
+              description
+                "Configuration of SNMPv3 USM";
+              choice auth-type {
+                default noauth;
+                description
+                  "Configuration of the user authentication";
+                case noauth {
+                  leaf noauth {
+                    type empty;
+                    description
+                      "no authentication";
+                  }
+                }
+                case md5 {
+                  container md5 {
+                    description
+                      "Use md5 authentication protocol";
+                    choice md5-type {
+                      description
+                        "configuration of md5 type";
+                      case key {
+                        container key {
+                          description
+                            "key (hex or encoded)";
+                          choice key-choice {
+                            description
+                              "key type";
+                            case clear-auth-key {
+                              leaf clear-auth-key {
+                                type string {
+                                  pattern '[0-9a-fA-F]{32}' {
+                                    error-message "Incorrect key "
+                                    + "length...md5 key must be 32 "
+                                    + "hexChars.";
+                                  }
+                                }
+                                description
+                                  "key value (in specified
+                                   format)";
+                              }
+                            }
+                            case encoded {
+                              container encoded {
+                                description
+                                  "key value is encoded using
+                                   specified algorithm";
+                                leaf base64 {
+                                  type string;
+                                  description
+                                    "key value encoded using
+                                     base64";
+                                }
+                              }
+                            }
+                          }
+                          leaf des56 {
+                            type string;
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                      case password {
+                        container password {
+                          description
+                            "Authentication Password";
+                          leaf auth-pwd {
+                            type string {
+                              length "8..64" {
+                                error-message "password string, "
+                                + "8 characters minimum, 64 "
+                                + "characters maximun.";
+                              }
+                            }
+                            mandatory true;
+                            description
+                              "password string, 8 characters
+                               minimum";
+                          }
+                          leaf des56 {
+                            type string {
+                              length "8..64" {
+                                error-message "password string, "
+                                + "8 characters minimum, 64 "
+                                + "characters maximun.";
+                              }
+                            }
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                case sha {
+                  container sha {
+                    description
+                      "Use SHA authentication protocol";
+                    choice sha-type {
+                      description
+                        "SHA type";
+                      case key {
+                        container key {
+                          description
+                            "key (hex or encoded)";
+                          choice key-choice {
+                            description
+                              "key type";
+                            case clear-auth-key {
+                              leaf clear-auth-key {
+                                type string {
+                                  pattern '[0-9a-fA-F]{40}' {
+                                    error-message "Incorrect key "
+                                    + "length...sha key must be 40 "
+                                    + "hexChars.";
+                                  }
+                                }
+                                description
+                                  "key value (in specified
+                                   format)";
+                              }
+                            }
+                            case encoded {
+                              container encoded {
+                                description
+                                  "key value is encoded using
+                                   specified algorithm";
+                                leaf base64 {
+                                  type string;
+                                  description
+                                    "key value encoded using
+                                     base64";
+                                }
+                              }
+                            }
+                          }
+                          leaf des56 {
+                            type string;
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                      case password {
+                        container password {
+                          description
+                            "Authentication Password";
+                          leaf auth-pwd {
+                            type string {
+                              length "8..64" {
+                                error-message "password string, "
+                                + "8 characters minimum, 64 "
+                                + "characters maximun.";
+                              }
+                            }
+                            mandatory true;
+                            description
+                              "password string, 8 characters
+                               minimum";
+                          }
+                          leaf des56 {
+                            type string {
+                              length "8..64" {
+                                error-message "password string, "
+                                + "8 characters minimum, 64 "
+                                + "characters maximun.";
+                              }
+                            }
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          list engine-remote {
+            key "engine-name";
+            description
+              "list of remote engines";
+            leaf engine-name {
+              type leafref {
+                path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k"
+                + ":engine-id/snmpr6k:remote/snmpr6k:remote-name";
+              }
+              description
+                "Name of the remote engine";
+            }
+            leaf group {
+              type leafref {
+                path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:gro"
+                + "up/snmpr6k:group-name";
+              }
+              description
+                "Name of the group to which the user belongs";
+            }
+            container security-model-usm {
+              description
+                "Configuration of SNMPv3 USM";
+              choice auth-type {
+                default noauth;
+                description
+                  "Configuration of the user authentication";
+                case noauth {
+                  leaf noauth {
+                    type empty;
+                    description
+                      "no authentication";
+                  }
+                }
+                case md5 {
+                  container md5 {
+                    description
+                      "Use md5 authentication protocol";
+                    choice md5-type {
+                      description
+                        "configuration of md5 type";
+                      case key {
+                        container key {
+                          description
+                            "key (hex or encoded)";
+                          choice key-choice {
+                            description
+                              "key type";
+                            case clear-auth-key {
+                              leaf clear-auth-key {
+                                type string {
+                                  pattern '[0-9a-fA-F]{32}' {
+                                    error-message "Incorrect key "
+                                    + "length...md5 key must be 32 "
+                                    + "hexChars.";
+                                  }
+                                }
+                                description
+                                  "key value (in specified
+                                   format)";
+                              }
+                            }
+                            case encoded {
+                              container encoded {
+                                description
+                                  "key value is encoded using
+                                   specified algorithm";
+                                leaf base64 {
+                                  type string;
+                                  description
+                                    "key value encoded using
+                                     base64";
+                                }
+                              }
+                            }
+                          }
+                          leaf des56 {
+                            type string;
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                      case password {
+                        container password {
+                          description
+                            "Authentication Password";
+                          leaf auth-pwd {
+                            type string {
+                              length "8..64" {
+                                error-message "password string, "
+                                + "8 characters minimum, 64 "
+                                + "characters maximun.";
+                              }
+                            }
+                            mandatory true;
+                            description
+                              "password string, 8 characters
+                               minimum";
+                          }
+                          leaf des56 {
+                            type string {
+                              length "8..64" {
+                                error-message "password string, "
+                                + "8 characters minimum, 64 "
+                                + "characters maximun.";
+                              }
+                            }
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                case sha {
+                  container sha {
+                    description
+                      "Use SHA authentication protocol";
+                    choice sha-type {
+                      description
+                        "SHA type";
+                      case key {
+                        container key {
+                          description
+                            "key (hex or encoded)";
+                          choice key-choice {
+                            description
+                              "key type";
+                            case clear-auth-key {
+                              leaf clear-auth-key {
+                                type string {
+                                  pattern '[0-9a-fA-F]{40}' {
+                                    error-message "Incorrect key "
+                                    + "length...sha key must be 40 "
+                                    + "hexChars.";
+                                  }
+                                }
+                                description
+                                  "key value (in specified
+                                   format)";
+                              }
+                            }
+                            case encoded {
+                              container encoded {
+                                description
+                                  "key value is encoded using
+                                   specified algorithm";
+                                leaf base64 {
+                                  type string;
+                                  description
+                                    "key value encoded using
+                                     base64";
+                                }
+                              }
+                            }
+                          }
+                          leaf des56 {
+                            type string;
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                      case password {
+                        container password {
+                          description
+                            "Authentication Password";
+                          leaf auth-pwd {
+                            type string {
+                              length "8..64" {
+                                error-message "password string, "
+                                + "8 characters minimum, 64 "
+                                + "characters maximun.";
+                              }
+                            }
+                            mandatory true;
+                            description
+                              "password string, 8 characters
+                               minimum";
+                          }
+                          leaf des56 {
+                            type string {
+                              length "8..64" {
+                                error-message "password string, "
+                                + "8 characters minimum, 64 "
+                                + "characters maximun.";
+                              }
+                            }
+                            description
+                              "DES privacy protocol";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      list notify {
+        key "notify-name";
+        description
+          "Associate a notification type with a tag";
+        leaf notify-name {
+          type string {
+            length "1..32";
+          }
+          description
+            "Name of the notification";
+        }
+        leaf notify-tag {
+          type string {
+            length "1..32";
+          }
+          mandatory true;
+          description
+            "Tag name for the notification";
+        }
+        leaf type {
+          type enumeration {
+            enum trap {
+              value 0;
+              description
+                "SNMP message is a trap that does not require a
+                 response from the SNMP target";
+            }
+            enum inform {
+              value 1;
+              description
+                "SNMP message is an information notification
+                 that requires a response from the SNMP target";
+            }
+          }
+          default "trap";
+          description
+            "Defines the notification type to be generated";
+        }
+      }
+      list notify-filter {
+        key "filter-name filter-oid";
+        description
+          "Notification filter profiles";
+        leaf filter-name {
+          type string {
+            length "1..32";
+          }
+          description
+            "Name of the notify filter";
+        }
+        leaf filter-oid {
+          type string;
+          description
+            "OID of the ASN-1 subtree for which notifications
+             are included or excluded";
+        }
+        leaf filter-type {
+          type enumeration {
+            enum included {
+              value 0;
+              description
+                "include the subtree in the filter";
+            }
+            enum excluded {
+              value 1;
+              description
+                "exclude the subtree from the filter";
+            }
+          }
+          mandatory true;
+          description
+            "exclude or include the specific OID tree";
+        }
+      }
+      list target {
+        key "name";
+        description
+          "Configuration of SNMP notifications sent to the SNMP
+           target management station";
+        leaf name {
+          type string {
+            length "1..32";
+          }
+          description
+            "Name of the target management station";
+        }
+        container transport {
+          description
+            "Transport address of the target";
+          leaf ip {
+            type union {
+              type inet:ipv4-address;
+              type inet:ipv6-address;
+            }
+            mandatory true;
+            description
+              "IP address of the target management station";
+          }
+          leaf port {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "the UDP port of the notification receiver";
+          }
+          leaf address-context {
+            type leafref {
+              path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+              + ":context-name";
+            }
+            description
+              "Name of the context from which notifications are
+               sent";
+          }
+          container security-params {
+            description
+              "Configuration of notification related security
+               parameters";
+            container security-name {
+              description
+                "Username or community name for the
+                 notifications. Community name for SNMPv1 or
+                 SNMPv2; Username for SNMPv3";
+              choice security-name {
+                mandatory true;
+                case user-name {
+                  container user-name {
+                    description
+                      "configuration of user name";
+                    leaf user-name {
+                      type leafref {
+                        path "/ctxsr6k:contexts/snmpr6k:snmp/snm"
+                        + "pr6k:user/snmpr6k:user-name";
+                      }
+                      mandatory true;
+                      description
+                        "User name";
+                    }
+                    leaf version-3 {
+                      type empty;
+                      mandatory true;
+                      description
+                        "SNMPv3";
+                    }
+                    leaf security-level {
+                      type enumeration {
+                        enum auth {
+                          value 0;
+                          description
+                            "authentication required";
+                        }
+                        enum noauth {
+                          value 1;
+                          description
+                            "no authentication";
+                        }
+                        enum priv {
+                          value 2;
+                          description
+                            "privacy required";
+                        }
+                      }
+                      default "noauth";
+                      description
+                        "SNMP security level";
+                    }
+                  }
+                }
+                case community-string {
+                  container community-string {
+                    description
+                      "community name";
+                    leaf community-string {
+                      type leafref {
+                        path "/ctxsr6k:contexts/snmpr6k:snmp/snm"
+                        + "pr6k:community/snmpr6k:name";
+                      }
+                      mandatory true;
+                      description
+                        "community name";
+                    }
+                    container version {
+                      description
+                        "SNMP Protocol version";
+                      choice version {
+                        description
+                          "SNMP protocol version type";
+                        case v1 {
+                          leaf v1 {
+                            type empty;
+                            description
+                              "SNMP Protocol version 1";
+                          }
+                        }
+                        case v2c {
+                          leaf v2c {
+                            type empty;
+                            description
+                              "SNMP Protocol version 2c";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            leaf group {
+              type leafref {
+                path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:gro"
+                + "up/snmpr6k:group-name";
+              }
+              description
+                "group name applied to the notifications sent to
+                 the SNMP target management station";
+            }
+            leaf notification-type {
+              type enumeration {
+                enum inform {
+                  value 0;
+                  description
+                    "Send SNMP INFORM pdu for notification";
+                }
+                enum trap {
+                  value 1;
+                  description
+                    "Send SNMP TRAP pdu for notification";
+                }
+              }
+              description
+                "notification PDU type";
+            }
+            leaf view {
+              type leafref {
+                path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k:vie"
+                + "w/snmpr6k:name";
+              }
+              description
+                "SNMP notify view";
+            }
+          }
+        }
+      }
+      list target-parameters {
+        key "parameter-name";
+        description
+          "Configuration of SNMP notification target";
+        leaf parameter-name {
+          type string;
+          description
+            "Name of the target parameter set";
+        }
+        container security-name {
+          description
+            "Community for SNMPv1 or SNMPv2, or the username for
+             SNMPv3";
+          choice security-name {
+            mandatory true;
+            case user-name {
+              container user-name {
+                description
+                  "container user-name.";
+                leaf user-name {
+                  type leafref {
+                    path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k"
+                    + ":user/snmpr6k:user-name";
+                  }
+                  mandatory true;
+                  description
+                    "User name";
+                }
+                leaf version-3 {
+                  type empty;
+                  mandatory true;
+                  description
+                    "SNMPv3";
+                }
+                leaf security-level {
+                  type enumeration {
+                    enum noauth {
+                      value 0;
+                      description
+                        "no authentication";
+                    }
+                    enum auth {
+                      value 1;
+                      description
+                        "authentication required";
+                    }
+                    enum priv {
+                      value 2;
+                      description
+                        "privacy required";
+                    }
+                  }
+                  default "noauth";
+                  description
+                    "SNMP security level";
+                }
+              }
+            }
+            case community-string {
+              container community-string {
+                description
+                  "container community-string.";
+                leaf community-string {
+                  type leafref {
+                    path "/ctxsr6k:contexts/snmpr6k:snmp/snmpr6k"
+                    + ":community/snmpr6k:name";
+                  }
+                  mandatory true;
+                  description
+                    "Community string";
+                }
+                container version {
+                  description
+                    "SNMP Protocol version";
+                  choice version {
+                    description
+                      "SNMP protocol version type";
+                    case v1 {
+                      leaf v1 {
+                        type empty;
+                        description
+                          "SNMP Protocol version 1";
+                      }
+                    }
+                    case v2c {
+                      leaf v2c {
+                        type empty;
+                        description
+                          "SNMP Protocol version 2c";
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      list notify-target {
+        key "ntfytrgt-name";
+        description
+          "Configure a receiver (target) for SNMP notifications";
+        leaf ntfytrgt-name {
+          type string;
+          description
+            "A name for identifying the target";
+        }
+        container ipos-choice {
+          description
+            "container ipos-choice.";
+          leaf ipos-choice-choice {
+            type union {
+              type typesrouter6000:ipos-ip-prefix;
+              type inet:ipv6-prefix;
+            }
+            mandatory true;
+            description
+              "leaf ipos-choice-choice.";
+          }
+          leaf port {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "the UDP Port used by the notification receiver";
+          }
+          leaf address-context {
+            type string;
+            description
+              "context in which the IP address exists";
+          }
+          leaf tag {
+            type empty;
+            mandatory true;
+            description
+              "A list of tags for selection of targets for
+               notifications";
+          }
+          leaf tag-val {
+            type string;
+            mandatory true;
+            description
+              "tag list";
+          }
+          leaf param {
+            type empty;
+            mandatory true;
+            description
+              "name to identify target-parameters";
+          }
+          leaf parm-val {
+            type string;
+            mandatory true;
+            description
+              "target-parameters name";
+          }
+          leaf filter {
+            type string;
+            description
+              "identify notify-filter";
+          }
+          leaf timeout {
+            type uint32 {
+              range "0..21474836";
+            }
+            description
+              "timeout value waiting for response to inform
+               notification";
+          }
+          leaf retry {
+            type uint8 {
+              range "0..255";
+            }
+            description
+              "number of times to retry sending inform
+               notification";
+          }
+        }
+      }
+      container ericsson-alarm {
+        description
+          "Configure Ericsson alarm MIB";
+        leaf heartbeat-interval {
+          type uint32 {
+            range "0..4294967295";
+          }
+          description
+            "Configure heartbeat interval";
+        }
+      }
+    }
+  }
+
+}

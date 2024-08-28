@@ -1,0 +1,105 @@
+module ericsson-banner-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-banner-ipos";
+
+  prefix "banneripos";
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-banner-ipos
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2019-03-21" {
+    description
+      "Add the default banner information as the default value in the banner login";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-03-20" {
+    description
+      "Change motd/exec/login length";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-08-08" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-banner";
+    /*
+    banner { login (login-str) | motd (motd-str) | exec (exec-str) }
+    */
+    container banner {
+      description
+        "Banner configuration command";
+      leaf login {
+        type string {
+          length "1..1860";
+        }
+        default "Notice
+This product processes subscriber's personal data. Depending on the local/country legislation where the product is deployed and operated, the use of this product may require providing notice of operator's privacy policy to subscribers.
+
+Ericsson discloses personal information to customers, professional advisors, suppliers or other third parties engaged to perform administrative or other business management services. This disclosure is always on a confidential basis or otherwise in accordance with law. Ericsson may also disclose personal information with the individual's consent or if disclosure is required or authorized by law.
+Ericsson takes reasonable steps in all circumstances to ensure that the personal information it holds is protected from misuse, from interference and loss and from unauthorized access, modification or disclosure. Ericsson holds personal information in both hard copy and electronic forms in secure databases on secure premises, accessible only by authorized personnel.";
+        description
+          "Configure message displayed before login prompt";
+      }
+      leaf motd {
+        type string {
+          length "1..1860";
+        }
+        description
+          "Configure message of the day";
+      }
+      leaf exec {
+        type string {
+          length "1..1860";
+        }
+        description
+          "Configure message displayed before entering exec mode";
+      }
+    }
+  }
+
+}

@@ -1,0 +1,257 @@
+module simple-3gpp {
+
+	namespace "urn:test:simple-3gpp";
+	prefix this;
+
+	revision "2021-11-08";
+
+	import ericsson-notifications {
+		prefix notife;
+	}
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	import simple-3gpp-dev {
+		prefix dev;
+	}
+
+	container Cont1 {
+		presence "";
+
+		container attributes {
+
+			leaf leaf11 {
+				type string;
+			}
+			leaf leaf12 {
+				type string;
+			}
+
+			// The struct-sequence is augmented and deviated. This should result in
+			// two CDTs being generated - one in original, and the other for deviated.
+
+			list structsequence13 {
+				key "member16        member15";
+
+				leaf member15 {
+					type string;
+				}
+				leaf member16 {
+					type boolean;
+				}
+
+				// "member17" will be deviated-out
+
+				leaf member17 {
+					type string;
+				}
+
+				// a new leaf "member18" will be augmented in here.
+			}
+		}
+	}
+
+	list List2 {
+		min-elements 2;
+		max-elements 4;
+
+		key "id";
+
+		leaf id {
+			type string;
+		}
+
+		container attributes {
+
+			leaf leaf21 {
+				type string;
+			}
+			leaf leaf22 {
+				type string;
+			}
+
+			// The attribute "struct23" generated into the MOC for this struct should be mandatory,
+			// as "member26" is 'mandatory true' and it is a struct (YANG 'container').
+
+			container struct23 {
+
+				leaf member25 {
+					type int32;
+				}
+				leaf member26 {
+					mandatory true;
+					type int16;
+				}
+			}
+
+
+			// leaf "memberYyy" is 'config false' and hence the attribute "structsequence27"
+			// generated into the MOC should be considered non-persistent (i.e. read from
+			// delegate).
+			//
+			// Although "memberZzz" is 'mandatory true', the attribute "structsequence27"
+			// itself should NOT be considered mandatory, as it is a YANG list without a
+			// 'min-elements' constraint.
+
+			list structsequence27 {
+				key "memberXxx";
+
+				leaf memberXxx {
+					type int32;
+				}
+				leaf memberYyy {
+					config false;
+					type int32;
+				}
+				leaf memberZzz {
+					mandatory true;
+					type int32;
+				}
+			}
+
+			// This struct attribute only has a single member, which is non-notified and
+			// read-only. Expectation is that the attribute "struct28" generated into the MOC
+			// is therefore FROM_DELEGATE / NOT_ALLOWED.
+
+			container struct28 {
+
+				leaf memberXxx {
+					config false;
+					type int16;
+				}
+			}
+
+			// The struct attribute itself is config false, so the attribute should result in
+			// FROM_DELEGATE / NOT_ALLOWED.
+
+			container struct29 {
+				config false;
+
+				leaf member29 {
+					type int16;
+				}
+			}
+
+			// The NSD true will make this attribute persistent, so we should have FROM_PERSISTENCE / NOT_ALLOWED.
+
+			container struct30 {
+				config false;
+				notife:notifiable-state-data true;
+
+				leaf member30 {
+					type int16;
+				}
+			}
+
+			// struct31 is augmented-in.
+
+			// The NSD true from the member should inherit upwards, thereby making the struct itself persistent,
+			// so we should have FROM_PERSISTENCE / NOT_ALLOWED for the struct attribute.
+
+			container struct32 {
+				config false;
+
+				leaf member32 {
+					notife:notifiable-state-data true;
+					type int16;
+				}
+			}
+
+		}
+	}
+
+	// All attributes of the MOC are in a grouping in a different module. This should
+	// result in the attributes being generated into the extension.
+
+	list List4 {
+		key "id";
+		leaf id { type string; }
+
+		container attributes {
+			uses dev:grouping4;
+		}
+	}
+
+	// All members of the struct are coming from a grouping in a different YAM. All
+	// CDT members should go into the CDT generated for deviated, and no attribute
+	// should be generated in ORIGINAL!
+
+	list List5 {
+		key "id";
+		leaf id { type string; }
+
+		container attributes {
+
+			list structsequence51 {
+				key "member51 member52";
+				uses dev:grouping5;
+			}
+		}
+	}
+
+	feature feature6;
+
+	list List6 {
+		key "id";
+		leaf id { type string; }
+
+		container attributes {
+
+			container struct61 {
+
+				leaf leaf61 {
+					type string;
+				}
+
+				leaf leaf62 {
+					type string;
+					mandatory true;
+					when "../leaf61 = 'Hello'";
+				}
+
+				leaf leaf63 {
+					type string;
+					mandatory true;
+					if-feature feature6;
+				}
+
+				choice choice64 {
+					case case65 {
+						leaf leaf65 {
+							type string;
+							mandatory false;
+						}
+					}
+					case case66 {
+						leaf leaf66 {
+							type string;
+							mandatory true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// List7 is config false and as such it should not be
+	// generated at all, never mind its struct contents.
+
+	list List7 {
+		config false;
+
+		key "id";
+		leaf id { type string; }
+
+		container attributes {
+
+			container struct71 {
+				leaf leaf61 {
+					type string;
+				}
+			}
+		}
+	}
+
+}

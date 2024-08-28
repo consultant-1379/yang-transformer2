@@ -1,0 +1,221 @@
+module ericsson-du5qi-du-cr {
+    yang-version 1.1;
+    namespace "urn:rdns:com:ericsson:oammodel:ericsson-du5qi-du-cr";
+    prefix "du5qi";
+
+    import _3gpp-common-managed-element {
+        prefix me3gpp;
+    }
+    import _3gpp-common-top {
+        prefix top3gpp;
+    }
+    import _3gpp-common-yang-types {
+        prefix types3gpp;
+    }
+    import _3gpp-nr-nrm-gnbdufunction {
+        prefix gnbdu3gpp;
+    }
+    import ericsson-drbrlc-du-cr {
+        prefix drb;
+    }
+    import ericsson-du5qitable-du-cr {
+        prefix du5qitable;
+    }
+    import ericsson-radiolinkcontrol-du-cr {
+        prefix rlc;
+    }
+    import ericsson-schedulingprofile-du-cr {
+        prefix schedulprof;
+    }
+    import ericsson-uecc-du-cr {
+        prefix uecc;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ietf-inet-types {
+        prefix "inet";
+    }
+
+    organization
+      "Ericsson AB";
+    contact
+      "Ericsson first line support via email";
+    description
+      "Defines the YANG mapping of the DU5qi.
+       
+       Copyright (c) 2021 Ericsson AB. All rights reserved.";
+    revision 2021-06-17 {
+        description
+          "First version.";
+        yexte:version 0;
+        yexte:release 1;
+        yexte:correction 0;
+    }
+    yexte:module-status preliminary;
+
+    grouping DU5qiGrp {
+        description
+          "QoS configuration corresponding to 3GPP-defined and operator-defined 5QI profiles.";
+        leaf logicalChannelGroupId {
+            description
+              "One instance of LogicalChannelGroup.
+               
+               Assigns logical channel group to QoS Class Indicator (5QI).
+               
+               Following values are recommended:
+                - 1 if profile5qi is 1, 2, 65, or 66.
+                - 2 if profile5qi is 3, 4, or 75.
+                - 3 if profile5qi is 5 or 69.
+                - 4 if profile5qi is 70 or 79.
+                - 5 if profile5qi is 6, 7, 8, or 9.
+                - 6 if profile5qi is 80, 82, 83, 84, or 85.
+                - 7 if profile5qi is 67, or operator defined 5QI.";
+            default 5;
+            type int32 {
+                range "1..7";
+            }
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf packetDelayBudget {
+            description
+              "Contribution from gNodeB to PDB for 5QI.
+               
+               Packet delays outside gNodeB are excluded, for example, in transport network.
+               
+               Following values are recommended:
+                - 80 if profile5qi is 1, 5, 7, 66 or 67.
+                - 130 if profile5qi is 2.
+                - 30 if profile5qi is 3 or 79.
+                - 280 if profile5qi is 4, 6, 8 or 9.
+                - 65 if profile5qi is 65.
+                - 50 if profile5qi is 69.
+                - 190 if profile5qi is 70.
+                - 8 if profile5qi is 80.
+                - 9 if profile5qi is 82 or 83.
+                - 25 if profile5qi is 84.
+                - 3 if profile5qi is 85.";
+            default 280;
+            type int32 {
+                range "0..511";
+            }
+            units "ms";
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf priorityLevel {
+            description
+              "5QI-related priority.
+               
+               Following values are recommended:
+                - 20 if profile5qi is 1 or 66.
+                - 40 if profile5qi is 2.
+                - 30 if profile5qi is 3.
+                - 50 if profile5qi is 4.
+                - 10 if profile5qi is 5.
+                - 60 if profile5qi is 6.
+                - 70 if profile5qi is 7.
+                - 80 if profile5qi is 8.
+                - 90 if profile5qi is 9.
+                - 7 if profile5qi is 65.
+                - 15 if profile5qi is 67.
+                - 5 if profile5qi is 69.
+                - 55 if profile5qi is 70.
+                - 65 if profile5qi is 79.
+                - 68 if profile5qi is 80.
+                - 19 if profile5qi is 82.
+                - 22 if profile5qi is 83.
+                - 24 if profile5qi is 84.
+                - 21 if profile5qi is 85.";
+            default 80;
+            type int32 {
+                range "1..127";
+            }
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf profile5qi {
+            description
+              "5G QoS Identifier unique within a table.
+               
+               For 3GPP-defined 5QIs, 5QI can be 1, 2, 3, 4, 5, 6, 7, 8, 9, 65, 66, 67, 69, 70, 79, 80, 82, 83, 84 or 85.";
+            mandatory true;
+            type int32 {
+                range "0..255";
+            }
+            yexte:takes-effect "New connection";
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf schedulingProfileRef {
+            description
+              "Reference to an instance of SchedulingProfile MO.";
+            mandatory true;
+            type types3gpp:DistinguishedName;
+            yexte:takes-effect "New connection";
+            must 're-match(.,concat("ManagedElement=", ../../../../../me3gpp:id,",GNBDUFunction=", ../../../../gnbdu3gpp:id,",UeCC=[^,]+,SchedulingProfile=[^,]+"))' {
+                error-message
+                  "Must refer to a SchedulingProfile in the same GNBDUFunction as the DU5qi.";
+            }
+            must 'boolean(../../../../uecc:UeCC[uecc:id = substring-before(substring-after(current(),",UeCC="),",")]/schedulprof:SchedulingProfile[schedulprof:id = substring-after(current(),",SchedulingProfile=")])' {
+                error-message
+                  "Referenced SchedulingProfile must exist.";
+            }
+            status current {
+                yexte:preliminary;
+            }
+        }
+
+        leaf drbRLCRef {
+            description
+              "Reference to an instance of DrbRLC MO.";
+            mandatory true;
+            type types3gpp:DistinguishedName;
+            yexte:takes-effect "New connection";
+            must 're-match(.,concat("ManagedElement=", ../../../../../me3gpp:id,",GNBDUFunction=", ../../../../gnbdu3gpp:id,",UeCC=[^,]+,RadioLinkControl=[^,]+,DrbRLC=[^,]+"))' {
+                error-message
+                  "Must refer to a DrbRLC in the same GNBDUFunction as the DU5qi.";
+            }
+            must 'boolean(../../../../uecc:UeCC[uecc:id = substring-before(substring-after(current(),",UeCC="),",")]/rlc:RadioLinkControl[rlc:id = substring-before(substring-after(current(),",RadioLinkControl="),",")]/drb:DrbRLC[drb:id = substring-after(current(),",DrbRLC=")])' {
+                error-message
+                  "Referenced DrbRLC must exist.";
+            }
+            status current {
+                yexte:preliminary;
+            }
+        }
+    }
+
+    augment "/me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/du5qitable:DU5qiTable" {
+        when "true()";
+        description
+          "Adds Ericsson IOC DU5qi to DU5qiTable.";
+        list DU5qi {
+            description
+              "Reference to DU5qi MO instance.
+               
+               Each profile can be present once in each table.";
+
+            key id;
+            uses top3gpp:Top_Grp;
+            unique attributes/profile5qi;
+            min-elements 1;
+            max-elements 29;
+            container attributes {
+                uses DU5qiGrp;
+            }
+        }
+    }
+}

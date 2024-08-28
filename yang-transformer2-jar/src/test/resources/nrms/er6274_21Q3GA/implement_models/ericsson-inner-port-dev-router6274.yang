@@ -1,0 +1,52 @@
+/*
+    This is written manually.
+*/
+
+module ericsson-inner-port-dev-router6274 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-inner-port-dev-router6274";
+
+  prefix "innerportvirouter6274";
+
+  import ericsson-inner-port-router6000 {
+    prefix "innerportrouter6000";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-inner-port-dev-router6274
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+  revision "2020-09-25" {
+    description
+      "add no support";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  /*global->recycling-card*/
+  deviation "/ctxsr6k:contexts/innerportrouter6000:recycling-card" {
+    deviate not-supported;
+  }
+  /*global->ethernet-oam-throughput*/
+  deviation "/ctxsr6k:contexts/innerportrouter6000:ethernet-oam-throughput-card" {
+    deviate not-supported;
+  }
+}

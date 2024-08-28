@@ -1,0 +1,418 @@
+module ericsson-xc-group-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-xc-group-ipos";
+
+  prefix "xcgroupipos";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-ipos {
+    prefix "ethxipos";
+  }
+
+  import ericsson-lag-ext-ipos {
+    prefix "lagxipos";
+  }
+
+  import ericsson-vpws-ipos {
+    prefix "vpwsipos";
+  }
+
+  import ericsson-l2-service-ipos {
+    prefix "l2serviceipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-xc-group-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-25" {
+    description
+      "modify service-instance type from uint32 to int32.";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "9";
+  }
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "8";
+  }
+
+  revision "2019-04-28" {
+    description
+      "change the type of service-instance-out and pseudowire
+       instance.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "7";
+  }
+
+  revision "2019-03-27" {
+    description
+      "removed the must condition and changed the type of
+       end-si-id-in and end-si-id-out.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "6";
+  }
+
+  revision "2018-11-30" {
+    description
+      "modify the must condition of end-si-id-in and
+       end-si-id-out.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-07-09" {
+    description
+      "YANG model description correction.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-06-25" {
+    description
+      "enhance the leafref statement for service-instance";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-03-30" {
+    description
+      "modify the must of end-si-id.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-13" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping config-xc-group-grp {
+    description
+      "XC group configuration mode";
+    /*
+    xc lg (lg-name) <service-instance (si-id-in)> [(end-si-id-
+     in)] to { <slot-port-out (slot-port-id-out)<service-
+     instance-out (si-id-out)> [(end-si-id-out)]> | <lg (lg-name)
+     <service-instance-out (si-id-out)> [(end-si-id-out)]> |
+     <pseudowire instance (pw-inst-id)> }
+    */
+    list xc-lg {
+      key "lg-name service-instance";
+      description
+        "Link group of circuit(s)";
+      leaf lg-name {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Link group name";
+      }
+      leaf service-instance {
+        type int32 {
+          range "1..262143";
+        }
+        description
+          "Service instance identifier";
+      }
+      leaf end-si-id-in {
+        type uint32;
+        description
+          "End identifier of the consecutive range of service
+           instances.";
+      }
+      leaf to {
+        type empty;
+        mandatory true;
+        description
+          "Configure the outbound circuit to be crossconnected
+           to";
+      }
+      choice xc-lg-choice {
+        mandatory true;
+        description
+          "XC LG circuit choice";
+        case slot-port-out {
+          container slot-port-out {
+            description
+              "Outbound circuit";
+            leaf slot-port-id-out {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Specify outbound circuit";
+            }
+            leaf service-instance-out {
+              type leafref {
+                path "/if:interfaces/if:interface/ethxipos:"
+                + "ethernet/l2serviceipos:service-instance/"
+                + "l2serviceipos:spec-instance-id";
+              }
+              mandatory true;
+              description
+                "Service instance identifier";
+            }
+            leaf end-si-id-out {
+              type uint32;
+              description
+                "End identifier of the consecutive range of
+                 service instances.";
+            }
+          }
+        }
+        case lg {
+          container lg {
+            description
+              "Link group of circuit(s)";
+            leaf lg-name {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Link group name";
+            }
+            leaf service-instance-out {
+              type int32 {
+                range "1..262143";
+              }
+              mandatory true;
+              description
+                "Service instance identifier";
+            }
+            leaf end-si-id-out {
+              type uint32;
+              description
+                "End identifier of the consecutive range of
+                 service instances.";
+            }
+          }
+        }
+        case pseudowire {
+          container pseudowire {
+            description
+              "VLL cross connection";
+            leaf instance {
+              type string {
+                pattern '\d{1,10}|\d{1,10}\s*\-\s*\d{1,10}';
+              }
+              mandatory true;
+              description
+                "Configure a pseudowire instance";
+            }
+          }
+        }
+      }
+    }
+    /*
+    xc (slot-port-id) <service-instance (si-id-in)> [(end-si-id-
+     in)] to { <slot-port-out (slot-port-id-out)<service-
+     instance-out (si-id-out)> [(end-si-id-out)]> | <lg (lg-name)
+     <service-instance-out (si-id-out)> [(end-si-id-out)]> |
+     <pseudowire instance (pw-inst-id)> }
+    */
+    list xc {
+      key "slot-port-id service-instance";
+      description
+        "Configure a circuit crossconnect";
+      leaf slot-port-id {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Input circuit(s)";
+      }
+      leaf service-instance {
+        type leafref {
+          path "/if:interfaces/if:interface/ethxipos:ethernet/"
+          + "l2serviceipos:service-instance/l2serviceipos:"
+          + "spec-instance-id";
+        }
+        description
+          "Service instance identifier";
+      }
+      leaf end-si-id-in {
+        type uint32;
+        description
+          "End identifier of the consecutive range of service
+           instances.";
+      }
+      leaf to {
+        type empty;
+        mandatory true;
+        description
+          "Configure the outbound circuit to be crossconnected
+           to";
+      }
+      choice xc-choice {
+        mandatory true;
+        description
+          "XC slot-port circuit choice";
+        case slot-port-out {
+          container slot-port-out {
+            description
+              "Outbound circuit";
+            leaf slot-port-id-out {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Specify outbound circuit";
+            }
+            leaf service-instance-out {
+              type leafref {
+                path "/if:interfaces/if:interface/ethxipos:"
+                + "ethernet/l2serviceipos:service-instance/"
+                + "l2serviceipos:spec-instance-id";
+              }
+              mandatory true;
+              description
+                "Service instance identifier";
+            }
+            leaf end-si-id-out {
+              type uint32;
+              description
+                "End identifier of the consecutive range of
+                 service instances.";
+            }
+          }
+        }
+        case lg {
+          container lg {
+            description
+              "Link group of circuit(s)";
+            leaf lg-name {
+              type leafref {
+                path "/if:interfaces/if:interface/if:name";
+              }
+              mandatory true;
+              description
+                "Link group name";
+            }
+            leaf service-instance-out {
+              type int32 {
+                range "1..262143";
+              }
+              mandatory true;
+              description
+                "Service instance identifier";
+            }
+            leaf end-si-id-out {
+              type uint32;
+              description
+                "End identifier of the consecutive range of
+                 service instances.";
+            }
+          }
+        }
+        case pseudowire {
+          container pseudowire {
+            description
+              "VLL cross connection";
+            leaf instance {
+              type string {
+                pattern '\d{1,10}|\d{1,10}\s*\-\s*\d{1,10}';
+              }
+              mandatory true;
+              description
+                "VLL cross connection";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-xc-group";
+    /*
+    xc-group {(group-name) | default }
+    */
+    list xc-group {
+      key "xc-group";
+      description
+        "Configure crossconnect group";
+      leaf xc-group {
+        type union {
+          type string;
+          type enumeration {
+            enum default {
+              value 0;
+              description
+                "Default group name";
+            }
+          }
+        }
+        description
+          "Xc groupname or default";
+      }
+      uses config-xc-group-grp;
+    }
+  }
+
+}

@@ -1,0 +1,206 @@
+module simple-actions {
+
+	namespace "urn:::test:::simple-actions";
+	prefix this;
+
+	revision "2021-11-11";
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	container cont1 {
+
+		action action11;
+
+		action action12 {
+			input {
+				leaf leaf121 {
+					type string;
+				}
+			}
+		}
+
+		action action13 {
+			input {
+				leaf leaf131 {
+					type string;
+				}
+				leaf leaf132 {
+					type int32;
+				}
+			}
+		}
+
+		action action14 {
+			output {
+				leaf leaf141 {
+					type enumeration {
+						enum RED;
+						enum YELLOW;
+						enum GREEN;
+					}
+					default RED;
+				}
+			}
+		}
+
+		action action15 {
+			input {
+				leaf leaf151 {
+					type string;
+				}
+				container struct152 {
+					leaf leaf1521 {
+						type string;
+					}
+					leaf leaf1522 {
+						type boolean;
+					}
+				}
+			}
+		}
+	}
+
+	container cont2 {
+
+		action action21 {
+			output {				// both leafs should be generated into a CDT
+				leaf leaf211 {
+					type string;
+				}
+				leaf leaf212 {
+					type int32;
+				}
+			}
+		}
+
+		action action22 {
+			output {				// two leafs should be generated into a placeholder CDT
+				leaf leaf221 {
+					type boolean;
+				}
+				leaf leaf222 {
+					type int64;
+				}
+				container struct223 {	// should not be generated, would be struct-in-struct
+					leaf leaf2231 {
+						type string;
+					}
+				}
+			}
+		}
+	
+		action action23 {
+			output {
+				container struct231 {	// should be generated as CDT as return type
+					leaf leaf2311 {
+						type string;
+					}
+				}
+			}
+		}
+	
+		action action24 {
+			output {					// no return type should be created
+				container struct241 {
+					leaf leaf2411 {
+						type string;
+					}
+				}
+				container struct242 {
+					leaf leaf2421 {
+						type string;
+					}
+				}
+			}
+		}
+	}
+
+	container cont3 {
+
+		action action31 {
+			description "action31 desc";
+			status deprecated {
+				yexte:status-information "action31 status information";
+			}
+
+			yexte:dependencies "action31 dependencies";
+			yexte:precondition "action31 precondition";
+			yexte:side-effects "action31 side-effects";
+			yexte:takes-effect "action31 takes-effect";
+			yexte:disturbances "action31 disturbances";
+		}
+
+		action action32 {
+			input {
+				leaf leaf321 {
+					type string;
+					mandatory true;
+				}
+				leaf leaf322 {
+					type string;
+					default "abc";
+				}
+				list structsequence323 {
+					key leaf3231;
+					min-elements 2;
+
+					leaf leaf3231 {
+						type int16;
+					}
+					leaf leaf3232 {
+						type enumeration {
+							enum RED;
+							enum YELLOW;
+						}
+					}
+				}
+			}
+		}
+
+		action action33 {
+			input {
+				leaf leaf331 {
+					type string;
+					mandatory true;
+				}
+				leaf leaf332 {
+					type string;
+					when "../leaf331 = 'Hello!'";
+					mandatory true;
+				}
+				leaf leaf333 {
+					type string;
+					if-feature feature333;
+					mandatory true;
+				}
+				choice choice33 {
+					case case331 {
+						leaf leaf3311 {
+							type string;
+						}
+						leaf leaf3312 {
+							type string;
+							mandatory true;
+						}
+					}
+					case case332 {
+						leaf leaf3321 {
+							type string;
+							if-feature feature3321;
+							mandatory true;
+						}
+						leaf leaf3322 {
+							type string;
+							mandatory true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	feature feature333;
+	feature feature3321;
+}

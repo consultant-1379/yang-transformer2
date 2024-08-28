@@ -1,0 +1,86 @@
+module ericsson-cu-cp-rc-diagnostics-cell {
+    yang-version 1.1;
+    namespace urn:rdns:com:ericsson:oammodel:ericsson-cu-cp-rc-diagnostics-cell;
+    prefix rcdiagcell;
+    import tailf-common {
+        prefix tailf;
+    }
+    import ericsson-yang-extensions {
+        prefix yexte;
+    }
+    import ericsson-common-types-diagnostics {
+        prefix commontypesdiag;
+    }
+    import ericsson-cu-cp-rc-diagnostics {
+        prefix rcdiag;
+    }
+    organization
+      'Ericsson AB';
+    contact
+      'Ericsson first line support via email';
+    description
+      'Diagnostics action:cell for RC Service
+
+       Copyright (c) 2022 Ericsson AB. All rights reserved';
+    revision 2022-02-21 {
+        description
+        'Initial revision';
+        yexte:version 1;
+        yexte:release 0;
+        yexte:correction 0;
+    }
+
+    yexte:module-status preliminary;
+
+    augment "/rcdiag:rc-diagnostics" {
+        container cell {
+            description "cell related actions";
+            action show {
+                description "display information for a given cell";
+                input {
+                    uses commontypesdiag:output-format;
+                    leaf cell-id {
+                        description "cell-id";
+                        type string;
+                        mandatory true;
+                    }
+                    leaf brief {
+                        description "display short output (ignored if combined with detailed)";
+                        type empty;
+                    }
+                    leaf detailed {
+                        description "display long output";
+                        type empty;
+                    }
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+            action list {
+                description "list all created cells";
+                input {
+                    uses commontypesdiag:output-format;
+                }
+                output {
+                    uses commontypesdiag:result;
+                }
+                tailf:actionpoint cpa-action;
+            }
+            container manager {
+                description "show cell manager information";
+                action show {
+                    input {
+                        uses commontypesdiag:output-format;
+                    }
+                    output {
+                        uses commontypesdiag:result;
+                    }
+                    tailf:actionpoint cpa-action;
+                }
+            }
+        }
+    }
+}
+

@@ -1,0 +1,37 @@
+module write-behaviour {
+
+    namespace "urn;test;write-behaviour";
+    prefix this;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	import ericsson-notifications {
+		prefix notife;
+	}
+	
+    revision "2021-03-07";
+
+	container cont1 {
+		presence "";
+		config true;
+	}
+
+	container cont2 {
+		presence "";
+		config true;
+	}
+
+	container cont3 {
+		presence "";
+		config false;
+		notife:notifiable-state-data true;
+	}
+
+	container cont4 {
+		presence "";
+		config false;
+		notife:notifiable-state-data true;
+	}
+
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rpc-reply message-id="101" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <data>
+    <modules-state xmlns="urn:ietf:params:xml:ns:yang:ietf-yang-library">
+      <module-set-id>10446</module-set-id>
+      <module>
+        <name>if-feature-handling-module1</name>
+        <revision>2022-09-23</revision>
+        <namespace>urn;test;if-feature-handling-module1</namespace>
+        <conformance-type>implement</conformance-type>
+        <submodule>
+          <name>if-feature-handling-submodule2</name>
+          <revision>2022-09-25</revision>
+        </submodule>
+      </module>
+      <module>
+        <name>if-feature-handling-module5</name>
+        <namespace>urn;test;if-feature-handling-module5</namespace>
+        <revision>2022-09-25</revision>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>if-feature-handling-module6</name>
+        <namespace>urn;test;if-feature-handling-module6</namespace>
+        <revision>2022-09-26</revision>
+        <conformance-type>implement</conformance-type>
+        <feature>feature68</feature>
+        <feature>feature69</feature>
+      </module>
+    </modules-state>
+  </data>
+</rpc-reply>

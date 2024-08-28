@@ -1,0 +1,16 @@
+module ericsson-no-revision {
+
+	namespace "urn:test:ericsson-no-revision";
+	prefix this;
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+
+	container cont10 {
+
+		leaf leaf101 {
+			type string;
+		}
+	}
+}

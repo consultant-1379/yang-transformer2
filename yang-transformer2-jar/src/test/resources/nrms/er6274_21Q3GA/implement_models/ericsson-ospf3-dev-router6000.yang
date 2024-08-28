@@ -1,0 +1,95 @@
+module ericsson-ospf3-dev-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-ospf3-dev-router6000";
+
+  prefix "ospf3router6000";
+
+  import ericsson-ospf3-router6000 {
+   prefix "ospf3r6k";
+  }
+
+  import ericsson-contexts-router6000 {
+   prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+   prefix "ctxr6k";
+  }
+  
+   import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-ospf3-dev-router6000
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-05-12" {
+    description
+      "Remove deviation for ospf3 authentication";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change the module namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-01" {
+    description
+      "deviation for ericsson-ospf3-ipos.yang file";
+    reference
+      "rfc6020";
+      yexte:version "1";
+      yexte:release "0";
+      yexte:correction "0";
+  }
+
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/ospf3r6k:ospf3/ospf3r6k:redistribute/ospf3r6k:ripng" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/ospf3r6k:ospf3/ospf3r6k:redistribute/ospf3r6k:bgf" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/ospf3r6k:ospf3/ospf3r6k:redistribute/ospf3r6k:cg-nat" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/ospf3r6k:ospf3/ospf3r6k:redistribute/ospf3r6k:epg" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/ospf3r6k:ospf3/ospf3r6k:redistribute/ospf3r6k:msp" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/ospf3r6k:ospf3/ospf3r6k:redistribute/ospf3r6k:sasn" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/ospf3r6k:ospf3/ospf3r6k:redistribute/ospf3r6k:subscriber" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/ospf3r6k:ospf3/ospf3r6k:redistribute/ospf3r6k:wifi-ac" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/ospf3r6k:ospf3/ospf3r6k:redistribute/ospf3r6k:wmg" {
+    deviate not-supported;
+  }
+  deviation "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router/ospf3r6k:ospf3/ospf3r6k:redistribute/ospf3r6k:static/ospf3r6k:dvsr" {
+    deviate not-supported;
+  }
+  }

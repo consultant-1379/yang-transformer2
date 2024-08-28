@@ -1,0 +1,391 @@
+module ericsson-service-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-service-ipos";
+
+  prefix "serviceipos";
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-acl-ipos {
+    prefix "aclipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-service-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "2";
+  }
+
+  revision "2019-03-04" {
+    description
+      "modify leaf service fabric-alarm-reload default value";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2019-01-25" {
+    description
+      "Add leaf service fabric-alarm-reload";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-07-02" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "5";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Refine format for yang statements: when, must, path,
+       pattern, augment, etc.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "4";
+  }
+
+  revision "2018-05-16" {
+    description
+      "Delete the command 'history-username-display'";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "3";
+  }
+
+  revision "2018-02-23" {
+    description
+      "Modify sftp and scp 'must' condition error message";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2018-02-07" {
+    description
+      "Add must condition for service scp and sftp";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2017-12-07" {
+    description
+      "VRE 2366 Adding redistribute seg and service
+       fabric-hello-interval yang commands";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-03-21" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsipos:contexts/ctxsipos:service" {
+    description
+      "ericsson-service";
+    /*
+    auto-system-recovery
+    */
+    leaf auto-system-recovery {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable auto-system-recovery";
+    }
+    /*
+    domain-wildcard
+    */
+    leaf domain-wildcard {
+      type empty;
+      description
+        "Allow the usage of a wildcard character (*) in domain
+         names";
+    }
+    /*
+    console-break
+    */
+    leaf console-break {
+      type empty;
+      description
+        "Enable console break by sending break sequence";
+    }
+    /*
+    card-auto-reload
+    */
+    leaf card-auto-reload {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable card-auto-reload";
+    }
+    /*
+    counters { arp | nd }
+    */
+    container counters {
+      description
+        "Enable ARP/ND counters at VLAN level";
+      leaf arp {
+        type empty;
+        description
+          "Enable ARP counters at parent circuit level";
+      }
+      leaf nd {
+        type empty;
+        description
+          "Enable ND counters at parent circuit level";
+      }
+    }
+    /*
+    process { ppp | pppoe | l2tp }
+    */
+    container process {
+      description
+        "Enable process services";
+      leaf ppp {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable ppp";
+      }
+      leaf pppoe {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable pppoe";
+      }
+      leaf l2tp {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable l2tp";
+      }
+    }
+    /*
+    upload-coredump <url (ftp-url)> [ context (ctx-str) ]
+    */
+    container upload-coredump {
+      presence "";
+      description
+        "Upload core dump files to remote server";
+      leaf url {
+        type string {
+          pattern 'ftp://[^: ]+(:\S+)?@(((([0-9]|[1-9][0-9]|'
+          + '1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|'
+          + '[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}'
+          + '\p{L}]+)?)|\[((((:|[0-9a-fA-F]{0,4}):)'
+          + '([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|'
+          + '[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|'
+          + '[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|'
+          + '[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?)|((([^:]+:){6}'
+          + '(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)'
+          + '?::(([^:]+:)*[^:]+)?)(%.+)?))\])(:([0-9]|[1-9]\d|'
+          + '[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|'
+          + '65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?(/\S+)?';
+        }
+        mandatory true;
+        description
+          "File Transfer Protocol";
+      }
+      leaf context {
+        type leafref {
+          path "/ctxsipos:contexts/ctxipos:context/ctxipos:"
+          + "context-name";
+        }
+        description
+          "Specify context for server reachability";
+      }
+    }
+    /*
+    fabric-hello-interval (hello-interval)
+    */
+    leaf fabric-hello-interval {
+      type uint16 {
+        range "10..1000";
+      }
+      description
+        "Milliseconds between fabric hellos";
+    }
+    /*
+    fabric-alarm-reload
+    */
+    leaf fabric-alarm-reload {
+      type boolean;
+      default "false";
+      description
+        "Enable/Disable fabric-alarm-reload";
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context" {
+    description
+      "ericsson-service";
+    /*
+    service { ftp client | tftp client | sftp { server | client
+     } | scp { server | client } | snmp server | netconf server |
+     ssh { server [ access-group (access-group-name) ] | client }
+     | telnet { server [ access-group (access-group-name) ] |
+     client } }
+    */
+    container service {
+      description
+        "Service commands";
+      leaf ftp-client {
+        type empty;
+        description
+          "Client";
+      }
+      leaf tftp-client {
+        type empty;
+        description
+          "Client";
+      }
+      container sftp {
+        must "(not(./server) and not(./client)) or (../ssh/server)" {
+          error-message "SSH must be enabled for sftp service";
+          description
+            "";
+        }
+        description
+          "sftp service";
+        leaf server {
+          type empty;
+          description
+            "Server";
+        }
+        leaf client {
+          type empty;
+          description
+            "Client";
+        }
+      }
+      container scp {
+        must "(not(./server) and not(./client)) or (../ssh/server)" {
+          error-message "SSH must be enabled for scp service";
+          description
+            "";
+        }
+        description
+          "Scp service";
+        leaf server {
+          type empty;
+          description
+            "Server";
+        }
+        leaf client {
+          type empty;
+          description
+            "Client";
+        }
+      }
+      leaf snmp-server {
+        type empty;
+        description
+          "Server";
+      }
+      leaf netconf-server {
+        type empty;
+        description
+          "Server";
+      }
+      container ssh {
+        description
+          "Ssh service";
+        container server {
+          presence "";
+          description
+            "Server";
+          leaf access-group {
+            type leafref {
+              path "/ctxsipos:contexts/ctxipos:context/ctxipos:ip/"
+              + "aclipos:access-list/aclipos:access-list";
+            }
+            description
+              "Access-group service";
+          }
+        }
+        leaf client {
+          type empty;
+          description
+            "Client";
+        }
+      }
+      container telnet {
+        description
+          "Telnet service";
+        container server {
+          presence "";
+          description
+            "Server";
+          leaf access-group {
+            type leafref {
+              path "/ctxsipos:contexts/ctxipos:context/ctxipos:ip/"
+              + "aclipos:access-list/aclipos:access-list";
+            }
+            description
+              "Access-group service";
+          }
+        }
+        leaf client {
+          type empty;
+          description
+            "Client";
+        }
+      }
+    }
+  }
+
+}

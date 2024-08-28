@@ -1,0 +1,106 @@
+module ericsson-arp-ext-pc5gc {
+  yang-version 1.1;
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-arp-ext-pc5gc";
+  prefix arpxpc5gc;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-ip {
+    prefix ip;
+    reference
+      "RFC 8344: A Yang Data Model for IP Management";
+  }
+  import ietf-arp {
+    prefix arp;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ericsson-yang-extensions {
+    prefix yexte;
+  }
+
+  organization
+    "Ericsson AB";
+  contact
+    "Web:   <http://www.ericsson.com>";
+  description
+    "This model extends IETF RFC 8343,
+     used to present PC specific requirement.
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision 2020-02-07 {
+    description
+      "initial revision";
+    reference
+      "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/if:interfaces/if:interface/ip:ipv4/arp:arp" {
+    action neighbors {
+      status current {
+        yexte:preliminary;
+      }
+      description
+        "A collection of ARP objects.";
+      output {
+        list neighbor {
+          config false;
+          key "instance-id";
+          description
+            "The current operational state of arp cache for each instance.";
+          leaf instance-id {
+            type string;
+            description
+              "The instance which arp cache is locating on.";
+          }
+          list cache {
+            key "ip";
+            description
+              "A list of mappings from IPv4 addresses to
+               link-layer addresses.
+
+               Entries in this list in the intended configuration are
+               used as static entries in the ARP Cache.
+
+               In the operational state, this list represents the ARP
+               Cache.";
+            reference
+              "RFC 826: An Ethernet Address Resolution Protocol";
+            leaf ip {
+              type inet:ipv4-address-no-zone;
+              description
+                "The IPv4 address of the neighbor node.";
+            }
+            leaf link-layer-address {
+              type yang:phys-address;
+              mandatory true;
+              description
+                "The link-layer address of the neighbor node.";
+            }
+            leaf remaining-expiry-time {
+              type uint32;
+              units "seconds";
+              description
+                "The number of seconds until the dynamic ARP entry expires
+                 and is removed from the ARP cache.";
+            }
+            leaf vlan-id {
+              type uint32;
+              description
+                "vlan id.";
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,421 @@
+module ericsson-static-route-state-router6000 {
+
+  /*** NAMESPACE / PREFIX DEFINITION ***/
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-static-route-state-router6000";
+  prefix "staroutestrouter6000";
+
+  /*** LINKAGE (IMPORTS / INCLUDES) ***/
+
+  import ietf-yang-types       { prefix "yang"; }
+  import ericsson-context-state-router6000         { prefix "ctxstrouter6000"; }
+  import ericsson-contexts-router6000       { prefix "ctxsr6k"; }
+  import ericsson-yang-extensions { prefix "yexte"; }
+
+  /*** META INFORMATION ***/
+
+  organization
+   "IETF IPv6 Working Group
+    http://www.ietf.org/html.charters/ipv6-charter.html";
+
+  contact
+   "Web:   <http://www.ericsson.com>";
+
+  description
+   "The MIB module for the management of CIDR multipath IP
+    Routes.
+    Copyright (c) 2018 Ericsson AB.
+    All rights reserved.";
+
+  revision "2018-06-05" {
+    description "Change model namespace";
+    reference "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2015-12-07" {
+    description
+     "IPv4/v6 version-independent revision.  Minimal changes
+      were made to the original RFC 2096 MIB to allow easy
+      upgrade of existing IPv4 implementations to the
+      version-independent MIB.  These changes include:
+
+      Adding inetCidrRouteDiscards as a replacement for the
+      deprecated ipRoutingDiscards and ipv6DiscardedRoutes
+      objects.
+
+      Adding a new conformance statement to support the
+      implementation of the IP Forwarding MIB in a
+      read-only mode.
+
+      The inetCidrRouteTable replaces the IPv4-specific
+      ipCidrRouteTable, its related objects, and related
+      conformance statements.
+
+      Published as RFC 4292.";
+    reference "";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+  revision "2015-09-08" {
+    description
+     "Revised to support CIDR routes.
+      Published as RFC 2096.";
+    reference "";
+  }
+  revision "2015-09-08" {
+    description
+     "Initial version, published as RFC 1354.";
+    reference "";
+  }
+
+  typedef iana-ip-route-protocol {
+    type enumeration {
+      enum other      { value 1; description "";}
+      enum local      { value 2; description "";}
+      enum netmgmt    { value 3; description "";}
+      enum icmp       { value 4; description "";}
+      enum egp        { value 5; description "";}
+      enum ggp        { value 6; description "";}
+      enum hello      { value 7; description "";}
+      enum rip        { value 8; description "";}
+      enum isIs       { value 9; description "";}
+      enum esIs       { value 10; description "";}
+      enum ciscoigrp  { value 11; description "";}
+      enum bbnSpfIgp  { value 12; description "";}
+      enum ospf       { value 13; description "";}
+      enum bgp        { value 14; description "";}
+      enum idpr       { value 15; description "";}
+      enum ciscoEigrp { value 16; description "";}
+      enum dvmrp      { value 17; description "";}
+    }
+    description
+     "A mechanism for learning routes.  Inclusion of values for
+      routing protocols is not intended to imply that those
+      protocols need be supported.";
+  }
+
+  typedef inet-address-type {
+    type enumeration {
+      enum unknown { value 0; description "";}
+      enum ipv4    { value 1; description "";}
+      enum ipv6    { value 2; description "";}
+      enum ipv4z   { value 3; description "";}
+      enum ipv6z   { value 4; description "";}
+      enum dns     { value 16; description "";}
+    }
+    description
+     "A value that represents a type of Internet address.
+
+      unknown(0)  An unknown address type.  This value MUST
+                  be used if the value of the corresponding
+                  InetAddress object is a zero-length string.
+                  It may also be used to indicate an IP address
+                  that is not in one of the formats defined
+                  below.
+
+      ipv4(1)     An IPv4 address as defined by the
+                  InetAddressIPv4 textual convention.
+
+      ipv6(2)     An IPv6 address as defined by the
+                  InetAddressIPv6 textual convention.
+
+      ipv4z(3)    A non-global IPv4 address including a zone
+                  index as defined by the InetAddressIPv4z
+                  textual convention.
+
+      ipv6z(4)    A non-global IPv6 address including a zone
+                  index as defined by the InetAddressIPv6z
+                  textual convention.
+
+      dns(16)     A DNS domain name as defined by the
+                  InetAddressDNS textual convention.
+
+      Each definition of a concrete InetAddressType value must be
+      accompanied by a definition of a textual convention for use
+      with that InetAddressType.
+
+      To support future extensions, the InetAddressType textual
+      convention SHOULD NOT be sub-typed in object type definitions.
+      It MAY be sub-typed in compliance statements in order to
+      require only a subset of these address types for a compliant
+      implementation.
+
+      Implementations must ensure that InetAddressType objects
+      and any dependent objects (e.g., InetAddress objects) are
+      consistent.  An inconsistentValue error must be generated
+      if an attempt to change an InetAddressType object would,
+      for example, lead to an undefined InetAddress value.  In
+      particular, InetAddressType/InetAddress pairs must be
+      changed together if the address type changes (e.g., from
+      ipv6(2) to ipv4(1)).";
+  }
+
+  typedef inet-address {
+    type binary {
+      length "0..255";
+    }
+    description
+     "A value that represents a type of Internet address.
+
+      unknown(0)  An unknown address type.  This value MUST
+                  be used if the value of the corresponding
+                  InetAddress object is a zero-length string.
+                  It may also be used to indicate an IP address
+                  that is not in one of the formats defined
+                  below.
+
+      ipv4(1)     An IPv4 address as defined by the
+                  InetAddressIPv4 textual convention.
+
+      ipv6(2)     An IPv6 address as defined by the
+                  InetAddressIPv6 textual convention.
+
+      ipv4z(3)    A non-global IPv4 address including a zone
+                  index as defined by the InetAddressIPv4z
+                  textual convention.
+
+      ipv6z(4)    A non-global IPv6 address including a zone
+                  index as defined by the InetAddressIPv6z
+                  textual convention.
+
+      dns(16)     A DNS domain name as defined by the
+                  InetAddressDNS textual convention.
+
+      Each definition of a concrete InetAddressType value must be
+      accompanied by a definition of a textual convention for use
+      with that InetAddressType.
+
+      To support future extensions, the InetAddressType textual
+      convention SHOULD NOT be sub-typed in object type definitions.
+      It MAY be sub-typed in compliance statements in order to
+      require only a subset of these address types for a compliant
+      implementation.
+
+      Implementations must ensure that InetAddressType objects
+      and any dependent objects (e.g., InetAddress objects) are
+      consistent.  An inconsistentValue error must be generated
+      if an attempt to change an InetAddressType object would,
+      for example, lead to an undefined InetAddress value.  In
+      particular, InetAddressType/InetAddress pairs must be
+      changed together if the address type changes (e.g., from
+      ipv6(2) to ipv4(1)).";
+  }
+
+  typedef inet-address-prefix-length {
+    type uint32 {
+      range "0..2040";
+    }
+    description
+     "Denotes the length of a generic Internet network address
+      prefix.  A value of n corresponds to an IP address mask
+      that has n contiguous 1-bits from the most significant
+      bit (MSB), with all other bits set to 0.
+
+      An InetAddressPrefixLength value is always interpreted within
+      the context of an InetAddressType value.  Every usage of the
+      InetAddressPrefixLength textual convention is required to
+      specify the InetAddressType object that provides the
+      context.  It is suggested that the InetAddressType object be
+      logically registered before the object(s) that use the
+      InetAddressPrefixLength textual convention, if they appear
+      in the same logical row.
+
+      InetAddressPrefixLength values larger than
+      the maximum length of an IP address for a specific
+      InetAddressType are treated as the maximum significant
+      value applicable for the InetAddressType.  The maximum
+      significant value is 32 for the InetAddressType
+      'ipv4(1)' and 'ipv4z(3)' and 128 for the InetAddressType
+      'ipv6(2)' and 'ipv6z(4)'.  The maximum significant value
+      for the InetAddressType 'dns(16)' is 0.
+
+      The value zero is object-specific and must be defined as
+      part of the description of any object that uses this
+      syntax.  Examples of the usage of zero might include
+      situations where the Internet network address prefix
+      is unknown or does not apply.
+
+      The upper bound of the prefix length has been chosen to
+      be consistent with the maximum size of an InetAddress.";
+  }
+
+  augment "/ctxsr6k:contexts-state/ctxstrouter6000:context"
+  {
+    description "static route state";
+    container ip-forward {
+      description "ip forward";
+
+      leaf inet-cidr-route-number {
+        type yang:gauge32;
+        config false;
+        description
+         "The number of current inetCidrRouteTable entries that
+          are not invalid.";
+      }
+
+
+      /* XXX table comments here XXX */
+
+      list inet-cidr-route-entry {
+
+        key "inet-cidr-route-dest-type inet-cidr-route-dest inet-cidr-route-pfx-len inet-cidr-route-policy inet-cidr-route-next-hop-type inet-cidr-route-next-hop";
+
+        config false;
+        description
+         "A particular route to a particular destination, under a
+          particular policy (as reflected in the
+          inetCidrRoutePolicy object).
+
+          Dynamically created rows will survive an agent reboot.
+
+          Implementers need to be aware that if the total number
+          of elements (octets or sub-identifiers) in
+          inetCidrRouteDest, inetCidrRoutePolicy, and
+          inetCidrRouteNextHop exceeds 111, then OIDs of column
+          instances in this table will have more than 128 sub-
+          identifiers and cannot be accessed using SNMPv1,
+          SNMPv2c, or SNMPv3.";
+
+
+        leaf inet-cidr-route-dest-type {
+          type inet-address-type;
+          config false;
+          description
+           "The type of the inetCidrRouteDest address, as defined
+            in the InetAddress MIB.
+
+            Only those address types that may appear in an actual
+            routing table are allowed as values of this object.";
+          reference
+           "RFC 4001";
+        }
+
+        leaf inet-cidr-route-dest {
+          type inet-address;
+          config false;
+          description
+           "The destination IP address of this route.
+
+            The type of this address is determined by the value of
+            the inetCidrRouteDestType object.
+
+            The values for the index objects inetCidrRouteDest and
+            inetCidrRoutePfxLen must be consistent.  When the value
+            of inetCidrRouteDest (excluding the zone index, if one
+            is present) is x, then the bitwise logical-AND
+            of x with the value of the mask formed from the
+            corresponding index object inetCidrRoutePfxLen MUST be
+            equal to x.  If not, then the index pair is not
+            consistent and an inconsistentName error must be
+            returned on SET or CREATE requests.";
+        }
+
+        leaf inet-cidr-route-pfx-len {
+          type inet-address-prefix-length;
+          config false;
+          description
+           "Indicates the number of leading one bits that form the
+            mask to be logical-ANDed with the destination address
+            before being compared to the value in the
+
+            inetCidrRouteDest field.
+
+            The values for the index objects inetCidrRouteDest and
+            inetCidrRoutePfxLen must be consistent.  When the value
+            of inetCidrRouteDest (excluding the zone index, if one
+            is present) is x, then the bitwise logical-AND
+            of x with the value of the mask formed from the
+            corresponding index object inetCidrRoutePfxLen MUST be
+            equal to x.  If not, then the index pair is not
+            consistent and an inconsistentName error must be
+            returned on SET or CREATE requests.";
+        }
+
+        leaf inet-cidr-route-policy {
+          type yang:object-identifier;
+          config false;
+          description
+           "This object is an opaque object without any defined
+            semantics.  Its purpose is to serve as an additional
+            index that may delineate between multiple entries to
+            the same destination.  The value { 0 0 } shall be used
+            as the default value for this object.";
+        }
+
+        leaf inet-cidr-route-next-hop-type {
+          type inet-address-type;
+          config false;
+          description
+           "The type of the inetCidrRouteNextHop address, as
+            defined in the InetAddress MIB.
+
+            Value should be set to unknown(0) for non-remote
+            routes.
+
+            Only those address types that may appear in an actual
+            routing table are allowed as values of this object.";
+          reference
+           "RFC 4001";
+        }
+
+        leaf inet-cidr-route-next-hop {
+          type inet-address;
+          config false;
+          description
+           "On remote routes, the address of the next system en
+
+            route.  For non-remote routes, a zero length string.
+
+            The type of this address is determined by the value of
+            the inetCidrRouteNextHopType object.";
+        }
+
+
+
+        leaf inet-cidr-route-proto {
+          type iana-ip-route-protocol;
+          config false;
+          description
+           "The routing mechanism via which this route was learned.
+            Inclusion of values for gateway routing protocols is
+            not intended to imply that hosts should support those
+            protocols.";
+        }
+
+        leaf inet-cidr-route-age {
+          type yang:gauge32;
+          config false;
+          description
+           "The number of seconds since this route was last updated
+            or otherwise determined to be correct.  Note that no
+            semantics of 'too old' can be implied, except through
+            knowledge of the routing protocol by which the route
+            was learned.";
+        }
+
+
+
+
+
+
+
+      }
+
+      leaf inet-cidr-route-discards {
+        type yang:counter32;
+        config false;
+        description
+         "The number of valid route entries discarded from the
+          inetCidrRouteTable.  Discarded route entries do not
+          appear in the inetCidrRouteTable.  One possible reason
+          for discarding an entry would be to free-up buffer space
+          for other route table entries.";
+      }
+    }
+
+  }
+} /* end of module ericsson-ipos-static-route-state */

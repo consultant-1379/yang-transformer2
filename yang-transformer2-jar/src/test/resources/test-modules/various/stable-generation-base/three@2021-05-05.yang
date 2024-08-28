@@ -1,0 +1,24 @@
+module three {
+
+	namespace "urn:test:three";
+	prefix this;
+
+	revision "2021-05-05";
+
+	import one {
+		prefix one;
+	}
+
+	identity three-1;
+
+	identity three-2 {
+		base one:one-1;
+	}
+
+	augment "/one:list1" {
+
+		leaf leaf51 {
+			type string;
+		}
+	}
+}

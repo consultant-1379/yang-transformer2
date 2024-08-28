@@ -1,0 +1,4065 @@
+module ericsson-bgp-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bgp-router6000";
+
+  prefix "bgpr6k";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bgp-router6000
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-04-28" {
+    description
+      "Fix ENM error for duplicated 1.2.1 revision";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "8";
+    yexte:correction "1";
+  }
+
+  revision "2020-12-14" {
+    description
+      "added support for nexthop bfd-tracking under global bgp af";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "8";
+    yexte:correction "0";
+  }
+
+  revision "2020-09-23" {
+    description
+      "Support ECMP64 for IP Unicast";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "7";
+    yexte:correction "0";
+  }
+
+  revision "2019-03-14" {
+    description
+      "Support for BGP command delay-route-updates under all
+       address families";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "6";
+    yexte:correction "0";
+  }
+
+  revision "2019-03-06" {
+    description
+      "BGP additional-path select command";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "5";
+    yexte:correction "0";
+  }
+
+  revision "2019-02-13" {
+    description
+      "syntax changes in relative addresses";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "4";
+    yexte:correction "2";
+  }
+
+  revision "2018-12-18" {
+    description
+      "allow-vpn-export peer group changes";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "4";
+    yexte:correction "1";
+  }
+
+  revision "2018-12-10" {
+    description
+      "Support for next-hop-self command under vpn
+       address-family";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2018-11-27" {
+    description
+      "remove ipos choice description";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "1";
+  }
+
+  revision "2018-11-15" {
+    description
+      "Adding allow-vpn-export cli support";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2018-10-28" {
+    description
+      "Modify evpn context bgp command";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2018-10-18" {
+    description
+      "Modification evpn context under neighbor";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-09-26" {
+    description
+      "Adding evpn context support";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-09-18" {
+    description
+      "Adding address-family l2vpn evpn";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-02-22" {
+    description
+      "JIRA: IPOS-21572 Fix for:Link-state id command changes
+       while doing a no (and) BGP AF LS attributes not working";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-02-05" {
+    description
+      "JIRA: IPOS-21192 add conservative-update-error-handling
+       must condition.";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-31" {
+    description
+      "Changed container export from presence to non-presence,
+       Changed leaf map-name from non-mandatory to mandatory,
+       Changed container route-map from non-presence to presence";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-22" {
+    description
+      "Add default value for advertisement-interval and add must
+       condition for or-ms leaf";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "4";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-10" {
+    description
+      "JIRA:SSR-6748 Added App-ID for LIM Application Id for LIM
+       feature.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2018-01-07" {
+    description
+      "JIRA: IPOS-16998 Add YANG model for per-vrf lable
+       allocation CLI command";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2017-12-30" {
+    description
+      "JIRA: IPOS-19154 'when' in ericsson-bgp-ipos.yang causes
+       circular reference error";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "2";
+  }
+
+  revision "2017-12-17" {
+    description
+      "JIRA: IPOS-14408 Add command address-family link-state in
+       BGP neighbor configuration mode/BGP router configuration
+       mode";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "1";
+  }
+
+  revision "2017-12-07" {
+    description
+      "VRE 2366 Adding redistribute seg and service
+       fabric-hello-interval yang commands";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-11-02" {
+    description
+      "JIRA:IPOS-17358 and IPOS-17255 Delete a when condition,
+       add a grouping to solve the performance problem.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-08-29" {
+    description
+      "JIRA: IPOS-6720 Add command address-family rt-filter in
+       BGP neighbor configuration mode/BGP router configuration
+       mode";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-07-10" {
+    description
+      "BGP address-family ipv4 multicast is sent by glue code
+       without confd input";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-29" {
+    description
+      "Rename penalty/timer/fast-reset/route-target/if-name-list
+       node and change neighbor-choice1 and peer-group-choice to
+       choice due to performance";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-06-26" {
+    description
+      "New container aigp is added";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-06-22" {
+    description
+      "bgp comments issue fixed such as multicast when
+       condition";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-06-02" {
+    description
+      "New command for bgp multicast";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-04" {
+    description
+      "IPOS-9781 remove the no_no flag for BGP";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-26" {
+    description
+      "HV82630 [iposoam area repo reg] libnetconf BGP glue code
+       error on remove next-hop-self";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-04-10" {
+    description
+      "IPOS-8850 IPOS-8794 IPOS-8638 IPOS-8809";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-02-23" {
+    description
+      "JIRA: IPOS-6720 BGP model improvement";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-01-26" {
+    description
+      "JIRA: IPOS-3347 Please find and modify the
+       side-effect/when/must point for model BGP";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-28" {
+    description
+      "enable ipfrr cli via removing if-feature";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-11-30" {
+    description
+      "fix JIRA IPOS-3490";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-09-18" {
+    description
+      "remove send label using if-feature";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-07-08" {
+    description
+      "remove ipfrr cli using if-feature";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-21" {
+    description
+      "fix EV276801";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-02-29" {
+    description
+      "1) fix when/must condition issues
+            2) fix EV274328";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature redistribute-bgf {
+    description
+      "This feature indicates that the device supports the
+       redistribute-bgf in BGP.";
+  }
+
+  feature redistribute-cg-nat {
+    description
+      "This feature indicates that the device supports the
+       redistribute-cg-nat in BGP.";
+  }
+
+  feature redistribute-epg {
+    description
+      "This feature indicates that the device supports the
+       redistribute-epg in BGP.";
+  }
+
+  feature redistribute-ipsec {
+    description
+      "This feature indicates that the device supports the
+       redistribute-ipsec in BGP.";
+  }
+
+  feature redistribute-msp {
+    description
+      "This feature indicates that the device supports the
+       redistribute-msp in BGP.";
+  }
+
+  feature redistribute-nat {
+    description
+      "This feature indicates that the device supports the
+       redistribute-nat in BGP.";
+  }
+
+  feature redistribute-rip {
+    description
+      "This feature indicates that the device supports the
+       redistribute-rip in BGP.";
+  }
+
+  feature redistribute-ripng {
+    description
+      "This feature indicates that the device supports the
+       redistribute-ripng in BGP.";
+  }
+
+  feature redistribute-sasn {
+    description
+      "This feature indicates that the device supports the
+       redistribute-sasn in BGP.";
+  }
+
+  feature redistribute-seg {
+    description
+      "This feature indicates that the device supports the
+       redistribute-seg in BGP.";
+  }
+
+  feature redistribute-static-dvsr {
+    description
+      "This feature indicates that the device supports the
+       redistribute-static-dvsr in BGP.";
+  }
+
+  feature redistribute-subscriber {
+    description
+      "This feature indicates that the device supports the
+       redistribute-subscriber in BGP.";
+  }
+
+  feature redistribute-vrrp {
+    description
+      "This feature indicates that the device supports the
+       redistribute-vrrp in BGP.";
+  }
+
+  feature redistribute-wifi-ac {
+    description
+      "This feature indicates that the device supports the
+       redistribute-wifi-ac in BGP.";
+  }
+
+  feature redistribute-static-wmg {
+    description
+      "This feature indicates that the device supports the
+       redistribute-static-wmg in BGP.";
+  }
+
+  feature table-map {
+    description
+      "This feature indicates that the device supports the
+       table-map in BGP.";
+  }
+
+  grouping bgp-af-new-grp {
+    description
+      "BGP address family configuration mode for refresh_time
+       and wait_on_eor";
+    /*
+    delay-route-updates on-reload (delay-time)
+    */
+    container delay-route-updates {
+      when "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+      + "name='local'" {
+        description
+          "";
+      }
+      description
+        "Delay BGP route updates to peers";
+      leaf on-reload {
+        type uint16 {
+          range "5..300";
+        }
+        description
+          "Delay upon node reload";
+      }
+    }
+    /*
+    vpn-route-refresh-interval (time-secs)
+    */
+    leaf vpn-route-refresh-interval {
+      type uint8 {
+        range "5..120";
+      }
+      description
+        "Specify time to wait for vpn route refresh";
+    }
+    /*
+    wait-on-end-of-rib-marker (eor-secs)
+    */
+    leaf wait-on-end-of-rib-marker {
+      type uint16 {
+        range "0..300";
+      }
+      description
+        "Specify time to wait for EOR";
+    }
+  }
+
+  grouping bgp-af-grp {
+    description
+      "BGP address family configuration mode";
+    /*
+    route-origin (ro-comm)
+    */
+    leaf route-origin {
+      when "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-rd" {
+        description
+          "";
+      }
+      type string;
+      description
+        "site of origin";
+    }
+    /*
+    export
+    */
+    container export {
+      when "(/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-rd) or "
+      + "(/ctxsr6k:contexts/ctxr6k:context/ctxr6k:evpn)" {
+        description
+          "";
+      }
+      description
+        "export extended community list";
+      uses bgp-af-export-grp;
+    }
+    /*
+    import
+    */
+    container import {
+      when "(/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-rd) or "
+      + "(/ctxsr6k:contexts/ctxr6k:context/ctxr6k:evpn)" {
+        description
+          "";
+      }
+      description
+        "import extended community list";
+      uses bgp-af-import-grp;
+    }
+    /*
+    nexthop { triggered [ delay { millisecond (dly-ms) | (dly-
+     secs) } ] [ < holdtime { millisecond (hld-ms) | (hld-secs) }
+     [ backoff { millisecond (back-ms) | (back-secs) } ] > ] |
+     check-reachability [ prefix-list (pfxlist-name) ] }
+    */
+    container nexthop {
+      when "(name(..) = 'bgpr6k:unicast') or (name(..) = "
+      + "'bgpr6k:vpn')" {
+        description
+          "";
+      }
+      status obsolete;
+      description
+        "Configuration of BGP NEXT_HOP processing";
+      choice nexthop {
+        case triggered {
+          container triggered {
+            presence "";
+            description
+              "Trigger BGP update when route to NEXT_HOP changes
+               in RIB";
+            container delay {
+              description
+                "Delay after nexthop change before calculating
+                 bestpath";
+              choice delay {
+                case millisecond {
+                  leaf millisecond {
+                    type uint16 {
+                      range "0..30000";
+                    }
+                    description
+                      "Delay in milliseconds";
+                  }
+                }
+                case dly-secs {
+                  leaf dly-secs {
+                    type uint8 {
+                      range "0..30";
+                    }
+                    description
+                      "Delay in seconds";
+                  }
+                }
+              }
+            }
+            container holdtime {
+              presence "";
+              description
+                "Minimum interval between triggered bestpath
+                 calculations";
+              choice holdtime-choice {
+                mandatory true;
+                case millisecond {
+                  leaf millisecond {
+                    type uint16 {
+                      range "0..30000";
+                    }
+                    mandatory true;
+                    description
+                      "Hold-time in milliseconds";
+                  }
+                }
+                case hld-secs {
+                  leaf hld-secs {
+                    type uint8 {
+                      range "0..30";
+                    }
+                    mandatory true;
+                    description
+                      "Hold-time in seconds";
+                  }
+                }
+              }
+              container backoff {
+                description
+                  "Amount to increase scan hold-time if nexthop
+                   changes frequently";
+                choice backoff {
+                  case millisecond {
+                    leaf millisecond {
+                      type uint16 {
+                        range "0..30000";
+                      }
+                      description
+                        "Scan interval backoff in milliseconds";
+                    }
+                  }
+                  case back-secs {
+                    leaf back-secs {
+                      type uint8 {
+                        range "0..30";
+                      }
+                      description
+                        "Scan interval backoff in seconds";
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        case check-reachability {
+          container check-reachability {
+            when "name(../..) = 'bgpr6k:vpn'" {
+              description
+                "";
+            }
+            description
+              "Require nexthop reachability evaluation";
+            leaf check-reachability-enable {
+              type boolean;
+              default "true";
+              description
+                "Enable/Disable check-reachability-enable";
+            }
+            leaf prefix-list {
+              when "../check-reachability-enable='false'" {
+                description
+                  "";
+              }
+              type string;
+              description
+                "Prefix-list to apply the command";
+            }
+          }
+        }
+      }
+    }
+    /*
+    nexthop-conf { triggered [ delay { millisecond (dly-ms) |
+     (dly-secs) } ] [ < holdtime { millisecond (hld-ms) | (hld-
+     secs) } [ backoff { millisecond (back-ms) | (back-secs) } ]
+     > ] | check-reachability [ prefix-list (pfxlist-name) ] |
+     bfd-tracking }
+    */
+    container nexthop-conf {
+      when "(name(..) = 'bgpr6k:unicast') or (name(..) = "
+      + "'bgpr6k:vpn') or (name(..) = 'bgpr6k:evpn')" {
+        description
+          "";
+      }
+      description
+        "Configuration of BGP NEXT_HOP processing";
+      container triggered {
+        presence "";
+        description
+          "Trigger BGP update when route to NEXT_HOP changes in
+           RIB";
+        container delay {
+          description
+            "Delay after nexthop change before calculating
+             bestpath";
+          choice delay {
+            case millisecond {
+              leaf millisecond {
+                type uint16 {
+                  range "0..30000";
+                }
+                description
+                  "Delay in milliseconds";
+              }
+            }
+            case dly-secs {
+              leaf dly-secs {
+                type uint8 {
+                  range "0..30";
+                }
+                description
+                  "Delay in seconds";
+              }
+            }
+          }
+        }
+        container holdtime {
+          description
+            "Minimum interval between triggered bestpath
+             calculations";
+          choice holdtime-choice {
+            case millisecond {
+              leaf millisecond {
+                type uint16 {
+                  range "0..30000";
+                }
+                description
+                  "Hold-time in milliseconds";
+              }
+            }
+            case hld-secs {
+              leaf hld-secs {
+                type uint8 {
+                  range "0..30";
+                }
+                description
+                  "Hold-time in seconds";
+              }
+            }
+          }
+          container backoff {
+            description
+              "Amount to increase scan hold-time if nexthop
+               changes frequently";
+            choice backoff {
+              case millisecond {
+                leaf millisecond {
+                  type uint16 {
+                    range "0..30000";
+                  }
+                  description
+                    "Scan interval backoff in milliseconds";
+                }
+              }
+              case back-secs {
+                leaf back-secs {
+                  type uint8 {
+                    range "0..30";
+                  }
+                  description
+                    "Scan interval backoff in seconds";
+                }
+              }
+            }
+          }
+        }
+      }
+      container check-reachability {
+        when "name(../..) = 'bgpr6k:vpn'" {
+          description
+            "";
+        }
+        description
+          "Require nexthop reachability evaluation";
+        leaf check-reachability-enable {
+          type boolean;
+          default "true";
+          description
+            "Enable/Disable check-reachability-enable";
+        }
+        leaf prefix-list {
+          when "../check-reachability-enable='false'" {
+            description
+              "";
+          }
+          type string;
+          description
+            "Prefix-list to apply the command";
+        }
+      }
+      leaf bfd-tracking {
+        when "name(../..) = 'bgpr6k:evpn'" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "Enable BFD tracking for the next hop of bgp routes";
+      }
+    }
+
+    /*
+    ipfrr [ route-map (routemap-name) ] [ bfd ] [ exclude ecmp ]
+     [ per-prefix-label ]
+    */
+    container ipfrr {
+      presence "";
+      description
+        "BGP Fast Re-Route";
+      leaf route-map {
+        type string;
+        description
+          "route-map to apply the command";
+      }
+      leaf bfd {
+        type empty;
+        description
+          "start BFD session to track next hop of bgp routes";
+      }
+      leaf exclude-ecmp {
+        type empty;
+        description
+          "exlcude ecmp";
+      }
+      leaf per-prefix-label {
+        type empty;
+        description
+          "alloc label per bgp prefix";
+      }
+    }
+    /*
+    flap-statistics [ persistent ]
+    */
+    container flap-statistics {
+      presence "";
+      description
+        "Enable route-flap statistics accounting";
+      leaf persistent {
+        type empty;
+        description
+          "Keep flap statistics across peer resets";
+      }
+    }
+    /*
+    distance (dist-external) (dist-internal) (dist-local)
+    */
+    container distance {
+      presence "";
+      description
+        "Administrative distance";
+      leaf dist-external {
+        type uint8 {
+          range "1..255";
+        }
+        mandatory true;
+        description
+          "Distance for routes external to the AS";
+      }
+      leaf dist-internal {
+        type uint8 {
+          range "1..255";
+        }
+        mandatory true;
+        description
+          "Distance for routes internal to the AS";
+      }
+      leaf dist-local {
+        type uint8 {
+          range "1..255";
+        }
+        mandatory true;
+        description
+          "Distance for local routes";
+      }
+    }
+    /*
+    route-target filter
+    */
+    leaf route-target-filter {
+      when "name(..) = 'bgpr6k:vpn'" {
+        description
+          "";
+      }
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable route-target-filter";
+    }
+    /*
+    dampening [ { (dampen-halflife) (dampen-reuse) (dampen-
+     suppress) (dampen-max) | route-map (routemap-name) } ] [
+     persistent ]
+    */
+    container dampening {
+      when "name(..) = 'bgpr6k:unicast' or name(..) = "
+      + "'bgpr6k:multicast' or name(..) = 'bgpr6k:link-state'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Enable route-flap dampening";
+      choice dampening-choice {
+        case dampen-halflife {
+          container penalty {
+            description
+              "container penalty.";
+            leaf dampen-halflife {
+              type uint8 {
+                range "1..45";
+              }
+              mandatory true;
+              description
+                "Half-life time (minutes) for the penalty";
+            }
+            leaf dampen-reuse {
+              type uint16 {
+                range "1..20000";
+              }
+              mandatory true;
+              description
+                "Value to start reusing a route";
+            }
+            leaf dampen-suppress {
+              type uint16 {
+                range "1..20000";
+              }
+              must "number(../dampen-suppress) > number"
+              + "(../dampen-reuse)" {
+                error-message "The penalty value for suppressing "
+                + "must be larger than the reuse value";
+                description
+                  "";
+              }
+              mandatory true;
+              description
+                "Value to start suppressing a route";
+            }
+            leaf dampen-max {
+              type uint8 {
+                range "1..255";
+              }
+              must "number(../dampen-max) > (number(../dampen-"
+              + "halflife) * 2 - 1)" {
+                error-message "Maximum duration should be at "
+                + "least twice the value as the half-life time";
+                description
+                  "";
+              }
+              mandatory true;
+              description
+                "Maximum duration (minutes) to suppress a stable
+                 route";
+            }
+          }
+        }
+        case route-map {
+          leaf route-map {
+            type string;
+            description
+              "Route-map to specify criteria for dampening";
+          }
+        }
+      }
+      leaf persistent {
+        type empty;
+        description
+          "Keep dampening statistics across peer resets";
+      }
+    }
+    /*
+    redistribute { connected | isis (isis-tag) [ level-1 |
+     level-2 ] | ospf (ospf-id) [ internal ] [ external ] [ nssa-
+     external ] | ospf3 (ospf3-id) [ internal ] [ external ] [
+     nssa-external ] | ripng (ripng-tag) | nat | static [ dvsr ]
+     | vrrp | subscriber { aggregate | address | static | nd |
+     dhcp-pd } | ipsec | epg | sasn | seg | wmg | lim | msp | bgf
+     | wifi-ac | cg-nat | ldp | rip (rip-tag) } [ route-map (map-
+     name) ]
+    */
+    container redistribute {
+      when "name(..) = 'bgpr6k:unicast'" {
+        description
+          "";
+      }
+      description
+        "Redistribute routes from another routing protocol";
+      container connected {
+        presence "";
+        description
+          "Connected routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      list isis {
+        key "isis-tag";
+        description
+          "ISO IS-IS";
+        leaf isis-tag {
+          type string;
+          description
+            "ISO routing area tag";
+        }
+        leaf isis-opt {
+          type enumeration {
+            enum level-1 {
+              value 0;
+              description
+                "Redistribute from ISIS level-1";
+            }
+            enum level-2 {
+              value 1;
+              description
+                "Redistribute from ISIS level-2";
+            }
+          }
+          description
+            "leaf isis-opt.";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      list ospf {
+        when "name(../../..) = 'bgpr6k:ipv4'" {
+          description
+            "";
+        }
+        key "ospf-id";
+        description
+          "Open Shortest Path First";
+        leaf ospf-id {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "OSPF instance";
+        }
+        leaf internal {
+          type empty;
+          description
+            "Redistribute OSPF internal routes";
+        }
+        leaf external {
+          type empty;
+          description
+            "Redistribute OSPF external routes";
+        }
+        leaf nssa-external {
+          type empty;
+          description
+            "Redistribute OSPF not-so-stuby area (NSSA) external
+             routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      list ospf3 {
+        when "name(../../..) = 'bgpr6k:ipv6'" {
+          description
+            "";
+        }
+        key "ospf3-id";
+        description
+          "Open Shortest Path First (OSPFv3)";
+        leaf ospf3-id {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "OSPF instance";
+        }
+        leaf internal {
+          type empty;
+          description
+            "Redistribute OSPF internal routes";
+        }
+        leaf external {
+          type empty;
+          description
+            "Redistribute OSPF external routes";
+        }
+        leaf nssa-external {
+          type empty;
+          description
+            "Redistribute OSPF not-so-stuby area (NSSA) external
+             routes";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      list ripng {
+        when "name(../../..) = 'bgpr6k:ipv6'" {
+          description
+            "";
+        }
+        if-feature redistribute-ripng;
+        key "ripng";
+        description
+          "Routing Information Protocol next generation (RIPng)";
+        leaf ripng {
+          type string;
+          description
+            "RIPng protocol instance name";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container nat {
+        if-feature redistribute-nat;
+        presence "";
+        description
+          "Network Address Translation (NAT)";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container static {
+        presence "";
+        description
+          "Static routes";
+        leaf dvsr {
+          if-feature redistribute-static-dvsr;
+          type empty;
+          description
+            "DVSR (dynamically verified static routing)";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container vrrp {
+        when "name(../../..) = 'bgpr6k:ipv4'" {
+          description
+            "";
+        }
+        if-feature redistribute-vrrp;
+        presence "";
+        description
+          "Virtual Router Redundancy Protocol (VRRP) routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container subscriber {
+        if-feature redistribute-subscriber;
+        must "not ((name(../../..) = 'bgpr6k:ipv4') and "
+        + "(./address) and (./static))" {
+          error-message "address and static are mutual- "
+          + "exclusive";
+          description
+            "";
+        }
+        presence "";
+        description
+          "Subscriber routes";
+        container aggregate {
+          presence "";
+          description
+            "Subscriber aggregate routes";
+          leaf route-map {
+            type string;
+            description
+              "Route map";
+          }
+        }
+        container address {
+          presence "";
+          description
+            "Subscriber address routes";
+          leaf route-map {
+            type string;
+            description
+              "Route map";
+          }
+        }
+        container static {
+          presence "";
+          description
+            "Subscriber static routes";
+          leaf route-map {
+            type string;
+            description
+              "Route map";
+          }
+        }
+        container nd {
+          when "(name(../../../..) = 'bgpr6k:ipv6') and "
+          + "(name(../../..) = 'bgpr6k:unicast')" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "Subscriber Neighbor Discovery (ND) routes";
+          leaf route-map {
+            type string;
+            description
+              "Route map";
+          }
+        }
+        container dhcp-pd {
+          when "(name(../../../..) = 'bgpr6k:ipv6') and "
+          + "(name(../../..) = 'bgpr6k:unicast')" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "Subscriber DHCP Prefix Delegation (PD) routes";
+          leaf route-map {
+            type string;
+            description
+              "Route map";
+          }
+        }
+      }
+      container ipsec {
+        when "name(../../..) = 'bgpr6k:ipv4'" {
+          description
+            "";
+        }
+        if-feature redistribute-ipsec;
+        presence "";
+        description
+          "IPsec routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container epg {
+        if-feature redistribute-epg;
+        presence "";
+        description
+          "Evolved Packet Gateway (EPG) routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container sasn {
+        if-feature redistribute-sasn;
+        presence "";
+        description
+          "Service-Aware Support Node (SASN) routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container seg {
+        if-feature redistribute-seg;
+        presence "";
+        description
+          "Security Gateway (SEG) routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container wmg {
+        if-feature redistribute-static-wmg;
+        presence "";
+        description
+          "Wi-Fi Mobility Gateway (WMG) routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container lim {
+        if-feature redistribute-seg;
+        presence "";
+        description
+          "Lawful Interception Module(LIM) routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container msp {
+        if-feature redistribute-msp;
+        presence "";
+        description
+          "Multi-Service Proxy (MSP) routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container bgf {
+        if-feature redistribute-bgf;
+        presence "";
+        description
+          "Border Gateway Function (BGF) routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container wifi-ac {
+        if-feature redistribute-wifi-ac;
+        presence "";
+        description
+          "WiFi Access Concentrator (WiFiAC) routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container cg-nat {
+        if-feature redistribute-cg-nat;
+        presence "";
+        description
+          "Carrier Grade Network Address Translation (CGNAT)
+           routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      container ldp {
+        when "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+        + "name='local'" {
+          description
+            "";
+        }
+        presence "";
+        description
+          "LDP routes";
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+      list rip {
+        when "name(../../..) = 'bgpr6k:ipv4'" {
+          description
+            "";
+        }
+        if-feature redistribute-rip;
+        key "rip";
+        description
+          "Routing Information Protocol";
+        leaf rip {
+          type string;
+          description
+            "RIP protocol instance name";
+        }
+        leaf route-map {
+          type string;
+          description
+            "Route map";
+        }
+      }
+    }
+    /*
+    table-map (tablemap-name)
+    */
+    leaf table-map {
+      if-feature table-map;
+      type string;
+      description
+        "Map external entry attributes into routing table";
+    }
+    /*
+    aggregate-address { { ipv4-addr (ipv4-prefix) [ as-set ] [
+     component-map (comp-name) ] [ attribute-map (attr-name) ] [
+     summary-only ] } | { ipv6-addr (ipv6-prefix) [ as-set ] [
+     component-map (comp-name) ] [ attribute-map (attr-name) ] [
+     summary-only ] } }
+    */
+    container aggregate-address {
+      description
+        "Configure an aggregate entry";
+      choice aggregate-address {
+        case ipv4-addr {
+          list ipv4-addr {
+            when "(name(../../..) = 'bgpr6k:ipv4') and "
+            + "((name(../..) = 'bgpr6k:unicast') or (name(../..) = "
+            + "'bgpr6k:multicast'))" {
+              description
+                "";
+            }
+            key "ipv4-prefix";
+            description
+              "IPv4 Addr";
+            leaf ipv4-prefix {
+              type inet:ipv4-prefix;
+              description
+                "IPv4 Prefix";
+            }
+            leaf as-set {
+              type empty;
+              description
+                "Generate AS set path information";
+            }
+            leaf component-map {
+              type string;
+              description
+                "Specify component routes to generate the
+                 aggregate";
+            }
+            leaf attribute-map {
+              type string;
+              description
+                "Set attributes of the aggregate";
+            }
+            leaf summary-only {
+              type empty;
+              description
+                "Suppress more specific aggregate components";
+            }
+          }
+        }
+        case ipv6-addr {
+          list ipv6-addr {
+            when "(name(../../..) = 'bgpr6k:ipv6') and "
+            + "(name(../..) = 'bgpr6k:unicast')" {
+              description
+                "";
+            }
+            key "ipv6-prefix";
+            description
+              "IPv6 Addr";
+            leaf ipv6-prefix {
+              type inet:ipv6-prefix;
+              description
+                "IPv6 Prefix";
+            }
+            leaf as-set {
+              type empty;
+              description
+                "Generate AS set path information";
+            }
+            leaf component-map {
+              type string;
+              description
+                "Specify component routes to generate the
+                 aggregate";
+            }
+            leaf attribute-map {
+              type string;
+              description
+                "Set attributes of the aggregate";
+            }
+            leaf summary-only {
+              type empty;
+              description
+                "Suppress more specific aggregate components";
+            }
+          }
+        }
+      }
+    }
+    /*
+    network { { ipv4-addr (network-addr) [ route-map (map-name)
+     ] } | { ipv6-addr (network-addrv6) [ route-map (map-name) ]
+     } }
+    */
+    container network {
+      description
+        "Specify a network to announce via BGP";
+      choice network {
+        case ipv4-addr {
+          list ipv4-addr {
+            when "(name(../../..) = 'bgpr6k:ipv4') and "
+            + "((name(../..) = 'bgpr6k:unicast') or (name(../..) = "
+            + "'bgpr6k:multicast'))" {
+              description
+                "";
+            }
+            key "network-addr";
+            description
+              "IPv4 addr";
+            leaf network-addr {
+              type inet:ipv4-prefix;
+              description
+                "Prefix";
+            }
+            leaf route-map {
+              type string;
+              description
+                "Route-map to modify the attributes";
+            }
+          }
+        }
+        case ipv6-addr {
+          list ipv6-addr {
+            when "(name(../../..) = 'bgpr6k:ipv6') and "
+            + "(name(../..) = 'bgpr6k:unicast')" {
+              description
+                "";
+            }
+            key "network-addrv6";
+            description
+              "IPv6 addr";
+            leaf network-addrv6 {
+              type inet:ipv6-prefix;
+              description
+                "IPv6 Prefix";
+            }
+            leaf route-map {
+              type string;
+              description
+                "Route-map to modify the attributes";
+            }
+          }
+        }
+      }
+    }
+    /*
+    advertise external [ unconditional ]
+    */
+    container advertise-external {
+      presence "";
+      description
+        "Advertise external paths";
+      leaf unconditional {
+        type empty;
+        description
+          "Do not check for equal attributes until MED";
+      }
+    }
+    /*
+    bestpath igp-metric ignore
+    */
+    leaf bestpath-igp-metric-ignore {
+      type empty;
+      description
+        "ignore the igp-metric for best path selection";
+    }
+    /*
+    diverse-path-delay (delay-value)
+    */
+    leaf diverse-path-delay {
+      when "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-"
+      + "rd)" {
+        description
+          "";
+      }
+      type uint16 {
+        range "10..300";
+      }
+      description
+        "min diverse path adv delay, when diverse path becomes
+         best";
+    }
+    /*
+    ls-id (ipv4_addr)
+    */
+    leaf ls-id {
+      type inet:ipv4-address;
+      description
+        "BGP Link state Id";
+    }
+    /*
+    per-vrf-label
+    */
+    leaf per-vrf-label {
+      type empty;
+      description
+        "Enable per-vrf-label allocation mode";
+    }
+    /*
+    additional-paths select { best (best-n) | multi-path }
+    */
+    container additional-paths-select {
+      description
+        "Selection algorithm";
+      choice additional-paths-select {
+        case best {
+          leaf best {
+            type uint8 {
+              range "2..8";
+            }
+            description
+              "best [N] algorithm";
+          }
+        }
+        case multi-path {
+          leaf multi-path {
+            type empty;
+            description
+              "multi-path (ECMP) algorithm";
+          }
+        }
+      }
+    }
+    /*
+    delay-route-updates on-reload (delay-time)
+    */
+    container delay-route-updates {
+      when "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+      + "name='local'" {
+        description
+          "";
+      }
+      description
+        "Delay BGP route updates to peers";
+      leaf on-reload {
+        type uint16 {
+          range "5..300";
+        }
+        description
+          "Delay upon node reload";
+      }
+    }
+    /*
+    suppress-route-download [ prefix-list (pfxlist-name) ] [
+     check-reachability ]
+    */
+    container suppress-route-download {
+      presence "";
+      description
+        "Suppress download to RIB";
+      leaf prefix-list {
+        type string;
+        description
+          "Prefix-list to apply the command";
+      }
+      leaf check-reachability {
+        type empty;
+        description
+          "Require nexthop reachability evaluation";
+      }
+    }
+  }
+
+  grouping bgp-neighbor-grp {
+    description
+      "BGP neighbor configuration mode";
+    /*
+    advertisement-interval (interval-set)
+    */
+    leaf advertisement-interval {
+      type uint16 {
+        range "0..600";
+      }
+      default "5";
+      description
+        "Minimum interval between sending BGP routing updates";
+    }
+    /*
+    bfd
+    */
+    leaf bfd {
+      type empty;
+      description
+        "Enable BFD for this neighbor";
+    }
+    /*
+    description (description-set)
+    */
+    leaf description {
+      type string;
+      description
+        "Neighbor specific description;Up to 80 characters
+         describing this neighbor";
+    }
+    /*
+    ebgp-multihop (mhop-set)
+    */
+    leaf ebgp-multihop {
+      when "../choice='external'" {
+        description
+          "";
+      }
+      type uint8 {
+        range "1..255";
+      }
+      description
+        "Allow EBGP neighbors not directly connected";
+    }
+    /*
+    password {(clear-text) | encrypted (encrypted-set)}
+    */
+    container password {
+      description
+        "Set password";
+      choice password {
+        case clear-text {
+          leaf clear-text {
+            type string {
+              length "1..39";
+            }
+            description
+              "Password string upto 39 characters";
+          }
+        }
+        case encrypted {
+          leaf encrypted {
+            type string {
+              length "1..80";
+            }
+            description
+              "Set encrypted password";
+          }
+        }
+      }
+    }
+    /*
+    session-dampening [ (dampen-halflife) (dampen-reuse)
+     (dampen-suppress) (dampen-max) ]
+    */
+    container session-dampening {
+      presence "";
+      description
+        "Enable session dampening";
+      container session-dampening-opt {
+        presence "";
+        description
+          "container session-dampening-opt.";
+        leaf dampen-halflife {
+          type uint8 {
+            range "1..45";
+          }
+          mandatory true;
+          description
+            "Half-life time (minutes) for the penalty";
+        }
+        leaf dampen-reuse {
+          type uint16 {
+            range "1..20000";
+          }
+          mandatory true;
+          description
+            "Value to start undampen a session";
+        }
+        leaf dampen-suppress {
+          type uint16 {
+            range "1..20000";
+          }
+          must "number(../dampen-suppress) > number(../dampen-"
+          + "reuse)" {
+            error-message "The penalty value for suppressing "
+            + "must be larger than the reuse value";
+            description
+              "";
+          }
+          mandatory true;
+          description
+            "Value to start dampen a session";
+        }
+        leaf dampen-max {
+          type uint8 {
+            range "1..255";
+          }
+          must "number(../dampen-max) > (number(../dampen-"
+          + "halflife) * 2 - 1)" {
+            error-message "Maximum duration should be at least "
+            + "twice the value as the half-life time";
+            description
+              "";
+          }
+          mandatory true;
+          description
+            "Maximum duration (minutes) to suppress a stable
+             session";
+        }
+      }
+    }
+    /*
+    as-override
+    */
+    leaf as-override {
+      when "../choice='external'" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Override matching AS-number while sending update";
+    }
+    /*
+    asloop-in (in-num)
+    */
+    leaf asloop-in {
+      type uint8 {
+        range "1..10";
+      }
+      description
+        "Accept as-path with my AS present in it";
+    }
+    /*
+    send { community | ext-community | filter prefix-list }
+    */
+    container send {
+      description
+        "Send this attribute";
+      leaf community {
+        type empty;
+        description
+          "Send Community attribute to this external neighbor";
+      }
+      leaf ext-community {
+        type empty;
+        description
+          "Send extended community attribute to this external
+           neighbor";
+      }
+      leaf filter-prefix-list {
+        type empty;
+        description
+          "Send prefix-list filter";
+      }
+    }
+    /*
+    update-source interface (updsrc-set)
+    */
+    container update-source {
+      presence "";
+      description
+        "Source of routing updates";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Source of routing updates interface";
+      }
+    }
+    /*
+    next-hop-self
+    */
+    leaf next-hop-self {
+      type empty;
+      description
+        "Disable the next hop calculation for this neighbor";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Administratively shut down this neighbor";
+    }
+    /*
+    fast-reset < if-down-time (reset-msec) >
+    */
+    container fast-reset {
+      presence "";
+      description
+        "Enable fast reset for this neighbor";
+      leaf if-down-time {
+        type uint16 {
+          range "0..60000";
+        }
+        mandatory true;
+        description
+          "Interface down time (in milliseconds)";
+      }
+      uses bgp-nbr-fast-reset-grp;
+    }
+    /*
+    enforce { ttl | first-as }
+    */
+    container enforce {
+      when "../choice='external'" {
+        description
+          "";
+      }
+      description
+        "Enforcing rules";
+      leaf ttl {
+        when "../../choice='external'" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "Enforcing checking of ttl for ebgp peers";
+      }
+      leaf first-as {
+        type empty;
+        description
+          "Enforce check that neighbor's AS is the first in
+           advertised AS_PATHs";
+      }
+    }
+    /*
+    timers { keepalive (timers-set) holdtime (set-ht) | active-
+     open (open-set) }
+    */
+    container timers {
+      description
+        "Per neighbor timers";
+      container peer-timer {
+        description
+          "container peer-timer.";
+        leaf keepalive {
+          type uint16 {
+            range "1..65535";
+          }
+          default "60";
+          description
+            "Keepalive timer value";
+        }
+        leaf holdtime {
+          type uint16 {
+            range "3..65535";
+          }
+          default "180";
+          description
+            "Holdtime timer value in seconds";
+        }
+      }
+      leaf active-open {
+        type uint16 {
+          range "1..600";
+        }
+        default "45";
+        description
+          "Initial active open timeout";
+      }
+    }
+    /*
+    address-family { ipv4 { multicast | unicast | vpn } | ipv6 {
+     unicast | vpn } | link-state [link-state] | rt-filter |
+     l2vpn [evpn] }
+    */
+    container address-family {
+      description
+        "Enter Address Family command mode";
+      container ipv4 {
+        description
+          "IPv4 address family commands";
+        container multicast {
+          when "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":vpn-rd)" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "
+                            Multicast address related commands
+                          ";
+          uses bgp-peer-af-grp;
+        }
+        container unicast {
+          presence "";
+          description
+            "
+                            Unicast address related commands
+                          ";
+          uses bgp-peer-af-grp;
+        }
+        container vpn {
+          when "(not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":vpn-rd)) and (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":context-name='local')" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "VPN address related commands";
+          uses bgp-peer-af-grp;
+        }
+      }
+      container ipv6 {
+        description
+          "
+                          IPv6 address family commands
+                        ";
+        container unicast {
+          presence "";
+          description
+            "
+                            Unicast address related commands
+                          ";
+          uses bgp-peer-af-grp;
+        }
+        container vpn {
+          when "(not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":vpn-rd)) and (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":context-name='local')" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "
+                            VPN address related commands
+                          ";
+          uses bgp-peer-af-grp;
+        }
+      }
+      container link-state {
+        description
+          "Link-state address family commands";
+        container link-state {
+          presence "";
+          description
+            "Enable BGP LS link-state data base";
+          uses bgp-peer-af-grp;
+        }
+      }
+      leaf rt-filter {
+        type empty;
+        description
+          "
+                          rt-filter address family commands
+                        ";
+      }
+      container l2vpn {
+        presence "";
+        description
+          "l2vpn address family commands";
+        container evpn {
+          when "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":vpn-rd) and not "
+          + "(/ctxsr6k:contexts/ctxr6k:context/ctxr6k:evpn)" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "evpn address related commands";
+          uses bgp-peer-af-grp;
+        }
+      }
+    }
+    /*
+    retain-ibgp-routes
+    */
+    leaf retain-ibgp-routes {
+      type empty;
+      description
+        "Retain routes for IBGP peer after the peer restarts";
+    }
+    /*
+    maximum { restart-time (timer-set) | retain-time (timer-set)
+     }
+    */
+    container maximum {
+      description
+        "Specify a maximum limit";
+      leaf restart-time {
+        type uint16 {
+          range "10..4095";
+        }
+        default "120";
+        description
+          "maximim restart timer for a local BGP peer";
+      }
+      leaf retain-time {
+        type uint16 {
+          range "30..65535";
+        }
+        default "420";
+        description
+          "Maximum time for retaining routes after a peer
+           restarted";
+      }
+    }
+    /*
+    accept filter prefix-list
+    */
+    leaf accept-filter-prefix-list {
+      type empty;
+      description
+        "Accept prefix filter from this neighbor";
+    }
+    /*
+    remote-as (as-set)
+    */
+    leaf remote-as {
+      when "../choice='external'" {
+        description
+          "";
+      }
+      type uint32 {
+        range "1..4294967295";
+      }
+      description
+        "Remote Autonomous system (AS)";
+    }
+    /*
+    peer-group (pg-set)
+    */
+    leaf peer-group {
+      type string;
+      description
+        "Peer Group from which configuration is inherited";
+    }
+    /*
+    local-as { (as-set) [ no-prepend ] [ replace-as ] | (as-
+     aann) }
+    */
+    container local-as {
+      when "../choice='external'" {
+        description
+          "";
+      }
+      description
+        "Specify a local-as number";
+      choice local-as {
+        case as-set {
+          container as-set {
+            description
+              "container as-set.";
+            leaf as-set {
+              type uint32 {
+                range "1..4294967295";
+              }
+              mandatory true;
+              description
+                "Autonomous system number used as local AS";
+            }
+            leaf no-prepend {
+              type empty;
+              description
+                "do not prepend local-as in the incoming msg";
+            }
+            leaf replace-as {
+              type empty;
+              description
+                "replace BGP router AS with local-as";
+            }
+          }
+        }
+        case as-aann {
+          leaf as-aann {
+            type string;
+            description
+              "AS number in nn:nn format";
+          }
+        }
+      }
+    }
+  }
+
+  grouping bgp-af-export-grp {
+    description
+      "BGP export configuration mode";
+    /*
+    route-map (map-name) [ (map-ctx) ]
+    */
+    container route-map {
+      presence "";
+      description
+        "Specify a route-map for exporting routes";
+      leaf map-name {
+        type string;
+        mandatory true;
+        description
+          "Name of the route map";
+      }
+      leaf map-ctx {
+        type string;
+        description
+          "Name of the context";
+      }
+    }
+    /*
+    route-target < rt-community (rt-comm) >
+    */
+    list route-target {
+      key "rt-community";
+      description
+        "Specify Target VPN Extended Communities";
+      leaf rt-community {
+        type string;
+        description
+          "ASN:nnnn or A.B.C.D:nn or ASN[L]:nn  route-target
+           extended community";
+      }
+    }
+  }
+
+  grouping bgp-peer-af-grp {
+    description
+      "BGP peer address family configuration mode";
+    /*
+    next-hop-self [ ebgp | ibgp ]
+    */
+    container next-hop-self {
+      when "(../../../../choice='internal') and (name(..) = "
+      + "'bgpr6k:unicast' or name(..) = 'bgpr6k:vpn')" {
+        description
+          "";
+      }
+      description
+        "Change the nexthop of the routes to self";
+      leaf ebgp {
+        when "(name(../..) = 'bgpr6k:unicast')" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "change nexthop for routes received from eBGP peers";
+      }
+      leaf ibgp {
+        type empty;
+        description
+          "change nexthop for routes received from iBGP peers";
+      }
+    }
+    /*
+    advertise diverse-path
+    */
+    leaf advertise-diverse-path {
+      when "../../../../choice='internal'" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Advertise diverse path";
+    }
+    /*
+    route-reflector-client
+    */
+    leaf route-reflector-client {
+      when "../../../../choice='internal'" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Configure a neighbor as Route Reflector client";
+    }
+    /*
+    maximum prefix (maxpfx-set) [ threshold (percent-set) ] [
+     warning-only | downtime (downtime-set) ]
+    */
+    container maximum-prefix {
+      presence "";
+      description
+        "Maximum number of prefixes accept from this peer";
+      leaf maxpfx-set {
+        type uint32 {
+          range "1..4294967295";
+        }
+        mandatory true;
+        description
+          "Max for number of prefix limit";
+      }
+      leaf threshold {
+        type uint8 {
+          range "1..100";
+        }
+        description
+          "Threshold value (%) at which to generate a warning";
+      }
+      choice maximum-prefix-opt {
+        case warning-only {
+          leaf warning-only {
+            type empty;
+            description
+              "Only give warning message when limit is exceeded";
+          }
+        }
+        case downtime {
+          leaf downtime {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "Keep the session down for this long";
+          }
+        }
+      }
+    }
+    /*
+    remove-private-as
+    */
+    leaf remove-private-as {
+      type empty;
+      description
+        "Remove private AS number from outbound updates";
+    }
+    /*
+    as-path-list (list-set) <direction { in |out }>
+    */
+    list as-path-list {
+      key "direction";
+      max-elements 2;
+      description
+        "Filter updates based an AS path list";
+      leaf direction {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Filter incoming updates";
+          }
+          enum out {
+            value 1;
+            description
+              "Filter outgoing updates";
+          }
+        }
+        description
+          "direction";
+      }
+      leaf list-set {
+        type string;
+        mandatory true;
+        description
+          "AS path list name";
+      }
+    }
+    /*
+    route-map (map-set) <direction { in |out }>
+    */
+    list route-map {
+      key "direction";
+      max-elements 2;
+      description
+        "Apply route map to neighbor";
+      leaf direction {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Apply route-map to incoming updates";
+          }
+          enum out {
+            value 1;
+            description
+              "Apply route-map to outing updates";
+          }
+        }
+        description
+          "direction";
+      }
+      leaf map-set {
+        type string;
+        mandatory true;
+        description
+          "Route Map name";
+      }
+    }
+    /*
+    next-hop-unchanged
+    */
+    leaf next-hop-unchanged {
+      when "(../../../../choice='external' and (name(..) = "
+      + "'bgpr6k:vpn')) or "
+      + "((/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+      + "name='local') and ((name(..) = 'bgpr6k:evpn')))" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Propagate the iBGP path's nexthop unchanged";
+    }
+    /*
+    send label
+    */
+    leaf send-label {
+      when "name(..) = 'bgpr6k:unicast' and "
+      + "(/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-rd or "
+      + "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+      + "name='local') " {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Send NLRI + MPLS Label to this neighbor";
+    }
+    /*
+    prefix-list (list-set) <direction { in |out }>
+    */
+    list prefix-list {
+      when "(name(..) = 'bgpr6k:unicast') or (name(..) = "
+      + "'bgpr6k:multicast' or name(..) = 'bgpr6k:link-state')" {
+        description
+          "";
+      }
+      key "direction";
+      max-elements 2;
+      description
+        "Filter updates based on IP prefixes";
+      leaf direction {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Filter incoming updates";
+          }
+          enum out {
+            value 1;
+            description
+              "Filter outgoing updates";
+          }
+        }
+        description
+          "direction";
+      }
+      leaf list-set {
+        type string;
+        mandatory true;
+        description
+          "Prefix List name";
+      }
+    }
+    /*
+    peer-group (pg-set)
+    */
+    leaf peer-group {
+      type string;
+      description
+        "Peer Group from which AF specifc config inherited";
+    }
+    /*
+    default-originate [ route-map (rtmap-set) ]
+    */
+    container default-originate {
+      when "(name(..) = 'bgpr6k:unicast') or (name(..) = "
+      + "'bgpr6k:multicast' or name(..) = 'bgpr6k:link-state')" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Originate default route to this neighbor";
+      leaf route-map {
+        type string;
+        description
+          "Route-map to specify criteria to originate default";
+      }
+    }
+    /*
+    aigp [ send-med ]
+    */
+    container aigp {
+      when "name(..)!= 'bgpr6k:link-state'" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Enable AIGP attribute";
+      leaf send-med {
+        type empty;
+        description
+          "Send AIGP metric as MED";
+      }
+    }
+    /*
+    additional-paths { send [ receive ] | receive [ send ] }
+    */
+    container additional-paths {
+      description
+        "Additional paths capabilty negotiation";
+      choice additional-paths {
+        case send {
+          container send {
+            presence "";
+            description
+              "Send additional paths capability to the neighbor";
+            leaf receive {
+              type empty;
+              description
+                "Receive additional paths capability from the
+                 neighbor";
+            }
+          }
+        }
+        case receive {
+          container receive {
+            presence "";
+            description
+              "Receive additional paths capability from the
+               neighbor";
+            leaf send {
+              type empty;
+              description
+                "Send additional paths capability to the
+                 neighbor";
+            }
+          }
+        }
+      }
+    }
+    /*
+    additional-paths-label { send [ receive ] | receive [ send ]
+     }
+    */
+    container additional-paths-label {
+      description
+        "Additional label paths capabilty negotiation";
+      choice additional-paths-label {
+        case send {
+          container send {
+            presence "";
+            description
+              "Send additional label paths capability to the
+               neighbor";
+            leaf receive {
+              type empty;
+              description
+                "Receive additional label paths capability from
+                 the neighbor";
+            }
+          }
+        }
+        case receive {
+          container receive {
+            presence "";
+            description
+              "Receive additional label paths capability from
+               the neighbor";
+            leaf send {
+              type empty;
+              description
+                "Send additional label paths capability to the
+                 neighbor";
+            }
+          }
+        }
+      }
+    }
+    /*
+    allow-vpn-export
+    */
+    leaf allow-vpn-export {
+      when "name(..) = 'bgpr6k:vpn'" {
+        description
+          "allowed only for vpn address family and in local
+           context";
+      }
+      type empty;
+      description
+        "Advertise imported VPN routes";
+    }
+  }
+
+  grouping bgp-grp {
+    description
+      "BGP router configuration mode";
+    /*
+    address-family { ipv4 { multicast | unicast | vpn } | ipv6 {
+     unicast | vpn } | link-state [link-state] |  rt-filter |
+     l2vpn [evpn] }
+    */
+    container address-family {
+      description
+        "Enter Address Family command mode";
+      container ipv4 {
+        description
+          "
+                          IPv4 address family commands
+                        ";
+        container multicast {
+          when "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":vpn-rd)" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "
+                            Multicast address related commands
+                          ";
+          uses bgp-af-grp;
+        }
+        container unicast {
+          presence "";
+          description
+            "
+                            Unicast address related commands
+                          ";
+          uses bgp-af-grp;
+        }
+        container vpn {
+          when "(not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":vpn-rd)) and (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":context-name='local')" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "
+                            VPN address related commands
+                          ";
+          uses bgp-af-grp;
+        }
+      }
+      container ipv6 {
+        description
+          "
+                          IPv6 address family commands
+                        ";
+        container unicast {
+          presence "";
+          description
+            "
+                            Unicast address related commands
+                          ";
+          uses bgp-af-grp;
+        }
+        container vpn {
+          when "(not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":vpn-rd)) and (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":context-name='local')" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "VPN address related command";
+          uses bgp-af-grp;
+        }
+      }
+      container link-state {
+        description
+          "Link-state address family commands";
+        container link-state {
+          presence "";
+          description
+            "Enable BGP LS link-state data base";
+          uses bgp-af-grp;
+        }
+      }
+      container rt-filter {
+        presence "";
+        description
+          "
+                          rt-filter address family commands
+                        ";
+        uses bgp-af-new-grp;
+      }
+      container l2vpn {
+        presence "";
+        description
+          "l2vpn address family commands";
+        container evpn {
+          presence "";
+          description
+            "evpn address related commands";
+          uses bgp-af-grp;
+        }
+      }
+    }
+    /*
+    peer-group (pg-group) <choice { external | internal }>
+    */
+    list peer-group {
+      key "pg-group";
+      description
+        "Enter Peer Group command mode";
+      leaf pg-group {
+        type string;
+        description
+          "Peer Group name";
+      }
+      leaf choice {
+        type enumeration {
+          enum external {
+            value 0;
+            description
+              "Define an external peer group";
+          }
+          enum internal {
+            value 1;
+            description
+              "Define an internal peer group";
+          }
+        }
+        must "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-"
+        + "rd) or (/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-rd "
+        + "and .='external')" {
+          error-message "context vpn peer-group has no internal "
+          + "choice";
+          description
+            "";
+        }
+        mandatory true;
+        description
+          "choice";
+      }
+      uses bgp-peer-group-grp;
+    }
+    /*
+    router-id (routerid-set)
+    */
+    leaf router-id {
+      when "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-"
+      + "rd)" {
+        description
+          "";
+      }
+      type inet:ipv4-address;
+      description
+        "Override configured router identifier";
+    }
+    /*
+    cluster-id (clusterid-set)
+    */
+    leaf cluster-id {
+      when "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-"
+      + "rd)" {
+        description
+          "";
+      }
+      type inet:ipv4-address;
+      description
+        "Configure Route-Reflector Cluster-id";
+    }
+    /*
+    client-to-client reflection
+    */
+    leaf client-to-client-reflection {
+      when "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-"
+      + "rd)" {
+        description
+          "";
+      }
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable client-to-client-reflection";
+    }
+    /*
+    confederation { identifier { (id-num) | (id-aann) } | peers-
+     container peers { (set-as) | (peer-aann) } }
+    */
+    container confederation {
+      when "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-"
+      + "rd)" {
+        description
+          "";
+      }
+      description
+        "AS confederation parameters";
+      leaf identifier {
+        type union {
+          type uint32 {
+            range "1..4294967295";
+          }
+          type string;
+        }
+        description
+          "AS number in ASN or nn:nn format. ASN is in asplain
+           format, the value is 1..4294967295; nn:nn is in
+           ascolon format, the first nn indicates higher-order 16
+           bit value in decimal, and the second nn is the
+           lower-order 16 bit value in decimal; nn*2^16+nn is as
+           same as ASN.";
+      }
+      container peers-container {
+        description
+          "container peers-container.";
+        leaf-list peers {
+          type union {
+            type uint32 {
+              range "1..4294967295";
+            }
+            type string;
+          }
+          max-elements 16;
+          description
+            "Peer ASs in BGP confederation(AS number in ASN or
+             nn:nn format. ASN is in asplain format, the value is
+             1..4294967295; nn:nn is in ascolon format, the first
+             nn indicates higher-order 16 bit value in decimal,
+             and the second nn is the lower-order 16 bit value in
+             decimal; nn*2^16+nn is as same as ASN.)";
+        }
+      }
+    }
+    /*
+    neighbor { (nbr-addr) | (addr-v6) } <choice { external |
+     internal }>
+    */
+    list neighbor {
+      key "neighbor-choice";
+      description
+        "Enter Neighbor command mode";
+      leaf neighbor-choice {
+        type union {
+          type inet:ipv4-address;
+          type inet:ipv6-address;
+        }
+        description
+          "IPv4/IPv6 neighbor address";
+      }
+      leaf choice {
+        type enumeration {
+          enum external {
+            value 0;
+            description
+              "Define an EBGP neighbor";
+          }
+          enum internal {
+            value 1;
+            description
+              "Define an IBGP neighbor";
+          }
+        }
+        must "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-"
+        + "rd) or (/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-rd "
+        + "and .='external')" {
+          error-message "context vpn neighbor has no internal "
+          + "choice";
+          description
+            "";
+        }
+        mandatory true;
+        description
+          "choice";
+      }
+      uses bgp-neighbor-grp;
+    }
+    /*
+    timers { keepalive (glob-set) holdtime (set-ht) | passwd-
+     timer (passwd-val) }
+    */
+    container timers {
+      description
+        "BGP neighbor timers";
+      container peer-timer {
+        description
+          "container peer-timer.";
+        leaf keepalive {
+          type uint16 {
+            range "1..65535";
+          }
+          default "60";
+          description
+            "Keepalive timer value";
+        }
+        leaf holdtime {
+          type uint16 {
+            range "3..65535";
+          }
+          default "180";
+          description
+            "Holdtime timer value in seconds";
+        }
+      }
+      leaf passwd-timer {
+        type uint16 {
+          range "1..3600";
+        }
+        default "30";
+        description
+          "Old password expiration time";
+      }
+    }
+    /*
+    multi-paths { eibgp (iebgp-num) | [ external (ext-num) ] [
+     internal (int-num) ] }
+    */
+    container multi-paths {
+      description
+        "Forward packets over multiple paths";
+      leaf eibgp {
+        when "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-rd" {
+          description
+            "";
+        }
+        type uint8 {
+          range "1..64";
+        }
+        description
+          "Multiple mixed external and internal paths";
+      }
+      container external {
+        description
+          "container external.";
+        leaf external {
+          type uint8 {
+            range "1..64";
+          }
+          default "1";
+          description
+            "Multiple external paths";
+        }
+        leaf internal {
+          type uint8 {
+            range "1..64";
+          }
+          default "1";
+          description
+            "Multiple internal paths";
+        }
+      }
+    }
+    /*
+    local-preference (localpref-set)
+    */
+    leaf local-preference {
+      type uint32 {
+        range "0..4294967295";
+      }
+      description
+        "Default local preference (higher=more preferred)";
+    }
+    /*
+    log-neighbor-changes
+    */
+    leaf log-neighbor-changes {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable log-neighbor-changes";
+    }
+    /*
+    enhanced-refresh [ cleanup-time (timer-set) ] [ eorr-max-
+     time (cleanup-set) ]
+    */
+    container enhanced-refresh {
+      description
+        "Enhanced route refresh";
+      leaf enhanced-refresh-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable enhanced-refresh-enable";
+      }
+      leaf cleanup-time {
+        when "../enhanced-refresh-enable='true'" {
+          description
+            "";
+        }
+        type uint16 {
+          range "0..65535";
+        }
+        description
+          "Time to remove stale routes if EoRR is not received";
+      }
+      leaf eorr-max-time {
+        when "../enhanced-refresh-enable='true'" {
+          description
+            "";
+        }
+        type uint16 {
+          range "0..65535";
+        }
+        description
+          "Maximum time before an End of Route Refresh (EoRR)
+           message is sent";
+      }
+    }
+    /*
+    fast-reset [ confed ] (or-ms) [ milliseconds ]
+    */
+    container fast-reset {
+      presence "";
+      description
+        "Resetting one-hop EBGP peers after interface is down";
+      leaf confed {
+        type empty;
+        description
+          "Apply fast-reset to confed external peers";
+      }
+      leaf or-ms {
+        type uint16 {
+          range "0..60000";
+        }
+        must "((../milliseconds) or (number(.) <= 60))" {
+          error-message "Invalid value. Up to 60 seconds.";
+          description
+            "Default unit: second. Up to 60s.";
+        }
+        mandatory true;
+        description
+          "Interface down time in seconds (default) or
+           milliseconds (specify keyword milliseconds).";
+      }
+      leaf milliseconds {
+        type empty;
+        description
+          "Interface down time in milliseconds";
+      }
+    }
+    /*
+    graceful-restart
+    */
+    leaf graceful-restart {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable graceful-restart";
+    }
+    /*
+    next-hop-on-lsp
+    */
+    leaf next-hop-on-lsp {
+      when "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+      + "name='local'" {
+        description
+          "";
+      }
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable next-hop-on-lsp";
+    }
+    /*
+    maximum { as-path { receive (rcvd-set) | aggregate (aggr-
+     set) } | restart-time (timer-set) | retain-time (timer-set)
+     | update-delay (delay-set) }
+    */
+    container maximum {
+      description
+        "Specify a maximum limit";
+      container as-path {
+        description
+          "AS-path";
+        leaf receive {
+          type uint8 {
+            range "1..255";
+          }
+          description
+            "Maximum received as-path";
+        }
+        leaf aggregate {
+          type uint8 {
+            range "1..230";
+          }
+          default "230";
+          description
+            "Maximum as-path for aggregate";
+        }
+      }
+      leaf restart-time {
+        type uint16 {
+          range "10..4095";
+        }
+        description
+          "Maximum restart timer for a local BGP peer";
+      }
+      leaf retain-time {
+        type uint16 {
+          range "30..65535";
+        }
+        description
+          "Maximum time for retaining routes after a peer
+           restarted";
+      }
+      leaf update-delay {
+        when "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-"
+        + "rd)" {
+          description
+            "";
+        }
+        type uint16 {
+          range "1..65535";
+        }
+        description
+          "Maximum delay for initial BGP update";
+      }
+    }
+    /*
+    conservative-update-error-handling [ ibgp | ebgp ]
+    */
+    container conservative-update-error-handling {
+      must "((count(./ibgp) + count(./ebgp)) >= 1)" {
+        error-message "ibgp and ebgp should be set at least "
+        + "one.";
+        description
+          "ibgp and ebgp should be set at least one.";
+      }
+      presence "";
+      description
+        "conservative update error handling (close session) or
+         draft-ietf-idr-error-handling";
+      leaf ibgp {
+        type empty;
+        description
+          "conservative error handling for ibgp";
+      }
+      leaf ebgp {
+        type empty;
+        description
+          "conservative error handling for ebgp";
+      }
+    }
+    /*
+    snmp traps [ rfc4273 | bgp4mib2 ]
+    */
+    container snmp-traps {
+      presence "";
+      description
+        "configure snmp TRAP type for BGP";
+      leaf snmp-traps-opt {
+        type enumeration {
+          enum rfc4273 {
+            value 0;
+            description
+              "Generate Traps as per RFC4723 (Ipv4 support
+               only)";
+          }
+          enum bgp4mib2 {
+            value 1;
+            description
+              "Generate Traps as per draft-ietf-bgp-mibv2 (Ipv4
+               & Ipv6)";
+          }
+        }
+        description
+          "leaf snmp-traps-opt.";
+      }
+    }
+    /*
+    bestpath med always-compare
+    */
+    leaf bestpath-med-always-compare {
+      type empty;
+      description
+        "Allow comparing MED from different autonomous systems";
+    }
+  }
+
+  grouping bgp-peer-group-grp {
+    description
+      "BGP peer group configuration mode";
+    /*
+    advertisement-interval (interval-set)
+    */
+    leaf advertisement-interval {
+      type uint16 {
+        range "0..600";
+      }
+      default "5";
+      description
+        "Minimum interval between sending BGP routing updates";
+    }
+    /*
+    bfd
+    */
+    leaf bfd {
+      type empty;
+      description
+        "Enable BFD for this neighbor";
+    }
+    /*
+    description (description-set)
+    */
+    leaf description {
+      type string;
+      description
+        "Neighbor specific description;Up to 80 characters
+         describing this neighbor";
+    }
+    /*
+    ebgp-multihop (mhop-set)
+    */
+    leaf ebgp-multihop {
+      when "../choice='external'" {
+        description
+          "";
+      }
+      type uint8 {
+        range "1..255";
+      }
+      description
+        "Allow EBGP neighbors not directly connected";
+    }
+    /*
+    password {(clear-text) | encrypted (encrypted-set)}
+    */
+    container password {
+      description
+        "Set password";
+      choice password {
+        case clear-text {
+          leaf clear-text {
+            type string {
+              length "1..39";
+            }
+            description
+              "Password string upto 39 characters";
+          }
+        }
+        case encrypted {
+          leaf encrypted {
+            type string {
+              length "1..80";
+            }
+            description
+              "Set encrypted password";
+          }
+        }
+      }
+    }
+    /*
+    session-dampening [ (dampen-halflife) (dampen-reuse)
+     (dampen-suppress) (dampen-max) ]
+    */
+    container session-dampening {
+      presence "";
+      description
+        "Enable session dampening";
+      container session-dampening-opt {
+        presence "";
+        description
+          "container session-dampening-opt.";
+        leaf dampen-halflife {
+          type uint8 {
+            range "1..45";
+          }
+          mandatory true;
+          description
+            "Half-life time (minutes) for the penalty";
+        }
+        leaf dampen-reuse {
+          type uint16 {
+            range "1..20000";
+          }
+          mandatory true;
+          description
+            "Value to start undampen a session";
+        }
+        leaf dampen-suppress {
+          type uint16 {
+            range "1..20000";
+          }
+          must "number(../dampen-suppress) > number(../dampen-"
+          + "reuse)" {
+            error-message "The penalty value for suppressing "
+            + "must be larger than the reuse value";
+            description
+              "";
+          }
+          mandatory true;
+          description
+            "Value to start dampen a session";
+        }
+        leaf dampen-max {
+          type uint8 {
+            range "1..255";
+          }
+          must "number(../dampen-max) > (number(../dampen-"
+          + "halflife) * 2 - 1)" {
+            error-message "Maximum duration should be at least "
+            + "twice the value as the half-life time";
+            description
+              "";
+          }
+          mandatory true;
+          description
+            "Maximum duration (minutes) to suppress a stable
+             session";
+        }
+      }
+    }
+    /*
+    as-override
+    */
+    leaf as-override {
+      when "../choice='external'" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Override matching AS-number while sending update";
+    }
+    /*
+    asloop-in (in-num)
+    */
+    leaf asloop-in {
+      type uint8 {
+        range "1..10";
+      }
+      description
+        "Accept as-path with my AS present in it";
+    }
+    /*
+    send { community | ext-community | filter prefix-list }
+    */
+    container send {
+      description
+        "Send this attribute";
+      leaf community {
+        type empty;
+        description
+          "Send Community attribute to this external neighbor";
+      }
+      leaf ext-community {
+        type empty;
+        description
+          "Send extended community attribute to this external
+           neighbor";
+      }
+      leaf filter-prefix-list {
+        type empty;
+        description
+          "Send prefix-list filter";
+      }
+    }
+    /*
+    update-source interface (updsrc-set)
+    */
+    container update-source {
+      presence "";
+      description
+        "Source of routing updates";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        mandatory true;
+        description
+          "Source of routing updates interface";
+      }
+    }
+    /*
+    next-hop-self
+    */
+    leaf next-hop-self {
+      type empty;
+      description
+        "Disable the next hop calculation for this neighbor";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Administratively shut down this neighbor";
+    }
+    /*
+    fast-reset < if-down-time (reset-msec) >
+    */
+    container fast-reset {
+      presence "";
+      description
+        "Enable fast reset for this neighbor";
+      leaf if-down-time {
+        type uint16 {
+          range "0..60000";
+        }
+        mandatory true;
+        description
+          "Interface down time (in milliseconds)";
+      }
+      uses bgp-nbr-fast-reset-grp;
+    }
+    /*
+    enforce ttl
+    */
+    leaf enforce-ttl {
+      type empty;
+      description
+        "Enforcing checking of ttl for ebgp peers";
+    }
+    /*
+    timers { keepalive (timers-set) holdtime (set-ht) | active-
+     open (open-set) }
+    */
+    container timers {
+      description
+        "Per neighbor timers";
+      container peer-timer {
+        description
+          "container peer-timer.";
+        leaf keepalive {
+          type uint16 {
+            range "1..65535";
+          }
+          default "60";
+          description
+            "Keepalive timer value";
+        }
+        leaf holdtime {
+          type uint16 {
+            range "3..65535";
+          }
+          default "180";
+          description
+            "Holdtime timer value in seconds";
+        }
+      }
+      leaf active-open {
+        type uint16 {
+          range "1..600";
+        }
+        default "45";
+        description
+          "Initial active open timeout";
+      }
+    }
+    /*
+    address-family { ipv4 { multicast | unicast | vpn } | ipv6 {
+     unicast | vpn } | l2vpn [evpn] }
+    */
+    container address-family {
+      description
+        "
+                        Enter Address Family command mode
+                      ";
+      container ipv4 {
+        description
+          "
+                          IPv4 address family commands
+                        ";
+        container multicast {
+          when "not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":vpn-rd)" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "
+                            Multicast address related commands
+                          ";
+          uses bgp-af-peer-grp;
+        }
+        container unicast {
+          presence "";
+          description
+            "
+                            Unicast address related commands
+                          ";
+          uses bgp-af-peer-grp;
+        }
+        container vpn {
+          when "(not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":vpn-rd)) and (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":context-name='local')" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "
+                            VPN address related commands
+                          ";
+          uses bgp-af-peer-grp;
+        }
+      }
+      container ipv6 {
+        description
+          "
+                          IPv6 address family commands
+                        ";
+        container unicast {
+          presence "";
+          description
+            "
+                            Unicast address related commands
+                          ";
+          uses bgp-af-peer-grp;
+        }
+        container vpn {
+          when "(not (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":vpn-rd)) and (/ctxsr6k:contexts/ctxr6k:context/ctxr6k"
+          + ":context-name='local')" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "
+                            VPN address related commands
+                          ";
+          uses bgp-af-peer-grp;
+        }
+      }
+      container l2vpn {
+        presence "";
+        description
+          "l2vpn address family commands";
+        container evpn {
+          when "(/ctxsr6k:contexts/ctxr6k:context/ctxr6k:evpn)" {
+            description
+              "";
+          }
+          presence "";
+          description
+            "evpn address related commands";
+          uses bgp-af-peer-grp;
+        }
+      }
+    }
+  }
+
+  grouping bgp-af-import-grp {
+    description
+      "BGP import configuration mode";
+    /*
+    route-target < rt-community (rt-comm) >
+    */
+    list route-target {
+      key "rt-community";
+      description
+        "Specify Target VPN Extended Communities";
+      leaf rt-community {
+        type string;
+        description
+          "ASN:nnnn or A.B.C.D:nn or ASN[L]:nn  route-target
+           extended community";
+      }
+    }
+    /*
+    route-map (map-name) [ (map-ctx) ]
+    */
+    container route-map {
+      presence "";
+      description
+        "Specify a route-map modifying imported routes";
+      leaf map-name {
+        type string;
+        mandatory true;
+        description
+          "Name of the route map";
+      }
+      leaf map-ctx {
+        type string;
+        description
+          "Name of the context";
+      }
+    }
+  }
+
+  grouping bgp-nbr-fast-reset-grp {
+    description
+      "BGP neighbor fast reset configuration mode";
+    /*
+    interfaces if-name-list (intf-name)
+    */
+    container interfaces {
+      description
+        "Configure fast reset tracking interfaces";
+      leaf-list if-name-list {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "Configure fast reset tracking an interface";
+      }
+    }
+  }
+
+  grouping bgp-af-peer-grp {
+    description
+      "BGP peer address family configuration mode";
+    /*
+    next-hop-self [ ebgp | ibgp ]
+    */
+    container next-hop-self {
+      when "(../../../../choice='internal') and (name(..) = "
+      + "'bgpr6k:unicast' or name(..) = 'bgpr6k:vpn')" {
+        description
+          "";
+      }
+      description
+        "Change the nexthop of the routes to self";
+      leaf ebgp {
+        when "(name(../..) = 'bgpr6k:unicast')" {
+          description
+            "";
+        }
+        type empty;
+        description
+          "change nexthop for routes received from eBGP peers";
+      }
+      leaf ibgp {
+        type empty;
+        description
+          "change nexthop for routes received from iBGP peers";
+      }
+    }
+    /*
+    advertise diverse-path
+    */
+    leaf advertise-diverse-path {
+      when "../../../../choice='internal'" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Advertise diverse path";
+    }
+    /*
+    route-reflector-client
+    */
+    leaf route-reflector-client {
+      when "../../../../choice='internal'" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Configure a neighbor as Route Reflector client";
+    }
+    /*
+    maximum prefix (maxpfx-set) [ threshold (percent-set) ] [
+     warning-only | downtime (downtime-set) ]
+    */
+    container maximum-prefix {
+      presence "";
+      description
+        "Maximum number of prefixes accept from this peer";
+      leaf maxpfx-set {
+        type uint32 {
+          range "1..4294967295";
+        }
+        mandatory true;
+        description
+          "Max for number of prefix limit";
+      }
+      leaf threshold {
+        type uint8 {
+          range "1..100";
+        }
+        description
+          "Threshold value (%) at which to generate a warning";
+      }
+      choice maximum-prefix-opt {
+        case warning-only {
+          leaf warning-only {
+            type empty;
+            description
+              "Only give warning message when limit is exceeded";
+          }
+        }
+        case downtime {
+          leaf downtime {
+            type uint16 {
+              range "1..65535";
+            }
+            description
+              "Keep the session down for this long";
+          }
+        }
+      }
+    }
+    /*
+    remove-private-as
+    */
+    leaf remove-private-as {
+      type empty;
+      description
+        "Remove private AS number from outbound updates";
+    }
+    /*
+    as-path-list (list-set) <direction { in |out }>
+    */
+    list as-path-list {
+      key "direction";
+      max-elements 2;
+      description
+        "Filter updates based an AS path list";
+      leaf direction {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Filter incoming updates";
+          }
+          enum out {
+            value 1;
+            description
+              "Filter outgoing updates";
+          }
+        }
+        description
+          "direction";
+      }
+      leaf list-set {
+        type string;
+        mandatory true;
+        description
+          "AS path list name";
+      }
+    }
+    /*
+    route-map (map-set) <direction { in |out }>
+    */
+    list route-map {
+      key "direction";
+      max-elements 2;
+      description
+        "Apply route map to neighbor";
+      leaf direction {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Apply route-map to incoming updates";
+          }
+          enum out {
+            value 1;
+            description
+              "Apply route-map to outing updates";
+          }
+        }
+        description
+          "direction";
+      }
+      leaf map-set {
+        type string;
+        mandatory true;
+        description
+          "Route Map name";
+      }
+    }
+    /*
+    next-hop-unchanged
+    */
+    leaf next-hop-unchanged {
+      when "(../../../../choice='external' and (name(..) = "
+      + "'bgpr6k:vpn')) or "
+      + "((/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+      + "name='local') and ((name(..) = 'bgpr6k:evpn')))" {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Propagate the iBGP path's nexthop unchanged";
+    }
+    /*
+    send label
+    */
+    leaf send-label {
+      when "name(..) = 'bgpr6k:unicast' and "
+      + "(/ctxsr6k:contexts/ctxr6k:context/ctxr6k:vpn-rd or "
+      + "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+      + "name='local') " {
+        description
+          "";
+      }
+      type empty;
+      description
+        "Send NLRI + MPLS Label to this neighbor";
+    }
+    /*
+    prefix-list (list-set) <direction { in |out }>
+    */
+    list prefix-list {
+      when "(name(..) = 'bgpr6k:unicast') or (name(..) = "
+      + "'bgpr6k:multicast')" {
+        description
+          "";
+      }
+      key "direction";
+      max-elements 2;
+      description
+        "Filter updates based on IP prefixes";
+      leaf direction {
+        type enumeration {
+          enum in {
+            value 0;
+            description
+              "Filter incoming updates";
+          }
+          enum out {
+            value 1;
+            description
+              "Filter outgoing updates";
+          }
+        }
+        description
+          "direction";
+      }
+      leaf list-set {
+        type string;
+        mandatory true;
+        description
+          "Prefix List name";
+      }
+    }
+    /*
+    default-originate [ route-map (rtmap-set) ]
+    */
+    container default-originate {
+      when "(name(..) = 'bgpr6k:unicast') or (name(..) = "
+      + "'bgpr6k:multicast' or name(..) = 'bgpr6k:link-state')" {
+        description
+          "";
+      }
+      presence "";
+      description
+        "Originate default route to this neighbor";
+      leaf route-map {
+        type string;
+        description
+          "Route-map to specify criteria to originate default";
+      }
+    }
+    /*
+    aigp [ send-med ]
+    */
+    container aigp {
+      presence "";
+      description
+        "Enable AIGP attribute";
+      leaf send-med {
+        type empty;
+        description
+          "Send AIGP metric as MED";
+      }
+    }
+    /*
+    additional-paths { send [ receive ] | receive [ send ] }
+    */
+    container additional-paths {
+      description
+        "Additional paths capabilty negotiation";
+      choice additional-paths {
+        case send {
+          container send {
+            presence "";
+            description
+              "Send additional paths capability to the neighbor";
+            leaf receive {
+              type empty;
+              description
+                "Receive additional paths capability from the
+                 neighbor";
+            }
+          }
+        }
+        case receive {
+          container receive {
+            presence "";
+            description
+              "Receive additional paths capability from the
+               neighbor";
+            leaf send {
+              type empty;
+              description
+                "Send additional paths capability to the
+                 neighbor";
+            }
+          }
+        }
+      }
+    }
+    /*
+    additional-paths-label { send [ receive ] | receive [ send ]
+     }
+    */
+    container additional-paths-label {
+      description
+        "Additional label paths capabilty negotiation";
+      choice additional-paths-label {
+        case send {
+          container send {
+            presence "";
+            description
+              "Send additional label paths capability to the
+               neighbor";
+            leaf receive {
+              type empty;
+              description
+                "Receive additional label paths capability from
+                 the neighbor";
+            }
+          }
+        }
+        case receive {
+          container receive {
+            presence "";
+            description
+              "Receive additional label paths capability from
+               the neighbor";
+            leaf send {
+              type empty;
+              description
+                "Send additional label paths capability to the
+                 neighbor";
+            }
+          }
+        }
+      }
+    }
+    /*
+    allow-vpn-export
+    */
+    leaf allow-vpn-export {
+      when "name(..) = 'bgpr6k:vpn'" {
+        description
+          "allowed only for vpn address family and in local
+           context";
+      }
+      type empty;
+      description
+        "Advertise imported VPN routes";
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:router" {
+    description
+      "ericsson-bgp";
+    /*
+    bgp { (bgp-as) | (as-aann) }
+    */
+    list bgp {
+      key "bgp";
+      max-elements 1;
+      description
+        "Border Gateway Protocol (BGP)";
+      leaf bgp {
+        type union {
+          type uint32 {
+            range "1..4294967295";
+          }
+          type string;
+        }
+        description
+          "leaf bgp.";
+      }
+      uses bgp-grp;
+    }
+  }
+
+  augment "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:evpn" {
+    description
+      "ericsson-bgp";
+    /*
+    router [bgp [vpn] ]
+    */
+    container router {
+      presence "";
+      description
+        "Configure Routing Protocol";
+      container bgp {
+        presence "";
+        description
+          "Border Gateway Protocol (BGP)";
+        container vpn {
+          presence "";
+          description
+            "vpn instance";
+          uses bgp-grp;
+        }
+      }
+    }
+  }
+
+}

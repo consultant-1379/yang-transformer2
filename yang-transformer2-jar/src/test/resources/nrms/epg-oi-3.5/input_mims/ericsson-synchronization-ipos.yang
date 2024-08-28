@@ -1,0 +1,2077 @@
+module ericsson-synchronization-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-synchronization-ipos";
+
+  prefix "syncipos";
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-ipos {
+    prefix "ethxipos";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-synchronization-ipos
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-05" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-05-17" {
+    description
+      "Contexts synchronization equipment-clock is made a valid command in confd.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-12-18" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  grouping synchronization-grp {
+    description
+      "Synchronization configuration mode";
+    /*
+    bits { <input { bits-a | bits-b }> | <output { <source {
+     equipment-clock | ptp-clock }> | { bits-a | bits-b } }> }
+    */
+    container bits {
+      description
+        "Configure BITS options";
+      choice bits {
+        description
+          "IPOS choice";
+        case input {
+          container input {
+            description
+              "Configure BITS Input options";
+            choice input {
+              description
+                "IPOS choice";
+              case bits-a {
+                container bits-a {
+                  presence "";
+                  description
+                    "bits-a selection";
+                  uses bits-input-grp;
+                }
+              }
+              case bits-b {
+                container bits-b {
+                  presence "";
+                  description
+                    "bits-b selection";
+                  uses bits-input-grp;
+                }
+              }
+            }
+          }
+        }
+        case output {
+          container output {
+            description
+              "Configure BITS Output Options";
+            choice output {
+              description
+                "IPOS choice";
+              case source {
+                container source {
+                  description
+                    "Configure BITS Output Source";
+                  choice source {
+                    description
+                      "IPOS choice";
+                    case equipment-clock {
+                      leaf equipment-clock {
+                        type empty;
+                        description
+                          "Configure BITS Output Source as
+                           equipment clock";
+                      }
+                    }
+                    case ptp-clock {
+                      leaf ptp-clock {
+                        type empty;
+                        description
+                          "Configure BITS Output Source as PTP
+                           clock";
+                      }
+                    }
+                  }
+                }
+              }
+              case output-choice {
+                choice output-choice {
+                  description
+                    "IPOS choice";
+                  case bits-a {
+                    container bits-a {
+                      presence "";
+                      description
+                        "bits-a selection";
+                      uses bits-output-grp;
+                    }
+                  }
+                  case bits-b {
+                    container bits-b {
+                      presence "";
+                      description
+                        "bits-b selection";
+                      uses bits-output-grp;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    equipment-clock [(g781)]
+    */
+    container equipment-clock {
+      presence "";
+      description
+        "Configure Equipment Clock options";
+      leaf g781 {
+        type empty;
+        description
+          "G.781 reference selection algorithm";
+      }
+      uses equipment-clock-grp;
+    }
+    /*
+    ptp-clock { g1588v2 boundary }
+    */
+    container ptp-clock-g1588v2-boundary {
+      presence "";
+      description
+        "Boundary clock";
+      uses ptp-clock-boundary-grp;
+    }
+  }
+
+  grouping equipment-clock-grp {
+    description
+      "Equipment clock configuration mode";
+    /*
+    internal clock-quality { 3-stratum | 3e-stratum }
+    */
+    container internal {
+      when "/ctxsipos:contexts/syncipos:global-synchronization"
+      + "/syncipos:option='2'" {
+        description
+          "";
+      }
+      description
+        "Configure internal oscillator options";
+      leaf clock-quality {
+        type enumeration {
+          enum 3-stratum {
+            value 0;
+            description
+              "Stratum-3 (with Stratum-3E holdover)";
+          }
+          enum 3e-stratum {
+            value 1;
+            description
+              "Stratum-3E";
+          }
+        }
+        default "3-stratum";
+        description
+          "Configure internal oscillator quality";
+      }
+    }
+    /*
+    input-source (src-num) [external {bits-a | bits-b} | line
+     slot-port(slot-port) ]
+    */
+    container input-source {
+      description
+        "Select input source for equipment clock";
+      leaf src-num {
+        type uint8 {
+          range "1..6";
+        }
+        description
+          "leaf src-num.";
+      }
+      choice input-source-opt {
+        description
+          "IPOS choice";
+        case external {
+          container external {
+            description
+              "External Input Source";
+            choice external {
+              description
+                "IPOS choice";
+              case bits-a {
+                container bits-a {
+                  presence "";
+                  description
+                    "bits-a selection";
+                  uses equipment-clock-input-grp;
+                }
+              }
+              case bits-b {
+                container bits-b {
+                  presence "";
+                  description
+                    "bits-b selection";
+                  uses equipment-clock-input-grp;
+                }
+              }
+            }
+          }
+        }
+        case line {
+          container line {
+            description
+              "Line Input Source";
+            leaf slot-port {
+              type string;
+              description
+                "Specify slot and port";
+            }
+            uses equipment-clock-input-line-grp;
+          }
+        }
+      }
+    }
+    /*
+    revertive
+    */
+    leaf revertive {
+      type empty;
+      description
+        "Configure revertive mode";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Shutdown clock";
+    }
+    /*
+    ql-enabled
+    */
+    leaf ql-enabled {
+      type empty;
+      description
+        "Configure ql-enabled mode";
+    }
+    /*
+    force-switch { external { bits-a | bits-b } | { line (sp-kw)
+     } }
+    */
+    container force-switch {
+      description
+        "Configure forced switch";
+      choice force-switch {
+        description
+          "IPOS choice";
+        case external {
+          container external {
+            description
+              "Select External Reference";
+            choice external {
+              description
+                "IPOS choice";
+              case bits-a {
+                leaf bits-a {
+                  type empty;
+                  description
+                    "Force bits-a as external reference";
+                }
+              }
+              case bits-b {
+                leaf bits-b {
+                  type empty;
+                  description
+                    "Force bits-b as external reference";
+                }
+              }
+            }
+          }
+        }
+        case line {
+          leaf line {
+            type string;
+            description
+              "Force source/port as external reference";
+          }
+        }
+      }
+    }
+    /*
+    wait-to-restore (wtr-minutes)
+    */
+    leaf wait-to-restore {
+      type uint8 {
+        range "0..12";
+      }
+      default "5";
+      description
+        "Configure wait-to-restore timeout";
+    }
+    /*
+    freerun
+    */
+    leaf freerun {
+      type empty;
+      description
+        "Configure freerun mode";
+    }
+    /*
+    minimum quality-level { option-1 { Internal | ql-dnu | ql-
+     eec1 | ql-prc | ql-sec | ql-ssu-a | ql-ssu-b | ql-unkn } |
+     option-2 { Internal | ql-stu | ql-prs | ql-tnc | ql-st2 |
+     ql-st3 | ql-eec2 | ql-smc | ql-st3e | ql-prov | ql-dus } }
+    */
+    container minimum-quality-level {
+      description
+        "Configure minimum quality-level";
+      leaf option-1 {
+        when "/ctxsipos:contexts/syncipos:global-synchronization"
+        + "/syncipos:option='1'" {
+          description
+            "";
+        }
+        type enumeration {
+          enum Internal {
+            value 0;
+            description
+              "Set the internal quality level (S3/S3E)";
+          }
+          enum ql-dnu {
+            value 1;
+            description
+              "Set the Do Not Use level";
+          }
+          enum ql-eec1 {
+            value 2;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+          enum ql-prc {
+            value 3;
+            description
+              "Set the PRC Traceable level";
+          }
+          enum ql-sec {
+            value 4;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+          enum ql-ssu-a {
+            value 5;
+            description
+              "Set the SSU-A Traceable level";
+          }
+          enum ql-ssu-b {
+            value 6;
+            description
+              "Set the SSU-B Traceable level";
+          }
+          enum ql-unkn {
+            value 7;
+            description
+              "Set the Unknown level";
+          }
+        }
+        description
+          "quality-level for global synchronization option 1";
+      }
+      leaf option-2 {
+        when "/ctxsipos:contexts/syncipos:global-synchronization"
+        + "/syncipos:option='2'" {
+          description
+            "";
+        }
+        type enumeration {
+          enum Internal {
+            value 0;
+            description
+              "Set the internal quality level (S3/S3E)";
+          }
+          enum ql-stu {
+            value 1;
+            description
+              "Set the Sync Traceability Unknown level";
+          }
+          enum ql-prs {
+            value 2;
+            description
+              "Set the (PRS) Traceable level";
+          }
+          enum ql-tnc {
+            value 3;
+            description
+              "Set the Transit Node Clock (TNC) Traceable level";
+          }
+          enum ql-st2 {
+            value 4;
+            description
+              "Set the Stratum-2 Traceable level";
+          }
+          enum ql-st3 {
+            value 5;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+          enum ql-eec2 {
+            value 6;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+          enum ql-smc {
+            value 7;
+            description
+              "Set the SMC Traceable level";
+          }
+          enum ql-st3e {
+            value 8;
+            description
+              "Set the Stratum-3E Traceable level";
+          }
+          enum ql-prov {
+            value 9;
+            description
+              "Set the QL Provisionable level";
+          }
+          enum ql-dus {
+            value 10;
+            description
+              "Set Do Not Use For Sync level";
+          }
+        }
+        description
+          "quality-level for global synchronization option 2";
+      }
+    }
+  }
+
+  grouping ptp-clock-ethernet-grp {
+    description
+      "PTP clock ethernet configuration mode";
+    /*
+    circuit (transport-circuit) vlan-id (circuit-vlan-id) [
+     (end-vlan-id) ]
+    */
+    container circuit {
+      presence "";
+      description
+        "Attach an Ethernet circuit";
+      leaf transport-circuit {
+        type string;
+        mandatory true;
+        description
+          "Specify slot/port";
+      }
+      leaf vlan-id {
+        type empty;
+        mandatory true;
+        description
+          "Specify vlan tag information";
+      }
+      leaf circuit-vlan-id {
+        type uint16 {
+          range "1..4095";
+        }
+        mandatory true;
+        description
+          "vlan id";
+      }
+      leaf end-vlan-id {
+        type uint16 {
+          range "1..4095";
+        }
+        description
+          "inner vlan id";
+      }
+    }
+    /*
+    priority { dot1q (dot1q-bit) | dot1ad outer (outer-bit) }
+    */
+    container priority {
+      description
+        "Set VLAN priority bits";
+      choice priority {
+        description
+          "IPOS choice";
+        case dot1q {
+          leaf dot1q {
+            type uint8 {
+              range "0..7";
+            }
+            description
+              "Specify priority for attached 802.1q circuit";
+          }
+        }
+        case dot1ad {
+          container dot1ad {
+            description
+              "Specify priorities for attached 802.1ad circuit";
+            leaf outer {
+              type uint8 {
+                range "0..7";
+              }
+              description
+                "Specify 802.1p prioirity for outer tag";
+            }
+          }
+        }
+      }
+    }
+    /*
+    mac-address { forwardable | non-forwardable }
+    */
+    container mac-address {
+      description
+        "Set transmit destination multicast MAC address";
+      choice mac-address {
+        description
+          "IPOS choice";
+        case forwardable {
+          leaf forwardable {
+            type empty;
+            description
+              "Use forwardable MAC address 01-1B-19-00-00-00";
+          }
+        }
+        case non-forwardable {
+          leaf non-forwardable {
+            type empty;
+            description
+              "Use non-forwardable MAC address
+               01-80-C2-00-00-0E";
+          }
+        }
+      }
+    }
+  }
+
+  grouping equipment-clock-input-grp {
+    description
+      "Equipment clock input configuration mode";
+    /*
+    priority (priority-select)
+    */
+    leaf priority {
+      type uint8 {
+        range "1..255";
+      }
+      description
+        "Set the reference priority";
+    }
+    /*
+    force quality-level { ql-unkn | ql-prc | ql-ssu-a | ql-ssu-b
+     | ql-sec | ql-eec1 | ql-dnu  | ql-stu | ql-prs | ql-tnc |
+     ql-st2 | ql-st3 | ql-eec2 | ql-smc | ql-st3e | ql-prov | ql-
+     dus }
+    */
+    container force-quality-level {
+      description
+        "Force Rx quality-level";
+      choice force-quality-level {
+        description
+          "IPOS choice";
+        case ql-unkn {
+          leaf ql-unkn {
+            when "../../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Unknown level";
+          }
+        }
+        case ql-prc {
+          leaf ql-prc {
+            when "../../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the PRC Traceable level";
+          }
+        }
+        case ql-ssu-a {
+          leaf ql-ssu-a {
+            when "../../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the SSU-A Traceable level";
+          }
+        }
+        case ql-ssu-b {
+          leaf ql-ssu-b {
+            when "../../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the SSU-B Traceable level";
+          }
+        }
+        case ql-sec {
+          leaf ql-sec {
+            when "../../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+        }
+        case ql-eec1 {
+          leaf ql-eec1 {
+            when "../../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+        }
+        case ql-dnu {
+          leaf ql-dnu {
+            when "../../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Do Not Use level";
+          }
+        }
+        case ql-stu {
+          leaf ql-stu {
+            when "../../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Sync Traceability Unknown level";
+          }
+        }
+        case ql-prs {
+          leaf ql-prs {
+            when "../../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the (PRS) Traceable level";
+          }
+        }
+        case ql-tnc {
+          leaf ql-tnc {
+            when "../../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Transit Node Clock (TNC) Traceable level";
+          }
+        }
+        case ql-st2 {
+          leaf ql-st2 {
+            when "../../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Stratum-2 Traceable level";
+          }
+        }
+        case ql-st3 {
+          leaf ql-st3 {
+            when "../../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+        }
+        case ql-eec2 {
+          leaf ql-eec2 {
+            when "../../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+        }
+        case ql-smc {
+          leaf ql-smc {
+            when "../../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the SMC Traceable level";
+          }
+        }
+        case ql-st3e {
+          leaf ql-st3e {
+            when "../../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Stratum-3E Traceable level";
+          }
+        }
+        case ql-prov {
+          leaf ql-prov {
+            when "../../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the QL Provisionable level";
+          }
+        }
+        case ql-dus {
+          leaf ql-dus {
+            when "../../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set Do Not Use For Sync level";
+          }
+        }
+      }
+    }
+    /*
+    lockout
+    */
+    leaf lockout {
+      type empty;
+      description
+        "Remove input source as reference candidate";
+    }
+  }
+
+  grouping equipment-clock-input-line-grp {
+    description
+      "Equipment clock input configuration mode";
+    /*
+    priority (priority-select)
+    */
+    leaf priority {
+      type uint8 {
+        range "1..255";
+      }
+      description
+        "Set the reference priority";
+    }
+    /*
+    force quality-level { ql-unkn | ql-prc | ql-ssu-a | ql-ssu-b
+     | ql-sec | ql-eec1 | ql-dnu  | ql-stu | ql-prs | ql-tnc |
+     ql-st2 | ql-st3 | ql-eec2 | ql-smc | ql-st3e | ql-prov | ql-
+     dus }
+    */
+    container force-quality-level {
+      description
+        "Force Rx quality-level";
+      choice force-quality-level {
+        description
+          "IPOS choice";
+        case ql-unkn {
+          leaf ql-unkn {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Unknown level";
+          }
+        }
+        case ql-prc {
+          leaf ql-prc {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the PRC Traceable level";
+          }
+        }
+        case ql-ssu-a {
+          leaf ql-ssu-a {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the SSU-A Traceable level";
+          }
+        }
+        case ql-ssu-b {
+          leaf ql-ssu-b {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the SSU-B Traceable level";
+          }
+        }
+        case ql-sec {
+          leaf ql-sec {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+        }
+        case ql-eec1 {
+          leaf ql-eec1 {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+        }
+        case ql-dnu {
+          leaf ql-dnu {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Do Not Use level";
+          }
+        }
+        case ql-stu {
+          leaf ql-stu {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Sync Traceability Unknown level";
+          }
+        }
+        case ql-prs {
+          leaf ql-prs {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the (PRS) Traceable level";
+          }
+        }
+        case ql-tnc {
+          leaf ql-tnc {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Transit Node Clock (TNC) Traceable level";
+          }
+        }
+        case ql-st2 {
+          leaf ql-st2 {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Stratum-2 Traceable level";
+          }
+        }
+        case ql-st3 {
+          leaf ql-st3 {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+        }
+        case ql-eec2 {
+          leaf ql-eec2 {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+        }
+        case ql-smc {
+          leaf ql-smc {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the SMC Traceable level";
+          }
+        }
+        case ql-st3e {
+          leaf ql-st3e {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the Stratum-3E Traceable level";
+          }
+        }
+        case ql-prov {
+          leaf ql-prov {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set the QL Provisionable level";
+          }
+        }
+        case ql-dus {
+          leaf ql-dus {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Set Do Not Use For Sync level";
+          }
+        }
+      }
+    }
+    /*
+    lockout
+    */
+    leaf lockout {
+      type empty;
+      description
+        "Remove input source as reference candidate";
+    }
+  }
+
+  grouping ptp-clock-bc-grp {
+    description
+      "PTP clock bc configuration mode";
+    /*
+    description (description-text)
+    */
+    leaf description {
+      type string;
+      description
+        "Set descriptive text for this PTP port";
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Disable this PTP port";
+    }
+    /*
+    transmit [ interval [ sync (sync-value) | announce
+     (announce-value) | delay-req (req-value) ] ]
+    */
+    container transmit {
+      description
+        "Set message transmit parameters";
+      container interval {
+        description
+          "Specify transmit interval";
+        choice interval-opt {
+          description
+            "IPOS choice";
+          case sync {
+            leaf sync {
+              type int8 {
+                range "-6..4";
+              }
+              description
+                "Specify Sync inter-message transmit interval";
+            }
+          }
+          case announce {
+            leaf announce {
+              type int8 {
+                range "-4..4";
+              }
+              description
+                "Specify Announce inter-message transmit
+                 interval";
+            }
+          }
+          case delay-req {
+            leaf delay-req {
+              type int8 {
+                range "-6..4";
+              }
+              description
+                "Specify Delay_Req inter-message transmit
+                 interval";
+            }
+          }
+        }
+      }
+    }
+    /*
+    receive [ timeout [ announce (num-kw) ] ]
+    */
+    container receive {
+      presence "";
+      description
+        "Set message receive parameters";
+      container timeout {
+        presence "";
+        description
+          "Specify timeout interval";
+        leaf announce {
+          type uint8 {
+            range "2..255";
+          }
+          description
+            "Specify announceReceiptTimeout for portDS";
+        }
+      }
+    }
+    /*
+    delay asymmetry (num-kw)
+    */
+    container delay {
+      description
+        "Set delay parameters";
+      leaf asymmetry {
+        type int32 {
+          range "-100000..100000";
+        }
+        description
+          "Specify delay asymmetry";
+      }
+    }
+    /*
+    transport ethernet multicast
+    */
+    container transport-ethernet-multicast {
+      presence "";
+      description
+        "Specify Ethernet multicast transport";
+      uses ptp-clock-ethernet-grp;
+    }
+  }
+
+  grouping ptp-clock-boundary-grp {
+    description
+      "PTP clock boundary configuration mode";
+    /*
+    domain (num-kw)
+    */
+    leaf domain {
+      type uint8 {
+        range "0..127";
+      }
+      description
+        "Set domainNumber for defaultDS";
+    }
+    /*
+    priority1 (num-kw)
+    */
+    leaf priority1 {
+      type uint8 {
+        range "0..255";
+      }
+      description
+        "Set priority1 for defaultDS";
+    }
+    /*
+    priority2 (num-kw)
+    */
+    leaf priority2 {
+      type int32;
+      description
+        "Set priority2 for defaultDS";
+    }
+    /*
+    ptp-port (num-kw)
+    */
+    list ptp-port {
+      key "ptp-port";
+      description
+        "Create or configure a PTP port";
+      leaf ptp-port {
+        type uint16 {
+          range "1..800";
+        }
+        description
+          "leaf ptp-port.";
+      }
+      uses ptp-clock-bc-grp;
+    }
+    /*
+    shutdown
+    */
+    leaf shutdown {
+      type empty;
+      description
+        "Disable this PTP Clock";
+    }
+  }
+
+  grouping bits-input-grp {
+    description
+      "BITS input configuration mode";
+    /*
+    framing-type { { e1 { crc4 | no-crc4 } | f2048k } | t1 { sf
+     | esf } }
+    */
+    container framing-type {
+      description
+        "Configure framing type";
+      choice framing-type {
+        description
+          "IPOS choice";
+        case framing-type-choice {
+          choice framing-type-choice {
+            description
+              "IPOS choice";
+            case e1 {
+              container e1 {
+                when "../../../../../../global-synchronization"
+                + "/option=1" {
+                  description
+                    "";
+                }
+                description
+                  "E1 framing";
+                choice e1 {
+                  description
+                    "IPOS choice";
+                  case crc4 {
+                    leaf crc4 {
+                      type empty;
+                      description
+                        "E1-CRC4 framing";
+                    }
+                  }
+                  case no-crc4 {
+                    leaf no-crc4 {
+                      type empty;
+                      description
+                        "E1-no-CRC4 framing";
+                    }
+                  }
+                }
+              }
+            }
+            case f2048k {
+              leaf f2048k {
+                when "../../../../../../global-synchronization"
+                + "/option=1" {
+                  description
+                    "";
+                }
+                type empty;
+                description
+                  "2048 kHz unframed";
+              }
+            }
+          }
+        }
+        case t1 {
+          container t1 {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            description
+              "T1 framing";
+            choice t1 {
+              description
+                "IPOS choice";
+              case sf {
+                leaf sf {
+                  type empty;
+                  description
+                    "T1-SF framing";
+                }
+              }
+              case esf {
+                leaf esf {
+                  type empty;
+                  description
+                    "T1-ESF framing";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    ssm option 2 { gen1 | gen2 }
+    */
+    container ssm-option-2 {
+      when "../../../../../global-synchronization/option=2" {
+        description
+          "";
+      }
+      description
+        "Option 2";
+      choice ssm-option-2-choice {
+        description
+          "IPOS choice";
+        case gen1 {
+          leaf gen1 {
+            type empty;
+            description
+              "Option 2 - Gen 1";
+          }
+        }
+        case gen2 {
+          leaf gen2 {
+            type empty;
+            description
+              "Option 2 - Gen 2";
+          }
+        }
+      }
+    }
+  }
+
+  grouping bits-output-grp {
+    description
+      "BITS output configuration mode";
+    /*
+    framing-type { { e1 { crc4 | no-crc4 } | f2048k } | t1 { sf
+     | esf } }
+    */
+    container framing-type {
+      description
+        "Configure framing type";
+      choice framing-type {
+        description
+          "IPOS choice";
+        case framing-type-choice {
+          choice framing-type-choice {
+            description
+              "IPOS choice";
+            case e1 {
+              container e1 {
+                when "../../../../../../global-synchronization"
+                + "/option=1" {
+                  description
+                    "";
+                }
+                description
+                  "E1 framing";
+                choice e1 {
+                  description
+                    "IPOS choice";
+                  case crc4 {
+                    leaf crc4 {
+                      type empty;
+                      description
+                        "E1-CRC4 framing";
+                    }
+                  }
+                  case no-crc4 {
+                    leaf no-crc4 {
+                      type empty;
+                      description
+                        "E1-no-CRC4 framing";
+                    }
+                  }
+                }
+              }
+            }
+            case f2048k {
+              leaf f2048k {
+                when "../../../../../../global-synchronization"
+                + "/option=1" {
+                  description
+                    "";
+                }
+                type empty;
+                description
+                  "2048 kHz unframed";
+              }
+            }
+          }
+        }
+        case t1 {
+          container t1 {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            description
+              "T1 framing";
+            choice t1 {
+              description
+                "IPOS choice";
+              case sf {
+                leaf sf {
+                  type empty;
+                  description
+                    "T1-SF framing";
+                }
+              }
+              case esf {
+                leaf esf {
+                  type empty;
+                  description
+                    "T1-ESF framing";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    /*
+    squelch { ais | ql-dnus | shut | rai } quality-level { ql-
+     unkn | ql-prc | ql-ssu-a | ql-ssu-b | ql-sec | ql-eec1 | ql-
+     dnu | ql-stu | ql-prs | ql-tnc | ql-st2 | ql-st3 | ql-eec2 |
+     ql-smc | ql-st3e | ql-prov | ql-dus }
+    */
+    container squelch {
+      presence "";
+      description
+        "Squelch selection";
+      choice squelch-choice {
+        mandatory true;
+        description
+          "IPOS choice";
+        case ais {
+          leaf ais {
+            type empty;
+            mandatory true;
+            description
+              "Transmit AIS";
+          }
+        }
+        case ql-dnus {
+          leaf ql-dnus {
+            type empty;
+            mandatory true;
+            description
+              "Transmit SSM code ql-dus/ql-dnu";
+          }
+        }
+        case shut {
+          leaf shut {
+            type empty;
+            mandatory true;
+            description
+              "Shut down the Tx signal";
+          }
+        }
+        case rai {
+          leaf rai {
+            type empty;
+            mandatory true;
+            description
+              "Transmit RAI";
+          }
+        }
+      }
+      leaf quality-level {
+        type empty;
+        mandatory true;
+        description
+          "Select Quality Level";
+      }
+      choice squelch-choice1 {
+        mandatory true;
+        description
+          "IPOS choice";
+        case ql-unkn {
+          leaf ql-unkn {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the Unknown level";
+          }
+        }
+        case ql-prc {
+          leaf ql-prc {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the PRC Traceable level";
+          }
+        }
+        case ql-ssu-a {
+          leaf ql-ssu-a {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the SSU-A Traceable level";
+          }
+        }
+        case ql-ssu-b {
+          leaf ql-ssu-b {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the SSU-B Traceable level";
+          }
+        }
+        case ql-sec {
+          leaf ql-sec {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+        }
+        case ql-eec1 {
+          leaf ql-eec1 {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the SEC/EEC1 Traceable level";
+          }
+        }
+        case ql-dnu {
+          leaf ql-dnu {
+            when "../../../../../../global-synchronization"
+            + "/option=1" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the Do Not Use level";
+          }
+        }
+        case ql-stu {
+          leaf ql-stu {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the Sync Traceability Unknown level";
+          }
+        }
+        case ql-prs {
+          leaf ql-prs {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the (PRS) Traceable level";
+          }
+        }
+        case ql-tnc {
+          leaf ql-tnc {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the Transit Node Clock (TNC) Traceable level";
+          }
+        }
+        case ql-st2 {
+          leaf ql-st2 {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the Stratum-2 Traceable level";
+          }
+        }
+        case ql-st3 {
+          leaf ql-st3 {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+        }
+        case ql-eec2 {
+          leaf ql-eec2 {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the Stratum-3/EEC2 Traceable level";
+          }
+        }
+        case ql-smc {
+          leaf ql-smc {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the SMC Traceable level";
+          }
+        }
+        case ql-st3e {
+          leaf ql-st3e {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the Stratum-3E Traceable level";
+          }
+        }
+        case ql-prov {
+          leaf ql-prov {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set the QL Provisionable level";
+          }
+        }
+        case ql-dus {
+          leaf ql-dus {
+            when "../../../../../../global-synchronization"
+            + "/option=2" {
+              description
+                "";
+            }
+            type empty;
+            mandatory true;
+            description
+              "Set Do Not Use For Sync level";
+          }
+        }
+      }
+    }
+    /*
+    ssm option 2 { gen1 | gen2 }
+    */
+    container ssm-option-2 {
+      when "../../../../../global-synchronization/option=2" {
+        description
+          "";
+      }
+      description
+        "Option 2";
+      choice ssm-option-2-choice {
+        mandatory true;
+        description
+          "IPOS choice";
+        case gen1 {
+          leaf gen1 {
+            type empty;
+            mandatory true;
+            description
+              "Option 2 - Gen 1";
+          }
+        }
+        case gen2 {
+          leaf gen2 {
+            type empty;
+            mandatory true;
+            description
+              "Option 2 - Gen 2";
+          }
+        }
+      }
+    }
+  }
+
+  grouping port-synchronization-grp {
+    description
+      "Squelch selection configuration mode";
+    /*
+    squelch ql-dnu quality-level { ql-unkn | ql-prc | ql-ssu-a |
+     ql-ssu-b | ql-sec | ql-eec1 | ql-dnu | ql-stu | ql-prs | ql-
+     tnc | ql-st2 | ql-st3 | ql-eec2 | ql-smc | ql-st3e | ql-prov
+     | ql-dus }
+    */
+    container squelch-ql-dnu-quality-level {
+      description
+        "Configure quality level";
+      choice squelch-ql-dnu-quality-level-choice {
+        description
+          "IPOS choice";
+        case ql-unkn {
+          leaf ql-unkn {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='1'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Quality level Unknown";
+          }
+        }
+        case ql-prc {
+          leaf ql-prc {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='1'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "PRC Traceable";
+          }
+        }
+        case ql-ssu-a {
+          leaf ql-ssu-a {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='1'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "SSU-A Traceable";
+          }
+        }
+        case ql-ssu-b {
+          leaf ql-ssu-b {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='1'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "SSU-B Traceable";
+          }
+        }
+        case ql-sec {
+          leaf ql-sec {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='1'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "SEC Traceable";
+          }
+        }
+        case ql-eec1 {
+          leaf ql-eec1 {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='1'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "EEC1 Traceable";
+          }
+        }
+        case ql-dnu {
+          leaf ql-dnu {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='1'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Do Not Use quality";
+          }
+        }
+        case ql-stu {
+          leaf ql-stu {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='2'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Sync Traceability Unknown";
+          }
+        }
+        case ql-prs {
+          leaf ql-prs {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='2'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "PRS Traceable";
+          }
+        }
+        case ql-tnc {
+          leaf ql-tnc {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='2'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "TNC Traceable";
+          }
+        }
+        case ql-st2 {
+          leaf ql-st2 {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='2'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Stratum 2 Traceable";
+          }
+        }
+        case ql-st3 {
+          leaf ql-st3 {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='2'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Stratum 3E type IV Traceable";
+          }
+        }
+        case ql-eec2 {
+          leaf ql-eec2 {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='2'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Stratum 3E type IV Traceable";
+          }
+        }
+        case ql-smc {
+          leaf ql-smc {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='2'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "SMC Traceable";
+          }
+        }
+        case ql-st3e {
+          leaf ql-st3e {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='2'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Stratum 3E type III Traceable";
+          }
+        }
+        case ql-prov {
+          leaf ql-prov {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='2'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "QL Provisionable";
+          }
+        }
+        case ql-dus {
+          leaf ql-dus {
+            when "/ctxsipos:contexts/syncipos:global-synchronization"
+            + "/syncipos:option='2'" {
+              description
+                "";
+            }
+            type empty;
+            description
+              "Do Not Use For Sync";
+          }
+        }
+      }
+    }
+    /*
+    ssm option 2 { gen1 | gen2 }
+    */
+    container ssm-option-2 {
+      when "/ctxsipos:contexts/syncipos:global-synchronization"
+      + "/syncipos:option='2'" {
+        description
+          "";
+      }
+      description
+        "Option 2";
+      choice ssm-option-2-choice {
+        description
+          "IPOS choice";
+        case gen1 {
+          leaf gen1 {
+            type empty;
+            description
+              "Option 2 - Gen 1";
+          }
+        }
+        case gen2 {
+          leaf gen2 {
+            type empty;
+            description
+              "Option 2 - Gen 2";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-synchronization";
+    /*
+    synchronization
+    */
+    container synchronization {
+      description
+        "Synchronization configuration mode";
+      uses synchronization-grp;
+    }
+    /*
+    global synchronization <option { 1 | 2 }>
+    */
+    container global-synchronization {
+      description
+        "Configure synchronization option for the system in
+         whole";
+      leaf option {
+        type enumeration {
+          enum 1 {
+            value 0;
+            description
+              "G.781 Option 1";
+          }
+          enum 2 {
+            value 1;
+            description
+              "G.781 Option 2 Gen 2";
+          }
+        }
+        default "2";
+        description
+          "Configure synchronization option for the system in
+           whole";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/ethxipos:ethernet" {
+    description
+      "ericsson-synchronization";
+    /*
+    synchronous-mode
+    */
+    container synchronous-mode {
+      when "not(../../if:name = 'management')" {
+        description
+          "not applicable under management port";
+      }
+      description
+        "Enable synchronous mode";
+      uses port-synchronization-grp;
+    }
+  }
+
+}

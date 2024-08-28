@@ -1,0 +1,206 @@
+module ericsson-inner-port-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-inner-port-router6000";
+
+  prefix "innerportrouter6000";
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-inner-port-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2021-03-30" {
+    description
+      "'rcy mirror1 and mirror2' change to 'rcy mirror'";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2021-03-10" {
+    description
+      "Evpn change to Mvpn";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "2";
+  }
+
+  revision "2020-12-23" {
+    description
+      "'line card slot number' change to 'slot number'";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2020-09-16" {
+    description
+      "add rcy DSCP Remark";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2020-08-17" {
+    description
+      "add rcy and sat port";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsr6k:contexts" {
+    description
+      "ericsson-inner-port";
+    /*
+    recycling card (card-num) port
+    */
+    list recycling-card {
+      key "card-num";
+      description
+        "Select card to configure";
+      leaf card-num {
+        type uint32 {
+          range "1";
+        }
+        description
+          "Slot number";
+      }
+      leaf port {
+        type empty;
+        mandatory true;
+        description
+          "Select recycling port to configure";
+      }
+      list inter-context-routing {
+        key "bandwidth";
+        description
+          "Inter context routing";
+        leaf bandwidth {
+          type uint32 {
+            range "1000000..300000000";
+          }
+          description
+            "Bandwidth";
+        }
+      }
+      list mvpn-bud {
+        key "bandwidth";
+        description
+          "Mvpn bud";
+        leaf bandwidth {
+          type uint32 {
+            range "1000000..300000000";
+          }
+          description
+            "Bandwidth";
+        }
+      }
+      list egress-mirror {
+        key "bandwidth";
+        description
+          "Egress mirror port";
+        leaf bandwidth {
+          type uint32 {
+            range "1000000..300000000";
+          }
+          description
+            "Bandwidth";
+        }
+      }
+      list egress-mirror1 {
+        key "bandwidth";
+        description
+          "Egress mirror port1";
+        leaf bandwidth {
+          type uint32 {
+            range "1000000..300000000";
+          }
+          description
+            "Bandwidth";
+        }
+      }
+      list egress-mirror2 {
+        key "bandwidth";
+        description
+          "Egress mirror port2";
+        leaf bandwidth {
+          type uint32 {
+            range "1000000..300000000";
+          }
+          description
+            "Bandwidth";
+        }
+      }
+      list DSCP-Remark {
+        key "bandwidth";
+        description
+          "DSCP Remark";
+        leaf bandwidth {
+          type uint32 {
+            range "1000000..300000000";
+          }
+          description
+            "Bandwidth";
+        }
+      }
+    }
+    /*
+    ethernet-oam-throughput card (card-num)  bandwidth
+     (bandwidth-value)
+    */
+    container ethernet-oam-throughput-card {
+      presence "";
+      description
+        "Select card to configure";
+      leaf card-num {
+        type uint32 {
+          range "1";
+        }
+        mandatory true;
+        description
+          "Slot number";
+      }
+      leaf bandwidth {
+        type empty;
+        mandatory true;
+        description
+          "Bandwidth";
+      }
+      leaf bandwidth-value {
+        type uint32 {
+          range "1000000..300000000";
+        }
+        mandatory true;
+        description
+          "Y1371 throughput initiator rate in kbps";
+      }
+    }
+  }
+
+}

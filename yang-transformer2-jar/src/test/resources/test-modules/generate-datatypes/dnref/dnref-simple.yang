@@ -1,0 +1,154 @@
+module dnref-simple {
+
+	namespace "urn#test#dnref-simple";
+	prefix this;
+
+	revision "2023-04-18";
+
+	import ericsson-yang-extensions {
+		prefix yexte;
+	}
+	import ericsson-yang-types {
+		prefix typese;
+	}
+
+	list MocA {
+
+		key id; leaf id { type string; }
+
+		container attributes {
+
+			leaf moRef11 {
+				type string;				// Not using extension, generated as string
+			}
+
+			leaf moRef12 {
+				type string;
+				yexte:dnref;				// Results in "any" MO
+			}
+
+			leaf moRef13 {
+				type string;
+				yexte:dnref "/MocB";
+			}
+
+			leaf moRef14 {
+				type string;
+				yexte:dnref "/MocB";
+				yexte:dnref "/MocC";
+			}
+
+			leaf moRef15 {
+				type string;
+				yexte:dnref;				// Really invalid combination, should result in any MO
+				yexte:dnref "/MocC";
+			}
+
+			leaf moRef16 {
+				type string;
+				yexte:dnref "/MocB";
+				yexte:dnref "/MocB";		// Should result in single target MOC
+			}
+
+			leaf moRef17 {
+				type string;
+				yexte:dnref "MocF";
+			}
+
+			leaf moRef18 {
+				type string;
+				yexte:dnref "/MocA/MocF";
+				yexte:dnref "MocF";			// Should result in single target MOC
+			}
+
+			leaf moRef19 {
+				type typese:distinguished-name;
+			}
+		}
+
+		list MocF {
+			key id; leaf id { type string; }
+		}
+
+		list MocG {
+			key id; leaf id { type string; }
+
+			container attributes {
+
+				leaf moRef21 {
+					type string;
+					yexte:dnref "../MocF";
+				}
+
+				leaf moRef22 {
+					type string;
+					yexte:dnref "../MocG";
+				}
+			}
+		}
+
+		list MocH {
+			key id; leaf id { type string; }
+
+			container attributes {
+
+				leaf moRef31 {
+					type string;
+					yexte:dnref "MocX";				// not found
+				}
+
+				leaf moRef32 {
+					type string;
+					yexte:dnref "../MocX";			// not found
+				}
+
+				leaf moRef33 {
+					type string;
+					yexte:dnref "/MocX";			// not found
+				}
+
+				leaf moRef34 {
+					type string;
+					yexte:dnref "/not-a-moc";			// Not a MOC
+				}
+
+				leaf moRef35 {
+					type string;
+					yexte:dnref "/";			// Empty path
+				}
+
+				leaf moRef36 {
+					type string;
+					yexte:dnref "";				// Empty path
+				}
+			}
+		}
+	}
+
+	list MocB {
+		key id; leaf id { type string; }
+
+		container attributes;
+	}
+
+	list MocC {
+		key id; leaf id { type string; }
+
+		container attributes;
+	}
+
+	list not-a-moc {
+
+		key id; leaf id { type string; }
+
+		leaf moRef51 {
+			type string;
+			yexte:dnref;
+		}
+
+		leaf moRef52 {
+			type string;
+			yexte:dnref "UnknownMoc";
+		}
+	}
+}

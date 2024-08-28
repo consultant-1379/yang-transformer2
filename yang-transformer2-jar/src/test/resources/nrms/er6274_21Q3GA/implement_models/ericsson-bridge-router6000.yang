@@ -1,0 +1,1202 @@
+module ericsson-bridge-router6000 {
+  yang-version "1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-bridge-router6000";
+
+  prefix "bridgerouter6000";
+
+  import ietf-yang-types {
+    prefix "yang";
+  }
+
+  import ericsson-types-router6000 {
+    prefix "typesrouter6000";
+  }
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-context-router6000 {
+    prefix "ctxr6k";
+  }
+
+  import ericsson-contexts-router6000 {
+    prefix "ctxsr6k";
+  }
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-acl-router6000 {
+    prefix "aclr6k";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-bridge-router6000
+     Copyright (c) 2020 Ericsson AB.
+     All rights reserved";
+
+  revision "2020-11-23" {
+    description
+      "Adding new proxy arp-nd commnad for 6673";
+    reference
+      "rfc6020";
+    yexte:version "4";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2020-07-15" {
+    description
+      "Modifying macro value for cooloff interval";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "7";
+    yexte:correction "5";
+  }
+
+  revision "2020-07-13" {
+    description
+      "Adding grp-addr as key for igmp static-group";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "7";
+    yexte:correction "4";
+  }
+
+  revision "2020-07-03" {
+    description
+      "Adding cooloff interval under mac-move-block";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "7";
+    yexte:correction "3";
+  }
+
+  revision "2020-06-18" {
+    description
+      "Correcting mrouting command string";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "7";
+    yexte:correction "2";
+  }
+
+  revision "2020-05-27" {
+    description
+      "Modifying igmp-snooping container as presence";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "7";
+    yexte:correction "1";
+  }
+
+  revision "2020-05-19" {
+    description
+      "Introducing igmp snooping related commands";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "7";
+    yexte:correction "0";
+  }
+
+  revision "2020-03-30" {
+    description
+      "Introducing mac-move-block cli as part of l2loop feature";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "6";
+    yexte:correction "0";
+  }
+
+  revision "2020-02-14" {
+    description
+      "Introducing mac-drop and mac-move clis as part of l2loop
+       feature";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "5";
+    yexte:correction "0";
+  }
+
+  revision "2019-06-21" {
+    description
+      "Modifying static-mac under bridge evpn instance";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "4";
+    yexte:correction "1";
+  }
+
+  revision "2019-05-22" {
+    description
+      "Adding control-word under bridge evpn instance";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "4";
+    yexte:correction "0";
+  }
+
+  revision "2019-05-17" {
+    description
+      "Adding proxy nd under evpn bridge";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "3";
+  }
+
+  revision "2019-04-26" {
+    description
+      "Fixing Datastore validadtion errors - HX63546";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "2";
+  }
+
+  revision "2019-04-17" {
+    description
+      "Fixing reverse chronological order issue- TR HX47599";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "1";
+  }
+
+  revision "2019-04-17" {
+    description
+      "Adding proxy arp command under bridge evpn instance";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2019-03-14" {
+    description
+      "Adding flooding command under bridge instance";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2019-01-28" {
+    description
+      "Modifying port and LAG circuits from conatiner to list";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2018-10-28" {
+    description
+      "Modifying mac move config commands";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-09-28" {
+    description
+      "Adding mac move config commands";
+    reference
+      "rfc6020";
+    yexte:version "3";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-09-26" {
+    description
+      "Adding sub-mode for EVPN configuration";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2018-09-18" {
+    description
+      "IPOS-26457 Adding new commands for EVPN configuration";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-05" {
+    description
+      "Change model namespace";
+    reference
+      "rfc6020";
+    yexte:version "2";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2018-03-05" {
+    description
+      "the type of leaf split-horizon-group under
+       service-instance is changed to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "5";
+  }
+
+  revision "2018-02-06" {
+    description
+      "change type of profile to leafref";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "4";
+  }
+
+  revision "2018-01-25" {
+    description
+      "IPOS-21242 The bridge aging-time should be default";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-12-11" {
+    description
+      "IPOS-18766 For bridge yang model, change the type of
+       si-id from uint32 to int32";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-07-26" {
+    description
+      "IPOS-13767 Modify the range of si-id of bridge model";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-06-30" {
+    description
+      "Change Mac Address type";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  revision "2017-06-17" {
+    description
+      "JIRA IPOS-11937 New command for bridge
+       split-horizon-group under service-instance";
+    reference
+      "rfc6020";
+  }
+
+  revision "2017-05-21" {
+    description
+      "JIRA IPOS-10743 New command for model bridging";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-12-27" {
+    description
+      "Bridge instance and profile sequence change; remove
+       unused import";
+    reference
+      "rfc6020";
+  }
+
+  revision "2016-03-29" {
+    description
+      "For CLI2Yang models data node sequence change.";
+    reference
+      "rfc6020";
+  }
+
+  revision "2015-12-07" {
+    description
+      "initial revision";
+    reference
+      "rfc6020";
+  }
+
+  feature restricted {
+    description
+      "This feature indicates that the device supports the
+       restricted in bridge profile.";
+  }
+
+  grouping static-mac-entry-grp {
+    description
+      "EVPN configuration static mac entry mode";
+    /*
+    static-mac-entry
+    */
+    container static-mac-entry {
+      description
+        "mac forwarding table entry";
+      list mac {
+        key "mac-address";
+        description
+          "MAC address list";
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "MAC address";
+        }
+      }
+      list vlan-mac {
+        key "vlan-id mac-address";
+        description
+          "MAC address list";
+        leaf vlan-id {
+          type uint16 {
+            range "1..4094";
+          }
+          description
+            "specify the vlan for the mac-entry";
+        }
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "MAC address";
+        }
+      }
+    }
+  }
+
+  grouping bridge-grp {
+    description
+      "Bridge configuration mode";
+    /*
+    learning
+    */
+    leaf learning {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable learning";
+    }
+    /*
+    qualified-learning
+    */
+    leaf qualified-learning {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable qualified-learning";
+    }
+    /*
+    split-horizon-group (shg-name)
+    */
+    list split-horizon-group {
+      key "split-horizon-group";
+      description
+        "create split-horizon-group";
+      leaf split-horizon-group {
+        type string;
+        description
+          "split-horizon-group name";
+      }
+    }
+    /*
+    mac-drop
+    */
+    container mac-drop {
+      description
+        "drop mac-address";
+      list mac {
+        key "mac-address";
+        description
+          "mac-entry mac-addr";
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "mac-entry mac-addr";
+        }
+      }
+      list vlan-mac {
+        key "vlan mac";
+        description
+          "mac-entry vlan";
+        leaf vlan {
+          type uint16 {
+            range "1..4094";
+          }
+          description
+            "mac-entry vlan";
+        }
+        leaf mac {
+          type yang:mac-address;
+          description
+            "mac-entry mac-addr";
+        }
+      }
+    }
+    /*
+    mac-move-drop
+    */
+    leaf mac-move-drop {
+      type boolean;
+      default "true";
+      status obsolete;
+      description
+        "Enable/Disable mac-move-drop";
+    }
+    /*
+    aging-time (time-val)
+    */
+    leaf aging-time {
+      type uint32 {
+        range "60..655350";
+      }
+      default "300";
+      description
+        "set or reset aging timer in seconds";
+    }
+    /*
+    description (desc-str)
+    */
+    leaf description {
+      type string {
+        length "1..63";
+      }
+      description
+        "Add descriptive text for this bridge";
+    }
+    /*
+    profile (prof-name)
+    */
+    leaf profile {
+      type leafref {
+        path "/bridgerouter6000:bridge/bridgerouter6000:profile/"
+        + "bridgerouter6000:profile";
+      }
+      description
+        "Configure default bridge profile";
+    }
+    /*
+    evpn instance { context (evpn-ctx) }
+    */
+    list evpn-instance {
+      key "context";
+      description
+        "EVPN instance";
+      leaf context {
+        type leafref {
+          path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:context-"
+          + "name";
+        }
+        description
+          "EVPN context";
+      }
+      uses evpn-grp;
+    }
+    /*
+    flooding
+    */
+    leaf flooding {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable flooding";
+    }
+    /*
+    service-instance {interface(if-name)} {si-id(si-id-val)}
+    */
+    list service-instance {
+      key "interface si-id";
+      description
+        "service-instance";
+      leaf interface {
+        type leafref {
+          path "/if:interfaces/if:interface/if:name";
+        }
+        description
+          "bridge attachment cct";
+      }
+      leaf si-id {
+        type int32 {
+          range "1..262143";
+        }
+        description
+          "Service-instance identifier";
+      }
+      uses bridge-cct-grp;
+    }
+    /*
+    mac-move-limit { (value) [ interval (seconds) ] }
+    */
+    container mac-move-limit {
+      description
+        "Maximum number of mac-moves allowed before drop";
+      leaf value {
+        type uint8 {
+          range "1..30";
+        }
+        description
+          "Specify a mac move limit";
+      }
+      leaf interval {
+        type uint32 {
+          range "5..4294967295";
+        }
+        description
+          "Interval within which maximum mac-moves can occur";
+      }
+    }
+    /*
+    mac-drop-config interval (value)
+    */
+    container mac-drop-config {
+      description
+        "Install drop entry on mac move";
+      leaf mac-drop-config-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable mac-drop-config-enable";
+      }
+      leaf interval {
+        when "../mac-drop-config-enable='true'" {
+          description
+            "";
+        }
+        type uint32 {
+          range "5..31536000";
+        }
+        default "120";
+        description
+          "Interval for which the MAC is blocked";
+      }
+    }
+    /*
+    mac-move-block { { trusted-mac [ interval (seconds) ] } {
+     cooloff-interval (seconds) } | { coloff-interval (secs) } }
+    */
+    container mac-move-block {
+      description
+        "Configure mac-move-block";
+      leaf mac-move-block-enable {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable mac-move-block-enable";
+      }
+      choice mac-move-block {
+        case trusted-mac {
+          container trusted-mac {
+            description
+              "container trusted-mac.";
+            container trusted-mac {
+              description
+                "Specify trusted mac-move-block interval";
+              leaf interval {
+                type uint16 {
+                  range "5..3600";
+                }
+                description
+                  "Interval for which SI is blocked";
+              }
+            }
+            leaf cooloff-interval {
+              type uint32 {
+                range "1..31536000";
+              }
+              description
+                "Time interval, during which no additional
+                 circuit is blocked after blocking a circuit";
+            }
+          }
+        }
+        case coloff-interval {
+          leaf coloff-interval {
+            type uint32 {
+              range "1..31536000";
+            }
+            description
+              "Time interval, during which no additional circuit
+               is blocked after blocking a circuit";
+          }
+        }
+      }
+    }
+    /*
+    igmp snooping
+    */
+    container igmp-snooping {
+      presence "";
+      description
+        "Configure Bridge IGMP Snooping attributes";
+      uses igmp-snooping-grp;
+    }
+  }
+
+  grouping evpn-grp {
+    description
+      "EVPN configuration mode";
+    /*
+    control-word
+    */
+    leaf control-word {
+      type empty;
+      description
+        "enable/disable control word for bridge";
+    }
+    /*
+    proxy arp-nd
+    */
+    leaf proxy-arp-nd {
+      type empty;
+      description
+        "Enable/disable L2 proxy ARP and ND";
+    }
+    /*
+    proxy arp
+    */
+    leaf proxy-arp {
+      type empty;
+      description
+        "Process L2 ARP Proxy for ARP request or Reply";
+    }
+    /*
+    proxy nd
+    */
+    leaf proxy-nd {
+      type empty;
+      description
+        "Enable L2 ND Proxy for NS messages";
+    }
+    /*
+    mac-move-limit { (value) [ interval (seconds) ] }
+    */
+    container mac-move-limit {
+      description
+        "Maximum number of mac-moves allowed before drop";
+      leaf value {
+        type uint8 {
+          range "1..30";
+        }
+        description
+          "Specify a mac move limit";
+      }
+      leaf interval {
+        type uint32 {
+          range "5..4294967295";
+        }
+        description
+          "Interval within which maximum mac-moves can occur";
+      }
+    }
+    /*
+    port (ngl2-cct) service-instance (si-id)
+    */
+    container port {
+      status obsolete;
+      description
+        "evpn attachment cct";
+      leaf port {
+        type string;
+        description
+          "Specify ngl2 cct, format is slot/port";
+      }
+      leaf service-instance {
+        type uint32 {
+          range "1..262143";
+        }
+        status obsolete;
+        description
+          "Service-instance identifier";
+      }
+    }
+    /*
+    lg (lg-cct) service-instance (si-id)
+    */
+    container lg {
+      status obsolete;
+      description
+        "bridge attachment lg cct";
+      leaf lg {
+        type string;
+        description
+          "Specify lg cct";
+      }
+      leaf service-instance {
+        type uint32 {
+          range "1..262143";
+        }
+        status obsolete;
+        description
+          "Service-instance identifier";
+      }
+    }
+    /*
+    static-mac-entry
+    */
+    container static-mac-entry {
+      status obsolete;
+      description
+        "mac forwarding table entry";
+      list mac {
+        key "mac-address";
+        status obsolete;
+        description
+          "MAC address list";
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "MAC address";
+        }
+      }
+      list vlan-mac {
+        key "vlan-id mac-address";
+        status obsolete;
+        description
+          "MAC address list";
+        leaf vlan-id {
+          type uint16 {
+            range "1..4094";
+          }
+          description
+            "specify the vlan for the mac-entry";
+        }
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "MAC address";
+        }
+      }
+    }
+    /*
+    portevpn {port(ngl2-cct)} {service-instance (si-id)}
+    */
+    list portevpn {
+      key "port service-instance";
+      description
+        "evpn attachment cct";
+      leaf port {
+        type string;
+        description
+          "bridge attachment cct";
+      }
+      leaf service-instance {
+        type uint32 {
+          range "1..262143";
+        }
+        description
+          "Service-instance identifier";
+      }
+      uses static-mac-entry-grp;
+    }
+    /*
+    lgevpn {lg(lg-cct)} {service-instance (si-id)}
+    */
+    list lgevpn {
+      key "lg service-instance";
+      description
+        "bridge attachment lg cct";
+      leaf lg {
+        type string;
+        description
+          "bridge attachment cct";
+      }
+      leaf service-instance {
+        type uint32 {
+          range "1..262143";
+        }
+        description
+          "Service-instance identifier";
+      }
+      uses static-mac-entry-grp;
+    }
+  }
+
+  grouping bridge-profile-grp {
+    description
+      "Bridge profile configuration mode";
+    /*
+    mac-limit (limit-val)
+    */
+    leaf mac-limit {
+      type uint32 {
+        range "1..524288";
+      }
+      description
+        "restrict the number of learned MAC addresses on a
+         circuit";
+    }
+    /*
+    restricted
+    */
+    leaf restricted {
+      if-feature restricted;
+      type empty;
+      description
+        "restrict the MACs on this profile, limit to statically
+         configured MACs";
+    }
+    /*
+    broadcast rate-limit (limit-value) burst (size-value)
+    */
+    container broadcast-rate-limit {
+      presence "";
+      description
+        "rate-limit in kbps";
+      leaf limit-value {
+        type uint32 {
+          range "5..1000000";
+        }
+        mandatory true;
+        description
+          "kbps";
+      }
+      leaf burst {
+        type empty;
+        mandatory true;
+        description
+          "Burst size";
+      }
+      leaf size-value {
+        type uint32 {
+          range "1..1250000000";
+        }
+        mandatory true;
+        description
+          "Burst size in bytes";
+      }
+    }
+    /*
+    multicast rate-limit (limit-value) burst (size-value)
+    */
+    container multicast-rate-limit {
+      presence "";
+      description
+        "rate-limit in kbps";
+      leaf limit-value {
+        type uint32 {
+          range "5..1000000";
+        }
+        mandatory true;
+        description
+          "kbps";
+      }
+      leaf burst {
+        type empty;
+        mandatory true;
+        description
+          "Burst size";
+      }
+      leaf size-value {
+        type uint32 {
+          range "1..1250000000";
+        }
+        mandatory true;
+        description
+          "Burst size in bytes";
+      }
+    }
+    /*
+    unknown-dest rate-limit (limit-value) burst (size-value)
+    */
+    container unknown-dest-rate-limit {
+      presence "";
+      description
+        "rate-limit in kbps";
+      leaf limit-value {
+        type uint32 {
+          range "5..1000000";
+        }
+        mandatory true;
+        description
+          "kbps";
+      }
+      leaf burst {
+        type empty;
+        mandatory true;
+        description
+          "Burst size";
+      }
+      leaf size-value {
+        type uint32 {
+          range "1..1250000000";
+        }
+        mandatory true;
+        description
+          "Burst size in bytes";
+      }
+    }
+    /*
+    description (desc-str)
+    */
+    leaf description {
+      type string {
+        length "1..63";
+      }
+      description
+        "Add descriptive text for this profile";
+    }
+    /*
+    flood unknown-unicast
+    */
+    leaf flood-unknown-unicast {
+      type empty;
+      description
+        "Flood unknown unicast frames";
+    }
+  }
+
+  grouping bridge-cct-grp {
+    description
+      "Bridge cct mode";
+    /*
+    profile (prof-name)
+    */
+    leaf profile {
+      type leafref {
+        path "/bridgerouter6000:bridge/bridgerouter6000:profile/"
+        + "bridgerouter6000:profile";
+      }
+      description
+        "Configure default bridge profile";
+    }
+    /*
+    split-horizon-group (shg-name)
+    */
+    list split-horizon-group {
+      key "split-horizon-group";
+      description
+        "Split Horizon Group of the service-instance";
+      leaf split-horizon-group {
+        type leafref {
+          path "/bridgerouter6000:bridge/bridgerouter6000"
+          + ":bridge-instance/bridgerouter6000:split-horizon-"
+          + "group/bridgerouter6000:split-horizon-group";
+        }
+        description
+          "split-horizon-group name";
+      }
+    }
+    /*
+    mac-entry static
+    */
+    container mac-entry-static {
+      description
+        "mac-entry static";
+      list mac {
+        key "mac-address";
+        description
+          "MAC address list";
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "MAC address";
+        }
+      }
+      list vlan-mac {
+        key "vlan-id mac-address";
+        description
+          "MAC address list";
+        leaf vlan-id {
+          type uint16 {
+            range "1..4094";
+          }
+          description
+            "specify the vlan for the mac-entry";
+        }
+        leaf mac-address {
+          type yang:mac-address;
+          description
+            "MAC address";
+        }
+      }
+    }
+    /*
+    igmp-snooping
+    */
+    container igmp-snooping {
+      description
+        "Configure IGMP attributes on CCT";
+      list static-group {
+        key "grp-addr";
+        description
+          "Specify multicast group address";
+        leaf grp-addr {
+          type typesrouter6000:ipv4-muticast-address;
+          description
+            "Multicast group IP address, should be in the range
+             224.0.1.0 to 239.255.255.255";
+        }
+        leaf source {
+          type inet:ipv4-address;
+          description
+            "Specify multicast source ip address";
+        }
+      }
+      leaf mrouting {
+        type empty;
+        description
+          "Configure IGMP snooping Mrouting";
+      }
+    }
+  }
+
+  container bridge-state {
+    config "false";
+    description
+      "root model for get";
+  }
+
+  grouping igmp-snooping-grp {
+    description
+      "IGMP Snooping profile configuration mode";
+    /*
+    version (ver-val)
+    */
+    leaf version {
+      type uint8 {
+        range "1..3";
+      }
+      default "3";
+      description
+        "IGMP version";
+    }
+    /*
+    access-group (acl-name)
+    */
+    leaf access-group {
+      type leafref {
+        path "/ctxsr6k:contexts/ctxr6k:context/ctxr6k:ip/aclr6k"
+        + ":access-list/aclr6k:access-list";
+      }
+      description
+        "Specify access groups to filter";
+    }
+    /*
+    robust (packet-number)
+    */
+    leaf robust {
+      type uint8 {
+        range "2..7";
+      }
+      default "2";
+      description
+        "Tune for the expected packet loss";
+    }
+    /*
+    query-max-response-time (resp-interval)
+    */
+    leaf query-max-response-time {
+      type uint8 {
+        range "1..25";
+      }
+      default "10";
+      description
+        "IGMP query max. response time in seconds";
+    }
+    /*
+    query-interval (interval)
+    */
+    leaf query-interval {
+      type uint16 {
+        range "1..65535";
+      }
+      default "125";
+      description
+        "IGMP host query interval in seconds";
+    }
+    /*
+    last-member-query-interval(que-interval)
+    */
+    leaf last-member-query-interval {
+      type uint16 {
+        range "1..65535";
+      }
+      default "1000";
+      description
+        "Last member query interval in milliseconds";
+    }
+  }
+
+  /*
+  bridge
+  */
+  container bridge {
+    description
+      "Configure a bridge";
+    list profile {
+      key "profile";
+      description
+        "Configure a bridge profile";
+      leaf profile {
+        type string {
+          length "1..31";
+        }
+        description
+          "profile name";
+      }
+      uses bridge-profile-grp;
+    }
+    list bridge-instance {
+      key "bridge-instance";
+      description
+        "Configure a bridge instance";
+      leaf bridge-instance {
+        type string {
+          length "1..31";
+        }
+        description
+          "bridge name";
+      }
+      uses bridge-grp;
+    }
+  }
+
+}

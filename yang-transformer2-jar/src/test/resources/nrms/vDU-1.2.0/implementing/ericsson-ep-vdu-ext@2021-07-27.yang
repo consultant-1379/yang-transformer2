@@ -1,0 +1,74 @@
+module ericsson-ep-vdu-ext {
+  yang-version 1.1;
+  namespace urn:rdns:com:ericsson:oammodel:ericsson-ep-vdu-ext;
+  prefix ep3gppext;
+
+  import _3gpp-common-managed-element { prefix me3gpp; }
+  import _3gpp-common-yang-types { prefix types3gpp; }
+  import _3gpp-nr-nrm-gnbdufunction { prefix gnbdu3gpp; }
+  import _3gpp-nr-nrm-ep { prefix ep3gpp; }
+  import ericsson-notifications { prefix notife; }
+  import ericsson-yang-extensions { prefix yexte; }
+  
+  organization
+    "Ericsson AB";
+  contact
+    "Ericsson first line support via email";
+  description
+    "The module defines the EP_F1C data model additional leafs for 
+    the Ericsson vDU.
+
+    Copyright (c) 2020 Ericsson AB. All rights reserved.";
+
+  revision 2021-07-27 {
+    description
+      "Bug Fix, leaf-list state notifiable compatibility issue. Adds extension notife:notifiable-state-data false to availabilityStatus.";
+    yexte:version 1;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+  
+  revision 2021-03-11 {
+    description
+      "Copy of ericsson-ep-vdu-add@2020-10-06.yang";
+    yexte:version 0;
+    yexte:release 1;
+    yexte:correction 0;
+    reference
+      "RFC 7950: The YANG 1.1 Data Modeling Language";
+  }
+
+  grouping EP_F1CVduGrp {
+    description "Ericsson extensions to the 3gpp EP_F1C IOC.";
+    reference "Ericsson documentation";
+
+    leaf operationalState  {
+      description "Operational state of the EP_F1C instance. Indicates
+        whether the resource is installed and partially or fully operable
+        (ENABLED) or the resource is not installed or not operable
+        (DISABLED).";
+      config false;
+      type types3gpp:OperationalState;
+      reference
+        "ITU-T Rec. X.731";
+    }
+
+    leaf-list availabilityStatus {
+      description "The availability status.
+        It contains details about operationalState.";
+      config false;
+      notife:notifiable-state-data false;
+      type types3gpp:AvailabilityStatus;
+      reference
+        "ITU-T Rec. X.731";
+    }
+
+  }
+
+  augment "/me3gpp:ManagedElement/gnbdu3gpp:GNBDUFunction/ep3gpp:EP_F1C/ep3gpp:attributes" {
+    description "Adds Ericsson attributes to 3gpp EP_F1C";
+    uses EP_F1CVduGrp;
+  }
+}

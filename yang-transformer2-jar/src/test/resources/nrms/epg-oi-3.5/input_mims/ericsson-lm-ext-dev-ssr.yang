@@ -1,0 +1,48 @@
+module ericsson-lm-ext-dev-ssr {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-lm-ext-dev-ssr";
+
+  prefix "lmxdevssr";
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ericsson-lm {
+    prefix lme;
+  }
+
+  import ericsson-lm-ext-ipos {
+    prefix "lmxipos";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-lm-ext-dev-ipos
+     Copyright (c) 2018 Ericsson AB.
+     All rights reserved";
+
+  revision "2018-10-31" {
+    description
+      "Creating deviations for hidden commands.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/lme:lm/lmxipos:enable-iu" {
+      deviate not-supported;
+  }
+}

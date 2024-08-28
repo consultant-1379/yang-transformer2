@@ -1,0 +1,59 @@
+module ericsson-l2-service-dev-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-l2-service-dev-ipos";
+
+  prefix "l2servicedevipos";
+
+  import ericsson-l2-service-ipos {
+      prefix "l2serviceipos";
+  }
+
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ericsson-ethernet-ext-ipos {
+    prefix "ethxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-l2-service-dev-ipos
+     Copyright (c) 2017 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2018-01-25" {
+    description
+      "Creation of deviation file.";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  deviation "/if:interfaces/if:interface/ethxipos:ethernet/l2serviceipos:service-instance/l2serviceipos:subscribe-micro-bfd" {
+      deviate not-supported;
+  }
+}

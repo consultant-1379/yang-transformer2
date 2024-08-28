@@ -1,0 +1,458 @@
+module ericsson-logger-ipos {
+  yang-version "1.1";
+
+  namespace "urn:rdns:com:ericsson:oammodel:ericsson-logger-ipos";
+
+  prefix "loggeripos";
+
+  import ietf-inet-types {
+    prefix "inet";
+  }
+
+  import ericsson-contexts-ipos {
+    prefix "ctxsipos";
+  }
+
+  import ericsson-context-ipos {
+    prefix "ctxipos";
+  }
+
+  import ericsson-yang-extensions {
+    prefix "yexte";
+  }
+
+  organization
+    "Ericsson AB";
+
+  contact
+    "Web:   <http://www.ericsson.com>";
+
+  description
+    "ericsson-logger-ipos
+     Copyright (c) 2019 Ericsson AB.
+     All rights reserved";
+
+  revision "2019-07-04" {
+    description
+      "Update yang version 1.0 to 1.1";
+    reference
+      "rfc7950";
+    yexte:version "1";
+    yexte:release "3";
+    yexte:correction "1";
+  }
+
+  revision "2018-11-15" {
+    description
+      "Modify the node default value";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "3";
+    yexte:correction "0";
+  }
+
+  revision "2018-08-02" {
+    description
+      "remove logging events related functions";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "2";
+    yexte:correction "0";
+  }
+
+  revision "2018-07-10" {
+    description
+      "YANG model description correction";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "1";
+  }
+
+  revision "2018-06-29" {
+    description
+      "Support logging events related functions";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "1";
+    yexte:correction "0";
+  }
+
+  revision "2017-10-10" {
+    description
+      "Generate model info for cli2xml";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "3";
+  }
+
+  revision "2017-08-18" {
+    description
+      "Update the description of server-addr";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "2";
+  }
+
+  revision "2017-07-31" {
+    description
+      "Timestamp should not be a choice,change leaf 'short' type
+       to boolean,change 'syslog-choice' to 'server-addr',change
+       leaf 'console' type to boolean";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "1";
+  }
+
+  revision "2017-01-15" {
+    description
+      "Initial revision";
+    reference
+      "rfc6020";
+    yexte:version "1";
+    yexte:release "0";
+    yexte:correction "0";
+  }
+
+  augment "/ctxsipos:contexts" {
+    description
+      "ericsson-logger";
+    /*
+    logging { debug { active | standby | default } | timestamp {
+     local-utc | millisecond | epoch } | active | < standby <
+     standby-enable (enable-value) > [ short ] > | cct-valid |
+     archive persistent (file-number) < size (file-size) > }
+    */
+    container logging {
+      description
+        "Logging configuration command";
+      container debug {
+        description
+          "Configure to log debug events";
+        leaf active {
+          type empty;
+          description
+            "Configure to send debug events from active to
+             standby controller";
+        }
+        leaf standby {
+          type empty;
+          description
+            "Configure to send debug events from standby to
+             active controller";
+        }
+        leaf default {
+          type empty;
+          description
+            "Configure to enable logging debug messages to the
+             log buffer";
+        }
+      }
+      container timestamp {
+        description
+          "Configure the timestamp information of log";
+        leaf local-utc {
+          type empty;
+          description
+            "Configure to log with timestamp in ISO-8601 UTC
+             format";
+        }
+        leaf millisecond {
+          type empty;
+          description
+            "Configure to log with timestamp in millisecond
+             resolution";
+        }
+        leaf epoch {
+          type empty;
+          description
+            "Configure to log with epoch timestamp";
+        }
+      }
+      leaf active {
+        type boolean;
+        default "true";
+        description
+          "Enable/Disable active";
+      }
+      container standby {
+        presence "";
+        description
+          "Configure to log standby event to active controller";
+        leaf standby-enable {
+          type boolean;
+          default "true";
+          description
+            "Enable configure to log standby event to active
+             controller";
+        }
+        leaf short {
+          when "../standby-enable='true'" {
+            description
+              "Short only exist when standby-enable is true.";
+          }
+          type boolean;
+          default "true";
+          description
+            "Configure to log standby event in short form";
+        }
+      }
+      leaf cct-valid {
+        type empty;
+        description
+          "Configure to log only event with valid cct";
+      }
+      container archive-persistent {
+        presence "";
+        description
+          "Configure archive persistent log file";
+        leaf file-number {
+          type uint8 {
+            range "50..60";
+          }
+          default "60";
+          description
+            "
+                            Configure the rotation number of
+             archived log files
+                          ";
+        }
+        leaf size {
+          type uint16 {
+            range "20480..25600";
+          }
+          default "20480";
+          description
+            "Configure the maximum size of archived log file";
+        }
+      }
+    }
+    /*
+    isp-log timestamp-format local-utc
+    */
+    leaf isp-log-timestamp-format-local-utc {
+      type empty;
+      description
+        "Save timestamp in local time with  UTC offset";
+    }
+  }
+
+  augment "/ctxsipos:contexts/ctxipos:context" {
+    description
+      "ericsson-logger";
+    /*
+    logging { console | < file (log-fname) [ text ] > | < syslog
+     { (server-ipv6) | (syslog-server) } [ facility { local7 |
+     local6 | local5 | local4 | local3 | local2 | local1 | local0
+     } ] > | < filter { console | monitor | file | syslog } <
+     level { emergency | alert | critical | error | warning |
+     notice | informational | debug } > > }
+    */
+    container logging {
+      description
+        "Logging configuration command";
+      leaf console {
+        type boolean;
+        default "false";
+        description
+          "Enable logging to the console";
+      }
+      list file {
+        key "log-fname";
+        description
+          "Enable logging to local files";
+        leaf log-fname {
+          type string {
+            length "0..256";
+          }
+          description
+            "Local file name prefix;";
+        }
+        leaf text {
+          type empty;
+          description
+            "Save the log in clear text";
+        }
+      }
+      list syslog {
+        key "server-addr";
+        description
+          "Enable logging to a syslog server reachable within
+           this context.";
+        leaf server-addr {
+          type union {
+            type inet:ipv6-address;
+            type inet:ipv4-address;
+          }
+          description
+            "the ipv4 or ipv6 address of the remote syslog
+             server";
+        }
+        container facility {
+          description
+            "Specify the syslog logging facility (local[0-7])";
+          choice facility {
+            description
+              "";
+            case local7 {
+              leaf local7 {
+                type empty;
+                description
+                  "Use syslog facility local7 (the default)";
+              }
+            }
+            case local6 {
+              leaf local6 {
+                type empty;
+                description
+                  "Use syslog facility local6";
+              }
+            }
+            case local5 {
+              leaf local5 {
+                type empty;
+                description
+                  "Use syslog facility local5";
+              }
+            }
+            case local4 {
+              leaf local4 {
+                type empty;
+                description
+                  "Use syslog facility local4";
+              }
+            }
+            case local3 {
+              leaf local3 {
+                type empty;
+                description
+                  "Use syslog facility local3";
+              }
+            }
+            case local2 {
+              leaf local2 {
+                type empty;
+                description
+                  "Use syslog facility local2";
+              }
+            }
+            case local1 {
+              leaf local1 {
+                type empty;
+                description
+                  "Use syslog facility local1";
+              }
+            }
+            case local0 {
+              leaf local0 {
+                type empty;
+                description
+                  "Use syslog facility local0";
+              }
+            }
+          }
+        }
+      }
+      list filter {
+        key "filter-choice";
+        description
+          "Configure logging level";
+        leaf filter-choice {
+          type enumeration {
+            enum console {
+              value 0;
+              description
+                "Configure logging display filter for the
+                 console";
+            }
+            enum monitor {
+              value 1;
+              description
+                "Configure logging display filter for monitoring
+                 terminal";
+            }
+            enum file {
+              value 2;
+              description
+                "Configure logging display filter for file";
+            }
+            enum syslog {
+              value 3;
+              description
+                "Configure logging display filter for syslog
+                 server";
+            }
+          }
+          description
+            "Configure filter-choice";
+        }
+        leaf level {
+          type enumeration {
+            enum emergency {
+              value 0;
+              description
+                "Log only emergency events
+                 (priority 0)";
+            }
+            enum alert {
+              value 1;
+              description
+                "Log alert and more severe events
+                 (priority 1)";
+            }
+            enum critical {
+              value 2;
+              description
+                "Log critical and more severe events
+                 (priority 2)";
+            }
+            enum error {
+              value 3;
+              description
+                "Log error and more severe events
+                 (priority 3)";
+            }
+            enum warning {
+              value 4;
+              description
+                "Log warning and more severe events
+                 (priority 4)";
+            }
+            enum notice {
+              value 5;
+              description
+                "Log notice and more severe events
+                 (priority 5)";
+            }
+            enum informational {
+              value 6;
+              description
+                "Log informational and more severe events
+                 (priority 6)";
+            }
+            enum debug {
+              value 7;
+              description
+                "Log all events, including debug
+                 (priority 7)";
+            }
+          }
+          default "debug";
+          description
+            "Configure logging filter level";
+        }
+      }
+    }
+  }
+
+}
